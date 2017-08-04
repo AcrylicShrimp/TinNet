@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="CaysNet">
+      <UniqueIdentifier>{fb4d872a-1aff-48b9-a082-b5685cfd0211}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CaysNet\Activation">
+      <UniqueIdentifier>{d45bb795-2d2a-4e76-a7ed-43f8b717ccb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CaysNet\Optimizer">
+      <UniqueIdentifier>{a4417830-d9b1-4f56-b66a-a9b999c2f283}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="NN.cpp">
+      <Filter>CaysNet</Filter>
+    </ClCompile>
+    <ClCompile Include="Linear.cpp">
+      <Filter>CaysNet\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Sigmoid.cpp">
+      <Filter>CaysNet\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="LeakyReLU.cpp">
+      <Filter>CaysNet\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="ReLU.cpp">
+      <Filter>CaysNet\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Softmax.cpp">
+      <Filter>CaysNet\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="TanH.cpp">
+      <Filter>CaysNet\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Layer.cpp">
+      <Filter>CaysNet</Filter>
+    </ClCompile>
+    <ClCompile Include="SGD.cpp">
+      <Filter>CaysNet\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="Optimizer.cpp">
+      <Filter>CaysNet\Optimizer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NN.h">
+      <Filter>CaysNet</Filter>
+    </ClInclude>
+    <ClInclude Include="Linear.h">
+      <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="Sigmoid.h">
+      <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="LeakyReLU.h">
+      <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="ReLU.h">
+      <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="Softmax.h">
+      <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="TanH.h">
+      <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>CaysNet</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD.h">
+      <Filter>CaysNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="Optimizer.h">
+      <Filter>CaysNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="Activation.h">
+      <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

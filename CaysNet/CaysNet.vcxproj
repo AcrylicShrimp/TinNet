@@ -20,23 +20,23 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{218AA9C0-C419-4464-AC57-56395D1FCDDF}</ProjectGuid>
+    <ProjectGuid>{6B2A6192-0214-4CF7-B2C7-4F7955278D68}</ProjectGuid>
     <RootNamespace>CaysNet</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -113,10 +113,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Run.cpp" />
+    <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="LeakyReLU.cpp" />
+    <ClCompile Include="Linear.cpp" />
+    <ClCompile Include="NN.cpp" />
+    <ClCompile Include="Optimizer.cpp" />
+    <ClCompile Include="ReLU.cpp" />
+    <ClCompile Include="SGD.cpp" />
+    <ClCompile Include="Sigmoid.cpp" />
+    <ClCompile Include="Softmax.cpp" />
+    <ClCompile Include="TanH.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Activation.h" />
+    <ClInclude Include="Layer.h" />
+    <ClInclude Include="LeakyReLU.h" />
+    <ClInclude Include="Linear.h" />
     <ClInclude Include="NN.h" />
+    <ClInclude Include="Optimizer.h" />
+    <ClInclude Include="ReLU.h" />
+    <ClInclude Include="SGD.h" />
+    <ClInclude Include="Sigmoid.h" />
+    <ClInclude Include="Softmax.h" />
+    <ClInclude Include="TanH.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
