@@ -21,9 +21,6 @@
     <ClCompile Include="Sigmoid.cpp">
       <Filter>CaysNet\Activation</Filter>
     </ClCompile>
-    <ClCompile Include="LeakyReLU.cpp">
-      <Filter>CaysNet\Activation</Filter>
-    </ClCompile>
     <ClCompile Include="ReLU.cpp">
       <Filter>CaysNet\Activation</Filter>
     </ClCompile>
@@ -42,6 +39,12 @@
     <ClCompile Include="Optimizer.cpp">
       <Filter>CaysNet\Optimizer</Filter>
     </ClCompile>
+    <ClCompile Include="LReLU.cpp">
+      <Filter>CaysNet\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="PReLU.cpp">
+      <Filter>CaysNet\Activation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NN.h">
@@ -51,9 +54,6 @@
       <Filter>CaysNet\Activation</Filter>
     </ClInclude>
     <ClInclude Include="Sigmoid.h">
-      <Filter>CaysNet\Activation</Filter>
-    </ClInclude>
-    <ClInclude Include="LeakyReLU.h">
       <Filter>CaysNet\Activation</Filter>
     </ClInclude>
     <ClInclude Include="ReLU.h">
@@ -75,6 +75,12 @@
       <Filter>CaysNet\Optimizer</Filter>
     </ClInclude>
     <ClInclude Include="Activation.h">
+      <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="LReLU.h">
+      <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="PReLU.h">
       <Filter>CaysNet\Activation</Filter>
     </ClInclude>
   </ItemGroup>

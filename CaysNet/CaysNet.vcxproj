@@ -114,10 +114,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Layer.cpp" />
-    <ClCompile Include="LeakyReLU.cpp" />
     <ClCompile Include="Linear.cpp" />
+    <ClCompile Include="LReLU.cpp" />
     <ClCompile Include="NN.cpp" />
     <ClCompile Include="Optimizer.cpp" />
+    <ClCompile Include="PReLU.cpp" />
     <ClCompile Include="ReLU.cpp" />
     <ClCompile Include="SGD.cpp" />
     <ClCompile Include="Sigmoid.cpp" />
@@ -127,10 +128,11 @@
   <ItemGroup>
     <ClInclude Include="Activation.h" />
     <ClInclude Include="Layer.h" />
-    <ClInclude Include="LeakyReLU.h" />
     <ClInclude Include="Linear.h" />
+    <ClInclude Include="LReLU.h" />
     <ClInclude Include="NN.h" />
     <ClInclude Include="Optimizer.h" />
+    <ClInclude Include="PReLU.h" />
     <ClInclude Include="ReLU.h" />
     <ClInclude Include="SGD.h" />
     <ClInclude Include="Sigmoid.h" />
