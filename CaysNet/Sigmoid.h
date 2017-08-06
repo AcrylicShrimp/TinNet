@@ -8,44 +8,29 @@
 
 #define _CLASS_CAYSNET_ACTIVATION_SIGMOID_H
 
-/*
-	TODO : Place your include directives here.
-*/
-#include <utility>
+#include "Activation.h"
+
+#include <cmath>
+#include <cstddef>
 
 namespace CaysNet::Activation
 {
-	class Sigmoid
+	class Sigmoid final : public Activation
 	{
-	private:
-		/*
-			TODO : Place your field declarations here.
-		*/
-		
+	public:
+		Sigmoid() = default;
+		Sigmoid(const Sigmoid &sSrc) = default;
+		Sigmoid(Sigmoid &&sSrc) = default;
+		~Sigmoid() = default;
 		
 	public:
-		Sigmoid();
-		Sigmoid(const Sigmoid &sSrc);
-		Sigmoid(Sigmoid &&sSrc);
-		~Sigmoid();
-		/*
-			TODO : Place your other constructors here.
-		*/
-		
+		Sigmoid &operator=(const Sigmoid &sSrc) = default;
+		Sigmoid &operator=(Sigmoid &&sSrc) = default;
 		
 	public:
-		Sigmoid &operator=(const Sigmoid &sSrc);
-		Sigmoid &operator=(Sigmoid &&sSrc);
-		/*
-			TODO : Place your other operator overloadings here.
-		*/
-		
-		
-	public:
-		/*
-			TODO : Place your member function declarations here.
-		*/
-		
+		virtual void activate(const Layer *pLayer, float *pOutput) const override;
+		virtual float derivative(float nZ, float nY) const override;
+		virtual Activation *duplicate() const override;
 	};
 }
 

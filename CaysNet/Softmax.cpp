@@ -8,64 +8,38 @@
 
 namespace CaysNet::Activation
 {
-	Softmax::Softmax()
+	void Softmax::activate(const Layer *pLayer, float *pOutput) const
 	{
-		//TODO : Place your implementation of default constructor here.
-		
-	}
-	
-	Softmax::Softmax(const Softmax &sSrc)
-	{
-		//TODO : Place your implementation of copy constructor here.
-		
-	}
-	
-	Softmax::Softmax(Softmax &&sSrc)
-	{
-		//TODO : Place your implementation of move constructor here.
-		
-	}
-	
-	Softmax::~Softmax()
-	{
-		//TODO : Place your implementation of destructor here.
-		
-	}
-	
-	/*
-		TODO : Place your other constructors here.
-	*/
-	
-	
-	Softmax &Softmax::operator=(const Softmax &sSrc)
-	{
-		if(&sSrc == this)
-			return *this;
-		
-		//TODO : Place your implementation of copy assignment operator here.
-		
-		
-		return *this;
-	}
-	
-	Softmax &Softmax::operator=(Softmax &&sSrc)
-	{
-		if(&sSrc == this)
-			return *this;
-		
-		//TODO : Place your implementation of move assignment operator here.
-		
-		
-		return *this;
-	}
-	
-	/*
-		TODO : Place your other operator overloadings here.
-	*/
-	
-	
-	/*
-		TODO : Place your member function definitions here.
-	*/
+		//Desk[0] : Max output
+		//Desk[1] : Accumulator
+		float vDesk[2]{pOutput[0], pOutput[0]};
 
+		//Find max value.
+		for (std::size_t nIndex = 1, nSize = pLayer->fanOut(); nIndex < nSize; ++nIndex)
+		{
+			vDesk[1] = pOutput[nIndex];
+			vDesk[0] = vDesk[vDesk[1] > vDesk[0]];
+		}
+
+		//Clear the accumulator.
+		vDesk[1] = .0f;
+
+		//Accumulate and fill.
+		for (std::size_t nIndex = 0, nSize = pLayer->fanOut(); nIndex < nSize; ++nIndex)
+			vDesk[1] += (pOutput[nIndex] = std::exp(pOutput[nIndex] - vDesk[0]));
+
+		//Divide by the accumulated value.
+		for (std::size_t nIndex = 0, nSize = pLayer->fanOut(); nIndex < nSize; ++nIndex)
+			pOutput[nIndex] /= vDesk[1];
+	}
+
+	float Softmax::derivative(float nZ, float nY) const
+	{
+		return nY * (1.f - nY);
+	}
+
+	Activation *Softmax::duplicate() const
+	{
+		return new Softmax();
+	}
 }

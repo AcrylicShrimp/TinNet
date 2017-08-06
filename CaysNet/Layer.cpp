@@ -10,67 +10,99 @@
 
 namespace CaysNet
 {
-	Layer::Layer(std::size_t nFanIn, std::size_t nFanOut) :
+	Layer::Layer(std::size_t nFanIn, std::size_t nFanOut, Activation::Activation *pNewActivation) :
 		sWeight(nFanOut, std::vector<float>(nFanIn, .0f)),
 		sBias(nFanOut, .0f),
-		pActivation{nullptr}
+		sOutput(nFanOut, .0f),
+		pActivation{pNewActivation}
 	{
 		//Empty.
 	}
-	
+
 	Layer::Layer(const Layer &sSrc) :
 		sWeight{sSrc.sWeight},
 		sBias{sSrc.sBias},
-		pActivation{sSrc.pActivation}
+		sOutput{sSrc.sOutput},
+		pActivation{sSrc.pActivation->duplicate()}
 	{
 		//Empty.
 	}
-	
+
 	Layer::Layer(Layer &&sSrc) :
 		sWeight{std::move(sSrc.sWeight)},
 		sBias{std::move(sSrc.sBias)},
-		pActivation{std::move(sSrc.pActivation)}
+		sOutput{std::move(sSrc.sOutput)},
+		pActivation{sSrc.pActivation}
 	{
-		//Empty.
+		sSrc.pActivation = nullptr;
 	}
-	
+
+	Layer::~Layer()
+	{
+		if (this->pActivation)
+			delete this->pActivation;
+
+		this->pActivation = nullptr;
+	}
+
 	Layer &Layer::operator=(const Layer &sSrc)
 	{
-		if(&sSrc == this)
+		if (&sSrc == this)
 			return *this;
-		
+
+		this->~Layer();
+
 		this->sWeight = sSrc.sWeight;
 		this->sBias = sSrc.sBias;
-		this->pActivation = sSrc.pActivation;
-		
+		this->sOutput = sSrc.sOutput;
+		this->pActivation = sSrc.pActivation->duplicate();
+
 		return *this;
 	}
-	
+
 	Layer &Layer::operator=(Layer &&sSrc)
 	{
-		if(&sSrc == this)
+		if (&sSrc == this)
 			return *this;
-		
-		this->sWeight = sSrc.sWeight;
-		this->sBias = sSrc.sBias;
+
+		this->~Layer();
+
+		this->sWeight = std::move(sSrc.sWeight);
+		this->sBias = std::move(sSrc.sBias);
+		this->sOutput = std::move(sSrc.sOutput);
 		this->pActivation = sSrc.pActivation;
-		
+
+		sSrc.~Layer();
+
 		return *this;
 	}
 
-	void Layer::calc(const float *pInput, float *pOutput) const
+	void Layer::forward(const float *pInput, float *pOutput)
 	{
-		//z = X * W + b
-		for (std::size_t nSecond = 0, nSecondSize = this->fanOut(); nSecond < nSecondSize; ++nSecond)
-		{
-			auto &nDestination{pOutput[nSecond] = this->sBias[nSecond]};
+		assert(this->pActivation);
 
-			for (std::size_t nFirst = 0, nFirstSize = this->fanIn(); nFirst < nFirstSize; ++nFirst)
-				nDestination += pInput[nFirst] * this->sWeight[nSecond][nFirst];
+		//z = X * W + b
+		for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)
+		{
+			auto &nDestination{pOutput[nOut] = this->sBias[nOut]};
+
+			for (std::size_t nIn{0}, nInSize{this->fanIn()}; nIn < nInSize; ++nIn)
+				nDestination += pInput[nIn] * this->sWeight[nOut][nIn];
+
+			this->sOutput[nOut] = nDestination;
 		}
 
 		//a = f(z)
-		assert(this->pActivation);
 		this->pActivation->activate(this, pOutput);
+	}
+
+	void Layer::backward(const float *pFrontOutput, const float *pBackInput, float *pBackOutput) const
+	{
+		assert(this->pActivation);
+
+		//Backprop the sum of the differentials.
+		for (std::size_t nIn{0}, nInSize{this->fanIn()}; nIn < nInSize; ++nIn)
+			for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)	//SUM (W * derivation * derivation_before)
+				pBackOutput[nIn] += this->sWeight[nOut][nIn] * this->pActivation->derivative(this->sOutput[nOut], pFrontOutput[nOut]) * pBackInput[nOut];
 	}
 }

@@ -10,11 +10,14 @@
     <Filter Include="CaysNet\Optimizer">
       <UniqueIdentifier>{a4417830-d9b1-4f56-b66a-a9b999c2f283}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CaysNet\Loss">
+      <UniqueIdentifier>{078789f3-99a8-429f-a6b7-52012bdeb2e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CaysNet\Initializer">
+      <UniqueIdentifier>{3d7dc2fc-3c2b-42cd-a06f-6f879ab796df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NN.cpp">
-      <Filter>CaysNet</Filter>
-    </ClCompile>
     <ClCompile Include="Linear.cpp">
       <Filter>CaysNet\Activation</Filter>
     </ClCompile>
@@ -33,17 +36,41 @@
     <ClCompile Include="Layer.cpp">
       <Filter>CaysNet</Filter>
     </ClCompile>
-    <ClCompile Include="SGD.cpp">
-      <Filter>CaysNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="Optimizer.cpp">
-      <Filter>CaysNet\Optimizer</Filter>
-    </ClCompile>
     <ClCompile Include="LReLU.cpp">
       <Filter>CaysNet\Activation</Filter>
     </ClCompile>
     <ClCompile Include="PReLU.cpp">
       <Filter>CaysNet\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Run.cpp">
+      <Filter>CaysNet</Filter>
+    </ClCompile>
+    <ClCompile Include="MSE.cpp">
+      <Filter>CaysNet\Loss</Filter>
+    </ClCompile>
+    <ClCompile Include="He.cpp">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Xavier.cpp">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Constant.cpp">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Glorot.cpp">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Normal.cpp">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Uniform.cpp">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="CE.cpp">
+      <Filter>CaysNet\Loss</Filter>
+    </ClCompile>
+    <ClCompile Include="MulticlassCE.cpp">
+      <Filter>CaysNet\Loss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,9 +98,6 @@
     <ClInclude Include="SGD.h">
       <Filter>CaysNet\Optimizer</Filter>
     </ClInclude>
-    <ClInclude Include="Optimizer.h">
-      <Filter>CaysNet\Optimizer</Filter>
-    </ClInclude>
     <ClInclude Include="Activation.h">
       <Filter>CaysNet\Activation</Filter>
     </ClInclude>
@@ -82,6 +106,54 @@
     </ClInclude>
     <ClInclude Include="PReLU.h">
       <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="Activations.h">
+      <Filter>CaysNet\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="MSE.h">
+      <Filter>CaysNet\Loss</Filter>
+    </ClInclude>
+    <ClInclude Include="Losses.h">
+      <Filter>CaysNet\Loss</Filter>
+    </ClInclude>
+    <ClInclude Include="NN.hpp">
+      <Filter>CaysNet</Filter>
+    </ClInclude>
+    <ClInclude Include="Initializers.h">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="He.h">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Xavier.h">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Constant.h">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Glorot.h">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Normal.h">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Uniform.h">
+      <Filter>CaysNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet.h">
+      <Filter>CaysNet</Filter>
+    </ClInclude>
+    <ClInclude Include="Optimizers.h">
+      <Filter>CaysNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="SGD.hpp">
+      <Filter>CaysNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="CE.h">
+      <Filter>CaysNet\Loss</Filter>
+    </ClInclude>
+    <ClInclude Include="MulticlassCE.h">
+      <Filter>CaysNet\Loss</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

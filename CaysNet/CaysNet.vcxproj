@@ -113,31 +113,53 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CE.cpp" />
+    <ClCompile Include="Constant.cpp" />
+    <ClCompile Include="Glorot.cpp" />
+    <ClCompile Include="He.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Linear.cpp" />
     <ClCompile Include="LReLU.cpp" />
-    <ClCompile Include="NN.cpp" />
-    <ClCompile Include="Optimizer.cpp" />
+    <ClCompile Include="MSE.cpp" />
+    <ClCompile Include="MulticlassCE.cpp" />
+    <ClCompile Include="Normal.cpp" />
     <ClCompile Include="PReLU.cpp" />
     <ClCompile Include="ReLU.cpp" />
-    <ClCompile Include="SGD.cpp" />
+    <ClCompile Include="Run.cpp" />
+    <ClInclude Include="CE.h" />
+    <ClInclude Include="MulticlassCE.h" />
+    <ClInclude Include="SGD.hpp" />
     <ClCompile Include="Sigmoid.cpp" />
     <ClCompile Include="Softmax.cpp" />
     <ClCompile Include="TanH.cpp" />
+    <ClCompile Include="Uniform.cpp" />
+    <ClCompile Include="Xavier.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Activation.h" />
+    <ClInclude Include="Activations.h" />
+    <ClInclude Include="CaysNet.h" />
+    <ClInclude Include="Constant.h" />
+    <ClInclude Include="Glorot.h" />
+    <ClInclude Include="He.h" />
+    <ClInclude Include="Initializers.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Linear.h" />
+    <ClInclude Include="Losses.h" />
     <ClInclude Include="LReLU.h" />
+    <ClInclude Include="MSE.h" />
     <ClInclude Include="NN.h" />
-    <ClInclude Include="Optimizer.h" />
+    <ClInclude Include="NN.hpp" />
+    <ClInclude Include="Normal.h" />
+    <ClInclude Include="Optimizers.h" />
     <ClInclude Include="PReLU.h" />
     <ClInclude Include="ReLU.h" />
     <ClInclude Include="SGD.h" />
     <ClInclude Include="Sigmoid.h" />
     <ClInclude Include="Softmax.h" />
     <ClInclude Include="TanH.h" />
+    <ClInclude Include="Uniform.h" />
+    <ClInclude Include="Xavier.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,45 +8,55 @@
 
 #define _CLASS_CAYSNET_OPTIMIZER_SGD_H
 
-/*
-	TODO : Place your include directives here.
-*/
+#include "Layer.h"
+#include "NN.h"
+
+#include <algorithm>
+#include <chrono>
+#include <cstddef>
+#include <random>
 #include <utility>
+#include <vector>
 
 namespace CaysNet::Optimizer
 {
-	class SGD
+	template<class LossFunc> class SGD
 	{
 	private:
-		/*
-			TODO : Place your field declarations here.
-		*/
-		
-		
+		float nLearningRate;
+		NN<LossFunc> &sNN;
+		std::vector<std::vector<float>> sDeltaList;
+		std::vector<float> sLossDelta;
+		std::vector<float> sInputAverage;
+		std::mt19937_64 sEngine;
+
 	public:
-		SGD();
-		SGD(const SGD &sSrc);
+		SGD(NN<LossFunc> &sNN, float nNewLearningRate);
+		SGD(const SGD &sSrc) = delete;
 		SGD(SGD &&sSrc);
-		~SGD();
-		/*
-			TODO : Place your other constructors here.
-		*/
-		
-		
+		~SGD() = default;
+
 	public:
-		SGD &operator=(const SGD &sSrc);
-		SGD &operator=(SGD &&sSrc);
-		/*
-			TODO : Place your other operator overloadings here.
-		*/
-		
-		
+		SGD &operator=(const SGD &sSrc) = delete;
+		SGD &operator=(SGD &&sSrc) = delete;
+
 	public:
-		/*
-			TODO : Place your member function declarations here.
-		*/
-		
+		inline float &learningRate();
+		inline float learningRate() const;
+		void train(std::vector<std::vector<float>> &sInput, std::vector<std::vector<float>> &sOutput, std::size_t nBatchSize, std::size_t nEpoch);
 	};
+
+	template<class LossFunc> inline float &SGD<LossFunc>::learningRate()
+	{
+		return this->nLearningRate;
+	}
+
+	template<class LossFunc> inline float SGD<LossFunc>::learningRate() const
+	{
+		return this->nLearningRate;
+	}
 }
+
+#include "SGD.hpp"
 
 #endif

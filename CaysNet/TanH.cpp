@@ -8,64 +8,21 @@
 
 namespace CaysNet::Activation
 {
-	TanH::TanH()
+	void TanH::activate(const Layer *pLayer, float *pOutput) const
 	{
-		//TODO : Place your implementation of default constructor here.
-		
+		for (std::size_t nIndex = 0, nSize = pLayer->fanOut(); nIndex < nSize; ++nIndex)
+			pOutput[nIndex] = std::tanh(pOutput[nIndex]);
 	}
-	
-	TanH::TanH(const TanH &sSrc)
-	{
-		//TODO : Place your implementation of copy constructor here.
-		
-	}
-	
-	TanH::TanH(TanH &&sSrc)
-	{
-		//TODO : Place your implementation of move constructor here.
-		
-	}
-	
-	TanH::~TanH()
-	{
-		//TODO : Place your implementation of destructor here.
-		
-	}
-	
-	/*
-		TODO : Place your other constructors here.
-	*/
-	
-	
-	TanH &TanH::operator=(const TanH &sSrc)
-	{
-		if(&sSrc == this)
-			return *this;
-		
-		//TODO : Place your implementation of copy assignment operator here.
-		
-		
-		return *this;
-	}
-	
-	TanH &TanH::operator=(TanH &&sSrc)
-	{
-		if(&sSrc == this)
-			return *this;
-		
-		//TODO : Place your implementation of move assignment operator here.
-		
-		
-		return *this;
-	}
-	
-	/*
-		TODO : Place your other operator overloadings here.
-	*/
-	
-	
-	/*
-		TODO : Place your member function definitions here.
-	*/
 
+	float TanH::derivative(float nZ, float nY) const
+	{
+		auto nValue{std::cosh(nZ)};
+
+		return 1.f / (nValue * nValue);
+	}
+
+	Activation *TanH::duplicate() const
+	{
+		return new TanH();
+	}
 }

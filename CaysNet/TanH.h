@@ -8,44 +8,29 @@
 
 #define _CLASS_CAYSNET_ACTIVATION_TAN_H_H
 
-/*
-	TODO : Place your include directives here.
-*/
-#include <utility>
+#include "Activation.h"
+
+#include <cmath>
+#include <cstddef>
 
 namespace CaysNet::Activation
 {
-	class TanH
+	class TanH final : public Activation
 	{
-	private:
-		/*
-			TODO : Place your field declarations here.
-		*/
-		
+	public:
+		TanH() = default;
+		TanH(const TanH &sSrc) = default;
+		TanH(TanH &&sSrc) = default;
+		~TanH() = default;
 		
 	public:
-		TanH();
-		TanH(const TanH &sSrc);
-		TanH(TanH &&sSrc);
-		~TanH();
-		/*
-			TODO : Place your other constructors here.
-		*/
-		
+		TanH &operator=(const TanH &sSrc) = default;
+		TanH &operator=(TanH &&sSrc) = default;
 		
 	public:
-		TanH &operator=(const TanH &sSrc);
-		TanH &operator=(TanH &&sSrc);
-		/*
-			TODO : Place your other operator overloadings here.
-		*/
-		
-		
-	public:
-		/*
-			TODO : Place your member function declarations here.
-		*/
-		
+		virtual void activate(const Layer *pLayer, float *pOutput) const override;
+		virtual float derivative(float nZ, float nY) const override;
+		virtual Activation *duplicate() const override;
 	};
 }
 

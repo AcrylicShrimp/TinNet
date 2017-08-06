@@ -13,7 +13,7 @@ namespace CaysNet::Activation
 	{
 		//Empty.
 	}
-	
+
 	PReLU::PReLU(const PReLU &sSrc) :
 		nFactor{sSrc.nFactor}
 	{
@@ -22,11 +22,11 @@ namespace CaysNet::Activation
 
 	PReLU &PReLU::operator=(const PReLU &sSrc)
 	{
-		if(&sSrc == this)
+		if (&sSrc == this)
 			return *this;
-		
+
 		this->nFactor = sSrc.nFactor;
-		
+
 		return *this;
 	}
 
@@ -39,16 +39,21 @@ namespace CaysNet::Activation
 
 	void PReLU::activate(const Layer *pLayer, float *pOutput) const
 	{
-		float vDesk[2]{ this->nFactor, 1.f };
+		float vDesk[2]{this->nFactor, 1.f};
 
 		for (std::size_t nIndex = 0, nSize = pLayer->fanOut(); nIndex < nSize; ++nIndex)
 			pOutput[nIndex] = vDesk[pOutput[nIndex] > .0f] * pOutput[nIndex];
 	}
 
-	float PReLU::derivative(float nZ) const
+	float PReLU::derivative(float nZ, float nY) const
 	{
-		float vDesk[2]{ this->nFactor, 1.f };
+		float vDesk[2]{this->nFactor, 1.f};
 
 		return vDesk[nZ > .0f];
+	}
+
+	Activation *PReLU::duplicate() const
+	{
+		return new PReLU(this->nFactor);
 	}
 }

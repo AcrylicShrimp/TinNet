@@ -13,8 +13,13 @@ namespace CaysNet::Activation
 		//Empty.
 	}
 
-	float Linear::derivative(float nZ) const
+	float Linear::derivative(float nZ, float nY) const
 	{
 		return 1.f;
+	}
+
+	Activation *Linear::duplicate() const
+	{
+		return new Linear();
 	}
 }

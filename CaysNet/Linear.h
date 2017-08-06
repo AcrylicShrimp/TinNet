@@ -26,7 +26,8 @@ namespace CaysNet::Activation
 		
 	public:
 		virtual void activate(const Layer *pLayer, float *pOutput) const override;
-		virtual float derivative(float nZ) const override;
+		virtual float derivative(float nZ, float nY) const override;
+		virtual Activation *duplicate() const override;
 	};
 }
 

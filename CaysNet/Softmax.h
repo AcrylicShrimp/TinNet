@@ -8,44 +8,29 @@
 
 #define _CLASS_CAYSNET_ACTIVATION_SOFTMAX_H
 
-/*
-	TODO : Place your include directives here.
-*/
-#include <utility>
+#include "Activation.h"
+
+#include <cmath>
+#include <cstddef>
 
 namespace CaysNet::Activation
 {
-	class Softmax
+	class Softmax final : public Activation
 	{
-	private:
-		/*
-			TODO : Place your field declarations here.
-		*/
-		
+	public:
+		Softmax() = default;
+		Softmax(const Softmax &sSrc) = default;
+		Softmax(Softmax &&sSrc) = default;
+		~Softmax() = default;
 		
 	public:
-		Softmax();
-		Softmax(const Softmax &sSrc);
-		Softmax(Softmax &&sSrc);
-		~Softmax();
-		/*
-			TODO : Place your other constructors here.
-		*/
-		
+		Softmax &operator=(const Softmax &sSrc) = default;
+		Softmax &operator=(Softmax &&sSrc) = default;
 		
 	public:
-		Softmax &operator=(const Softmax &sSrc);
-		Softmax &operator=(Softmax &&sSrc);
-		/*
-			TODO : Place your other operator overloadings here.
-		*/
-		
-		
-	public:
-		/*
-			TODO : Place your member function declarations here.
-		*/
-		
+		virtual void activate(const Layer *pLayer, float *pOutput) const override;
+		virtual float derivative(float nZ, float nY) const override;
+		virtual Activation *duplicate() const override;
 	};
 }
 

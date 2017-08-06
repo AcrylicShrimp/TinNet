@@ -10,7 +10,6 @@
 
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <utility>
 #include <vector>
 
@@ -26,29 +25,40 @@ namespace CaysNet
 	private:
 		std::vector<std::vector<float>> sWeight;
 		std::vector<float> sBias;
+		std::vector<float> sOutput;
 		Activation::Activation *pActivation;
+
+	private:
+		Layer(std::size_t nFanIn, std::size_t nFanOut, Activation::Activation *pNewActivation);
 		
 	public:
-		Layer(std::size_t nFanIn, std::size_t nFanOut);
 		Layer(const Layer &sSrc);
 		Layer(Layer &&sSrc);
-		~Layer() = default;
+		~Layer();
 		
 	public:
 		Layer &operator=(const Layer &sSrc);
 		Layer &operator=(Layer &&sSrc);
 		
 	public:
+		template<class ActivationFunc, class ...ActivationFuncParam> inline static Layer layer(std::size_t nFanIn, std::size_t nFanOut, ActivationFuncParam && ...sActivationFuncParam);
 		inline std::vector<std::vector<float>> &weight();
 		inline const std::vector<std::vector<float>> &weight() const;
 		inline std::vector<float> &bias();
 		inline const std::vector<float> &bias() const;
-		inline Activation::Activation * &activation();
+		inline std::vector<float> &output();
+		inline const std::vector<float> &output() const;
 		inline Activation::Activation *activation() const;
 		inline std::size_t fanIn() const;
 		inline std::size_t fanOut() const;
-		void calc(const float *pInput, float *pOutput) const;
+		void forward(const float *pInput, float *pOutput);
+		void backward(const float *pFrontOutput, const float *pBackInput, float *pBackOutput) const;
 	};
+
+	template<class ActivationFunc, class ...ActivationFuncParam> inline Layer Layer::layer(std::size_t nFanIn, std::size_t nFanOut, ActivationFuncParam && ...sActivationFuncParam)
+	{
+		return Layer{nFanIn, nFanOut, new ActivationFunc(std::forward<ActivationFuncParam>(sActivationFuncParam)...)};
+	}
 
 	inline std::vector<std::vector<float>> &Layer::weight()
 	{
@@ -70,9 +80,14 @@ namespace CaysNet
 		return this->sBias;
 	}
 
-	inline Activation::Activation * &Layer::activation()
+	inline std::vector<float> &Layer::output()
 	{
-		return this->pActivation;
+		return this->sOutput;
+	}
+
+	inline const std::vector<float> &Layer::output() const
+	{
+		return this->sOutput;
 	}
 
 	inline Activation::Activation *Layer::activation() const
@@ -82,7 +97,7 @@ namespace CaysNet
 
 	inline std::size_t Layer::fanIn() const
 	{
-		return this->sWeight.size();
+		return this->sWeight.front().size();
 	}
 
 	inline std::size_t Layer::fanOut() const

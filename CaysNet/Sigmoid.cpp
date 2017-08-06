@@ -8,64 +8,19 @@
 
 namespace CaysNet::Activation
 {
-	Sigmoid::Sigmoid()
+	void Sigmoid::activate(const Layer *pLayer, float *pOutput) const
 	{
-		//TODO : Place your implementation of default constructor here.
-		
+		for (std::size_t nIndex = 0, nSize = pLayer->fanOut(); nIndex < nSize; ++nIndex)
+			pOutput[nIndex] = 1.f / (std::exp(-pOutput[nIndex]) + 1.f);
 	}
-	
-	Sigmoid::Sigmoid(const Sigmoid &sSrc)
-	{
-		//TODO : Place your implementation of copy constructor here.
-		
-	}
-	
-	Sigmoid::Sigmoid(Sigmoid &&sSrc)
-	{
-		//TODO : Place your implementation of move constructor here.
-		
-	}
-	
-	Sigmoid::~Sigmoid()
-	{
-		//TODO : Place your implementation of destructor here.
-		
-	}
-	
-	/*
-		TODO : Place your other constructors here.
-	*/
-	
-	
-	Sigmoid &Sigmoid::operator=(const Sigmoid &sSrc)
-	{
-		if(&sSrc == this)
-			return *this;
-		
-		//TODO : Place your implementation of copy assignment operator here.
-		
-		
-		return *this;
-	}
-	
-	Sigmoid &Sigmoid::operator=(Sigmoid &&sSrc)
-	{
-		if(&sSrc == this)
-			return *this;
-		
-		//TODO : Place your implementation of move assignment operator here.
-		
-		
-		return *this;
-	}
-	
-	/*
-		TODO : Place your other operator overloadings here.
-	*/
-	
-	
-	/*
-		TODO : Place your member function definitions here.
-	*/
 
+	float Sigmoid::derivative(float nZ, float nY) const
+	{
+		return nY * (1.f - nY);
+	}
+
+	Activation *Sigmoid::duplicate() const
+	{
+		return new Sigmoid();
+	}
 }
