@@ -8,6 +8,7 @@
 
 #include <cstdint>
 #include <fstream>
+#include <iostream>
 #include <vector>
 
 int32_t main()
@@ -69,15 +70,22 @@ int32_t main()
 		}
 	}
 
-	std::vector<float> sOutput(10);
-	sNetwork.calc(sTrainInput[0].data(), sOutput.data());
+	std::vector<float> sOutput1(10);
+	sNetwork.calc(sTestInput[0].data(), sOutput1.data());
 
-	auto nLoss = sNetwork.loss(sTestInput[0].data(), sTestOutput[0].data());
+	auto nLoss1 = sNetwork.loss(sTestInput[0].data(), sTestOutput[0].data());
 
 	Optimizer::SGD<Loss::MSE> sOptimizer{sNetwork, .01f};
-	sOptimizer.train(sTrainInput, sTrainOutput, 64, 1);
+	sOptimizer.train(sTrainInput, sTrainOutput, 64, 100);
 
-	nLoss = sNetwork.loss(sTestInput[0].data(), sTestOutput[0].data());
+	std::vector<float> sOutput2(10);
+	sNetwork.calc(sTestInput[0].data(), sOutput2.data());
+
+	auto nLoss2 = sNetwork.loss(sTestInput[0].data(), sTestOutput[0].data());
+
+	std::cout << nLoss1 << std::endl << nLoss2 << std::endl;
+
+	system("pause");
 
 	return 0;
 }

@@ -66,6 +66,7 @@ namespace CaysNet::Optimizer
 
 				for (std::size_t nBatch{0}; nBatch < nActualBatchSize; ++nBatch, ++nBatchIndex)
 				{
+					//Accrue the inputs.
 					for (std::size_t nIndex{0}, nSize{this->sInputAverage.size()}; nIndex < nSize; ++nIndex)
 						this->sInputAverage[nIndex] += sInput[nBatchIndex][nIndex];
 
@@ -81,44 +82,47 @@ namespace CaysNet::Optimizer
 
 					//Backward pass; accrue the gradients.
 					for (std::size_t nIndex{this->sNN.depth() - 1}; nIndex > 0; --nIndex)
-						this->sNN[nIndex].backward(this->sNN.output()[nIndex].data(), this->sDeltaList[nIndex].data(), this->sDeltaList[nIndex - 1].data());
+						this->sNN[nIndex].backward(this->sDeltaList[nIndex].data(), this->sDeltaList[nIndex - 1].data());
 				}
 
 				auto nFactor{1.f / nActualBatchSize};
 
+				//Take the average of the inputs.
 				for (auto &nIn : this->sInputAverage)
 					nIn *= nFactor;
+
+				nFactor *= this->nLearningRate;
 
 				//Take the average of the gradients.
 				for (std::size_t nIndex{0}, nSize{this->sDeltaList.size() - 1}; nIndex < nSize; ++nIndex)
 					for (auto &nDelta : this->sDeltaList[nIndex])
-						nDelta *= this->nLearningRate * nFactor;
+						nDelta *= nFactor;
 
 				for (auto &nDelta : this->sLossDelta)
-					nDelta *= this->nLearningRate * nFactor;
+					nDelta *= nFactor;
 
 				//Update the weights and biases.
 				{
 					auto &sLastLayer{this->sNN.layer().back()};
 					auto &sWeight{sLastLayer.weight()};
 					auto &sBias{sLastLayer.bias()};
-					auto pInput{this->sNN.depth() >= 2 ? this->sNN.output()[this->sNN.depth() - 1].data() : this->sInputAverage.data()};
+					auto pInput{this->sNN.depth() >= 2 ? this->sNN.output()[this->sNN.depth() - 2].data() : this->sInputAverage.data()};
 
 					for (std::size_t nOut{0}, nOutSize{sLastLayer.fanOut()}; nOut < nOutSize; ++nOut)
 					{
 						//b = b - delta
-						sBias[nOut] -= sLastLayer.activation()->derivative(sLastLayer.output()[nOut], this->sNN.output().back()[nOut]) * this->sLossDelta[nOut];
+						sBias[nOut] -= sLastLayer.derivative()[nOut] * this->sLossDelta[nOut];
 
 						//w = w - in * delta
 						//TODO : multiply derivation of the activation function here.
 						for (std::size_t nIn{0}, nInSize{sLastLayer.fanIn()}; nIn < nInSize; ++nIn)
-							sWeight[nOut][nIn] -= pInput[nIn] * sLastLayer.activation()->derivative(sLastLayer.output()[nOut], this->sNN.output().back()[nOut]) * this->sLossDelta[nOut];
+							sWeight[nOut][nIn] -= pInput[nIn] * sLastLayer.derivative()[nOut] * this->sLossDelta[nOut];
 					}
 				}
 
 				for (std::size_t nIndex{1}, nSize{this->sNN.depth() - 1}; nIndex < nSize; ++nIndex)
 				{
-					auto &sLayer{this->sNN.layer().front()};
+					auto &sLayer{this->sNN[nIndex]};
 					auto &sWeight{sLayer.weight()};
 					auto &sBias{sLayer.bias()};
 					auto pInput{this->sNN.output()[nIndex - 1].data()};
@@ -126,11 +130,11 @@ namespace CaysNet::Optimizer
 					for (std::size_t nOut{0}, nOutSize{sLayer.fanOut()}; nOut < nOutSize; ++nOut)
 					{
 						//b = b - delta
-						sBias[nOut] -= sLayer.activation()->derivative(sLayer.output()[nOut], this->sNN.output()[nIndex][nOut]) * this->sDeltaList[nIndex][nOut];
+						sBias[nOut] -= sLayer.derivative()[nOut] * this->sDeltaList[nIndex][nOut];
 
 						//w = w - in * delta
 						for (std::size_t nIn{0}, nInSize{sLayer.fanIn()}; nIn < nInSize; ++nIn)
-							sWeight[nOut][nIn] -= pInput[nIn] * sLayer.activation()->derivative(sLayer.output()[nOut], this->sNN.output().front()[nOut]) * this->sDeltaList[nIndex][nOut];
+							sWeight[nOut][nIn] -= pInput[nIn] * sLayer.derivative()[nOut] * this->sDeltaList[nIndex][nOut];
 					}
 				}
 
@@ -144,11 +148,11 @@ namespace CaysNet::Optimizer
 					for (std::size_t nOut{0}, nOutSize{sFirstLayer.fanOut()}; nOut < nOutSize; ++nOut)
 					{
 						//b = b - delta
-						sBias[nOut] -= sFirstLayer.activation()->derivative(sFirstLayer.output()[nOut], this->sNN.output().front()[nOut]) * this->sDeltaList.front()[nOut];
+						sBias[nOut] -= sFirstLayer.derivative()[nOut] * this->sDeltaList.front()[nOut];
 
 						//w = w - in * delta
 						for (std::size_t nIn{0}, nInSize{sFirstLayer.fanIn()}; nIn < nInSize; ++nIn)
-							sWeight[nOut][nIn] -= pInput[nIn] * sFirstLayer.activation()->derivative(sFirstLayer.output()[nOut], this->sNN.output().front()[nOut]) * this->sDeltaList.front()[nOut];
+							sWeight[nOut][nIn] -= pInput[nIn] * sFirstLayer.derivative()[nOut] * this->sDeltaList.front()[nOut];
 					}
 				}
 			}

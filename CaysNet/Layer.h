@@ -25,7 +25,7 @@ namespace CaysNet
 	private:
 		std::vector<std::vector<float>> sWeight;
 		std::vector<float> sBias;
-		std::vector<float> sOutput;
+		std::vector<float> sDerivative;
 		Activation::Activation *pActivation;
 
 	private:
@@ -46,13 +46,13 @@ namespace CaysNet
 		inline const std::vector<std::vector<float>> &weight() const;
 		inline std::vector<float> &bias();
 		inline const std::vector<float> &bias() const;
-		inline std::vector<float> &output();
-		inline const std::vector<float> &output() const;
+		inline std::vector<float> &derivative();
+		inline const std::vector<float> &derivative() const;
 		inline Activation::Activation *activation() const;
 		inline std::size_t fanIn() const;
 		inline std::size_t fanOut() const;
 		void forward(const float *pInput, float *pOutput);
-		void backward(const float *pFrontOutput, const float *pBackInput, float *pBackOutput) const;
+		void backward(const float *pBackInput, float *pBackOutput) const;
 	};
 
 	template<class ActivationFunc, class ...ActivationFuncParam> inline Layer Layer::layer(std::size_t nFanIn, std::size_t nFanOut, ActivationFuncParam && ...sActivationFuncParam)
@@ -80,14 +80,14 @@ namespace CaysNet
 		return this->sBias;
 	}
 
-	inline std::vector<float> &Layer::output()
+	inline std::vector<float> &Layer::derivative()
 	{
-		return this->sOutput;
+		return this->sDerivative;
 	}
 
-	inline const std::vector<float> &Layer::output() const
+	inline const std::vector<float> &Layer::derivative() const
 	{
-		return this->sOutput;
+		return this->sDerivative;
 	}
 
 	inline Activation::Activation *Layer::activation() const
