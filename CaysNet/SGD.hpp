@@ -9,6 +9,7 @@ namespace CaysNet::Optimizer
 	template<class LossFunc> SGD<LossFunc>::SGD(NN<LossFunc> &sNN, float nNewLearningRate) :
 		nLearningRate{nNewLearningRate},
 		sNN{sNN},
+		sOutput(sNN.depth()),
 		sBiasDelta(sNN.depth()),
 		sWeightDelta(sNN.depth()),
 		sEngine{static_cast<std::mt19937_64::result_type>(std::chrono::system_clock::now().time_since_epoch().count())}
