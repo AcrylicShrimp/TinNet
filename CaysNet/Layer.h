@@ -52,7 +52,7 @@ namespace CaysNet
 		inline std::size_t fanIn() const;
 		inline std::size_t fanOut() const;
 		void forward(const float *pInput, float *pOutput);
-		void backward(const float *pBackInput, float *pBackOutput) const;
+		void backward(float *pBackInput, float *pBackOutput) const;
 	};
 
 	template<class ActivationFunc, class ...ActivationFuncParam> inline Layer Layer::layer(std::size_t nFanIn, std::size_t nFanOut, ActivationFuncParam && ...sActivationFuncParam)

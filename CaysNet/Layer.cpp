@@ -100,13 +100,20 @@ namespace CaysNet
 			this->sDerivative[nOut] = this->pActivation->derivative(this->sDerivative[nOut], pOutput[nOut]);
 	}
 
-	void Layer::backward(const float *pBackInput, float *pBackOutput) const
+	void Layer::backward(float *pBackInput, float *pBackOutput) const
 	{
 		assert(this->pActivation);
 
+		//Multiply the derivations of the activation function.
+		for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)
+			pBackInput[nOut] *= this->sDerivative[nOut];
+
+		if (!pBackOutput)
+			return;
+
 		//Backprop the sum of the differentials.
-		for (std::size_t nIn{0}, nInSize{this->fanIn()}; nIn < nInSize; ++nIn)
-			for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)	//SUM (W * derivation * derivation_before)
-				pBackOutput[nIn] += this->sWeight[nOut][nIn] * this->sDerivative[nOut] * pBackInput[nOut];
+		for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)
+			for (std::size_t nIn{0}, nInSize{this->fanIn()}; nIn < nInSize; ++nIn)
+				pBackOutput[nIn] += this->sWeight[nOut][nIn] * pBackInput[nOut];	//SUM (W * derivation * derivation_before)
 	}
 }

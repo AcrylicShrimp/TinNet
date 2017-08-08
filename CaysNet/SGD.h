@@ -25,9 +25,8 @@ namespace CaysNet::Optimizer
 	private:
 		float nLearningRate;
 		NN<LossFunc> &sNN;
-		std::vector<std::vector<float>> sDeltaList;
-		std::vector<float> sLossDelta;
-		std::vector<float> sInputAverage;
+		std::vector<std::vector<float>> sBiasDelta;
+		std::vector<std::vector<std::vector<float>>> sWeightDelta;
 		std::mt19937_64 sEngine;
 
 	public:
