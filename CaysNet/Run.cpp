@@ -17,19 +17,15 @@ int32_t main()
 
 	NN<Loss::MSE> sNetwork
 	{
-		Layer::layer<Activation::ReLU>(784, 30),
-		Layer::layer<Activation::ReLU>(30, 30),
-		Layer::layer<Activation::ReLU>(30, 30),
-		Layer::layer<Activation::ReLU>(30, 30),
-		Layer::layer<Activation::ReLU>(30, 30),
-		Layer::layer<Activation::Softmax>(30, 10)
+		Layer::layer<Activation::LReLU>(784, 10),
+		Layer::layer<Activation::Softmax>(10, 10)
 	};
 
 	sNetwork.initWeight<Initializer::He>();
 	sNetwork.initBias<Initializer::Constant>(.0f);
 
-	std::vector<std::vector<float>> sTrainInput(600u);
-	std::vector<std::vector<float>> sTrainOutput(600u);
+	std::vector<std::vector<float>> sTrainInput(60000u);
+	std::vector<std::vector<float>> sTrainOutput(60000u);
 
 	{
 		std::ifstream sInput{L"D:/Develop/MNIST/MNIST_train_in.dat", std::ifstream::binary | std::ifstream::in};
@@ -70,22 +66,29 @@ int32_t main()
 		}
 	}
 
-	std::vector<float> sOutput1(10);
-	sNetwork.calc(sTestInput[0].data(), sOutput1.data());
+	std::vector<float> sOutput(10, .0f);
+	Optimizer::SGD<Loss::MSE> sOptimizer{sNetwork, .001f};
 
-	auto nLoss1 = sNetwork.loss(sTestInput[0].data(), sTestOutput[0].data());
+	for (;;)
+	{
+		printf("Training data loss : %f\n", sNetwork.loss(sTrainInput, sTrainOutput));
+		printf("Validation data loss : %f\n", sNetwork.loss(sTestInput, sTestOutput));
 
-	Optimizer::SGD<Loss::MSE> sOptimizer{sNetwork, .01f};
-	sOptimizer.train(sTrainInput, sTrainOutput, 64, 100);
+		for (std::size_t nIndex{0}; nIndex < 10; ++nIndex)
+		{
+			sNetwork.calc(sTestInput[nIndex].data(), sOutput.data());
+			
+			printf("%0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf\n",
+				sOutput[0], sOutput[1], sOutput[2], sOutput[3], sOutput[4],
+				sOutput[5], sOutput[6], sOutput[7], sOutput[8], sOutput[9]);
 
-	std::vector<float> sOutput2(10);
-	sNetwork.calc(sTestInput[0].data(), sOutput2.data());
+			printf("%0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf\n\n",
+				sTestOutput[nIndex][0], sTestOutput[nIndex][1], sTestOutput[nIndex][2], sTestOutput[nIndex][3], sTestOutput[nIndex][4],
+				sTestOutput[nIndex][5], sTestOutput[nIndex][6], sTestOutput[nIndex][7], sTestOutput[nIndex][8], sTestOutput[nIndex][9]);
+		}
 
-	auto nLoss2 = sNetwork.loss(sTestInput[0].data(), sTestOutput[0].data());
-
-	std::cout << nLoss1 << std::endl << nLoss2 << std::endl;
-
-	system("pause");
+		sOptimizer.train(sTrainInput, sTrainOutput, 64, 10);
+	}
 
 	return 0;
 }

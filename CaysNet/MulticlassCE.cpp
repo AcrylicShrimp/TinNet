@@ -13,7 +13,7 @@ namespace CaysNet::Loss
 		auto nLoss{-pDesiredOutput[0] * std::log(pNetworkOutput[0])};
 
 		for (std::size_t nIndex{1}; nIndex < nLength; ++nIndex)
-			nLoss += -pDesiredOutput[nIndex] * std::log(pNetworkOutput[nIndex]);
+			nLoss += -pDesiredOutput[nIndex] * std::log(pNetworkOutput[nIndex] + 1e-4f);
 
 		return nLoss;
 	}

@@ -30,7 +30,7 @@ namespace CaysNet::Activation
 
 		//Divide by the accumulated value.
 		for (std::size_t nIndex = 0, nSize = pLayer->fanOut(); nIndex < nSize; ++nIndex)
-			pOutput[nIndex] /= vDesk[1];
+			pOutput[nIndex] /= (vDesk[1] + 1e-4f);
 	}
 
 	float Softmax::derivative(float nZ, float nY) const

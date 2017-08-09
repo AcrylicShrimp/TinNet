@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CaysNet", "CaysNet\CaysNet.vcxproj", "{6B2A6192-0214-4CF7-B2C7-4F7955278D68}"
 EndProject
@@ -9,6 +9,8 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Export|x64 = Export|x64
+		Export|x86 = Export|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -17,6 +19,10 @@ Global
 		{6B2A6192-0214-4CF7-B2C7-4F7955278D68}.Debug|x64.Build.0 = Debug|x64
 		{6B2A6192-0214-4CF7-B2C7-4F7955278D68}.Debug|x86.ActiveCfg = Debug|Win32
 		{6B2A6192-0214-4CF7-B2C7-4F7955278D68}.Debug|x86.Build.0 = Debug|Win32
+		{6B2A6192-0214-4CF7-B2C7-4F7955278D68}.Export|x64.ActiveCfg = Export|x64
+		{6B2A6192-0214-4CF7-B2C7-4F7955278D68}.Export|x64.Build.0 = Export|x64
+		{6B2A6192-0214-4CF7-B2C7-4F7955278D68}.Export|x86.ActiveCfg = Export|Win32
+		{6B2A6192-0214-4CF7-B2C7-4F7955278D68}.Export|x86.Build.0 = Export|Win32
 		{6B2A6192-0214-4CF7-B2C7-4F7955278D68}.Release|x64.ActiveCfg = Release|x64
 		{6B2A6192-0214-4CF7-B2C7-4F7955278D68}.Release|x64.Build.0 = Release|x64
 		{6B2A6192-0214-4CF7-B2C7-4F7955278D68}.Release|x86.ActiveCfg = Release|Win32
