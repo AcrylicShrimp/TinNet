@@ -17,9 +17,9 @@ int32_t main()
 
 	NN<Loss::MSE> sNetwork
 	{
-		Layer::layer<Activation::LReLU>(784, 10),
-		Layer::layer<Activation::LReLU>(10, 10),
-		Layer::layer<Activation::Softmax>(10, 10)
+		Layer::layer<Activation::Linear>(784, 10),
+		Layer::layer<Activation::Linear>(10, 10),
+		Layer::layer<Activation::Linear>(10, 10)
 	};
 
 	sNetwork.initWeight<Initializer::He>();
@@ -89,6 +89,8 @@ int32_t main()
 	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 8, 0);
 	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
 	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 9, 0);
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 0, 243, 0);
 	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
 
 	/*for (;;)
