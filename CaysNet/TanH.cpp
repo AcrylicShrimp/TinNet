@@ -16,9 +16,7 @@ namespace CaysNet::Activation
 
 	float TanH::derivative(float nZ, float nY) const
 	{
-		auto nValue{std::cosh(nZ)};
-
-		return 1.f / (nValue * nValue);
+		return 1.f - nY * nY;
 	}
 
 	Activation *TanH::duplicate() const

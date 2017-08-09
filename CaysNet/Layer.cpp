@@ -111,6 +111,9 @@ namespace CaysNet
 		if (!pBackOutput)
 			return;
 
+		for (std::size_t nIn{0}, nInSize{this->fanIn()}; nIn < nInSize; ++nIn)
+			pBackOutput[nIn] = .0f;
+
 		//Backprop the sum of the differentials.
 		for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)
 			for (std::size_t nIn{0}, nInSize{this->fanIn()}; nIn < nInSize; ++nIn)

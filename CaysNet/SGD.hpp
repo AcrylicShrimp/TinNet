@@ -40,7 +40,7 @@ namespace CaysNet::Optimizer
 
 	template<class LossFunc> std::pair<float, float> SGD<LossFunc>::calcNumericalGradient(const std::vector<float> &sInput, const std::vector<float> &sOutput, std::size_t nLayerIndex, std::size_t nInputIndex, std::size_t nOutputIndex)
 	{
-		constexpr auto nEpsilon{1e-5f};
+		constexpr auto nEpsilon{1e-6f};
 
 		float nWeight{this->sNN[nLayerIndex].weight()[nOutputIndex][nInputIndex]};
 		
@@ -123,12 +123,6 @@ namespace CaysNet::Optimizer
 
 				for (std::size_t nBatch{0}; nBatch < nActualBatchSize; ++nBatch, ++nBatchIndex)
 				{
-					if (std::isnan(this->sNN.output().back()[0]))
-					{
-						int a = 10;
-						printf("WTF %d", a);
-					}
-
 					//Forward pass.
 					this->sNN.calc(sInput[nBatchIndex].data());
 					

@@ -19,10 +19,6 @@ int32_t main()
 	{
 		Layer::layer<Activation::LReLU>(784, 10),
 		Layer::layer<Activation::LReLU>(10, 10),
-		Layer::layer<Activation::LReLU>(10, 10),
-		Layer::layer<Activation::LReLU>(10, 10),
-		Layer::layer<Activation::LReLU>(10, 10),
-		Layer::layer<Activation::LReLU>(10, 10),
 		Layer::layer<Activation::Softmax>(10, 10)
 	};
 
@@ -72,30 +68,30 @@ int32_t main()
 	}
 
 	std::vector<float> sOutput(10, .0f);
-	Optimizer::SGD<Loss::MSE> sOptimizer{sNetwork, .000001f};
+	Optimizer::SGD<Loss::MSE> sOptimizer{sNetwork, .0001f};
 
-	auto sPair{sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 0, 0)};
-	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
-	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 1, 0);
-	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
-	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 2, 0);
-	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
-	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 3, 0);
-	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
-	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 4, 0);
-	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
-	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 5, 0);
-	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
-	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 6, 0);
-	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
-	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 7, 0);
-	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
-	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 8, 0);
-	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
-	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 9, 0);
-	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
+	auto sPair{sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 0, 0)};
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 1, 0);
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 2, 0);
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 3, 0);
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 4, 0);
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 5, 0);
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 6, 0);
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 7, 0);
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 8, 0);
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 2, 9, 0);
+	printf("Check gradients : %f	vs	%f\n", sPair.first, sPair.second);
 
-	for (;;)
+	/*for (;;)
 	{
 		printf("Training data loss : %f\n", sNetwork.loss(sTrainInput, sTrainOutput));
 		printf("Validation data loss : %f\n", sNetwork.loss(sTestInput, sTestOutput));
@@ -114,7 +110,9 @@ int32_t main()
 		}
 
 		sOptimizer.train(sTrainInput, sTrainOutput, 32, 10);
-	}
+	}*/
+
+	system("pause");
 
 	return 0;
 }
