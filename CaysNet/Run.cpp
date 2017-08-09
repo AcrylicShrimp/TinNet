@@ -18,6 +18,11 @@ int32_t main()
 	NN<Loss::MSE> sNetwork
 	{
 		Layer::layer<Activation::LReLU>(784, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
 		Layer::layer<Activation::Softmax>(10, 10)
 	};
 
@@ -67,7 +72,28 @@ int32_t main()
 	}
 
 	std::vector<float> sOutput(10, .0f);
-	Optimizer::SGD<Loss::MSE> sOptimizer{sNetwork, .001f};
+	Optimizer::SGD<Loss::MSE> sOptimizer{sNetwork, .000001f};
+
+	auto sPair{sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 0, 0)};
+	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 1, 0);
+	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 2, 0);
+	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 3, 0);
+	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 4, 0);
+	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 5, 0);
+	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 6, 0);
+	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 7, 0);
+	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 8, 0);
+	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
+	sPair = sOptimizer.calcNumericalGradient(sTestInput[0], sTestOutput[0], 6, 9, 0);
+	printf("Checking : %f	vs	%f\n", sPair.first, sPair.second);
 
 	for (;;)
 	{
@@ -87,7 +113,7 @@ int32_t main()
 				sTestOutput[nIndex][5], sTestOutput[nIndex][6], sTestOutput[nIndex][7], sTestOutput[nIndex][8], sTestOutput[nIndex][9]);
 		}
 
-		sOptimizer.train(sTrainInput, sTrainOutput, 64, 10);
+		sOptimizer.train(sTrainInput, sTrainOutput, 32, 10);
 	}
 
 	return 0;

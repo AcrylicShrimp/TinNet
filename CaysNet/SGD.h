@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <cstddef>
 #include <random>
 #include <utility>
@@ -43,6 +44,7 @@ namespace CaysNet::Optimizer
 	public:
 		inline float &learningRate();
 		inline float learningRate() const;
+		std::pair<float, float> calcNumericalGradient(const std::vector<float> &sInput, const std::vector<float> &sOutput, std::size_t nLayerIndex, std::size_t nInputIndex, std::size_t nOutputIndex);
 		void train(std::vector<std::vector<float>> &sInput, std::vector<std::vector<float>> &sOutput, std::size_t nBatchSize, std::size_t nEpoch);
 	};
 
