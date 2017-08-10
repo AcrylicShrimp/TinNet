@@ -41,15 +41,18 @@ namespace CaysNet::Activation
 	{
 		float vDesk[2]{this->nFactor, 1.f};
 
-		for (std::size_t nIndex = 0, nSize = pLayer->fanOut(); nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{0}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
 			pOutput[nIndex] = vDesk[pOutput[nIndex] > .0f] * pOutput[nIndex];
 	}
 
-	float PReLU::derivative(float nZ, float nY) const
+	void PReLU::derivative(std::size_t nLength, const float *pInput, const float *pOutput, float *pResult) const
 	{
-		float vDesk[2]{this->nFactor, 1.f};
+		for (std::size_t nIndex{0}; nIndex < nLength; ++nIndex)
+		{
+			float vDesk[2]{this->nFactor, 1.f};
 
-		return vDesk[nZ > .0f];
+			pResult[nIndex] = vDesk[pInput[nIndex] > .0f];
+		}
 	}
 
 	Activation *PReLU::duplicate() const

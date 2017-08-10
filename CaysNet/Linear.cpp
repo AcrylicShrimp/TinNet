@@ -13,9 +13,10 @@ namespace CaysNet::Activation
 		//Empty.
 	}
 
-	float Linear::derivative(float nZ, float nY) const
+	void Linear::derivative(std::size_t nLength, const float *pInput, const float *pOutput, float *pResult) const
 	{
-		return 1.f;
+		for (std::size_t nIndex{0}; nIndex < nLength; ++nIndex)
+			pResult[nIndex] = 1.f;
 	}
 
 	Activation *Linear::duplicate() const

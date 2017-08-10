@@ -77,7 +77,24 @@ namespace CaysNet
 		return *this;
 	}
 
-	void Layer::forward(const float *pInput, float *pOutput)
+	void Layer::forward(const float *pInput, float *pOutput) const
+	{
+		assert(this->pActivation);
+
+		//z = X * W + b
+		for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)
+		{
+			auto &nDestination{pOutput[nOut] = this->sBias[nOut]};
+
+			for (std::size_t nIn{0}, nInSize{this->fanIn()}; nIn < nInSize; ++nIn)
+				nDestination += pInput[nIn] * this->sWeight[nOut][nIn];
+		}
+
+		//a = f(z)
+		this->pActivation->activate(this, pOutput);
+	}
+
+	void Layer::forwardForTrain(const float *pInput, float *pOutput)
 	{
 		assert(this->pActivation);
 
@@ -94,10 +111,7 @@ namespace CaysNet
 
 		//a = f(z)
 		this->pActivation->activate(this, pOutput);
-
-		//Take the derivative of the activation function.
-		for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)
-			this->sDerivative[nOut] = this->pActivation->derivative(this->sDerivative[nOut], pOutput[nOut]);
+		this->pActivation->derivative(this->fanOut(), this->sDerivative.data(), pOutput, this->sDerivative.data());
 	}
 
 	void Layer::backward(float *pBackInput, float *pBackOutput) const

@@ -48,6 +48,8 @@ namespace CaysNet
 		template<class Initializer, class ...InitializerParam> void initBias(InitializerParam && ...sParam);
 		void calc(const float *pInput);
 		void calc(const float *pInput, float *pOutput);
+		void calcForTrain(const float *pInput);
+		void calcForTrain(const float *pInput, float *pOutput);
 		float loss(const float *pInput, const float *pOutput);
 		float loss(const float **pInput, const float **pOutput, std::size_t nBatchCount);
 		float loss(const std::vector<float *> &sInputList, const std::vector<float *> &sOutputList);

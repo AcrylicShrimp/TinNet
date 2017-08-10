@@ -84,6 +84,25 @@ namespace CaysNet
 			*pOutput++ = nValue;
 	}
 
+	template<class LossFunc> void NN<LossFunc>::calcForTrain(const float *pInput)
+	{
+		this->sLayerList[0].forwardForTrain(pInput, this->sOutputBuffer[0].data());
+
+		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
+			this->sLayerList[nIndex].forwardForTrain(this->sOutputBuffer[nIndex - 1].data(), this->sOutputBuffer[nIndex].data());
+	}
+
+	template<class LossFunc> void NN<LossFunc>::calcForTrain(const float *pInput, float *pOutput)
+	{
+		if (!this->sLayerList.size())
+			return;
+
+		this->calcForTrain(pInput);
+
+		for (auto nValue : this->sOutputBuffer.back())
+			*pOutput++ = nValue;
+	}
+
 	template<class LossFunc> float NN<LossFunc>::loss(const float *pInput, const float *pOutput)
 	{
 		if (!this->sLayerList.size())

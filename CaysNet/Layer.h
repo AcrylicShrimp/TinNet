@@ -51,7 +51,8 @@ namespace CaysNet
 		inline Activation::Activation *activation() const;
 		inline std::size_t fanIn() const;
 		inline std::size_t fanOut() const;
-		void forward(const float *pInput, float *pOutput);
+		void forward(const float *pInput, float *pOutput) const;
+		void forwardForTrain(const float *pInput, float *pOutput);
 		void backward(float *pBackInput, float *pBackOutput) const;
 	};
 

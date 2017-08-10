@@ -10,13 +10,14 @@ namespace CaysNet::Activation
 {
 	void TanH::activate(const Layer *pLayer, float *pOutput) const
 	{
-		for (std::size_t nIndex = 0, nSize = pLayer->fanOut(); nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{0}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
 			pOutput[nIndex] = std::tanh(pOutput[nIndex]);
 	}
 
-	float TanH::derivative(float nZ, float nY) const
+	void TanH::derivative(std::size_t nLength, const float *pInput, const float *pOutput, float *pResult) const
 	{
-		return 1.f - nY * nY;
+		for (std::size_t nIndex{0}; nIndex < nLength; ++nIndex)
+			pResult[nIndex] = 1.f - pOutput[nIndex] * pOutput[nIndex];
 	}
 
 	Activation *TanH::duplicate() const

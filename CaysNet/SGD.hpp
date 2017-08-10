@@ -40,7 +40,7 @@ namespace CaysNet::Optimizer
 
 	template<class LossFunc> std::pair<float, float> SGD<LossFunc>::calcNumericalGradient(const std::vector<float> &sInput, const std::vector<float> &sOutput, std::size_t nLayerIndex, std::size_t nInputIndex, std::size_t nOutputIndex)
 	{
-		constexpr auto nEpsilon{1e-6f};
+		constexpr auto nEpsilon{1e-4f};
 
 		float nWeight{this->sNN[nLayerIndex].weight()[nOutputIndex][nInputIndex]};
 		
@@ -55,7 +55,7 @@ namespace CaysNet::Optimizer
 		this->sNN[nLayerIndex].weight()[nOutputIndex][nInputIndex] = nWeight;
 
 		//Forward pass.
-		this->sNN.calc(sInput.data());
+		this->sNN.calcForTrain(sInput.data());
 
 		//Give the backward input - derivative of the loss function.
 		LossFunc::derivative(sOutput.size(), this->sNN.output().back().data(), sOutput.data(), this->sNN.output().back().data());
@@ -124,7 +124,7 @@ namespace CaysNet::Optimizer
 				for (std::size_t nBatch{0}; nBatch < nActualBatchSize; ++nBatch, ++nBatchIndex)
 				{
 					//Forward pass.
-					this->sNN.calc(sInput[nBatchIndex].data());
+					this->sNN.calcForTrain(sInput[nBatchIndex].data());
 					
 					//Give the backward input - derivative of the loss function.
 					LossFunc::derivative(nDimension, this->sNN.output().back().data(), sOutput[nBatchIndex].data(), this->sNN.output().back().data());

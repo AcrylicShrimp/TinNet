@@ -19,7 +19,7 @@ int32_t main()
 	{
 		Layer::layer<Activation::Linear>(784, 10),
 		Layer::layer<Activation::Linear>(10, 10),
-		Layer::layer<Activation::Linear>(10, 10)
+		Layer::layer<Activation::Softmax>(10, 10)
 	};
 
 	sNetwork.initWeight<Initializer::He>();
