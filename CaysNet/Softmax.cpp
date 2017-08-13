@@ -8,6 +8,11 @@
 
 namespace CaysNet::Activation
 {
+	Activation *Softmax::duplicate() const
+	{
+		return new Softmax();
+	}
+
 	void Softmax::activate(const Layer *pLayer, float *pOutput) const
 	{
 		//Desk[0] : Max output
@@ -33,20 +38,20 @@ namespace CaysNet::Activation
 			pOutput[nIndex] /= (vDesk[1] + 1e-4f);
 	}
 
-	void Softmax::derivative(std::size_t nLength, const float *pInput, const float *pOutput, float *pResult) const
+	void Softmax::derivative(
+		std::size_t nLength,
+		const float *pActivationInput,
+		const float *pActivationOutput,
+		const float *pDerivativeInput,
+		float *pResult) const
 	{
-		std::vector<float> sTemp(nLength, .0f);
+		std::vector<float> sResult(nLength, .0f);
 
 		for (std::size_t nFirst{0}; nFirst < nLength; ++nFirst)
 			for (std::size_t nSecond{0}; nSecond < nLength; ++nSecond)
-				sTemp[nFirst] += (nFirst == nSecond ? pOutput[nSecond] * (1.f - pOutput[nSecond]) : -pOutput[nSecond] * pOutput[nFirst]);
+				sResult[nFirst] += pDerivativeInput[nSecond] * (nSecond == nFirst ? pActivationOutput[nSecond] * (1.f - pActivationOutput[nSecond]) : -pActivationOutput[nSecond] * pActivationOutput[nFirst]);
 
 		for (std::size_t nIndex{0}; nIndex < nLength; ++nIndex)
-			pResult[nIndex] = sTemp[nIndex];
-	}
-
-	Activation *Softmax::duplicate() const
-	{
-		return new Softmax();
+			pResult[nIndex] = sResult[nIndex];
 	}
 }

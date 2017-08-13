@@ -28,9 +28,14 @@ namespace CaysNet::Activation
 		Softmax &operator=(Softmax &&sSrc) = default;
 		
 	public:
-		virtual void activate(const Layer *pLayer, float *pOutput) const override;
-		virtual void derivative(std::size_t nLength, const float *pInput, const float *pOutput, float *pResult) const override;
 		virtual Activation *duplicate() const override;
+		virtual void activate(const Layer *pLayer, float *pOutput) const override;
+		virtual void derivative(
+			std::size_t nLength,
+			const float *pActivationInput,
+			const float *pActivationOutput,
+			const float *pDerivativeInput,
+			float *pResult) const override;
 	};
 }
 

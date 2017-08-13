@@ -28,9 +28,14 @@ namespace CaysNet::Activation
 		Activation &operator=(Activation &&sSrc) = default;
 
 	public:
-		virtual void activate(const Layer *pLayer, float *pOutput) const = 0;
-		virtual void derivative(std::size_t nLength, const float *pInput, const float *pOutput, float *pResult) const = 0;
 		virtual Activation *duplicate() const = 0;
+		virtual void activate(const Layer *pLayer, float *pOutput) const = 0;
+		virtual void derivative(
+			std::size_t nLength,
+			const float *pActivationInput,
+			const float *pActivationOutput,
+			const float *pDerivativeInput,
+			float *pResult) const = 0;
 	};
 }
 

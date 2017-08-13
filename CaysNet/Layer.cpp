@@ -12,8 +12,9 @@ namespace CaysNet
 {
 	Layer::Layer(std::size_t nFanIn, std::size_t nFanOut, Activation::Activation *pNewActivation) :
 		sWeight(nFanOut, std::vector<float>(nFanIn, .0f)),
-		sBias(nFanOut, .0f),
-		sDerivative(nFanOut, .0f),
+		sBias(nFanOut),
+		sActivationInput(nFanOut, .0f),
+		sActivationOutput(nFanOut, .0f),
 		pActivation{pNewActivation}
 	{
 		//Empty.
@@ -22,7 +23,8 @@ namespace CaysNet
 	Layer::Layer(const Layer &sSrc) :
 		sWeight{sSrc.sWeight},
 		sBias{sSrc.sBias},
-		sDerivative{sSrc.sDerivative},
+		sActivationInput{sSrc.sActivationInput},
+		sActivationOutput{sSrc.sActivationOutput},
 		pActivation{sSrc.pActivation->duplicate()}
 	{
 		//Empty.
@@ -31,7 +33,8 @@ namespace CaysNet
 	Layer::Layer(Layer &&sSrc) :
 		sWeight{std::move(sSrc.sWeight)},
 		sBias{std::move(sSrc.sBias)},
-		sDerivative{std::move(sSrc.sDerivative)},
+		sActivationInput{std::move(sSrc.sActivationInput)},
+		sActivationOutput{std::move(sSrc.sActivationOutput)},
 		pActivation{sSrc.pActivation}
 	{
 		sSrc.pActivation = nullptr;
@@ -54,7 +57,8 @@ namespace CaysNet
 
 		this->sWeight = sSrc.sWeight;
 		this->sBias = sSrc.sBias;
-		this->sDerivative = sSrc.sDerivative;
+		this->sActivationInput = sSrc.sActivationInput;
+		this->sActivationOutput = sSrc.sActivationOutput;
 		this->pActivation = sSrc.pActivation->duplicate();
 
 		return *this;
@@ -69,10 +73,11 @@ namespace CaysNet
 
 		this->sWeight = std::move(sSrc.sWeight);
 		this->sBias = std::move(sSrc.sBias);
-		this->sDerivative = std::move(sSrc.sDerivative);
+		this->sActivationInput = std::move(sSrc.sActivationInput);
+		this->sActivationOutput = std::move(sSrc.sActivationOutput);
 		this->pActivation = sSrc.pActivation;
 
-		sSrc.~Layer();
+		sSrc.pActivation = nullptr;
 
 		return *this;
 	}
@@ -101,17 +106,21 @@ namespace CaysNet
 		//z = X * W + b
 		for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)
 		{
-			auto &nDestination{pOutput[nOut] = this->sBias[nOut]};
+			auto &nDestination{this->sActivationOutput[nOut] = this->sBias[nOut]};
 
 			for (std::size_t nIn{0}, nInSize{this->fanIn()}; nIn < nInSize; ++nIn)
 				nDestination += pInput[nIn] * this->sWeight[nOut][nIn];
 
-			this->sDerivative[nOut] = nDestination;
+			//Save the network outputs.
+			this->sActivationInput[nOut] = nDestination;
 		}
 
 		//a = f(z)
-		this->pActivation->activate(this, pOutput);
-		this->pActivation->derivative(this->fanOut(), this->sDerivative.data(), pOutput, this->sDerivative.data());
+		this->pActivation->activate(this, this->sActivationOutput.data());
+
+		//Save the network outputs w/ activation.
+		for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)
+			pOutput[nOut] = this->sActivationOutput[nOut];
 	}
 
 	void Layer::backward(float *pBackInput, float *pBackOutput) const
@@ -119,8 +128,11 @@ namespace CaysNet
 		assert(this->pActivation);
 
 		//Multiply the derivations of the activation function.
+		std::vector<float> sBackInputBuffer(this->fanOut(), .0f);
+		this->pActivation->derivative(this->fanOut(), this->sActivationInput.data(), this->sActivationOutput.data(), pBackInput, sBackInputBuffer.data());
+
 		for (std::size_t nOut{0}, nOutSize{this->fanOut()}; nOut < nOutSize; ++nOut)
-			pBackInput[nOut] *= this->sDerivative[nOut];
+			pBackInput[nOut] = sBackInputBuffer[nOut];
 
 		if (!pBackOutput)
 			return;

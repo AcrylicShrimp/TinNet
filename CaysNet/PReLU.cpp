@@ -37,6 +37,11 @@ namespace CaysNet::Activation
 		return *this;
 	}
 
+	Activation *PReLU::duplicate() const
+	{
+		return new PReLU(this->nFactor);
+	}
+
 	void PReLU::activate(const Layer *pLayer, float *pOutput) const
 	{
 		float vDesk[2]{this->nFactor, 1.f};
@@ -45,18 +50,18 @@ namespace CaysNet::Activation
 			pOutput[nIndex] = vDesk[pOutput[nIndex] > .0f] * pOutput[nIndex];
 	}
 
-	void PReLU::derivative(std::size_t nLength, const float *pInput, const float *pOutput, float *pResult) const
+	void PReLU::derivative(
+		std::size_t nLength,
+		const float *pActivationInput,
+		const float *pActivationOutput,
+		const float *pDerivativeInput,
+		float *pResult) const
 	{
 		for (std::size_t nIndex{0}; nIndex < nLength; ++nIndex)
 		{
 			float vDesk[2]{this->nFactor, 1.f};
 
-			pResult[nIndex] = vDesk[pInput[nIndex] > .0f];
+			pResult[nIndex] = pDerivativeInput[nIndex] * vDesk[pActivationInput[nIndex] > .0f];
 		}
-	}
-
-	Activation *PReLU::duplicate() const
-	{
-		return new PReLU(this->nFactor);
 	}
 }

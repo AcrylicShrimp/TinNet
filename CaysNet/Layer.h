@@ -25,7 +25,8 @@ namespace CaysNet
 	private:
 		std::vector<std::vector<float>> sWeight;
 		std::vector<float> sBias;
-		std::vector<float> sDerivative;
+		std::vector<float> sActivationInput;
+		std::vector<float> sActivationOutput;
 		Activation::Activation *pActivation;
 
 	private:
@@ -46,8 +47,6 @@ namespace CaysNet
 		inline const std::vector<std::vector<float>> &weight() const;
 		inline std::vector<float> &bias();
 		inline const std::vector<float> &bias() const;
-		inline std::vector<float> &derivative();
-		inline const std::vector<float> &derivative() const;
 		inline Activation::Activation *activation() const;
 		inline std::size_t fanIn() const;
 		inline std::size_t fanOut() const;
@@ -79,16 +78,6 @@ namespace CaysNet
 	inline const std::vector<float> &Layer::bias() const
 	{
 		return this->sBias;
-	}
-
-	inline std::vector<float> &Layer::derivative()
-	{
-		return this->sDerivative;
-	}
-
-	inline const std::vector<float> &Layer::derivative() const
-	{
-		return this->sDerivative;
 	}
 
 	inline Activation::Activation *Layer::activation() const

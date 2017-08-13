@@ -8,6 +8,11 @@
 
 namespace CaysNet::Activation
 {
+	Activation *LReLU::duplicate() const
+	{
+		return new LReLU();
+	}
+
 	void LReLU::activate(const Layer *pLayer, float *pOutput) const
 	{
 		static const float vDesk[2]{.01f, 1.f};
@@ -16,16 +21,16 @@ namespace CaysNet::Activation
 			pOutput[nIndex] = vDesk[pOutput[nIndex] > .0f] * pOutput[nIndex];
 	}
 
-	void LReLU::derivative(std::size_t nLength, const float *pInput, const float *pOutput, float *pResult) const
+	void LReLU::derivative(
+		std::size_t nLength,
+		const float *pActivationInput,
+		const float *pActivationOutput,
+		const float *pDerivativeInput,
+		float *pResult) const
 	{
 		static const float vDesk[2]{.01f, 1.f};
 
 		for (std::size_t nIndex{0}; nIndex < nLength; ++nIndex)
-			pResult[nIndex] = vDesk[pInput[nIndex] > .0f];
-	}
-
-	Activation *LReLU::duplicate() const
-	{
-		return new LReLU();
+			pResult[nIndex] = pDerivativeInput[nIndex] * vDesk[pActivationInput[nIndex] > .0f];
 	}
 }
