@@ -177,6 +177,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CE.cpp" />
+    <ClCompile Include="ConsoleVisualizer.cpp" />
     <ClCompile Include="Constant.cpp" />
     <ClCompile Include="Glorot.cpp" />
     <ClCompile Include="He.cpp" />
@@ -190,6 +191,7 @@
     <ClCompile Include="ReLU.cpp" />
     <ClCompile Include="Run.cpp" />
     <ClInclude Include="CE.h" />
+    <ClInclude Include="ConsoleVisualizer.h" />
     <ClInclude Include="MulticlassCE.h" />
     <ClInclude Include="SGD.hpp" />
     <ClCompile Include="Sigmoid.cpp" />

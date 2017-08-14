@@ -17,8 +17,13 @@ int32_t main()
 
 	NN<Loss::MulticlassCE> sNetwork
 	{
-		Layer::layer<Activation::LReLU>(784, 100),
-		Layer::layer<Activation::LReLU>(100, 10),
+		Layer::layer<Activation::LReLU>(784, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
+		Layer::layer<Activation::LReLU>(10, 10),
 		Layer::layer<Activation::Softmax>(10, 10)
 	};
 
@@ -97,19 +102,26 @@ int32_t main()
 	{
 		printf("Training data loss : %f\n", sNetwork.loss(sTrainInput, sTrainOutput));
 		printf("Validation data loss : %f\n", sNetwork.loss(sTestInput, sTestOutput));
+		printf("Training data classification loss : %f\n", sNetwork.classificationLoss(sTrainInput, sTrainOutput));
+		printf("Validation data classification loss : %f\n", sNetwork.classificationLoss(sTestInput, sTestOutput));
 
-		for (std::size_t nIndex{0}; nIndex < 10; ++nIndex)
+		//sNetwork.calc(sTestInput[0].data(), sOutput.data());
+
+		//CaysNet::Visualizer::ConsoleVisualizer::clear();
+		//CaysNet::Visualizer::ConsoleVisualizer::visualize(sOutput.data());
+
+		/*for (std::size_t nIndex{0}; nIndex < 10; ++nIndex)
 		{
 			sNetwork.calc(sTestInput[nIndex].data(), sOutput.data());
 			
 			printf("%0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf\n",
 				sOutput[0], sOutput[1], sOutput[2], sOutput[3], sOutput[4],
 				sOutput[5], sOutput[6], sOutput[7], sOutput[8], sOutput[9]);
-
+			
 			printf("%0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf\n\n",
 				sTestOutput[nIndex][0], sTestOutput[nIndex][1], sTestOutput[nIndex][2], sTestOutput[nIndex][3], sTestOutput[nIndex][4],
 				sTestOutput[nIndex][5], sTestOutput[nIndex][6], sTestOutput[nIndex][7], sTestOutput[nIndex][8], sTestOutput[nIndex][9]);
-		}
+		}*/
 
 		sOptimizer.train(sTrainInput, sTrainOutput, 32, 1);
 	}

@@ -50,10 +50,14 @@ namespace CaysNet
 		void calc(const float *pInput, float *pOutput);
 		void calcForTrain(const float *pInput);
 		void calcForTrain(const float *pInput, float *pOutput);
+		std::size_t classification(const float *pInput);
 		float loss(const float *pInput, const float *pOutput);
 		float loss(const float **pInput, const float **pOutput, std::size_t nBatchCount);
 		float loss(const std::vector<float *> &sInputList, const std::vector<float *> &sOutputList);
 		float loss(const std::vector<std::vector<float>> &sInputList, const std::vector<std::vector<float>> &sOutputList);
+		float classificationLoss(const float **pInput, const float **pOutput, std::size_t nBatchCount);
+		float classificationLoss(const std::vector<float *> &sInputList, const std::vector<float *> &sOutputList);
+		float classificationLoss(const std::vector<std::vector<float>> &sInputList, const std::vector<std::vector<float>> &sOutputList);
 	};
 
 	template<class LossFunc> inline Layer &NN<LossFunc>::operator[](std::size_t nIndex)

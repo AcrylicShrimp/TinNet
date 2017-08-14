@@ -16,6 +16,9 @@
     <Filter Include="CaysNet\Initializer">
       <UniqueIdentifier>{3d7dc2fc-3c2b-42cd-a06f-6f879ab796df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CaysNet\Visualizer">
+      <UniqueIdentifier>{2677b10e-72ad-4029-b527-fe8e82915869}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Linear.cpp">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="MulticlassCE.cpp">
       <Filter>CaysNet\Loss</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleVisualizer.cpp">
+      <Filter>CaysNet\Visualizer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="MulticlassCE.h">
       <Filter>CaysNet\Loss</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleVisualizer.h">
+      <Filter>CaysNet\Visualizer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

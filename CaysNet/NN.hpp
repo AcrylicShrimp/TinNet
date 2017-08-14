@@ -67,6 +67,8 @@ namespace CaysNet
 
 	template<class LossFunc> void NN<LossFunc>::calc(const float *pInput)
 	{
+		assert(this->sLayerList.size());
+
 		this->sLayerList[0].forward(pInput, this->sOutputBuffer[0].data());
 
 		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
@@ -75,6 +77,8 @@ namespace CaysNet
 
 	template<class LossFunc> void NN<LossFunc>::calc(const float *pInput, float *pOutput)
 	{
+		assert(this->sLayerList.size());
+
 		if (!this->sLayerList.size())
 			return;
 
@@ -94,6 +98,8 @@ namespace CaysNet
 
 	template<class LossFunc> void NN<LossFunc>::calcForTrain(const float *pInput, float *pOutput)
 	{
+		assert(this->sLayerList.size());
+
 		if (!this->sLayerList.size())
 			return;
 
@@ -103,8 +109,29 @@ namespace CaysNet
 			*pOutput++ = nValue;
 	}
 
+	template<class LossFunc> std::size_t NN<LossFunc>::classification(const float *pInput)
+	{
+		assert(this->sLayerList.size());
+
+		if (!this->sLayerList.size())
+			return std::numeric_limits<std::size_t>::max();
+
+		this->calc(pInput);
+
+		std::size_t nMaxIndex{0};
+		auto nMaxValue{this->sOutputBuffer.back().front()};
+
+		for (std::size_t nOut{1}, nOutSize{this->sOutputBuffer.back().size()}; nOut < nOutSize; ++nOut)
+			if (nMaxValue < this->sOutputBuffer.back()[nOut])
+				nMaxValue = this->sOutputBuffer.back()[nMaxIndex = nOut];
+
+		return nMaxIndex;
+	}
+
 	template<class LossFunc> float NN<LossFunc>::loss(const float *pInput, const float *pOutput)
 	{
+		assert(this->sLayerList.size());
+
 		if (!this->sLayerList.size())
 			return std::numeric_limits<float>::signaling_NaN();
 
@@ -161,5 +188,50 @@ namespace CaysNet
 
 		//Take average of the loss.
 		return nLossSum / sInputList.size();
+	}
+
+	template<class LossFunc> float NN<LossFunc>::classificationLoss(const float **pInput, const float **pOutput, std::size_t nBatchCount)
+	{
+		assert(this->sLayerList.size());
+
+		if (!this->sLayerList.size())
+			return std::numeric_limits<float>::signaling_NaN();
+
+		auto nResult{.0f};
+
+		for (std::size_t nIndex{0u}; nIndex < nBatchCount; ++nIndex)
+			nResult += pOutput[nIndex][this->classification(pInput[nIndex])];
+
+		return 1.f - nResult / nBatchCount;
+	}
+
+	template<class LossFunc> float NN<LossFunc>::classificationLoss(const std::vector<float *> &sInputList, const std::vector<float *> &sOutputList)
+	{
+		assert(this->sLayerList.size());
+
+		if (!this->sLayerList.size())
+			return std::numeric_limits<float>::signaling_NaN();
+
+		auto nResult{.0f};
+
+		for (std::size_t nIndex{0u}, nCount{sInputList.size()}; nIndex < nCount; ++nIndex)
+			nResult += sOutputList[nIndex][this->classification(sInputList[nIndex])];
+
+		return 1.f - nResult / sInputList.size();
+	}
+
+	template<class LossFunc> float NN<LossFunc>::classificationLoss(const std::vector<std::vector<float>> &sInputList, const std::vector<std::vector<float>> &sOutputList)
+	{
+		assert(this->sLayerList.size());
+
+		if (!this->sLayerList.size())
+			return std::numeric_limits<float>::signaling_NaN();
+
+		auto nResult{.0f};
+
+		for (std::size_t nIndex{0u}, nCount{sInputList.size()}; nIndex < nCount; ++nIndex)
+			nResult += sOutputList[nIndex][this->classification(sInputList[nIndex].data())];
+
+		return 1.f - nResult / sInputList.size();
 	}
 }

@@ -16,4 +16,6 @@
 #include "Losses.h"
 #include "Optimizers.h"
 
+#include "ConsoleVisualizer.h"
+
 #endif
