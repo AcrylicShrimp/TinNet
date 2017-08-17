@@ -18,4 +18,6 @@
 
 #include "ConsoleVisualizer.h"
 
+#include "Serializable.h"
+
 #endif

@@ -19,6 +19,9 @@
     <Filter Include="CaysNet\Visualizer">
       <UniqueIdentifier>{2677b10e-72ad-4029-b527-fe8e82915869}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CaysNet\IO">
+      <UniqueIdentifier>{88da9943-515b-4e75-bb5f-86c443f73963}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Linear.cpp">
@@ -77,6 +80,12 @@
     </ClCompile>
     <ClCompile Include="ConsoleVisualizer.cpp">
       <Filter>CaysNet\Visualizer</Filter>
+    </ClCompile>
+    <ClCompile Include="Activations.cpp">
+      <Filter>CaysNet\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="Serializable.cpp">
+      <Filter>CaysNet\IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="ConsoleVisualizer.h">
       <Filter>CaysNet\Visualizer</Filter>
+    </ClInclude>
+    <ClInclude Include="Serializable.h">
+      <Filter>CaysNet\IO</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

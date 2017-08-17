@@ -37,6 +37,11 @@ namespace CaysNet::Activation
 		return *this;
 	}
 
+	const wchar_t *PReLU::name() const
+	{
+		return L"PReLU";
+	}
+
 	Activation *PReLU::duplicate() const
 	{
 		return new PReLU(this->nFactor);

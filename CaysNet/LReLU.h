@@ -27,6 +27,7 @@ namespace CaysNet::Activation
 		LReLU &operator=(LReLU &&sSrc) = default;
 		
 	public:
+		virtual const wchar_t *name() const override;
 		virtual Activation *duplicate() const override;
 		virtual void activate(const Layer *pLayer, float *pOutput) const override;
 		virtual void derivative(std::size_t nLength, const float *pLayerInput, const float *pActivationInput, const float *pActivationOutput, float *pResult) const override;

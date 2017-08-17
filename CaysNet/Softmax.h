@@ -28,6 +28,7 @@ namespace CaysNet::Activation
 		Softmax &operator=(Softmax &&sSrc) = default;
 		
 	public:
+		virtual const wchar_t *name() const override;
 		virtual Activation *duplicate() const override;
 		virtual void activate(const Layer *pLayer, float *pOutput) const override;
 		virtual void derivative(

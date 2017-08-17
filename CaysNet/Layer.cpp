@@ -145,4 +145,24 @@ namespace CaysNet
 			for (std::size_t nIn{0}, nInSize{this->fanIn()}; nIn < nInSize; ++nIn)
 				pBackOutput[nIn] += this->sWeight[nOut][nIn] * pBackInput[nOut];	//SUM (W * derivation * derivation_before)
 	}
+
+	void Layer::serialize(std::ofstream &sOutput) const
+	{
+		for (auto &sWeight : this->sWeight)
+			for (auto nWeight : sWeight)
+				IO::Serializable::write(sOutput, nWeight);
+
+		for (auto nBias : this->sBias)
+			IO::Serializable::write(sOutput, nBias);
+	}
+
+	void Layer::deserialize(std::ifstream &sInput)
+	{
+		for (auto &sWeight : this->sWeight)
+			for (auto &nWeight : sWeight)
+				nWeight = IO::Serializable::read<float>(sInput);
+
+		for (auto &nBias : this->sBias)
+			nBias = IO::Serializable::read<float>(sInput);
+	}
 }

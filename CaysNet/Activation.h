@@ -4,9 +4,9 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_CAYSNET_ACTIVATION_ACTIVATION_H
+#ifndef _INTERFACE_CAYSNET_ACTIVATION_ACTIVATION_H
 
-#define _CLASS_CAYSNET_ACTIVATION_ACTIVATION_H
+#define _INTERFACE_CAYSNET_ACTIVATION_ACTIVATION_H
 
 #include "Layer.h"
 
@@ -28,6 +28,7 @@ namespace CaysNet::Activation
 		Activation &operator=(Activation &&sSrc) = default;
 
 	public:
+		virtual const wchar_t *name() const = 0;
 		virtual Activation *duplicate() const = 0;
 		virtual void activate(const Layer *pLayer, float *pOutput) const = 0;
 		virtual void derivative(

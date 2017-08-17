@@ -8,6 +8,11 @@
 
 namespace CaysNet::Activation
 {
+	const wchar_t *TanH::name() const
+	{
+		return L"TanH";
+	}
+
 	Activation *TanH::duplicate() const
 	{
 		return new TanH();

@@ -8,6 +8,11 @@
 
 namespace CaysNet::Activation
 {
+	const wchar_t *Softmax::name() const
+	{
+		return L"Softmax";
+	}
+
 	Activation *Softmax::duplicate() const
 	{
 		return new Softmax();

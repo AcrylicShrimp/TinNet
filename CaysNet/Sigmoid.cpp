@@ -8,6 +8,11 @@
 
 namespace CaysNet::Activation
 {
+	const wchar_t *Sigmoid::name() const
+	{
+		return L"Sigmoid";
+	}
+
 	Activation *Sigmoid::duplicate() const
 	{
 		return new Sigmoid();

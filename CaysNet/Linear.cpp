@@ -8,6 +8,11 @@
 
 namespace CaysNet::Activation
 {
+	const wchar_t *Linear::name() const
+	{
+		return L"Linear";
+	}
+
 	Activation *Linear::duplicate() const
 	{
 		return new Linear();

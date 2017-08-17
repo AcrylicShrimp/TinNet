@@ -99,6 +99,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
     <GenerateManifest>false</GenerateManifest>
+    <IncludePath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\Win32;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\Win32;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -176,6 +186,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Activations.cpp" />
     <ClCompile Include="CE.cpp" />
     <ClCompile Include="ConsoleVisualizer.cpp" />
     <ClCompile Include="Constant.cpp" />
@@ -193,7 +204,9 @@
     <ClInclude Include="CE.h" />
     <ClInclude Include="ConsoleVisualizer.h" />
     <ClInclude Include="MulticlassCE.h" />
+    <ClInclude Include="Serializable.h" />
     <ClInclude Include="SGD.hpp" />
+    <ClCompile Include="Serializable.cpp" />
     <ClCompile Include="Sigmoid.cpp" />
     <ClCompile Include="Softmax.cpp" />
     <ClCompile Include="TanH.cpp" />

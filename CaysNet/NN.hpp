@@ -234,4 +234,35 @@ namespace CaysNet
 
 		return 1.f - nResult / sInputList.size();
 	}
+
+	template<class LossFunc> void NN<LossFunc>::serialize(std::ofstream &sOutput) const
+	{
+		IO::Serializable::write(sOutput, this->sLayerList.size());
+
+		for (auto &sLayer : this->sLayerList)
+		{
+			IO::Serializable::write(sOutput, sLayer.fanIn());
+			IO::Serializable::write(sOutput, sLayer.fanOut());
+			IO::Serializable::write(sOutput, std::wstring(sLayer.activation()->name()));
+
+			sLayer.serialize(sOutput);
+		}
+	}
+
+	template<class LossFunc> void NN<LossFunc>::deserialize(std::ifstream &sInput)
+	{
+		this->sLayerList.clear();
+		this->sOutputBuffer.clear();
+
+		for (std::size_t nIndex{0}, nSize{IO::Serializable::read<std::size_t>(sInput)}; nIndex < nSize; ++nIndex)
+		{
+			auto nFanIn{IO::Serializable::read<std::size_t>(sInput)};
+			auto nFanOut{IO::Serializable::read<std::size_t>(sInput)};
+			
+			this->sLayerList.emplace_back(nFanIn, nFanOut, Activation::Activations::createByName(IO::Serializable::readWideString(sInput), sInput));
+			this->sOutputBuffer.emplace_back(nFanOut, .0f);
+
+			this->sLayerList.back().deserialize(sInput);
+		}
+	}
 }

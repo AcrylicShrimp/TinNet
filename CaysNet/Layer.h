@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_LAYER_H
 
+#include "Serializable.h"
+
 #include <cassert>
 #include <cstddef>
 #include <utility>
@@ -20,7 +22,7 @@ namespace CaysNet
 		class Activation;
 	}
 
-	class Layer final
+	class Layer final : public IO::Serializable
 	{
 	private:
 		std::vector<std::vector<float>> sWeight;
@@ -29,18 +31,16 @@ namespace CaysNet
 		std::vector<float> sActivationOutput;
 		Activation::Activation *pActivation;
 
-	private:
-		Layer(std::size_t nFanIn, std::size_t nFanOut, Activation::Activation *pNewActivation);
-		
 	public:
+		Layer(std::size_t nFanIn, std::size_t nFanOut, Activation::Activation *pNewActivation);
 		Layer(const Layer &sSrc);
 		Layer(Layer &&sSrc);
 		~Layer();
-		
+
 	public:
 		Layer &operator=(const Layer &sSrc);
 		Layer &operator=(Layer &&sSrc);
-		
+
 	public:
 		template<class ActivationFunc, class ...ActivationFuncParam> inline static Layer layer(std::size_t nFanIn, std::size_t nFanOut, ActivationFuncParam && ...sActivationFuncParam);
 		inline std::vector<std::vector<float>> &weight();
@@ -53,6 +53,8 @@ namespace CaysNet
 		void forward(const float *pInput, float *pOutput) const;
 		void forwardForTrain(const float *pInput, float *pOutput);
 		void backward(float *pBackInput, float *pBackOutput) const;
+		virtual void serialize(std::ofstream &sOutput) const override;
+		virtual void deserialize(std::ifstream &sInput) override;
 	};
 
 	template<class ActivationFunc, class ...ActivationFuncParam> inline Layer Layer::layer(std::size_t nFanIn, std::size_t nFanOut, ActivationFuncParam && ...sActivationFuncParam)
