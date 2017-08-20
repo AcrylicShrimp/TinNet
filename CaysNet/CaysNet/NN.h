@@ -8,9 +8,9 @@
 
 #define _CLASS_CAYSNET_NN_H
 
-#include "Activations.h"
 #include "Layer.h"
-#include "Serializable.h"
+#include "Activation/Activations.h"
+#include "IO/Serializable.h"
 
 #include <algorithm>
 #include <cassert>
@@ -23,7 +23,7 @@
 
 namespace CaysNet
 {
-	template<class LossFunc> class NN final : public IO::Serializable
+	class NN final : public IO::Serializable
 	{
 	private:
 		std::vector<Layer> sLayerList;
@@ -57,10 +57,10 @@ namespace CaysNet
 		void calcForTrain(const float *pInput);
 		void calcForTrain(const float *pInput, float *pOutput);
 		std::size_t classification(const float *pInput);
-		float loss(const float *pInput, const float *pOutput);
-		float loss(const float **pInput, const float **pOutput, std::size_t nBatchCount);
-		float loss(const std::vector<float *> &sInputList, const std::vector<float *> &sOutputList);
-		float loss(const std::vector<std::vector<float>> &sInputList, const std::vector<std::vector<float>> &sOutputList);
+		template<class LossFunc> float loss(const float *pInput, const float *pOutput);
+		template<class LossFunc> float loss(const float **pInput, const float **pOutput, std::size_t nBatchCount);
+		template<class LossFunc> float loss(const std::vector<float *> &sInputList, const std::vector<float *> &sOutputList);
+		template<class LossFunc> float loss(const std::vector<std::vector<float>> &sInputList, const std::vector<std::vector<float>> &sOutputList);
 		float classificationLoss(const float **pInput, const float **pOutput, std::size_t nBatchCount);
 		float classificationLoss(const std::vector<float *> &sInputList, const std::vector<float *> &sOutputList);
 		float classificationLoss(const std::vector<std::vector<float>> &sInputList, const std::vector<std::vector<float>> &sOutputList);
@@ -68,48 +68,48 @@ namespace CaysNet
 		virtual void deserialize(std::ifstream &sInput) override;
 	};
 
-	template<class LossFunc> inline Layer &NN<LossFunc>::operator[](std::size_t nIndex)
+	inline Layer &NN::operator[](std::size_t nIndex)
 	{
 		return this->sLayerList[nIndex];
 	}
 
-	template<class LossFunc> inline const Layer &NN<LossFunc>::operator[](std::size_t nIndex) const
+	inline const Layer &NN::operator[](std::size_t nIndex) const
 	{
 		return this->sLayerList[nIndex];
 	}
 
-	template<class LossFunc> inline std::vector<Layer> &NN<LossFunc>::layer()
+	inline std::vector<Layer> &NN::layer()
 	{
 		return this->sLayerList;
 	}
 
-	template<class LossFunc> inline const std::vector<Layer> &NN<LossFunc>::layer() const
+	inline const std::vector<Layer> &NN::layer() const
 	{
 		return this->sLayerList;
 	}
 
-	template<class LossFunc> inline std::size_t NN<LossFunc>::depth() const
+	inline std::size_t NN::depth() const
 	{
 		return this->sLayerList.size();
 	}
 
-	template<class LossFunc> inline std::vector<std::vector<float>> &NN<LossFunc>::output()
+	inline std::vector<std::vector<float>> &NN::output()
 	{
 		return this->sOutputBuffer;
 	}
 
-	template<class LossFunc> inline const std::vector<std::vector<float>> &NN<LossFunc>::output() const
+	inline const std::vector<std::vector<float>> &NN::output() const
 	{
 		return this->sOutputBuffer;
 	}
 
-	template<class LossFunc> void NN<LossFunc>::addLayer(const Layer &sLayer)
+	void NN::addLayer(const Layer &sLayer)
 	{
 		this->sLayerList.emplace_back(sLayer);
 		this->sOutputBuffer.emplace_back(this->sLayerList.back().fanOut(), .0f);
 	}
 
-	template<class LossFunc> void NN<LossFunc>::addLayer(Layer &&sLayer)
+	void NN::addLayer(Layer &&sLayer)
 	{
 		this->sLayerList.emplace_back(std::move(sLayer));
 		this->sOutputBuffer.emplace_back(this->sLayerList.back().fanOut(), .0f);

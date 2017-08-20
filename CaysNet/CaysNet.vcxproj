@@ -57,21 +57,21 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -80,21 +80,27 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Default.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Default.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Export|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Default.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Default.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Default.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Export|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Default.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
@@ -115,15 +121,24 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
+    <Link>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
+    <Link>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -132,11 +147,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
@@ -146,11 +163,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <DebugInformationFormat>None</DebugInformationFormat>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <StringPooling>true</StringPooling>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -166,78 +186,101 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <StringPooling>true</StringPooling>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Activations.cpp" />
-    <ClCompile Include="CE.cpp" />
-    <ClCompile Include="ConsoleVisualizer.cpp" />
-    <ClCompile Include="Constant.cpp" />
-    <ClCompile Include="Glorot.cpp" />
-    <ClCompile Include="He.cpp" />
-    <ClCompile Include="Layer.cpp" />
-    <ClCompile Include="Linear.cpp" />
-    <ClCompile Include="LReLU.cpp" />
-    <ClCompile Include="MSE.cpp" />
-    <ClCompile Include="MulticlassCE.cpp" />
-    <ClCompile Include="Normal.cpp" />
-    <ClCompile Include="PReLU.cpp" />
-    <ClCompile Include="ReLU.cpp" />
+    <ClCompile Include="CaysNet\Activation\Activations.cpp" />
+    <ClCompile Include="CaysNet\Activation\Linear.cpp" />
+    <ClCompile Include="CaysNet\Activation\LReLU.cpp" />
+    <ClCompile Include="CaysNet\Activation\PReLU.cpp" />
+    <ClCompile Include="CaysNet\Activation\ReLU.cpp" />
+    <ClCompile Include="CaysNet\Activation\Sigmoid.cpp" />
+    <ClCompile Include="CaysNet\Activation\Softmax.cpp" />
+    <ClCompile Include="CaysNet\Activation\TanH.cpp" />
+    <ClCompile Include="CaysNet\Initializer\Constant.cpp" />
+    <ClCompile Include="CaysNet\Initializer\Glorot.cpp" />
+    <ClCompile Include="CaysNet\Initializer\He.cpp" />
+    <ClCompile Include="CaysNet\Initializer\Normal.cpp" />
+    <ClCompile Include="CaysNet\Initializer\Uniform.cpp" />
+    <ClCompile Include="CaysNet\Initializer\Xavier.cpp" />
+    <ClCompile Include="CaysNet\IO\Serializable.cpp" />
+    <ClCompile Include="CaysNet\Layer.cpp" />
+    <ClCompile Include="CaysNet\Loss\CE.cpp" />
+    <ClCompile Include="CaysNet\Loss\MSE.cpp" />
+    <ClCompile Include="CaysNet\Loss\MulticlassCE.cpp" />
+    <ClCompile Include="CaysNet\NN.cpp" />
+    <ClCompile Include="CaysNet\Optimizer\Supervised\Momentum.cpp" />
+    <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp" />
+    <ClCompile Include="CaysNet\Optimizer\Supervised\SGD.cpp" />
+    <ClCompile Include="CaysNet\Visualizer\ConsoleVisualizer.cpp" />
+    <ClCompile Include="CaysNet\Visualizer\CSVLossExporter.cpp" />
     <ClCompile Include="Run.cpp" />
-    <ClInclude Include="CE.h" />
-    <ClInclude Include="ConsoleVisualizer.h" />
-    <ClInclude Include="MulticlassCE.h" />
-    <ClInclude Include="Serializable.h" />
-    <ClInclude Include="SGD.hpp" />
-    <ClCompile Include="Serializable.cpp" />
-    <ClCompile Include="Sigmoid.cpp" />
-    <ClCompile Include="Softmax.cpp" />
-    <ClCompile Include="TanH.cpp" />
-    <ClCompile Include="Uniform.cpp" />
-    <ClCompile Include="Xavier.cpp" />
+    <ClInclude Include="CaysNet\Activation\Activation.h" />
+    <ClInclude Include="CaysNet\Activation\Activations.h" />
+    <ClInclude Include="CaysNet\Activation\Linear.h" />
+    <ClInclude Include="CaysNet\Activation\LReLU.h" />
+    <ClInclude Include="CaysNet\Activation\PReLU.h" />
+    <ClInclude Include="CaysNet\Activation\ReLU.h" />
+    <ClInclude Include="CaysNet\Activation\Sigmoid.h" />
+    <ClInclude Include="CaysNet\Activation\Softmax.h" />
+    <ClInclude Include="CaysNet\Activation\TanH.h" />
+    <ClInclude Include="CaysNet\CaysNet.h" />
+    <ClInclude Include="CaysNet\Initializer\Constant.h" />
+    <ClInclude Include="CaysNet\Initializer\Glorot.h" />
+    <ClInclude Include="CaysNet\Initializer\He.h" />
+    <ClInclude Include="CaysNet\Initializer\Initializers.h" />
+    <ClInclude Include="CaysNet\Initializer\Normal.h" />
+    <ClInclude Include="CaysNet\Initializer\Uniform.h" />
+    <ClInclude Include="CaysNet\Initializer\Xavier.h" />
+    <ClInclude Include="CaysNet\IO\Serializable.h" />
+    <ClInclude Include="CaysNet\Layer.h" />
+    <ClInclude Include="CaysNet\Loss\CE.h" />
+    <ClInclude Include="CaysNet\Loss\Losses.h" />
+    <ClInclude Include="CaysNet\Loss\MSE.h" />
+    <ClInclude Include="CaysNet\Loss\MulticlassCE.h" />
+    <ClInclude Include="CaysNet\NN.h" />
+    <ClInclude Include="CaysNet\NN.hpp" />
+    <ClInclude Include="CaysNet\Optimizer\Optimizers.h" />
+    <ClInclude Include="CaysNet\Optimizer\Reinforcement\ActorCritic.h" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.h" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.hpp" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.h" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.h" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Activation.h" />
-    <ClInclude Include="Activations.h" />
-    <ClInclude Include="CaysNet.h" />
-    <ClInclude Include="Constant.h" />
-    <ClInclude Include="Glorot.h" />
-    <ClInclude Include="He.h" />
-    <ClInclude Include="Initializers.h" />
-    <ClInclude Include="Layer.h" />
-    <ClInclude Include="Linear.h" />
-    <ClInclude Include="Losses.h" />
-    <ClInclude Include="LReLU.h" />
-    <ClInclude Include="MSE.h" />
-    <ClInclude Include="NN.h" />
-    <ClInclude Include="NN.hpp" />
-    <ClInclude Include="Normal.h" />
-    <ClInclude Include="Optimizers.h" />
-    <ClInclude Include="PReLU.h" />
-    <ClInclude Include="ReLU.h" />
-    <ClInclude Include="SGD.h" />
-    <ClInclude Include="Sigmoid.h" />
-    <ClInclude Include="Softmax.h" />
-    <ClInclude Include="TanH.h" />
-    <ClInclude Include="Uniform.h" />
-    <ClInclude Include="Xavier.h" />
+    <ClInclude Include="CaysNet\Visualizer\ConsoleVisualizer.h" />
+    <ClInclude Include="CaysNet\Visualizer\CSVLossExporter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

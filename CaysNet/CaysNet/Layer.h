@@ -8,7 +8,7 @@
 
 #define _CLASS_CAYSNET_LAYER_H
 
-#include "Serializable.h"
+#include "IO/Serializable.h"
 
 #include <cassert>
 #include <cstddef>

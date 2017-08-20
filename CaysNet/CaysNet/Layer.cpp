@@ -6,7 +6,7 @@
 
 #include "Layer.h"
 
-#include "Activation.h"
+#include "Activation/Activation.h"
 
 namespace CaysNet
 {

@@ -8,7 +8,7 @@
 
 #define _CLASS_CAYSNET_INITIALIZER_CONSTANT_H
 
-#include "Layer.h"
+#include "../Layer.h"
 
 namespace CaysNet::Initializer
 {

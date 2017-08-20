@@ -38,9 +38,13 @@ namespace CaysNet::Activation
 		for (std::size_t nIndex{0}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
 			vDesk[1] += (pOutput[nIndex] = std::exp(pOutput[nIndex] - vDesk[0]));
 
+		//UNDER TEST
+		if (vDesk[1] == .0f)
+			return;
+
 		//Divide by the accumulated value.
 		for (std::size_t nIndex{0}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
-			pOutput[nIndex] /= (vDesk[1] + 1e-4f);
+			pOutput[nIndex] /= vDesk[1];
 	}
 
 	void Softmax::derivative(

@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_OPTIMIZER_OPTIMIZERS_H
 
-#include "SGD.h"
+#include "Supervised/SGD.h"
+#include "Supervised/Momentum.h"
+#include "Supervised/NAG.h"
 
 #endif

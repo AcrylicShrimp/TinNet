@@ -1,32 +1,32 @@
 
 /*
-	2017.08.05
+	2017.08.20
 	Created by AcrylicShrimp.
 */
 
-#include "Losses.h"
+#include "NAG.h"
 
-namespace CaysNet::Loss
+namespace CaysNet::Optimizer::Supervised
 {
-	Losses::Losses()
+	NAG::NAG()
 	{
 		//TODO : Place your implementation of default constructor here.
 		
 	}
 	
-	Losses::Losses(const Losses &sSrc)
+	NAG::NAG(const NAG &sSrc)
 	{
 		//TODO : Place your implementation of copy constructor here.
 		
 	}
 	
-	Losses::Losses(Losses &&sSrc)
+	NAG::NAG(NAG &&sSrc)
 	{
 		//TODO : Place your implementation of move constructor here.
 		
 	}
 	
-	Losses::~Losses()
+	NAG::~NAG()
 	{
 		//TODO : Place your implementation of destructor here.
 		
@@ -37,7 +37,7 @@ namespace CaysNet::Loss
 	*/
 	
 	
-	Losses &Losses::operator=(const Losses &sSrc)
+	NAG &NAG::operator=(const NAG &sSrc)
 	{
 		if(&sSrc == this)
 			return *this;
@@ -48,7 +48,7 @@ namespace CaysNet::Loss
 		return *this;
 	}
 	
-	Losses &Losses::operator=(Losses &&sSrc)
+	NAG &NAG::operator=(NAG &&sSrc)
 	{
 		if(&sSrc == this)
 			return *this;

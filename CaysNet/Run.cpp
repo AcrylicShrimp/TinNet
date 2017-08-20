@@ -4,7 +4,7 @@
 	Created by AcrylicShrimp.
 */
 
-#include "CaysNet.h"
+#include "CaysNet/CaysNet.h"
 
 #include <cstdint>
 #include <fstream>
@@ -15,7 +15,7 @@ int32_t main()
 {
 	using namespace CaysNet;
 
-	NN<Loss::MulticlassCE> sNetwork;
+	NN sNetwork;
 
 	for (std::string sCommand;;)
 	{
@@ -139,40 +139,24 @@ int32_t main()
 		}
 	}
 
-	std::vector<float> sOutput(10, .0f);
-	Optimizer::SGD<Loss::MulticlassCE> sOptimizer{sNetwork, .001f};
+	//Optimizer::Supervised::SGD sOptimizer{sNetwork, .001f};
+	Optimizer::Supervised::Momentum sOptimizer{sNetwork, .9f, .001f};
+
+	Visualizer::CSVLossExporter sExporter;
 
 	for (;;)
 	{
-		printf("Validation data classification loss : %f\n", sNetwork.classificationLoss(sTestInput, sTestOutput));
+		float nLoss{sNetwork.classificationLoss(sTestInput, sTestOutput)};
+
+		printf("Validation data classification loss : %f\n", nLoss);
+		sExporter.accrueLoss(nLoss);
+		sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
 
 		std::cout << "Serializing network...";
 		sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
 		std::cout << " saved." << std::endl;
 
-		//printf("Training data loss : %f\n", sNetwork.loss(sTrainInput, sTrainOutput));
-		//printf("Validation data loss : %f\n", sNetwork.loss(sTestInput, sTestOutput));
-		//printf("Training data classification loss : %f\n", sNetwork.classificationLoss(sTrainInput, sTrainOutput));
-
-		//sNetwork.calc(sTestInput[0].data(), sOutput.data());
-
-		//CaysNet::Visualizer::ConsoleVisualizer::clear();
-		//CaysNet::Visualizer::ConsoleVisualizer::visualize(sOutput.data());
-
-		/*for (std::size_t nIndex{0}; nIndex < 10; ++nIndex)
-		{
-			sNetwork.calc(sTestInput[nIndex].data(), sOutput.data());
-
-			printf("%0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf\n",
-				sOutput[0], sOutput[1], sOutput[2], sOutput[3], sOutput[4],
-				sOutput[5], sOutput[6], sOutput[7], sOutput[8], sOutput[9]);
-
-			printf("%0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf, %0.2lf\n\n",
-				sTestOutput[nIndex][0], sTestOutput[nIndex][1], sTestOutput[nIndex][2], sTestOutput[nIndex][3], sTestOutput[nIndex][4],
-				sTestOutput[nIndex][5], sTestOutput[nIndex][6], sTestOutput[nIndex][7], sTestOutput[nIndex][8], sTestOutput[nIndex][9]);
-		}*/
-
-		sOptimizer.train(sTrainInput, sTrainOutput, 32, 1);
+		sOptimizer.train<Loss::MulticlassCE>(sTrainInput, sTrainOutput, 32, 1);
 	}
 
 	system("pause");

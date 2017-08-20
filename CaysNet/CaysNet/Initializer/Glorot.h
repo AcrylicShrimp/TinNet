@@ -8,7 +8,7 @@
 
 #define _CLASS_CAYSNET_INITIALIZER_GLOROT_H
 
-#include "Layer.h"
+#include "../Layer.h"
 
 #include <chrono>
 #include <cmath>

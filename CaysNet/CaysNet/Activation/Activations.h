@@ -19,7 +19,7 @@
 #include "LReLU.h"
 #include "PReLU.h"
 
-#include "Serializable.h"
+#include "../IO/Serializable.h"
 
 #include <fstream>
 #include <string>
