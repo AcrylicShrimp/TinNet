@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_ACTIVATIONS_H
 
+#include "../CaysNetDLL.h"
+
 #include "Linear.h"
 
 #include "Sigmoid.h"
@@ -26,7 +28,7 @@
 
 namespace CaysNet::Activation
 {
-	class Activations final
+	class CAYSNET_DLL Activations final
 	{
 	public:
 		Activations() = delete;

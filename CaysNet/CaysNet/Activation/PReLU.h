@@ -8,13 +8,15 @@
 
 #define _CLASS_CAYSNET_ACTIVATION_PRE_LU_H
 
+#include "../CaysNetDLL.h"
+
 #include "Activation.h"
 
 #include <cstddef>
 
 namespace CaysNet::Activation
 {
-	class PReLU final : public Activation
+	class CAYSNET_DLL PReLU final : public Activation
 	{
 	private:
 		float nFactor;

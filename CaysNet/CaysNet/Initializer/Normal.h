@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_INITIALIZER_NORMAL_H
 
+#include "../CaysNetDLL.h"
+
 #include "../Layer.h"
 
 #include <chrono>
@@ -18,7 +20,7 @@
 
 namespace CaysNet::Initializer
 {
-	class Normal final
+	class CAYSNET_DLL Normal final
 	{
 	private:
 		double nMean;

@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_NN_H
 
+#include "CaysNetDLL.h"
+
 #include "Layer.h"
 #include "Activation/Activations.h"
 #include "IO/Serializable.h"
@@ -23,7 +25,7 @@
 
 namespace CaysNet
 {
-	class NN final : public IO::Serializable
+	class CAYSNET_DLL NN final : public IO::Serializable
 	{
 	private:
 		std::vector<Layer> sLayerList;
@@ -56,7 +58,7 @@ namespace CaysNet
 		void calc(const float *pInput, float *pOutput);
 		void calcForTrain(const float *pInput);
 		void calcForTrain(const float *pInput, float *pOutput);
-		std::size_t classification(const float *pInput);
+		std::size_t classify(const float *pInput);
 		template<class LossFunc> float loss(const float *pInput, const float *pOutput);
 		template<class LossFunc> float loss(const float **pInput, const float **pOutput, std::size_t nBatchCount);
 		template<class LossFunc> float loss(const std::vector<float *> &sInputList, const std::vector<float *> &sOutputList);

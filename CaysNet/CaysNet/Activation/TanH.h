@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_ACTIVATION_TAN_H_H
 
+#include "../CaysNetDLL.h"
+
 #include "Activation.h"
 
 #include <cmath>
@@ -15,7 +17,7 @@
 
 namespace CaysNet::Activation
 {
-	class TanH final : public Activation
+	class CAYSNET_DLL TanH final : public Activation
 	{
 	public:
 		TanH() = default;

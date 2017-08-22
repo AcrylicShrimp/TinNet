@@ -8,6 +8,8 @@
 
 #define _INTERFACE_CAYSNET_IO_SERIALIZABLE_H
 
+#include "../CaysNetDLL.h"
+
 #include <cstddef>
 #include <cstdint>
 #include <fstream>
@@ -15,7 +17,7 @@
 
 namespace CaysNet::IO
 {
-	class Serializable
+	class CAYSNET_DLL Serializable
 	{
 	public:
 		Serializable() = default;

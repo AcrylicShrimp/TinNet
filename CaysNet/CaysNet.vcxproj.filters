@@ -30,7 +30,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Run.cpp" />
     <ClCompile Include="CaysNet\Activation\Activations.cpp">
       <Filter>CaysNet\Activation</Filter>
     </ClCompile>
@@ -209,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="CaysNet\Loss\CE.h">
       <Filter>CaysNet\Loss</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\CaysNetDLL.h">
+      <Filter>CaysNet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

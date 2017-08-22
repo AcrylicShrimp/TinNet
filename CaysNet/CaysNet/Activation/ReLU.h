@@ -8,13 +8,15 @@
 
 #define _CLASS_CAYSNET_ACTIVATION_RE_LU_H
 
+#include "../CaysNetDLL.h"
+
 #include "Activation.h"
 
 #include <cstddef>
 
 namespace CaysNet::Activation
 {
-	class ReLU final : public Activation
+	class CAYSNET_DLL ReLU final : public Activation
 	{
 	public:
 		ReLU() = default;

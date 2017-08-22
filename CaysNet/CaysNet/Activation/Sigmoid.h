@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_ACTIVATION_SIGMOID_H
 
+#include "../CaysNetDLL.h"
+
 #include "Activation.h"
 
 #include <cmath>
@@ -15,7 +17,7 @@
 
 namespace CaysNet::Activation
 {
-	class Sigmoid final : public Activation
+	class CAYSNET_DLL Sigmoid final : public Activation
 	{
 	public:
 		Sigmoid() = default;

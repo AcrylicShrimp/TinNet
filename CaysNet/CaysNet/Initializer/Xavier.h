@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_INITIALIZER_XAVIER_H
 
+#include "../CaysNetDLL.h"
+
 #include "../Layer.h"
 
 #include <chrono>
@@ -18,7 +20,7 @@
 
 namespace CaysNet::Initializer
 {
-	class Xavier final
+	class CAYSNET_DLL Xavier final
 	{
 	private:
 		std::mt19937_64 sEngine;

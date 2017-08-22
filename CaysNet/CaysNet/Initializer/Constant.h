@@ -8,11 +8,13 @@
 
 #define _CLASS_CAYSNET_INITIALIZER_CONSTANT_H
 
+#include "../CaysNetDLL.h"
+
 #include "../Layer.h"
 
 namespace CaysNet::Initializer
 {
-	class Constant final
+	class CAYSNET_DLL Constant final
 	{
 	private:
 		float nConstant;

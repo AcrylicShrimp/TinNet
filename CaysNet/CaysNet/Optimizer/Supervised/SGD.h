@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_OPTIMIZER_SUPERVISED_SGD_H
 
+#include "../../CaysNetDLL.h"
+
 #include "../../Layer.h"
 #include "../../NN.h"
 
@@ -21,7 +23,7 @@
 
 namespace CaysNet::Optimizer::Supervised
 {
-	class SGD final
+	class CAYSNET_DLL SGD final
 	{
 	private:
 		float nLearningRate;

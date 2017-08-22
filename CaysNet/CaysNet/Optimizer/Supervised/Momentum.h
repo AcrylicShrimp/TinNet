@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_OPTIMIZER_SUPERVISED_MOMENTUM_H
 
+#include "../../CaysNetDLL.h"
+
 #include "../../Layer.h"
 #include "../../NN.h"
 
@@ -21,7 +23,7 @@
 
 namespace CaysNet::Optimizer::Supervised
 {
-	class Momentum final
+	class CAYSNET_DLL Momentum final
 	{
 	private:
 		float nMomentumTerm;

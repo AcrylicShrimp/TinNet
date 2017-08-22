@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_INITIALIZER_UNIFORM_H
 
+#include "../CaysNetDLL.h"
+
 #include "../Layer.h"
 
 #include <chrono>
@@ -18,7 +20,7 @@
 
 namespace CaysNet::Initializer
 {
-	class Uniform final
+	class CAYSNET_DLL Uniform final
 	{
 	private:
 		double nMin;

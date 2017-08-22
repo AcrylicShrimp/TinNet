@@ -8,11 +8,13 @@
 
 #define _CLASS_CAYSNET_LOSS_MSE_H
 
+#include "../CaysNetDLL.h"
+
 #include <cstddef>
 
 namespace CaysNet::Loss
 {
-	class MSE final
+	class CAYSNET_DLL MSE final
 	{
 	public:
 		MSE() = delete;

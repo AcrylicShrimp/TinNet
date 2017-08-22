@@ -8,18 +8,20 @@
 
 #define _CLASS_CAYSNET_OPTIMIZER_REINFORCEMENT_ACTOR_CRITIC_H
 
-#include "Layer.h"
-#include "NN.h"
+#include "../../CaysNetDLL.h"
+
+#include "../../Layer.h"
+#include "../../NN.h"
 
 #include <utility>
 
 namespace CaysNet::Optimizer::Reinforcement
 {
-	template<class LossFunc> class ActorCritic
+	class CAYSNET_DLL ActorCritic
 	{
 	private:
-		NN<LossFunc> &sActor;
-		NN<LossFunc> &sCritic;
+		NN &sActor;
+		NN &sCritic;
 		
 	public:
 		ActorCritic();

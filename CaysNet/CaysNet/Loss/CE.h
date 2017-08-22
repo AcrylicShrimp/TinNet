@@ -8,11 +8,13 @@
 
 #define _CLASS_CAYSNET_LOSS_CE_H
 
+#include "../CaysNetDLL.h"
+
 #include <cmath>
 
 namespace CaysNet::Loss
 {
-	class CE final
+	class CAYSNET_DLL CE final
 	{
 	public:
 		CE() = delete;

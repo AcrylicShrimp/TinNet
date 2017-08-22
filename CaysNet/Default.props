@@ -4,7 +4,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <OutDir>$(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\</OutDir>
-    <IntDir>$(SolutionDir)MidOutput\$(Configuration)\$(PlatformTarget)\</IntDir>
+    <IntDir>$(SolutionDir)MidOutput\$(ProjectName)\$(Configuration)\$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />

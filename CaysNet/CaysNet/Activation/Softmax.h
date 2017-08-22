@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_ACTIVATION_SOFTMAX_H
 
+#include "../CaysNetDLL.h"
+
 #include "Activation.h"
 
 #include <cmath>
@@ -15,7 +17,7 @@
 
 namespace CaysNet::Activation
 {
-	class Softmax final : public Activation
+	class CAYSNET_DLL Softmax final : public Activation
 	{
 	public:
 		Softmax() = default;

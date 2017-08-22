@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_VISUALIZER_CONSOLE_VISUALIZER_H
 
+#include "../CaysNetDLL.h"
+
 #include <cmath>
 #include <cstddef>
 #include <cstdio>
@@ -17,9 +19,9 @@
 
 namespace CaysNet::Visualizer
 {
-	struct Vector2;
+	struct CAYSNET_DLL Vector2;
 
-	struct Vector2
+	struct CAYSNET_DLL Vector2
 	{
 	public:
 		float x;
@@ -96,7 +98,7 @@ namespace CaysNet::Visualizer
 		return Vector2(left * right.x, left * right.y);
 	}
 
-	class ConsoleVisualizer final
+	class CAYSNET_DLL ConsoleVisualizer final
 	{
 	public:
 		ConsoleVisualizer() = delete;

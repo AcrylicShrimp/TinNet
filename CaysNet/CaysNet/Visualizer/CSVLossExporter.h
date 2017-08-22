@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_VISUALIZER_CSV_LOSS_EXPORTER_H
 
+#include "../CaysNetDLL.h"
+
 #include <fstream>
 #include <string>
 #include <utility>
@@ -15,7 +17,7 @@
 
 namespace CaysNet::Visualizer
 {
-	class CSVLossExporter final
+	class CAYSNET_DLL CSVLossExporter final
 	{
 	private:
 		std::vector<float> sLoss;

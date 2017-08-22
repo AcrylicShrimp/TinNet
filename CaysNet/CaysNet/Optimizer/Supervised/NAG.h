@@ -8,14 +8,13 @@
 
 #define _CLASS_CAYSNET_OPTIMIZER_SUPERVISED_NAG_H
 
-/*
-	TODO : Place your include directives here.
-*/
+#include "../../CaysNetDLL.h"
+
 #include <utility>
 
 namespace CaysNet::Optimizer::Supervised
 {
-	class NAG
+	class CAYSNET_DLL NAG
 	{
 	private:
 		/*

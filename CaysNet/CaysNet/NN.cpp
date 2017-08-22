@@ -95,7 +95,7 @@ namespace CaysNet
 			*pOutput++ = nValue;
 	}
 
-	std::size_t NN::classification(const float *pInput)
+	std::size_t NN::classify(const float *pInput)
 	{
 		assert(this->sLayerList.size());
 
@@ -124,7 +124,7 @@ namespace CaysNet
 		auto nResult{.0f};
 
 		for (std::size_t nIndex{0u}; nIndex < nBatchCount; ++nIndex)
-			nResult += pOutput[nIndex][this->classification(pInput[nIndex])];
+			nResult += pOutput[nIndex][this->classify(pInput[nIndex])];
 
 		return 1.f - nResult / nBatchCount;
 	}
@@ -139,7 +139,7 @@ namespace CaysNet
 		auto nResult{.0f};
 
 		for (std::size_t nIndex{0u}, nCount{sInputList.size()}; nIndex < nCount; ++nIndex)
-			nResult += sOutputList[nIndex][this->classification(sInputList[nIndex])];
+			nResult += sOutputList[nIndex][this->classify(sInputList[nIndex])];
 
 		return 1.f - nResult / sInputList.size();
 	}
@@ -154,7 +154,7 @@ namespace CaysNet
 		auto nResult{.0f};
 
 		for (std::size_t nIndex{0u}, nCount{sInputList.size()}; nIndex < nCount; ++nIndex)
-			nResult += sOutputList[nIndex][this->classification(sInputList[nIndex].data())];
+			nResult += sOutputList[nIndex][this->classify(sInputList[nIndex].data())];
 
 		return 1.f - nResult / sInputList.size();
 	}

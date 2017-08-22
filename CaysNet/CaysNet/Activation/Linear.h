@@ -8,11 +8,13 @@
 
 #define _CLASS_CAYSNET_ACTIVATION_LINEAR_H
 
+#include "../CaysNetDLL.h"
+
 #include "Activation.h"
 
 namespace CaysNet::Activation
 {
-	class Linear final : public Activation
+	class CAYSNET_DLL Linear final : public Activation
 	{
 	public:
 		Linear() = default;

@@ -8,6 +8,8 @@
 
 #define _CLASS_CAYSNET_LAYER_H
 
+#include "CaysNetDLL.h"
+
 #include "IO/Serializable.h"
 
 #include <cassert>
@@ -19,10 +21,10 @@ namespace CaysNet
 {
 	namespace Activation
 	{
-		class Activation;
+		class CAYSNET_DLL Activation;
 	}
 
-	class Layer final : public IO::Serializable
+	class CAYSNET_DLL Layer final : public IO::Serializable
 	{
 	private:
 		std::vector<std::vector<float>> sWeight;

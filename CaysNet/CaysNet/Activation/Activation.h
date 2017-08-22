@@ -8,6 +8,8 @@
 
 #define _INTERFACE_CAYSNET_ACTIVATION_ACTIVATION_H
 
+#include "../CaysNetDLL.h"
+
 #include "../Layer.h"
 
 #include <cstddef>
@@ -15,7 +17,7 @@
 
 namespace CaysNet::Activation
 {
-	class Activation
+	class CAYSNET_DLL Activation
 	{
 	public:
 		Activation() = default;

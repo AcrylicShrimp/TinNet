@@ -8,6 +8,8 @@
 
 #define _CAYS_NET_H
 
+#include "CaysNetDLL.h"
+
 #include "Layer.h"
 #include "NN.h"
 
