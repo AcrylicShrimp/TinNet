@@ -277,10 +277,10 @@
     <ClInclude Include="CaysNet\NN.h" />
     <ClInclude Include="CaysNet\NN.hpp" />
     <ClInclude Include="CaysNet\Optimizer\Optimizers.h" />
-    <ClInclude Include="CaysNet\Optimizer\Reinforcement\ActorCritic.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.hpp" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.h" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.hpp" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.hpp" />
   </ItemGroup>

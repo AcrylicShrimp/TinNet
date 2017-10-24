@@ -22,9 +22,6 @@
     <Filter Include="CaysNet\IO">
       <UniqueIdentifier>{88da9943-515b-4e75-bb5f-86c443f73963}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CaysNet\Optimizer\Reinforcement">
-      <UniqueIdentifier>{134af348-6a5c-461c-a3e4-4eb35b5bbb28}</UniqueIdentifier>
-    </Filter>
     <Filter Include="CaysNet\Optimizer\Supervised">
       <UniqueIdentifier>{51c773b9-bee3-45dc-9409-edcc56bc4775}</UniqueIdentifier>
     </Filter>
@@ -84,9 +81,6 @@
     <ClCompile Include="CaysNet\Optimizer\Supervised\Momentum.cpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClCompile>
-    <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp">
-      <Filter>CaysNet\Optimizer\Supervised</Filter>
-    </ClCompile>
     <ClCompile Include="CaysNet\Optimizer\Supervised\SGD.cpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClCompile>
@@ -104,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="CaysNet\Loss\CE.cpp">
       <Filter>CaysNet\Loss</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,16 +164,10 @@
     <ClInclude Include="CaysNet\Loss\MulticlassCE.h">
       <Filter>CaysNet\Loss</Filter>
     </ClInclude>
-    <ClInclude Include="CaysNet\Optimizer\Reinforcement\ActorCritic.h">
-      <Filter>CaysNet\Optimizer\Reinforcement</Filter>
-    </ClInclude>
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.h">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClInclude>
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.hpp">
-      <Filter>CaysNet\Optimizer\Supervised</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.h">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClInclude>
     <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.h">
@@ -211,6 +202,12 @@
     </ClInclude>
     <ClInclude Include="CaysNet\CaysNetDLL.h">
       <Filter>CaysNet</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.h">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.hpp">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
