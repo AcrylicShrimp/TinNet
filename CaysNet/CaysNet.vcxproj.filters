@@ -25,6 +25,9 @@
     <Filter Include="CaysNet\Optimizer\Supervised">
       <UniqueIdentifier>{51c773b9-bee3-45dc-9409-edcc56bc4775}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CaysNet\Optimizer\Reinforcement">
+      <UniqueIdentifier>{c5984f60-5a15-47be-81ef-2a2cf965b6e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CaysNet\Activation\Activations.cpp">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.cpp">
+      <Filter>CaysNet\Optimizer\Reinforcement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.hpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.h">
+      <Filter>CaysNet\Optimizer\Reinforcement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
