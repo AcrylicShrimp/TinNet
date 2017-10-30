@@ -39,7 +39,7 @@ namespace CaysNet::Visualizer
 
 	inline void CSVLossExporter::accrueLoss(float nLoss)
 	{
-		return this->sLoss.emplace_back(nLoss);
+		this->sLoss.emplace_back(nLoss);
 	}
 }
 

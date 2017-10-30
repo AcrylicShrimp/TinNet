@@ -48,6 +48,11 @@ void AIOmocAgent::handleStart(float nIdentifier)
 	//Empty.
 }
 
+void AIOmocAgent::handlePlaceRejected(int nPlace)
+{
+
+}
+
 void AIOmocAgent::handlePlaceOK(int nPlace)
 {
 	//Empty.

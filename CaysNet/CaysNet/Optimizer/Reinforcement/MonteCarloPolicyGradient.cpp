@@ -13,7 +13,8 @@ namespace CaysNet::Optimizer::Reinforcement
 		sNN{sNN},
 		sOutput(sNN.depth()),
 		sBiasDelta(sNN.depth()),
-		sWeightDelta(sNN.depth())
+		sWeightDelta(sNN.depth()),
+		sDesiredAction(sNN.layer().back().fanOut())
 	{
 		for (std::size_t nIndex{0}, nSize{sNN.depth()}; nIndex < nSize; ++nIndex)
 		{
@@ -33,17 +34,22 @@ namespace CaysNet::Optimizer::Reinforcement
 		sNN{sSrc.sNN},
 		sOutput{std::move(sSrc.sOutput)},
 		sBiasDelta{std::move(sSrc.sBiasDelta)},
-		sWeightDelta{std::move(sSrc.sWeightDelta)}
+		sWeightDelta{std::move(sSrc.sWeightDelta)},
+		sDesiredAction{std::move(sSrc.sDesiredAction)}
 	{
 		//Empty.
 	}
 
 	void MonteCarloPolicyGradient::update(const float *pState, const float *pActionTaken, float nReward)
 	{
+		for (auto &nInput : this->sNN.layer().back().activationOutput())
+			nInput = *pActionTaken++;
+
+		this->sNN.layer().back().activation()->activate(&this->sNN.layer().back(), this->sDesiredAction.data());
+
 		this->sNN.calcForTrain(pState);
-		
-		for (auto &nInput : this->sNN.output().back())
-			nInput = nReward * -std::log(nInput + 1e-4f);
+
+		Loss::MulticlassCE::derivative(this->sNN.layer().back().fanOut(), this->sNN.output().back().data(), this->sDesiredAction.data(), this->sNN.output().back().data());
 
 		for (std::size_t nIndex{this->sNN.depth() - 1}; ; --nIndex)
 		{
@@ -66,7 +72,7 @@ namespace CaysNet::Optimizer::Reinforcement
 				break;
 		}
 
-		auto nFactor{this->nLearningRate};
+		auto nFactor{this->nLearningRate * -nReward};
 
 		for (std::size_t nIndex{0}, nSize{this->sNN.depth()}; nIndex < nSize; ++nIndex)
 			for (std::size_t nOut{0}, nOutSize{this->sNN[nIndex].fanOut()}; nOut < nOutSize; ++nOut)

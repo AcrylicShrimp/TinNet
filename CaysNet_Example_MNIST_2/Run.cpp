@@ -6,31 +6,76 @@
 
 #include "../CaysNet/CaysNet/CaysNet.h"
 
-#include <fstream>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
 
-#ifdef __cplusplus
+int main()
+{
+	using namespace CaysNet;
 
-extern "C" {
-
-#endif
-
-	CaysNet::NN sNetwork;
-
-	__declspec(dllexport) void initNetwork();
-	__declspec(dllexport) int classifyImage(float *pFloat);
-
-	void initNetwork()
+	NN sNetwork
 	{
-		sNetwork.deserialize(std::ifstream{"network.cn", std::ifstream::binary | std::ifstream::in});
-	}
+		Layer::layer<Activation::TanH>(2, 2)
+	};
 
-	int classifyImage(float *pFloat)
+	sNetwork.initBias<Initializer::Constant>(.0f);
+	sNetwork.initWeight<Initializer::Uniform>(-.5f, .5f);
+
+	float vInput[2]
 	{
-		return static_cast<int>(sNetwork.classify(pFloat));
-	}
+		.0f, .0f
+	};
 
-#ifdef __cplusplus
+	float vOutput[2]{};
 
+	vInput[0] = 0, vInput[1] = 0;
+	sNetwork.calc(vInput, vOutput);
+	printf("%.2f, %.2f\n", vOutput[0], vOutput[1]);
+	vInput[0] = 1, vInput[1] = 0;
+	sNetwork.calc(vInput, vOutput);
+	printf("%.2f, %.2f\n", vOutput[0], vOutput[1]);
+	vInput[0] = 0, vInput[1] = 1;
+	sNetwork.calc(vInput, vOutput);
+	printf("%.2f, %.2f\n", vOutput[0], vOutput[1]);
+	vInput[0] = 1, vInput[1] = 1;
+	sNetwork.calc(vInput, vOutput);
+	printf("%.2f, %.2f\n", vOutput[0], vOutput[1]);
+
+	Optimizer::Supervised::Momentum sOptimizer{sNetwork, .9f, .1f};
+
+	std::vector<std::vector<float>> sTrainInput
+	{
+		{.0f, .0f},
+		{1.f, .0f},
+		{.0f, 1.f},
+		{1.f, 1.f}
+	};
+
+	std::vector<std::vector<float>> sTrainOutput
+	{
+		{.0f, .0f},
+		{1.f, .0f},
+		{1.f, .0f},
+		{1.f, 1.f}
+	};
+
+	sOptimizer.train<Loss::MSE>(sTrainInput, sTrainOutput, 4, 1000);
+
+	vInput[0] = 0, vInput[1] = 0;
+	sNetwork.calc(vInput, vOutput);
+	printf("%.2f, %.2f\n", vOutput[0], vOutput[1]);
+	vInput[0] = 1, vInput[1] = 0;
+	sNetwork.calc(vInput, vOutput);
+	printf("%.2f, %.2f\n", vOutput[0], vOutput[1]);
+	vInput[0] = 0, vInput[1] = 1;
+	sNetwork.calc(vInput, vOutput);
+	printf("%.2f, %.2f\n", vOutput[0], vOutput[1]);
+	vInput[0] = 1, vInput[1] = 1;
+	sNetwork.calc(vInput, vOutput);
+	printf("%.2f, %.2f\n", vOutput[0], vOutput[1]);
+
+	system("pause");
+	
+	return 0;
 }
-
-#endif

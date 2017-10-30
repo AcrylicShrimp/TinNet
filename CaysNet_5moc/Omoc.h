@@ -20,6 +20,7 @@ public:
 public:
 	virtual int place(const float *pPlace) = 0;
 	virtual void handleStart(float nIdentifier) = 0;
+	virtual void handlePlaceRejected(int nPlace) = 0;
 	virtual void handlePlaceOK(int nPlace) = 0;
 	virtual void handlePlaceOtherOK(int nPlace) = 0;
 	virtual void handleWin() = 0;

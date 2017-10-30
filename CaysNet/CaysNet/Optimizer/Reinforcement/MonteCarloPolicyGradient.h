@@ -13,6 +13,8 @@
 #include "../../Layer.h"
 #include "../../NN.h"
 
+#include "../../Loss/MulticlassCE.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -28,6 +30,7 @@ namespace CaysNet::Optimizer::Reinforcement
 		std::vector<std::vector<float>> sOutput;
 		std::vector<std::vector<float>> sBiasDelta;
 		std::vector<std::vector<std::vector<float>>> sWeightDelta;
+		std::vector<float> sDesiredAction;
 		NN &sNN;
 		
 	public:

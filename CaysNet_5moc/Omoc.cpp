@@ -56,10 +56,13 @@ bool Omoc::nextStep(int *pWinner, int *nFinalPlace)
 {
 	int nPlace;
 
-	do
+	nPlace = this->pBlack->place(this->pPlace);
+
+	while (this->pPlace[nPlace] != .0f)
 	{
+		this->pBlack->handlePlaceRejected(nPlace);
 		nPlace = this->pBlack->place(this->pPlace);
-	} while (this->pPlace[nPlace]);
+	}
 
 	this->pBlack->handlePlaceOK(nPlace);
 	this->pWhite->handlePlaceOtherOK(nPlace);
@@ -81,10 +84,13 @@ bool Omoc::nextStep(int *pWinner, int *nFinalPlace)
 	return true;
 
 WHITE_PART:
-	do
+	nPlace = this->pWhite->place(this->pPlace);
+
+	while (this->pPlace[nPlace] != .0f)
 	{
+		this->pWhite->handlePlaceRejected(nPlace);
 		nPlace = this->pWhite->place(this->pPlace);
-	} while (this->pPlace[nPlace]);
+	}
 
 	this->pBlack->handlePlaceOtherOK(nPlace);
 	this->pWhite->handlePlaceOK(nPlace);

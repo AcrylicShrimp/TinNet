@@ -36,6 +36,7 @@ public:
 public:
 	virtual int place(const float *pPlace) override;
 	virtual void handleStart(float nIdentifier) override;
+	virtual void handlePlaceRejected(int nPlace) override;
 	virtual void handlePlaceOK(int nPlace) override;
 	virtual void handlePlaceOtherOK(int nPlace) override;
 	virtual void handleWin() override;

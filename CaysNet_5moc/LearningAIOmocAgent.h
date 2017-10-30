@@ -17,6 +17,14 @@
 #include <random>
 #include <vector>
 
+struct Ep
+{
+public:
+	std::vector<float> sState;
+	int nAction;
+	float nReward;
+};
+
 class LearningAIOmocAgent : public OmocAgent
 {
 private:
@@ -24,10 +32,7 @@ private:
 	CaysNet::Optimizer::Reinforcement::MonteCarloPolicyGradient sUpdater;
 	std::mt19937_64 sEngine;
 	float vMap[101];
-	int vIndexBuffer[100];
-	float vProbBuffer[100];
-	std::vector<int> sPlaceList;
-	std::vector<float> sRewardList;
+	std::vector<Ep> sEpList;
 	
 public:
 	LearningAIOmocAgent(CaysNet::NN *pNewNetwork);
@@ -42,6 +47,7 @@ public:
 public:
 	virtual int place(const float *pPlace) override;
 	virtual void handleStart(float nIdentifier) override;
+	virtual void handlePlaceRejected(int nPlace) override;
 	virtual void handlePlaceOK(int nPlace) override;
 	virtual void handlePlaceOtherOK(int nPlace) override;
 	virtual void handleWin() override;

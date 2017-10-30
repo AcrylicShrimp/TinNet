@@ -49,6 +49,10 @@ namespace CaysNet
 		inline const std::vector<std::vector<float>> &weight() const;
 		inline std::vector<float> &bias();
 		inline const std::vector<float> &bias() const;
+		inline std::vector<float> &activationInput();
+		inline const std::vector<float> &activationInput() const;
+		inline std::vector<float> &activationOutput();
+		inline const std::vector<float> &activationOutput() const;
 		inline Activation::Activation *activation() const;
 		inline std::size_t fanIn() const;
 		inline std::size_t fanOut() const;
@@ -82,6 +86,26 @@ namespace CaysNet
 	inline const std::vector<float> &Layer::bias() const
 	{
 		return this->sBias;
+	}
+
+	inline std::vector<float> &Layer::activationInput()
+	{
+		return this->sActivationInput;
+	}
+
+	inline const std::vector<float> &Layer::activationInput() const
+	{
+		return this->sActivationInput;
+	}
+
+	inline std::vector<float> &Layer::activationOutput()
+	{
+		return this->sActivationOutput;
+	}
+
+	inline const std::vector<float> &Layer::activationOutput() const
+	{
+		return this->sActivationOutput;
 	}
 
 	inline Activation::Activation *Layer::activation() const

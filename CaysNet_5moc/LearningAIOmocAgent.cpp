@@ -18,30 +18,17 @@ int LearningAIOmocAgent::place(const float *pPlace)
 {
 	this->pNetwork->calc(this->vMap);
 
-	int nBufferSize = 0;
-
-	for (int i = 0; i < 100; ++i)
-		if (pPlace[i] == .0f)
-		{
-			this->vIndexBuffer[nBufferSize] = i;
-			this->vProbBuffer[nBufferSize] = this->pNetwork->output().back()[i];
-			++nBufferSize;
-		}
-
-	if (!nBufferSize)
-		return 0;
-
-	for (int i = 0; i < nBufferSize - 1; ++i)
-		this->vProbBuffer[i + 1] += this->vProbBuffer[i];
-
-	std::uniform_real_distribution<float> sDist{0.f, this->vProbBuffer[nBufferSize - 1]};
+	std::uniform_real_distribution<float> sDist{.0f, 1.f};
 	auto nValue{sDist(this->sEngine)};
 
-	for (int i = 0; i < nBufferSize; ++i)
-		if (this->vProbBuffer[i] >= nValue)
-			return this->vIndexBuffer[i];
+	for (int i = 0; i < 99; ++i)
+		this->pNetwork->output().back()[i + 1] += this->pNetwork->output().back()[i];
 
-	return this->vIndexBuffer[nBufferSize - 1];
+	for (int i = 0; i < 100; ++i)
+		if (this->pNetwork->output().back()[i] >= nValue)
+			return i;
+
+	return 99;
 }
 
 void LearningAIOmocAgent::handleStart(float nIdentifier)
@@ -49,85 +36,68 @@ void LearningAIOmocAgent::handleStart(float nIdentifier)
 	std::fill(this->vMap, this->vMap + 100, .0f);
 
 	this->vMap[100] = nIdentifier;
-	this->sPlaceList.clear();
-	this->sRewardList.clear();
+	this->sEpList.clear();
+}
+
+void LearningAIOmocAgent::handlePlaceRejected(int nPlace)
+{
+	this->sEpList.emplace_back(Ep
+	{
+		std::vector<float>(this->vMap, this->vMap + 101),
+		nPlace,
+		-100.f
+	});
 }
 
 void LearningAIOmocAgent::handlePlaceOK(int nPlace)
 {
+	this->sEpList.emplace_back(Ep
+	{
+		std::vector<float>(this->vMap, this->vMap + 101),
+		nPlace,
+		1.f
+	});
+
 	this->vMap[nPlace] = this->vMap[100];
-	this->sPlaceList.emplace_back(nPlace);
-	this->sRewardList.emplace_back(.0f);
 }
 
 void LearningAIOmocAgent::handlePlaceOtherOK(int nPlace)
 {
 	this->vMap[nPlace] = -this->vMap[100];
-	this->sPlaceList.emplace_back(nPlace);
 }
 
 void LearningAIOmocAgent::handleWin()
 {
-	this->sRewardList.back() = 1.f;
+	this->sEpList.back().nReward = 25.f;
 	this->update();
 }
 
 void LearningAIOmocAgent::handleLose()
 {
-	this->sRewardList.back() = -10.f;
+	this->sEpList.back().nReward = -10.f;
 	this->update();
 }
 
 void LearningAIOmocAgent::handleDraw()
 {
-	this->sRewardList.back() = .0f;
+	//this->sEpList.back().nReward += 10.f;
 	this->update();
 }
 
 void LearningAIOmocAgent::update()
 {
-	float vTempMap[101]{};
+	int nLastTempAction{0};
 	float vTempAction[100]{};
-	constexpr float nFactor{.95f};
-	int nLastTempAction = -1;
+	auto nRewardSum{.0f};
+	constexpr float nFactor{.8f};
 
-	vTempMap[100] = this->vMap[100];
-
-	for (std::size_t nTime{0u}, nPlaceTime{0u}, nLength{this->sRewardList.size()}; nTime < nLength; ++nTime)
+	for (std::size_t nTime{0}, nLength{this->sEpList.size()}; nTime < nLength; ++nTime)
 	{
-		auto nRewardSum{.0f};
-		auto nRewardFactor{1.f};
+		nRewardSum = this->sEpList[nTime].nReward + nRewardSum * nFactor;
 
-		for (auto nRewardTime{nTime}; nRewardTime < nLength; ++nRewardTime)
-		{
-			nRewardSum += nRewardFactor * this->sRewardList[nRewardTime];
-			nRewardFactor *= nFactor;
-		}
+		vTempAction[nLastTempAction] = .0f;
+		vTempAction[nLastTempAction = this->sEpList[nTime].nAction] = 1.f;
 
-		if (nLastTempAction != -1)
-			vTempAction[nLastTempAction] = .0f;
-
-		if (this->vMap[100] < .0f)
-		{
-			vTempMap[this->sPlaceList[nPlaceTime]] = -1.f;
-			vTempAction[nLastTempAction = this->sPlaceList[nPlaceTime++]] = 1.f;
-
-			this->sUpdater.update(vTempMap, vTempAction, nRewardSum);
-
-			if (nPlaceTime < this->sPlaceList.size())
-				vTempMap[this->sPlaceList[nPlaceTime++]] = 1.f;
-		}
-		else
-		{
-			vTempMap[this->sPlaceList[nPlaceTime++]] = -1.f;
-
-			if (nPlaceTime < this->sPlaceList.size())
-			{
-				vTempMap[this->sPlaceList[nPlaceTime]] = 1.f;
-				vTempAction[nLastTempAction = this->sPlaceList[nPlaceTime++]] = 1.f;
-			}
-
-			this->sUpdater.update(vTempMap, vTempAction, nRewardSum);
-		}
+		this->sUpdater.update(this->sEpList[nTime].sState.data(), vTempAction, nRewardSum);
 	}
 }

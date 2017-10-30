@@ -17,7 +17,7 @@ int main()
 {
 	CaysNet::NN sBlack
 	{
-		CaysNet::Layer::layer<CaysNet::Activation::Softmax>(101, 100)
+		CaysNet::Layer::layer<CaysNet::Activation::Softmax>(100, 100)
 	};
 
 	CaysNet::NN sWhite
@@ -32,7 +32,7 @@ int main()
 
 	Omoc sOmoc{10, 10};
 	ConsoleOmocObserver sConsoleObserver;
-	LearningAIOmocAgent sAIBlack{&sBlack};
+	AIOmocAgent sAIBlack{&sBlack};
 	LearningAIOmocAgent sAIWhite{&sWhite};
 
 	sOmoc.registerObserver(&sConsoleObserver);
