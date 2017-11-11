@@ -52,20 +52,23 @@ namespace CaysNet::Initializer
 		return *this;
 	}
 
-	void He::initializeBias(Layer &sLayer)
+	void He::initializeBias(Layer::Layer &sLayer)
 	{
 		std::normal_distribution<double> sDist{.0, std::sqrt(2. / sLayer.fanIn())};
 
-		for (auto &nBias : sLayer.bias())
-			nBias = static_cast<float>(sDist(this->sEngine));
+		sLayer.initBias([this, &sDist]()
+		{
+			return static_cast<float>(sDist(this->sEngine));
+		});
 	}
 
-	void He::initializeWeight(Layer &sLayer)
+	void He::initializeWeight(Layer::Layer &sLayer)
 	{
 		std::normal_distribution<double> sDist{.0, std::sqrt(2. / sLayer.fanIn())};
 
-		for (auto &sWeightList : sLayer.weight())
-			for (auto &nWeight : sWeightList)
-				nWeight = static_cast<float>(sDist(this->sEngine));
+		sLayer.initWeight([this, &sDist]()
+		{
+			return static_cast<float>(sDist(this->sEngine));
+		});
 	}
 }

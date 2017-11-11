@@ -16,7 +16,7 @@ int main()
 
 	NN sNetwork
 	{
-		Layer::layer<Activation::TanH>(2, 2)
+		Layer::FullLayer::make<Activation::TanH>(2, 2)
 	};
 
 	sNetwork.initBias<Initializer::Constant>(.0f);

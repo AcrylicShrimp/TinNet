@@ -10,36 +10,30 @@ namespace CaysNet
 	{
 		Initializer sInitialier(std::forward<InitializerParam>(sParam)...);
 
-		for (auto &sLayer : this->sLayerList)
-			sInitialier.initializeWeight(sLayer);
+		for (auto pLayer : this->sLayerList)
+			sInitialier.initializeWeight(*pLayer);
 	}
 
 	template<class Initializer, class ...InitializerParam> void NN::initBias(InitializerParam && ...sParam)
 	{
 		Initializer sInitialier(std::forward<InitializerParam>(sParam)...);
 
-		for (auto &sLayer : this->sLayerList)
-			sInitialier.initializeBias(sLayer);
+		for (auto pLayer : this->sLayerList)
+			sInitialier.initializeBias(*pLayer);
 	}
 
 	template<class LossFunc> float NN::loss(const float *pInput, const float *pOutput)
 	{
 		assert(this->sLayerList.size());
 
-		if (!this->sLayerList.size())
-			return std::numeric_limits<float>::signaling_NaN();
+		this->forward(pInput);
 
-		this->calc(pInput);
-
-		return LossFunc::loss<LossFunc>(this->sOutputBuffer.back().size(), this->sOutputBuffer.back().data(), pOutput);
+		return LossFunc::loss(this->sOutput.back().size(), this->sOutput.back().data(), pOutput);
 	}
 
-	template<class LossFunc> float NN::loss(const float **pInput, const float **pOutput, std::size_t nBatchCount)
+	template<class LossFunc> float NN::loss(const float *const *pInput, const float *const *pOutput, std::size_t nBatchCount)
 	{
 		assert(this->sLayerList.size());
-
-		if (!this->sLayerList.size())
-			return std::numeric_limits<float>::signaling_NaN();
 
 		float nLossSum{.0f};
 
@@ -55,9 +49,6 @@ namespace CaysNet
 		assert(this->sLayerList.size());
 		assert(sInputList.size() == sOutputList.size());
 
-		if (!this->sLayerList.size())
-			return std::numeric_limits<float>::signaling_NaN();
-
 		float nLossSum{.0f};
 
 		for (std::size_t nIndex{0u}, nSize{sInputList.size()}; nIndex < nSize; ++nIndex)
@@ -71,9 +62,6 @@ namespace CaysNet
 	{
 		assert(this->sLayerList.size());
 		assert(sInputList.size() == sOutputList.size());
-
-		if (!this->sLayerList.size())
-			return std::numeric_limits<float>::signaling_NaN();
 
 		float nLossSum{.0f};
 

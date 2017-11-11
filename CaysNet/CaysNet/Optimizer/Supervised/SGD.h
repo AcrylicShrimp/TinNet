@@ -10,12 +10,11 @@
 
 #include "../../CaysNetDLL.h"
 
-#include "../../Layer.h"
+#include "../../Layer/Layer.h"
 #include "../../NN.h"
 
 #include <algorithm>
 #include <chrono>
-#include <cmath>
 #include <cstddef>
 #include <random>
 #include <utility>
@@ -28,9 +27,13 @@ namespace CaysNet::Optimizer::Supervised
 	private:
 		float nLearningRate;
 		NN &sNN;
-		std::vector<std::vector<float>> sOutput;
+		std::vector<std::vector<float>> sActivationInput;
+		std::vector<std::vector<float>> sActivationOutput;
 		std::vector<std::vector<float>> sBiasDelta;
-		std::vector<std::vector<std::vector<float>>> sWeightDelta;
+		std::vector<std::vector<float>> sWeightDelta;
+		std::vector<std::vector<float>> sBiasDeltaBuffer;
+		std::vector<std::vector<float>> sWeightDeltaBuffer;
+		std::vector<std::vector<float>> sBackward;
 		std::mt19937_64 sEngine;
 
 	public:
@@ -46,7 +49,6 @@ namespace CaysNet::Optimizer::Supervised
 	public:
 		inline float &learningRate();
 		inline float learningRate() const;
-		template<class LossFunc> std::pair<float, float> calcNumericalGradient(const std::vector<float> &sInput, const std::vector<float> &sOutput, std::size_t nLayerIndex, std::size_t nInputIndex, std::size_t nOutputIndex);
 		template<class LossFunc> void train(std::vector<std::vector<float>> &sInput, std::vector<std::vector<float>> &sOutput, std::size_t nBatchSize, std::size_t nEpoch);
 	};
 

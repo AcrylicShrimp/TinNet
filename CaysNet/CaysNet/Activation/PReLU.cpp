@@ -47,11 +47,11 @@ namespace CaysNet::Activation
 		return new PReLU(this->nFactor);
 	}
 
-	void PReLU::activate(const Layer *pLayer, float *pOutput) const
+	void PReLU::activate(std::size_t nFanOut, float *pOutput) const
 	{
 		float vDesk[2]{this->nFactor, 1.f};
 
-		for (std::size_t nIndex{0}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{0}; nIndex < nFanOut; ++nIndex)
 			pOutput[nIndex] = vDesk[pOutput[nIndex] > .0f] * pOutput[nIndex];
 	}
 
@@ -68,5 +68,15 @@ namespace CaysNet::Activation
 
 			pResult[nIndex] = pDerivativeInput[nIndex] * vDesk[pActivationInput[nIndex] > .0f];
 		}
+	}
+
+	void PReLU::serialize(std::ofstream &sOutput) const
+	{
+		IO::Serializable::write(sOutput, this->nFactor);
+	}
+
+	void PReLU::deserialize(std::ifstream &sInput)
+	{
+		this->nFactor = IO::Serializable::read<float>(sInput);
 	}
 }

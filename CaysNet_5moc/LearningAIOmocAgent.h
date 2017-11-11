@@ -31,8 +31,8 @@ private:
 	CaysNet::NN *pNetwork;
 	CaysNet::Optimizer::Reinforcement::MonteCarloPolicyGradient sUpdater;
 	std::mt19937_64 sEngine;
-	float vMap[101];
 	std::vector<Ep> sEpList;
+	const float *pPlace;
 	
 public:
 	LearningAIOmocAgent(CaysNet::NN *pNewNetwork);

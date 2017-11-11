@@ -8,7 +8,31 @@
 
 namespace CaysNet::Activation
 {
-	Activation *Activations::createByName(const std::wstring &sActivationName, std::ifstream &sInput)
+	void Activations::serialize(Activation *pActivation, std::ofstream &sOutput)
+	{
+		IO::Serializable::write(sOutput, pActivation != nullptr);
+
+		if (!pActivation)
+			return;
+
+		IO::Serializable::write(sOutput, std::wstring(pActivation->name()));
+		pActivation->serialize(sOutput);
+	}
+
+	Activation *Activations::deserialize(std::ifstream &sInput)
+	{
+		if (!IO::Serializable::read<bool>(sInput))
+			return nullptr;
+
+		auto pActivation{Activations::createByName(IO::Serializable::readWideString(sInput))};
+
+		if (pActivation)
+			pActivation->deserialize(sInput);
+
+		return pActivation;
+	}
+
+	Activation *Activations::createByName(const std::wstring &sActivationName)
 	{
 		using namespace std::literals::string_literals;
 
@@ -25,7 +49,7 @@ namespace CaysNet::Activation
 		else if (sActivationName == L"LReLU"s)
 			return new LReLU();
 		else if (sActivationName == L"PReLU"s)
-			return new PReLU(IO::Serializable::read<float>(sInput));
+			return new PReLU(.0f);
 		else
 			return nullptr;
 	}

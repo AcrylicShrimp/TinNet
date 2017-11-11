@@ -41,7 +41,9 @@ namespace CaysNet::Activation
 		Activations &operator=(Activations &&sSrc) = delete;
 
 	public:
-		static Activation *createByName(const std::wstring &sActivationName, std::ifstream &sInput);
+		static void serialize(Activation *pActivation, std::ofstream &sOutput);
+		static Activation *deserialize(std::ifstream &sInput);
+		static Activation *createByName(const std::wstring &sActivationName);
 	};
 }
 

@@ -18,11 +18,11 @@ namespace CaysNet::Activation
 		return new ReLU();
 	}
 
-	void ReLU::activate(const Layer *pLayer, float *pOutput) const
+	void ReLU::activate(std::size_t nFanOut, float *pOutput) const
 	{
 		static constexpr float vDesk[2]{.0f, 1.f};
 
-		for (std::size_t nIndex{0}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{0}; nIndex < nFanOut; ++nIndex)
 			pOutput[nIndex] = vDesk[pOutput[nIndex] > .0f] * pOutput[nIndex];
 	}
 

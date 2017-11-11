@@ -18,9 +18,9 @@ namespace CaysNet::Activation
 		return new Sigmoid();
 	}
 
-	void Sigmoid::activate(const Layer *pLayer, float *pOutput) const
+	void Sigmoid::activate(std::size_t nFanOut, float *pOutput) const
 	{
-		for (std::size_t nIndex{0}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{0}; nIndex < nFanOut; ++nIndex)
 			pOutput[nIndex] = 1.f / (std::exp(-pOutput[nIndex]) + 1.f);
 	}
 

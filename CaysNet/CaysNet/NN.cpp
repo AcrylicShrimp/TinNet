@@ -8,25 +8,34 @@
 
 namespace CaysNet
 {
-	NN::NN(std::initializer_list<Layer> sLayerList) :
+	NN::NN(std::initializer_list<Layer::Layer *> sLayerList) :
 		sLayerList(sLayerList)
 	{
-		for (const auto &sLayer : this->sLayerList)
-			this->sOutputBuffer.emplace_back(sLayer.fanOut(), .0f);
+		for (const auto pLayer : this->sLayerList)
+			this->sOutput.emplace_back(pLayer->fanOut(), .0f);
 	}
 
 	NN::NN(const NN &sSrc) :
-		sLayerList{sSrc.sLayerList},
-		sOutputBuffer{sSrc.sOutputBuffer}
+		sOutput{sSrc.sOutput}
 	{
-		//Empty.
+		for (const auto pLayer : sSrc.sLayerList)
+			this->sLayerList.emplace_back(pLayer->duplicate());
 	}
 
 	NN::NN(NN &&sSrc) :
 		sLayerList{std::move(sSrc.sLayerList)},
-		sOutputBuffer{std::move(sSrc.sOutputBuffer)}
+		sOutput{std::move(sSrc.sOutput)}
 	{
 		//Empty.
+	}
+
+	NN::~NN()
+	{
+		for (auto pLayer : this->sLayerList)
+			delete pLayer;
+
+		this->sLayerList.clear();
+		this->sOutput.clear();
 	}
 
 	NN &NN::operator=(const NN &sSrc)
@@ -34,8 +43,10 @@ namespace CaysNet
 		if (&sSrc == this)
 			return *this;
 
+		this->~NN();
+
 		this->sLayerList = sSrc.sLayerList;
-		this->sOutputBuffer = sSrc.sOutputBuffer;
+		this->sOutput = sSrc.sOutput;
 
 		return *this;
 	}
@@ -45,81 +56,96 @@ namespace CaysNet
 		if (&sSrc == this)
 			return *this;
 
+		this->~NN();
+
 		this->sLayerList = std::move(sSrc.sLayerList);
-		this->sOutputBuffer = std::move(sSrc.sOutputBuffer);
+		this->sOutput = std::move(sSrc.sOutput);
 
 		return *this;
 	}
 
-	void NN::calc(const float *pInput)
+	void NN::forward(const float *pInput)
 	{
 		assert(this->sLayerList.size());
 
-		this->sLayerList[0].forward(pInput, this->sOutputBuffer[0].data());
+		this->sLayerList.front()->forward(pInput, this->sOutput.front().data());
 
 		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-			this->sLayerList[nIndex].forward(this->sOutputBuffer[nIndex - 1].data(), this->sOutputBuffer[nIndex].data());
+			this->sLayerList[nIndex]->forward(this->sOutput[nIndex - 1].data(), this->sOutput[nIndex].data());
 	}
 
-	void NN::calc(const float *pInput, float *pOutput)
+	void NN::forward(const float *pInput, float *pOutput)
 	{
-		assert(this->sLayerList.size());
+		this->forward(pInput);
 
-		if (!this->sLayerList.size())
-			return;
-
-		this->calc(pInput);
-
-		for (auto nValue : this->sOutputBuffer.back())
+		for (auto nValue : this->sOutput.back())
 			*pOutput++ = nValue;
 	}
 
-	void NN::calcForTrain(const float *pInput)
-	{
-		this->sLayerList[0].forwardForTrain(pInput, this->sOutputBuffer[0].data());
-
-		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-			this->sLayerList[nIndex].forwardForTrain(this->sOutputBuffer[nIndex - 1].data(), this->sOutputBuffer[nIndex].data());
-	}
-
-	void NN::calcForTrain(const float *pInput, float *pOutput)
+	void NN::forward(
+		const float *pInput,
+		std::vector<std::vector<float>> &sActivationInputBuffer,
+		std::vector<std::vector<float>> &sActivationOutputBuffer)
 	{
 		assert(this->sLayerList.size());
+		assert(this->sLayerList.size() == sActivationInputBuffer.size());
+		assert(this->sLayerList.size() == sActivationOutputBuffer.size());
 
-		if (!this->sLayerList.size())
-			return;
+		this->sLayerList.front()->forward(pInput, this->sOutput.front().data(), sActivationInputBuffer.front().data(), sActivationOutputBuffer.front().data());
 
-		this->calcForTrain(pInput);
+		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
+			this->sLayerList[nIndex]->forward(this->sOutput[nIndex - 1].data(), this->sOutput[nIndex].data(), sActivationInputBuffer[nIndex].data(), sActivationOutputBuffer[nIndex].data());
+	}
 
-		for (auto nValue : this->sOutputBuffer.back())
-			*pOutput++ = nValue;
+	void NN::backward(
+		const std::vector<std::vector<float>> &sActivationInputBuffer,
+		const std::vector<std::vector<float>> &sActivationOutputBuffer,
+		std::vector<std::vector<float>> &sBiasDeltaBuffer,
+		std::vector<std::vector<float>> &sWeightDeltaBuffer,
+		std::vector<std::vector<float>> &sBackwardBuffer,
+		const float *pForwardInput,
+		const float *pBackwardInput) const
+	{
+		for (std::size_t nIndex{this->sLayerList.size() - 1}; ; --nIndex)
+		{
+			auto pLayer{this->sLayerList[nIndex]};
+			auto pLayerForwardInput{nIndex == 0 ? pForwardInput : this->sOutput[nIndex - 1].data()};
+			auto pLayerBackwardInput{nIndex + 1 == this->sLayerList.size() ? pBackwardInput : sBackwardBuffer[nIndex + 1].data()};
+			auto pLayerBackwardOutput{sBackwardBuffer[nIndex].data()};
+
+			pLayer->backward(
+				sActivationInputBuffer[nIndex].data(),
+				sActivationOutputBuffer[nIndex].data(),
+				pLayerForwardInput,
+				pLayerBackwardInput,
+				pLayerBackwardOutput,
+				sBiasDeltaBuffer[nIndex].data(),
+				sWeightDeltaBuffer[nIndex].data());
+
+			if (!nIndex)
+				break;
+		}
 	}
 
 	std::size_t NN::classify(const float *pInput)
 	{
 		assert(this->sLayerList.size());
 
-		if (!this->sLayerList.size())
-			return std::numeric_limits<std::size_t>::max();
-
-		this->calc(pInput);
+		this->forward(pInput);
 
 		std::size_t nMaxIndex{0};
-		auto nMaxValue{this->sOutputBuffer.back().front()};
+		auto nMaxValue{this->sOutput.back().front()};
 
-		for (std::size_t nOut{1}, nOutSize{this->sOutputBuffer.back().size()}; nOut < nOutSize; ++nOut)
-			if (nMaxValue < this->sOutputBuffer.back()[nOut])
-				nMaxValue = this->sOutputBuffer.back()[nMaxIndex = nOut];
+		for (std::size_t nOut{1}, nOutSize{this->sOutput.back().size()}; nOut < nOutSize; ++nOut)
+			if (nMaxValue < this->sOutput.back()[nOut])
+				nMaxValue = this->sOutput.back()[nMaxIndex = nOut];
 
 		return nMaxIndex;
 	}
 
-	float NN::classificationLoss(const float **pInput, const float **pOutput, std::size_t nBatchCount)
+	float NN::classificationLoss(const float *const *pInput, const float *const *pOutput, std::size_t nBatchCount)
 	{
 		assert(this->sLayerList.size());
-
-		if (!this->sLayerList.size())
-			return std::numeric_limits<float>::signaling_NaN();
 
 		auto nResult{.0f};
 
@@ -161,32 +187,26 @@ namespace CaysNet
 
 	void NN::serialize(std::ofstream &sOutput) const
 	{
-		IO::Serializable::write(sOutput, this->sLayerList.size());
-
-		for (auto &sLayer : this->sLayerList)
-		{
-			IO::Serializable::write(sOutput, sLayer.fanIn());
-			IO::Serializable::write(sOutput, sLayer.fanOut());
-			IO::Serializable::write(sOutput, std::wstring(sLayer.activation()->name()));
-
-			sLayer.serialize(sOutput);
-		}
+		//IO::Serializable::write(sOutput, this->sLayerList.size());
+		//
+		//for (auto &pLayer : this->sLayerList)
+		//	pLayer->serialize(sOutput);
 	}
 
 	void NN::deserialize(std::ifstream &sInput)
 	{
-		this->sLayerList.clear();
-		this->sOutputBuffer.clear();
-
-		for (std::size_t nIndex{0}, nSize{IO::Serializable::read<std::size_t>(sInput)}; nIndex < nSize; ++nIndex)
-		{
-			auto nFanIn{IO::Serializable::read<std::size_t>(sInput)};
-			auto nFanOut{IO::Serializable::read<std::size_t>(sInput)};
-
-			this->sLayerList.emplace_back(nFanIn, nFanOut, Activation::Activations::createByName(IO::Serializable::readWideString(sInput), sInput));
-			this->sOutputBuffer.emplace_back(nFanOut, .0f);
-
-			this->sLayerList.back().deserialize(sInput);
-		}
+		//this->sLayerList.clear();
+		//this->sOutput.clear();
+		//
+		//for (std::size_t nIndex{0}, nSize{IO::Serializable::read<std::size_t>(sInput)}; nIndex < nSize; ++nIndex)
+		//{
+		//	auto nFanIn{IO::Serializable::read<std::size_t>(sInput)};
+		//	auto nFanOut{IO::Serializable::read<std::size_t>(sInput)};
+		//
+		//	this->sLayerList.emplace_back(nFanIn, nFanOut, Activation::Activations::createByName(IO::Serializable::readWideString(sInput), sInput));
+		//	this->sOutput.emplace_back(nFanOut, .0f);
+		//
+		//	this->sLayerList.back().deserialize(sInput);
+		//}
 	}
 }

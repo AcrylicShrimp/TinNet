@@ -10,10 +10,10 @@
 
 #include "../../CaysNetDLL.h"
 
-#include "../../Layer.h"
+#include "../../Layer/Layer.h"
 #include "../../NN.h"
 
-#include "../../Loss/MulticlassCE.h"
+#include "../../Loss/Losses.h"
 
 #include <algorithm>
 #include <cmath>
@@ -30,7 +30,6 @@ namespace CaysNet::Optimizer::Reinforcement
 		std::vector<std::vector<float>> sOutput;
 		std::vector<std::vector<float>> sBiasDelta;
 		std::vector<std::vector<std::vector<float>>> sWeightDelta;
-		std::vector<float> sDesiredAction;
 		NN &sNN;
 		
 	public:
@@ -46,7 +45,8 @@ namespace CaysNet::Optimizer::Reinforcement
 	public:
 		inline float &learningRate();
 		inline float learningRate() const;
-		void update(const float *pState, const float *pActionTaken, float nReward);
+		//double checkGradient(const float *pState, const float *pActionTaken, float nReward, std::size_t nLayerIndex, std::size_t nInputIndex, std::size_t nOutputIndex);
+		void update(const float *pState, const float *pActionTaken, std::size_t nActionTakenIndex, float nReward);
 	};
 
 	inline float &MonteCarloPolicyGradient::learningRate()

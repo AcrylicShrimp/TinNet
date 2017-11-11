@@ -17,20 +17,25 @@ int main()
 {
 	CaysNet::NN sBlack
 	{
-		CaysNet::Layer::layer<CaysNet::Activation::Softmax>(100, 100)
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::Softmax>(25, 25)
 	};
 
 	CaysNet::NN sWhite
 	{
-		CaysNet::Layer::layer<CaysNet::Activation::Softmax>(101, 100)
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(25, 50),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(50, 45),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(45, 40),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(40, 35),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(35, 30),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::Softmax>(30, 25)
 	};
 
-	sBlack.initBias<CaysNet::Initializer::He>();
+	sBlack.initBias<CaysNet::Initializer::Constant>(.0f);
 	sBlack.initWeight<CaysNet::Initializer::He>();
-	sWhite.initBias<CaysNet::Initializer::He>();
+	sWhite.initBias<CaysNet::Initializer::Constant>(.0f);
 	sWhite.initWeight<CaysNet::Initializer::He>();
 
-	Omoc sOmoc{10, 10};
+	Omoc sOmoc{5, 5};
 	ConsoleOmocObserver sConsoleObserver;
 	AIOmocAgent sAIBlack{&sBlack};
 	LearningAIOmocAgent sAIWhite{&sWhite};

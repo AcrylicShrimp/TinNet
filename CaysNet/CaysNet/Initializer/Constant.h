@@ -10,7 +10,7 @@
 
 #include "../CaysNetDLL.h"
 
-#include "../Layer.h"
+#include "../Layer/Layer.h"
 
 namespace CaysNet::Initializer
 {
@@ -28,8 +28,8 @@ namespace CaysNet::Initializer
 		Constant &operator=(const Constant &sSrc);
 
 	public:
-		void initializeBias(Layer &sLayer) const;
-		void initializeWeight(Layer &sLayer) const;
+		void initializeBias(Layer::Layer &sLayer) const;
+		void initializeWeight(Layer::Layer &sLayer) const;
 	};
 }
 

@@ -74,20 +74,23 @@ namespace CaysNet::Initializer
 		return *this;
 	}
 
-	void Uniform::initializeBias(Layer &sLayer)
+	void Uniform::initializeBias(Layer::Layer &sLayer)
 	{
 		std::uniform_real_distribution<double> sDist{this->nMin, this->nMax};
 
-		for (auto &nBias : sLayer.bias())
-			nBias = static_cast<float>(sDist(this->sEngine));
+		sLayer.initBias([this, &sDist]()
+		{
+			return static_cast<float>(sDist(this->sEngine));
+		});
 	}
 
-	void Uniform::initializeWeight(Layer &sLayer)
+	void Uniform::initializeWeight(Layer::Layer &sLayer)
 	{
 		std::uniform_real_distribution<double> sDist{this->nMin, this->nMax};
 
-		for (auto &sWeightList : sLayer.weight())
-			for (auto &nWeight : sWeightList)
-				nWeight = static_cast<float>(sDist(this->sEngine));
+		sLayer.initWeight([this, &sDist]()
+		{
+			return static_cast<float>(sDist(this->sEngine));
+		});
 	}
 }

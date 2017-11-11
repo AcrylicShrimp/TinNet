@@ -19,8 +19,8 @@ class AIOmocAgent : public OmocAgent
 {
 private:
 	CaysNet::NN *pNetwork;
-	int vIndexBuffer[100];
-	float vProbBuffer[100];
+	int vIndexBuffer[25];
+	float vProbBuffer[25];
 	std::mt19937_64 sEngine;
 	
 public:

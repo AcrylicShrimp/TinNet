@@ -225,6 +225,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CaysNet\Activation\Activation.cpp" />
     <ClCompile Include="CaysNet\Activation\Activations.cpp" />
     <ClCompile Include="CaysNet\Activation\Linear.cpp" />
     <ClCompile Include="CaysNet\Activation\LReLU.cpp" />
@@ -240,14 +241,17 @@
     <ClCompile Include="CaysNet\Initializer\Uniform.cpp" />
     <ClCompile Include="CaysNet\Initializer\Xavier.cpp" />
     <ClCompile Include="CaysNet\IO\Serializable.cpp" />
-    <ClCompile Include="CaysNet\Layer.cpp" />
+    <ClCompile Include="CaysNet\Layer\AveragePoolingLayer.cpp" />
+    <ClCompile Include="CaysNet\Layer\ConvLayer.cpp" />
+    <ClCompile Include="CaysNet\Layer\FullLayer.cpp" />
+    <ClCompile Include="CaysNet\Layer\Layer.cpp" />
+    <ClCompile Include="CaysNet\Layer\MaxPoolingLayer.cpp" />
     <ClCompile Include="CaysNet\Loss\CE.cpp" />
     <ClCompile Include="CaysNet\Loss\MSE.cpp" />
     <ClCompile Include="CaysNet\Loss\MulticlassCE.cpp" />
     <ClCompile Include="CaysNet\NN.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Supervised\Momentum.cpp" />
-    <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Supervised\SGD.cpp" />
     <ClCompile Include="CaysNet\Visualizer\ConsoleVisualizer.cpp" />
     <ClCompile Include="CaysNet\Visualizer\CSVLossExporter.cpp" />
@@ -270,7 +274,12 @@
     <ClInclude Include="CaysNet\Initializer\Uniform.h" />
     <ClInclude Include="CaysNet\Initializer\Xavier.h" />
     <ClInclude Include="CaysNet\IO\Serializable.h" />
-    <ClInclude Include="CaysNet\Layer.h" />
+    <ClInclude Include="CaysNet\Layer\AveragePoolingLayer.h" />
+    <ClInclude Include="CaysNet\Layer\ConvLayer.h" />
+    <ClInclude Include="CaysNet\Layer\FullLayer.h" />
+    <ClInclude Include="CaysNet\Layer\Layer.h" />
+    <ClInclude Include="CaysNet\Layer\Layers.h" />
+    <ClInclude Include="CaysNet\Layer\MaxPoolingLayer.h" />
     <ClInclude Include="CaysNet\Loss\CE.h" />
     <ClInclude Include="CaysNet\Loss\Losses.h" />
     <ClInclude Include="CaysNet\Loss\MSE.h" />
@@ -281,8 +290,6 @@
     <ClInclude Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.hpp" />
-    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.h" />
-    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.hpp" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.hpp" />
   </ItemGroup>

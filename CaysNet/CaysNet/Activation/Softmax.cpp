@@ -18,14 +18,14 @@ namespace CaysNet::Activation
 		return new Softmax();
 	}
 
-	void Softmax::activate(const Layer *pLayer, float *pOutput) const
+	void Softmax::activate(std::size_t nFanOut, float *pOutput) const
 	{
 		//Desk[0] : Max output
 		//Desk[1] : Accumulator
 		float vDesk[2]{pOutput[0], pOutput[0]};
 
 		//Find max value.
-		for (std::size_t nIndex{1}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{1}; nIndex < nFanOut; ++nIndex)
 		{
 			vDesk[1] = pOutput[nIndex];
 			vDesk[0] = vDesk[vDesk[1] > vDesk[0]];
@@ -35,11 +35,11 @@ namespace CaysNet::Activation
 		vDesk[1] = .0f;
 
 		//Accumulate and fill.
-		for (std::size_t nIndex{0}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{0}; nIndex < nFanOut; ++nIndex)
 			vDesk[1] += (pOutput[nIndex] = std::exp(pOutput[nIndex] - vDesk[0]));
 
 		//Divide by the accumulated value.
-		for (std::size_t nIndex{0}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{0}; nIndex < nFanOut; ++nIndex)
 			pOutput[nIndex] /= vDesk[1];
 	}
 

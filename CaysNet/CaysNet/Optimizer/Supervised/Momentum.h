@@ -10,12 +10,11 @@
 
 #include "../../CaysNetDLL.h"
 
-#include "../../Layer.h"
+#include "../../Layer/Layer.h"
 #include "../../NN.h"
 
 #include <algorithm>
 #include <chrono>
-#include <cmath>
 #include <cstddef>
 #include <random>
 #include <utility>
@@ -29,11 +28,15 @@ namespace CaysNet::Optimizer::Supervised
 		float nMomentumTerm;
 		float nLearningRate;
 		NN &sNN;
-		std::vector<std::vector<float>> sOutput;
+		std::vector<std::vector<float>> sActivationInput;
+		std::vector<std::vector<float>> sActivationOutput;
 		std::vector<std::vector<float>> sBiasDelta;
+		std::vector<std::vector<float>> sWeightDelta;
 		std::vector<std::vector<float>> sBiasMomentum;
-		std::vector<std::vector<std::vector<float>>> sWeightDelta;
-		std::vector<std::vector<std::vector<float>>> sWeightMomentum;
+		std::vector<std::vector<float>> sWeightMomentum;
+		std::vector<std::vector<float>> sBiasDeltaBuffer;
+		std::vector<std::vector<float>> sWeightDeltaBuffer;
+		std::vector<std::vector<float>> sBackward;
 		std::mt19937_64 sEngine;
 		
 	public:

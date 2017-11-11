@@ -18,9 +18,9 @@ namespace CaysNet::Activation
 		return new TanH();
 	}
 
-	void TanH::activate(const Layer *pLayer, float *pOutput) const
+	void TanH::activate(std::size_t nFanOut, float *pOutput) const
 	{
-		for (std::size_t nIndex{0}, nSize{pLayer->fanOut()}; nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{0}; nIndex < nFanOut; ++nIndex)
 			pOutput[nIndex] = std::tanh(pOutput[nIndex]);
 	}
 

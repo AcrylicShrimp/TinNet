@@ -10,7 +10,7 @@
 
 #include "../CaysNetDLL.h"
 
-#include "../Layer.h"
+#include "../Layer/Layer.h"
 
 #include <chrono>
 #include <cmath>
@@ -43,8 +43,8 @@ namespace CaysNet::Initializer
 		Normal &operator=(Normal &&sSrc);
 
 	public:
-		void initializeBias(Layer &sLayer);
-		void initializeWeight(Layer &sLayer);
+		void initializeBias(Layer::Layer &sLayer);
+		void initializeWeight(Layer::Layer &sLayer);
 	};
 }
 

@@ -52,16 +52,16 @@ void ConsoleOmocObserver::handleGameEnd(const float *pPlace, int nWinner, int nF
 
 	printf("±âº¸ :\n");
 
-	for (int h = 0; h < 10; ++h)
+	for (int h = 0; h < 5; ++h)
 	{
 		printf("\t");
 
-		for (int w = 0; w < 10; ++w)
+		for (int w = 0; w < 5; ++w)
 		{
-			if (h * 10 + w == nFinalPlace)
-				printf("%c", pPlace[h * 10 + w] == 0 ? '`' : pPlace[h * 10 + w] < 0 ? 'X' : 'O');
+			if (h * 5 + w == nFinalPlace)
+				printf("%c", pPlace[h * 5 + w] == 0 ? '`' : pPlace[h * 5 + w] < 0 ? 'X' : 'O');
 			else
-				printf("%c", pPlace[h * 10 + w] == 0 ? '`' : pPlace[h * 10 + w] < 0 ? 'b' : 'w');
+				printf("%c", pPlace[h * 5 + w] == 0 ? '`' : pPlace[h * 5 + w] < 0 ? 'b' : 'w');
 		}
 
 		printf("\n");

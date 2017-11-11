@@ -41,13 +41,13 @@ int32_t main()
 
 			std::size_t nCount{0};
 
-			for (const auto &sLayer : sNetwork.layer())
+			for (const auto &pLayer : sNetwork.layer())
 			{
 				std::cout << "\tSummary of the Layer No. " << ++nCount << " :" << std::endl;
-				std::cout << "\tFan in : " << sLayer.fanIn() << std::endl;
-				std::cout << "\tFan out : " << sLayer.fanOut() << std::endl;
+				std::cout << "\tFan in : " << pLayer->fanIn() << std::endl;
+				std::cout << "\tFan out : " << pLayer->fanOut() << std::endl;
 				std::cout << "\tActivation : ";
-				std::wcout << sLayer.activation()->name();
+				std::wcout << pLayer->activation()->name();
 				std::cout << std::endl << std::endl;
 			}
 
@@ -55,14 +55,13 @@ int32_t main()
 		}
 		else if (sCommand == "new")
 		{
-			sNetwork.addLayer(Layer::layer<Activation::LReLU>(784, 300));
-			sNetwork.addLayer(Layer::layer<Activation::LReLU>(300, 100));
-			sNetwork.addLayer(Layer::layer<Activation::LReLU>(100, 50));
-			sNetwork.addLayer(Layer::layer<Activation::LReLU>(50, 45));
-			sNetwork.addLayer(Layer::layer<Activation::LReLU>(45, 30));
-			sNetwork.addLayer(Layer::layer<Activation::LReLU>(30, 20));
-			sNetwork.addLayer(Layer::layer<Activation::LReLU>(20, 10));
-			sNetwork.addLayer(Layer::layer<Activation::Softmax>(10, 10));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(784, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::Softmax>(50, 10));
 
 			std::cout << "Successfully created." << std::endl;
 			std::cout << "Number of the layers : " << sNetwork.layer().size() << std::endl;
@@ -70,13 +69,13 @@ int32_t main()
 
 			std::size_t nCount{0};
 
-			for (const auto &sLayer : sNetwork.layer())
+			for (const auto &pLayer : sNetwork.layer())
 			{
 				std::cout << "\tSummary of the Layer No. " << ++nCount << " :" << std::endl;
-				std::cout << "\tFan in : " << sLayer.fanIn() << std::endl;
-				std::cout << "\tFan out : " << sLayer.fanOut() << std::endl;
+				std::cout << "\tFan in : " << pLayer->fanIn() << std::endl;
+				std::cout << "\tFan out : " << pLayer->fanOut() << std::endl;
 				std::cout << "\tActivation : ";
-				std::wcout << sLayer.activation()->name();
+				std::wcout << pLayer->activation()->name();
 				std::cout << std::endl << std::endl;
 			}
 
@@ -101,7 +100,7 @@ int32_t main()
 	std::vector<std::vector<float>> sTrainOutput(60000u);
 
 	{
-		std::ifstream sInput{L"D:/Develop/MNIST/MNIST_train_in.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"D:/Develop/Dataset/MNIST/MNIST_train_in.dat", std::ifstream::binary | std::ifstream::in};
 		for (auto &sInVec : sTrainInput)
 		{
 			sInVec.resize(784u);
@@ -110,7 +109,7 @@ int32_t main()
 	}
 
 	{
-		std::ifstream sInput{L"D:/Develop/MNIST/MNIST_train_out.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"D:/Develop/Dataset/MNIST/MNIST_train_out.dat", std::ifstream::binary | std::ifstream::in};
 		for (auto &sInVec : sTrainOutput)
 		{
 			sInVec.resize(10u);
@@ -122,7 +121,7 @@ int32_t main()
 	std::vector<std::vector<float>> sTestOutput(10000u);
 
 	{
-		std::ifstream sInput{L"D:/Develop/MNIST/MNIST_test_in.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"D:/Develop/Dataset/MNIST/MNIST_test_in.dat", std::ifstream::binary | std::ifstream::in};
 		for (auto &sInVec : sTestInput)
 		{
 			sInVec.resize(784u);
@@ -131,7 +130,7 @@ int32_t main()
 	}
 
 	{
-		std::ifstream sInput{L"D:/Develop/MNIST/MNIST_test_out.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"D:/Develop/Dataset/MNIST/MNIST_test_out.dat", std::ifstream::binary | std::ifstream::in};
 		for (auto &sInVec : sTestOutput)
 		{
 			sInVec.resize(10u);

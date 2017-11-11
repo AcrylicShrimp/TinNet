@@ -30,16 +30,19 @@ namespace CaysNet::Initializer
 		return *this;
 	}
 
-	void Constant::initializeBias(Layer &sLayer) const
+	void Constant::initializeBias(Layer::Layer &sLayer) const
 	{
-		for (auto &nBias : sLayer.bias())
-			nBias = this->nConstant;
+		sLayer.initBias([this]()
+		{
+			return this->nConstant;
+		});
 	}
 
-	void Constant::initializeWeight(Layer &sLayer) const
+	void Constant::initializeWeight(Layer::Layer &sLayer) const
 	{
-		for (auto &sWeightList : sLayer.weight())
-			for (auto &nWeight : sWeightList)
-				nWeight = this->nConstant;
+		sLayer.initWeight([this]()
+		{
+			return this->nConstant;
+		});
 	}
 }

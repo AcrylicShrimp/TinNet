@@ -18,7 +18,7 @@ namespace CaysNet::Activation
 		return new Linear();
 	}
 
-	void Linear::activate(const Layer *pLayer, float *pOutput) const
+	void Linear::activate(std::size_t nFanOut, float *pOutput) const
 	{
 		//Empty.
 	}

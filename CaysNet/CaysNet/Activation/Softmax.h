@@ -14,6 +14,7 @@
 
 #include <cmath>
 #include <cstddef>
+#include <vector>
 
 namespace CaysNet::Activation
 {
@@ -32,7 +33,7 @@ namespace CaysNet::Activation
 	public:
 		virtual const wchar_t *name() const override;
 		virtual Activation *duplicate() const override;
-		virtual void activate(const Layer *pLayer, float *pOutput) const override;
+		virtual void activate(std::size_t nFanOut, float *pOutput) const override;
 		virtual void derivative(
 			std::size_t nLength,
 			const float *pActivationInput,

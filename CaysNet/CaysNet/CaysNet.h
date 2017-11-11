@@ -10,8 +10,9 @@
 
 #include "CaysNetDLL.h"
 
-#include "Layer.h"
 #include "NN.h"
+
+#include "Layer\Layers.h"
 
 #include "Activation/Activations.h"
 #include "Initializer/Initializers.h"

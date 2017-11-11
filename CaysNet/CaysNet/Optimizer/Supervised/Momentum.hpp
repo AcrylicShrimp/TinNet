@@ -31,65 +31,55 @@ namespace CaysNet::Optimizer::Supervised
 				std::size_t nActualBatchSize{sInput.size() - nBatchIndex > nBatchSize ? nBatchSize : sInput.size() - nBatchIndex};
 
 				//Initialize the delta buffers.
-				for (auto &sLayer : this->sBiasDelta)
-					for (auto &nDelta : sLayer)
-						nDelta = .0f;
+				for (auto &sBias : this->sBiasDelta)
+					for (auto &nBias : sBias)
+						nBias = .0f;
 
-				for (auto &sLayer : this->sWeightDelta)
-					for (auto &sWeight : sLayer)
-						for (auto &nDelta : sWeight)
-							nDelta = .0f;
+				for (auto &sWeight : this->sWeightDelta)
+					for (auto &nWeight : sWeight)
+						nWeight = .0f;
 
 				for (std::size_t nBatch{0}; nBatch < nActualBatchSize; ++nBatch, ++nBatchIndex)
 				{
 					//Forward pass.
-					this->sNN.calcForTrain(sInput[nBatchIndex].data());
+					this->sNN.forward(sInput[nBatchIndex].data(), this->sActivationInput, this->sActivationOutput);
 
 					//Give the backward input - derivative of the loss function.
 					LossFunc::derivative(nDimension, this->sNN.output().back().data(), sOutput[nBatchIndex].data(), this->sNN.output().back().data());
 
-					//Backward pass; accrue the gradients.
-					for (std::size_t nIndex{this->sNN.depth() - 1}; ; --nIndex)
+					//Backward pass.
+					this->sNN.backward(
+						this->sActivationInput,
+						this->sActivationOutput,
+						this->sBiasDeltaBuffer,
+						this->sWeightDeltaBuffer,
+						this->sBackward,
+						sInput[nBatchIndex].data(),
+						this->sNN.output().back().data());
+
+					for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
 					{
-						auto &sLayer{this->sNN[nIndex]};
-						auto pLayerInput{nIndex == 0 ? sInput[nBatchIndex].data() : this->sNN.output()[nIndex - 1].data()};
-						auto pLayerBackInput{nIndex + 1 == this->sNN.depth() ? this->sNN.output().back().data() : this->sOutput[nIndex + 1].data()};
-						auto pLayerBackOutput{this->sOutput[nIndex].data()};
+						for (std::size_t nBiasIndex{0}, nBiasSize{this->sBiasDelta[nIndex].size()}; nBiasIndex < nBiasSize; ++nBiasIndex)
+							this->sBiasDelta[nIndex][nBiasIndex] += this->sBiasDeltaBuffer[nIndex][nBiasIndex];
 
-						sLayer.backward(pLayerBackInput, pLayerBackOutput);
-
-						for (std::size_t nOut{0}, nOutSize{sLayer.fanOut()}; nOut < nOutSize; ++nOut)
-						{
-							this->sBiasDelta[nIndex][nOut] += pLayerBackInput[nOut];
-
-							for (std::size_t nIn{0}, nInSize{sLayer.fanIn()}; nIn < nInSize; ++nIn)
-								this->sWeightDelta[nIndex][nOut][nIn] += pLayerInput[nIn] * pLayerBackInput[nOut];
-						}
-
-						if (nIndex == 0)
-							break;
+						for (std::size_t nWeightIndex{0}, nWeightSize{this->sWeightDelta[nIndex].size()}; nWeightIndex < nWeightSize; ++nWeightIndex)
+							this->sWeightDelta[nIndex][nWeightIndex] += this->sWeightDeltaBuffer[nIndex][nWeightIndex];
 					}
 				}
 
 				auto nFactor{-this->nLearningRate / nActualBatchSize};
 
-				for (std::size_t nIndex{0}, nSize{this->sNN.depth()}; nIndex < nSize; ++nIndex)
-					for (std::size_t nOut{0}, nOutSize{this->sNN[nIndex].fanOut()}; nOut < nOutSize; ++nOut)
-					{
-						this->sBiasMomentum[nIndex][nOut] = this->nMomentumTerm * this->sBiasMomentum[nIndex][nOut] + nFactor * this->sBiasDelta[nIndex][nOut];
+				for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
+				{
+					for (std::size_t nBiasIndex{0}, nBiasSize{this->sBiasDelta[nIndex].size()}; nBiasIndex < nBiasSize; ++nBiasIndex)
+						this->sBiasMomentum[nIndex][nBiasIndex] = this->nMomentumTerm * this->sBiasMomentum[nIndex][nBiasIndex] + nFactor * this->sBiasDelta[nIndex][nBiasIndex];
 
-						for (std::size_t nIn{0}, nInSize{this->sNN[nIndex].fanIn()}; nIn < nInSize; ++nIn)
-							this->sWeightMomentum[nIndex][nOut][nIn] = this->nMomentumTerm * this->sWeightMomentum[nIndex][nOut][nIn] + nFactor * this->sWeightDelta[nIndex][nOut][nIn];
-					}
+					for (std::size_t nWeightIndex{0}, nWeightSize{this->sWeightDelta[nIndex].size()}; nWeightIndex < nWeightSize; ++nWeightIndex)
+						this->sWeightMomentum[nIndex][nWeightIndex] = this->nMomentumTerm * this->sWeightMomentum[nIndex][nWeightIndex] + nFactor * this->sWeightDelta[nIndex][nWeightIndex];
+				}
 
-				for (std::size_t nIndex{0}, nSize{this->sNN.depth()}; nIndex < nSize; ++nIndex)
-					for (std::size_t nOut{0}, nOutSize{this->sNN[nIndex].fanOut()}; nOut < nOutSize; ++nOut)
-					{
-						this->sNN[nIndex].bias()[nOut] += this->sBiasMomentum[nIndex][nOut];
-
-						for (std::size_t nIn{0}, nInSize{this->sNN[nIndex].fanIn()}; nIn < nInSize; ++nIn)
-							this->sNN[nIndex].weight()[nOut][nIn] += this->sWeightMomentum[nIndex][nOut][nIn];
-					}
+				for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
+					this->sNN[nIndex]->update(this->sBiasMomentum[nIndex].data(), this->sWeightMomentum[nIndex].data());
 			}
 		}
 	}

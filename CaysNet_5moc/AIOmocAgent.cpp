@@ -19,7 +19,7 @@ int AIOmocAgent::place(const float *pPlace)
 
 	int nBufferSize = 0;
 
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 25; ++i)
 		if (pPlace[i] == .0f)
 		{
 			this->vIndexBuffer[nBufferSize] = i;
