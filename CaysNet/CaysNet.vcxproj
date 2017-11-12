@@ -252,6 +252,7 @@
     <ClCompile Include="CaysNet\NN.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Supervised\Momentum.cpp" />
+    <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Supervised\SGD.cpp" />
     <ClCompile Include="CaysNet\Visualizer\ConsoleVisualizer.cpp" />
     <ClCompile Include="CaysNet\Visualizer\CSVLossExporter.cpp" />
@@ -290,6 +291,8 @@
     <ClInclude Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.hpp" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.h" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.hpp" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.hpp" />
   </ItemGroup>

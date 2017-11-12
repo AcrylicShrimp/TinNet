@@ -123,6 +123,9 @@
     <ClCompile Include="CaysNet\Layer\MaxPoolingLayer.cpp">
       <Filter>CaysNet\Layer</Filter>
     </ClCompile>
+    <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaysNet\Activation\Activation.h">
@@ -241,6 +244,12 @@
     </ClInclude>
     <ClInclude Include="CaysNet\Layer\MaxPoolingLayer.h">
       <Filter>CaysNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.h">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.hpp">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

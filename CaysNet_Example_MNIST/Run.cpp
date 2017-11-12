@@ -140,6 +140,7 @@ int32_t main()
 
 	//Optimizer::Supervised::SGD sOptimizer{sNetwork, .001f};
 	Optimizer::Supervised::Momentum sOptimizer{sNetwork, .9f, .001f};
+	//Optimizer::Supervised::NAG sOptimizer{sNetwork, .9f, .001f};
 
 	Visualizer::CSVLossExporter sExporter;
 
