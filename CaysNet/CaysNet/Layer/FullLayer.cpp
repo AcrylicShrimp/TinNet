@@ -98,31 +98,57 @@ namespace CaysNet::Layer
 		this->pActivation->activate(this->nFanOut, pOutput);
 	}
 
-	void FullLayer::forward(const float *pInput, float *pOutput, float *pActivationInput, float *pActivationOutput) const
+	void FullLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const
 	{
 		assert(this->pActivation);
 
-		//z = X * W + b
-		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-		{
-			auto &nDestination{pOutput[nOut] = this->sBias[nOut]};
+		//z = b
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				pOutput[nBatch][nOut] = this->sBias[nOut];
 
-			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-				nDestination += pInput[nIn] * this->sWeight[nOut][nIn];
-
-			//Fill the activation input.
-			pActivationInput[nOut] = nDestination;
-		}
+		//z += W * x;
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pOutput[nBatch][nOut] += pInput[nBatch][nIn] * this->sWeight[nOut][nIn];
 
 		//a = f(z)
-		this->pActivation->activate(this->nFanOut, pOutput);
-
-		//Fill the activation output.
-		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-			pActivationOutput[nOut] = pOutput[nOut];
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			this->pActivation->activate(this->nFanOut, pOutput[nBatch].data());
 	}
 
-	void FullLayer::backward(const float *pActivationInput, const float *pActivationOutput, const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput, float *pBiasDelta, float *pWeightDelta) const
+	void FullLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, std::vector<float> *pActivationInput, std::vector<float> *pActivationOutput) const
+	{
+		assert(this->pActivation);
+
+		//z = b
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				pOutput[nBatch][nOut] = this->sBias[nOut];
+
+		//z += W * x;
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pOutput[nBatch][nOut] += pInput[nBatch][nIn] * this->sWeight[nOut][nIn];
+
+		//Fill the activation input.
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				pActivationInput[nBatch][nOut] = pOutput[nBatch][nOut];
+
+		//a = f(z)
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			this->pActivation->activate(this->nFanOut, pOutput[nBatch].data());
+
+		//Fill the activation output.
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				pActivationOutput[nBatch][nOut] = pOutput[nBatch][nOut];
+	}
+
+	void FullLayer::backward(std::size_t nBatchSize, const std::vector<float> *pActivationInput, const std::vector<float> *pActivationOutput, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, std::vector<float> *pBiasDelta, std::vector<float> *pWeightDelta) const
 	{
 		assert(this->pActivation);
 
@@ -141,14 +167,14 @@ namespace CaysNet::Layer
 				pBackwardOutput[nIn] += pBiasDelta[nOut] * this->sWeight[nOut][nIn];
 	}
 
-	void FullLayer::update(const float *pBiasDelta, const float *pWeightDelta)
+	void FullLayer::update(float nFactor, const float *pBiasDelta, const float *pWeightDelta)
 	{
 		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-			this->sBias[nOut] += pBiasDelta[nOut];
+			this->sBias[nOut] += nFactor * pBiasDelta[nOut];
 
 		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
 			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-				this->sWeight[nOut][nIn] += pWeightDelta[nOut * this->nFanIn + nIn];
+				this->sWeight[nOut][nIn] += nFactor * pWeightDelta[nOut * this->nFanIn + nIn];
 	}
 
 	void FullLayer::serialize(std::ofstream &sOutput) const
