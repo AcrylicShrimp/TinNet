@@ -30,7 +30,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{6B2A6192-0214-4CF7-B2C7-4F7955278D68}</ProjectGuid>
     <RootNamespace>CaysNet</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -251,6 +251,7 @@
     <ClCompile Include="CaysNet\Loss\MulticlassCE.cpp" />
     <ClCompile Include="CaysNet\NN.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.cpp" />
+    <ClCompile Include="CaysNet\Optimizer\Supervised\Adagrad.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Supervised\Momentum.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Supervised\SGD.cpp" />
@@ -289,6 +290,8 @@
     <ClInclude Include="CaysNet\NN.hpp" />
     <ClInclude Include="CaysNet\Optimizer\Optimizers.h" />
     <ClInclude Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.h" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\Adagrad.h" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\Adagrad.hpp" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.hpp" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.h" />

@@ -50,13 +50,10 @@ namespace CaysNet::Activation
 		const float *pDerivativeInput,
 		float *pResult) const
 	{
-		std::vector<float> sResult(nLength, .0f);
+		std::fill(pResult, pResult + nLength, .0f);
 
 		for (std::size_t nFirst{0}; nFirst < nLength; ++nFirst)
 			for (std::size_t nSecond{0}; nSecond < nLength; ++nSecond)
-				sResult[nFirst] += pDerivativeInput[nSecond] * (nSecond == nFirst ? pActivationOutput[nSecond] * (1.f - pActivationOutput[nSecond]) : -pActivationOutput[nSecond] * pActivationOutput[nFirst]);
-
-		for (std::size_t nIndex{0}; nIndex < nLength; ++nIndex)
-			pResult[nIndex] = sResult[nIndex];
+				pResult[nFirst] += pDerivativeInput[nSecond] * (nSecond == nFirst ? pActivationOutput[nSecond] * (1.f - pActivationOutput[nSecond]) : -pActivationOutput[nSecond] * pActivationOutput[nFirst]);
 	}
 }

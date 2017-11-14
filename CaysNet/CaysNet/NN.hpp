@@ -35,27 +35,27 @@ namespace CaysNet
 	{
 		assert(this->sLayerList.size());
 
+		std::vector<std::vector<std::vector<float>>> sOutput(nBatchCount);
+
+		for (auto &sOutputBuffer : sOutput)
+		{
+			sOutputBuffer.resize(this->sLayerList.size());
+
+			std::size_t nIndex{0};
+
+			for (auto &sLayerBuffer : sOutputBuffer)
+				sLayerBuffer.resize(this->sLayerList[nIndex++]->fanOut());
+		}
+
+		this->forward(pInput, sOutput);
+
 		float nLossSum{.0f};
 
 		for (std::size_t nIndex{0u}; nIndex < nBatchCount; ++nIndex)
-			nLossSum += this->loss<LossFunc>(pInput[nIndex], pOutput[nIndex]);
+			nLossSum += LossFunc::loss(sOutput[nIndex].back().size(), sOutput[nIndex].back().data(), pOutput[nIndex]);
 
 		//Take average of the loss.
 		return nLossSum / nBatchCount;
-	}
-
-	template<class LossFunc> float NN::loss(const std::vector<float *> &sInputList, const std::vector<float *> &sOutputList)
-	{
-		assert(this->sLayerList.size());
-		assert(sInputList.size() == sOutputList.size());
-
-		float nLossSum{.0f};
-
-		for (std::size_t nIndex{0u}, nSize{sInputList.size()}; nIndex < nSize; ++nIndex)
-			nLossSum += this->loss<LossFunc>(sInputList[nIndex], sOutputList[nIndex]);
-
-		//Take average of the loss.
-		return nLossSum / sInputList.size();
 	}
 
 	template<class LossFunc> float NN::loss(const std::vector<std::vector<float>> &sInputList, const std::vector<std::vector<float>> &sOutputList)
@@ -63,10 +63,24 @@ namespace CaysNet
 		assert(this->sLayerList.size());
 		assert(sInputList.size() == sOutputList.size());
 
+		std::vector<std::vector<std::vector<float>>> sOutput(sInputList.size());
+
+		for (auto &sOutputBuffer : sOutput)
+		{
+			sOutputBuffer.resize(this->sLayerList.size());
+
+			std::size_t nIndex{0};
+
+			for (auto &sLayerBuffer : sOutputBuffer)
+				sLayerBuffer.resize(this->sLayerList[nIndex++]->fanOut());
+		}
+
+		this->forward(sInputList, sOutput);
+
 		float nLossSum{.0f};
 
 		for (std::size_t nIndex{0u}, nSize{sInputList.size()}; nIndex < nSize; ++nIndex)
-			nLossSum += this->loss<LossFunc>(sInputList[nIndex].data(), sOutputList[nIndex].data());
+			nLossSum += LossFunc::loss(sOutput[nIndex].back().size(), sOutput[nIndex].back().data(), sOutputList[nIndex]);
 
 		//Take average of the loss.
 		return nLossSum / sInputList.size();

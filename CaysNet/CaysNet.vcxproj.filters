@@ -126,6 +126,9 @@
     <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClCompile>
+    <ClCompile Include="CaysNet\Optimizer\Supervised\Adagrad.cpp">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaysNet\Activation\Activation.h">
@@ -249,6 +252,12 @@
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClInclude>
     <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.hpp">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\Adagrad.h">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\Adagrad.hpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClInclude>
   </ItemGroup>

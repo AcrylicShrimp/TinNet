@@ -10,6 +10,9 @@
 
 #include "../CaysNetDLL.h"
 
+#include <chrono>
+#include <cstddef>
+#include <ctime>
 #include <fstream>
 #include <string>
 #include <utility>
@@ -21,6 +24,7 @@ namespace CaysNet::Visualizer
 	{
 	private:
 		std::vector<float> sLoss;
+		std::vector<std::chrono::system_clock::time_point> sTimepoint;
 		
 	public:
 		CSVLossExporter() = default;
@@ -40,6 +44,7 @@ namespace CaysNet::Visualizer
 	inline void CSVLossExporter::accrueLoss(float nLoss)
 	{
 		this->sLoss.emplace_back(nLoss);
+		this->sTimepoint.emplace_back(std::chrono::system_clock::now());
 	}
 }
 

@@ -43,7 +43,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{0D8F6AE6-5FFA-420A-85EA-62F130899E18}</ProjectGuid>
     <RootNamespace>CaysNet_5moc</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

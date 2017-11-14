@@ -55,7 +55,35 @@ int32_t main()
 		}
 		else if (sCommand == "new")
 		{
-			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(784, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(784, 100));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(100, 70));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(70, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
+			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
 			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
 			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
 			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
@@ -139,8 +167,9 @@ int32_t main()
 	}
 
 	//Optimizer::Supervised::SGD sOptimizer{sNetwork, .001f};
-	Optimizer::Supervised::Momentum sOptimizer{sNetwork, .9f, .001f};
+	//Optimizer::Supervised::Momentum sOptimizer{sNetwork, .9f, .001f};
 	//Optimizer::Supervised::NAG sOptimizer{sNetwork, .9f, .001f};
+	Optimizer::Supervised::Adagrad sOptimizer{sNetwork, .0001f};
 
 	Visualizer::CSVLossExporter sExporter;
 
@@ -148,7 +177,7 @@ int32_t main()
 	{
 		float nLoss{sNetwork.classificationLoss(sTestInput, sTestOutput)};
 
-		printf("Validation data classification loss : %f\n", nLoss);
+		printf("Validation data classification accuracy : %0.2f%%\n", (1.f - nLoss) * 100.f);
 		sExporter.accrueLoss(nLoss);
 		sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
 

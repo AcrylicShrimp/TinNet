@@ -12,6 +12,7 @@
 
 #include "Activation.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <vector>
