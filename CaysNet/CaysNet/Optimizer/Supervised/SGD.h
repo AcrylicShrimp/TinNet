@@ -25,14 +25,21 @@ namespace CaysNet::Optimizer::Supervised
 	class CAYSNET_DLL SGD final
 	{
 	private:
-		float nLearningRate;
 		NN &sNN;
+		std::size_t nBatchSize;
+		float nLearningRate;
 		std::vector<std::vector<float>> sBiasDelta;
 		std::vector<std::vector<float>> sWeightDelta;
+		std::vector<std::vector<float>> sBiasDeltaBuffer;
+		std::vector<std::vector<float>> sWeightDeltaBuffer;
+		std::vector<std::vector<std::vector<float>>> sForwardOutput;
+		std::vector<std::vector<std::vector<float>>> sBackwardOutput;
+		std::vector<std::vector<std::vector<float>>> sActivationInput;
+		std::vector<std::vector<std::vector<float>>> sActivationOutput;
 		std::mt19937_64 sEngine;
 
 	public:
-		SGD(NN &sNN, float nNewLearningRate);
+		SGD(NN &sNN, std::size_t nNewBatchSize, float nNewLearningRate);
 		SGD(const SGD &sSrc) = delete;
 		SGD(SGD &&sSrc);
 		~SGD() = default;
@@ -44,7 +51,7 @@ namespace CaysNet::Optimizer::Supervised
 	public:
 		inline float &learningRate();
 		inline float learningRate() const;
-		template<class LossFunc> void train(std::vector<std::vector<float>> &sInput, std::vector<std::vector<float>> &sOutput, std::size_t nBatchSize, std::size_t nEpoch);
+		template<class LossFunc> void train(std::size_t nEpoch, std::size_t nSize, std::vector<float> *pInput, std::vector<float> *pOutput);
 	};
 
 	inline float &SGD::learningRate()

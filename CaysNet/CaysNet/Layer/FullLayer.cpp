@@ -76,15 +76,17 @@ namespace CaysNet::Layer
 				nWeight = sGenerator();
 	}
 
-	void FullLayer::specifySize(std::size_t &nActivationInputSize, std::size_t &nActivationOutputSize, std::size_t &nBiasDeltaSize, std::size_t &nWeightDeltaSize) const
+	void FullLayer::specifySize(
+		std::size_t &nActivationInputSize,
+		std::size_t &nActivationOutputSize,
+		std::size_t &nBiasDeltaSize,
+		std::size_t &nWeightDeltaSize) const
 	{
 		nWeightDeltaSize = this->nFanIn * (nActivationInputSize = nActivationOutputSize = nBiasDeltaSize = this->nFanOut);
 	}
 
 	void FullLayer::forward(const float *pInput, float *pOutput) const
 	{
-		assert(this->pActivation);
-
 		//z = X * W + b
 		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
 		{
@@ -100,8 +102,6 @@ namespace CaysNet::Layer
 
 	void FullLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const
 	{
-		assert(this->pActivation);
-
 		//z = b
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
@@ -118,10 +118,13 @@ namespace CaysNet::Layer
 			this->pActivation->activate(this->nFanOut, pOutput[nBatch].data());
 	}
 
-	void FullLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, std::vector<float> *pActivationInput, std::vector<float> *pActivationOutput) const
+	void FullLayer::forward(
+		std::size_t nBatchSize,
+		const std::vector<float> *pInput,
+		std::vector<float> *pOutput,
+		std::vector<float> *pActivationInput,
+		std::vector<float> *pActivationOutput) const
 	{
-		assert(this->pActivation);
-
 		//z = b
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
@@ -148,23 +151,40 @@ namespace CaysNet::Layer
 				pActivationOutput[nBatch][nOut] = pOutput[nBatch][nOut];
 	}
 
-	void FullLayer::backward(std::size_t nBatchSize, const std::vector<float> *pActivationInput, const std::vector<float> *pActivationOutput, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, std::vector<float> *pBiasDelta, std::vector<float> *pWeightDelta) const
+	void FullLayer::backward(
+		std::size_t nBatchSize,
+		const std::vector<float> *pActivationInput,
+		const std::vector<float> *pActivationOutput,
+		const std::vector<float> *pForwardInput,
+		const std::vector<float> *pBackwardInput,
+		std::vector<float> *pBackwardOutput,
+		float *pBiasDelta,
+		float *pWeightDelta,
+		float *pBiasDeltaBuffer,
+		float *pWeightDeltaBuffer) const
 	{
-		assert(this->pActivation);
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+		{
+			this->pActivation->derivative(this->nFanOut, pActivationInput[nBatch].data(), pActivationOutput[nBatch].data(), pBackwardInput[nBatch].data(), pBiasDeltaBuffer);
 
-		//Take the derivation of the activation function.
-		this->pActivation->derivative(this->nFanOut, pActivationInput, pActivationOutput, pBackwardInput, pBiasDelta);
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pWeightDeltaBuffer[nOut * this->nFanIn + nIn] = pBiasDeltaBuffer[nOut] * pForwardInput[nBatch][nIn];
 
-		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				pBiasDelta[nOut] += pBiasDeltaBuffer[nOut];
+
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pWeightDelta[nOut * this->nFanIn + nIn] += pWeightDeltaBuffer[nOut * this->nFanIn + nIn];
+
 			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-				pWeightDelta[nOut * this->nFanIn + nIn] = pBiasDelta[nOut] * pForwardInput[nIn];
+				pBackwardOutput[nBatch][nIn] = .0f;
 
-		for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-			pBackwardOutput[nIn] = .0f;
-
-		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-				pBackwardOutput[nIn] += pBiasDelta[nOut] * this->sWeight[nOut][nIn];
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pBackwardOutput[nBatch][nIn] += pBiasDeltaBuffer[nOut] * this->sWeight[nOut][nIn];
+		}
 	}
 
 	void FullLayer::update(float nFactor, const float *pBiasDelta, const float *pWeightDelta)

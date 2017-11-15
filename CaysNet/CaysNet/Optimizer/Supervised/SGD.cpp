@@ -8,15 +8,27 @@
 
 namespace CaysNet::Optimizer::Supervised
 {
-	SGD::SGD(NN &sNN, float nNewLearningRate) :
-		nLearningRate{nNewLearningRate},
+	SGD::SGD(NN &sNN, std::size_t nNewBatchSize, float nNewLearningRate) :
 		sNN{sNN},
-		sBiasDelta(sNN.depth()),
-		sWeightDelta(sNN.depth()),
+		nBatchSize{nNewBatchSize},
+		nLearningRate{nNewLearningRate},
+		sBiasDelta(this->sNN.depth()),
+		sWeightDelta(this->sNN.depth()),
+		sBiasDeltaBuffer(this->sNN.depth()),
+		sWeightDeltaBuffer(this->sNN.depth()),
+		sForwardOutput(this->sNN.depth()),
+		sBackwardOutput(this->sNN.depth()),
+		sActivationInput(this->sNN.depth()),
+		sActivationOutput(this->sNN.depth()),
 		sEngine{static_cast<std::mt19937_64::result_type>(std::chrono::system_clock::now().time_since_epoch().count())}
 	{
 		for (std::size_t nIndex{0}, nSize{sNN.depth()}; nIndex < nSize; ++nIndex)
 		{
+			sForwardOutput[nIndex].resize(nNewBatchSize);
+			sBackwardOutput[nIndex].resize(nNewBatchSize);
+			sActivationInput[nIndex].resize(nNewBatchSize);
+			sActivationOutput[nIndex].resize(nNewBatchSize);
+
 			auto pLayer{this->sNN[nIndex]};
 
 			std::size_t nActivationInputSize;
@@ -26,8 +38,18 @@ namespace CaysNet::Optimizer::Supervised
 
 			pLayer->specifySize(nActivationInputSize, nActivationOutputSize, nBiasDeltaSize, nWeightDeltaSize);
 
-			this->sBiasDelta[nIndex].resize(nBiasDeltaSize, .0f);
-			this->sWeightDelta[nIndex].resize(nWeightDeltaSize, .0f);
+			this->sBiasDelta[nIndex].resize(nBiasDeltaSize);
+			this->sWeightDelta[nIndex].resize(nWeightDeltaSize);
+			this->sBiasDeltaBuffer[nIndex].resize(nBiasDeltaSize);
+			this->sWeightDeltaBuffer[nIndex].resize(nWeightDeltaSize);
+
+			for (std::size_t nBatchIndex{0}; nBatchIndex < nNewBatchSize; ++nBatchIndex)
+			{
+				sForwardOutput[nIndex][nBatchIndex].resize(pLayer->fanOut());
+				sBackwardOutput[nIndex][nBatchIndex].resize(pLayer->fanIn());
+				sActivationInput[nIndex][nBatchIndex].resize(nActivationInputSize);
+				sActivationOutput[nIndex][nBatchIndex].resize(nActivationOutputSize);
+			}
 		}
 	}
 

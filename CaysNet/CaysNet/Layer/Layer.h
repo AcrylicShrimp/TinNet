@@ -49,11 +49,30 @@ namespace CaysNet::Layer
 		virtual Layer *duplicate() const = 0;
 		virtual void initBias(std::function<float()> sGenerator) = 0;
 		virtual void initWeight(std::function<float()> sGenerator) = 0;
-		virtual void specifySize(std::size_t &nActivationInputSize, std::size_t &nActivationOutputSize, std::size_t &nBiasDeltaSize, std::size_t &nWeightDeltaSize) const = 0;
+		virtual void specifySize(
+			std::size_t &nActivationInputSize,
+			std::size_t &nActivationOutputSize,
+			std::size_t &nBiasDeltaSize,
+			std::size_t &nWeightDeltaSize) const = 0;
 		virtual void forward(const float *pInput, float *pOutput) const = 0;
 		virtual void forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const = 0;
-		virtual void forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, std::vector<float> *pActivationInput, std::vector<float> *pActivationOutput) const = 0;
-		virtual void backward(std::size_t nBatchSize, const std::vector<float> *pActivationInput, const std::vector<float> *pActivationOutput, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, std::vector<float> *pBiasDelta, std::vector<float> *pWeightDelta) const = 0;
+		virtual void forward(
+			std::size_t nBatchSize,
+			const std::vector<float> *pInput,
+			std::vector<float> *pOutput,
+			std::vector<float> *pActivationInput,
+			std::vector<float> *pActivationOutput) const = 0;
+		virtual void backward(
+			std::size_t nBatchSize,
+			const std::vector<float> *pActivationInput,
+			const std::vector<float> *pActivationOutput,
+			const std::vector<float> *pForwardInput,
+			const std::vector<float> *pBackwardInput,
+			std::vector<float> *pBackwardOutput,
+			float *pBiasDelta,
+			float *pWeightDelta,
+			float *pBiasDeltaBuffer,
+			float *pWeightDeltaBuffer) const = 0;
 		virtual void update(float nFactor, const float *pBiasDelta, const float *pWeightDelta) = 0;
 		virtual void serialize(std::ofstream &sOutput) const override;
 		virtual void deserialize(std::ifstream &sInput) override;
