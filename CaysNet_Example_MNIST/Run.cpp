@@ -6,6 +6,8 @@
 
 #include "../CaysNet/CaysNet/CaysNet.h"
 
+#include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <fstream>
 #include <iostream>
@@ -138,17 +140,34 @@ int32_t main()
 		}
 	}
 
-	Optimizer::Supervised::SGD sOptimizer{sNetwork, 256, .001f};
-	//Optimizer::Supervised::Momentum sOptimizer{sNetwork, .9f, .001f};
+	//Optimizer::Supervised::SGD sOptimizer{sNetwork, 32, .001f};
+	Optimizer::Supervised::Momentum sOptimizer{sNetwork, 32, .9f, .001f};
 	//Optimizer::Supervised::NAG sOptimizer{sNetwork, .9f, .001f};
 	//Optimizer::Supervised::Adagrad sOptimizer{sNetwork, .0001f};
 
 	Visualizer::CSVLossExporter sExporter;
 
+	//for (std::size_t nOut{0}; nOut < 50; ++nOut)
+	//	for (std::size_t nIn{0}; nIn < 784; ++nIn)
+	//	{
+	//		auto sPair{sOptimizer.calcNumericalGradient<Loss::MulticlassCE>(sTestInput[0], sTestOutput[0], 0, nOut, nIn)};
+	//
+	//		auto nError{std::abs(sPair.first - sPair.second) / (std::max)(std::abs(sPair.first), std::abs(sPair.second))};
+	//
+	//		if (sPair.first == sPair.second)
+	//			continue;
+	//
+	//		if (nError < 0.05f)
+	//			continue;
+	//
+	//		printf("%.6f vs %.6f : %.6f\n", sPair.first, sPair.second, nError);
+	//	}
+
 	for (;;)
 	{
 		float nLoss{sNetwork.classificationLoss(10000u, sTestInput.data(), sTestOutput.data())};
 
+		printf("Validation data classification loss : %f\n", nLoss);
 		printf("Validation data classification accuracy : %0.2f%%\n", (1.f - nLoss) * 100.f);
 		sExporter.accrueLoss(nLoss);
 		sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});

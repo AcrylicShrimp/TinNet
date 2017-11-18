@@ -57,11 +57,24 @@ namespace CaysNet::Layer
 		virtual void forward(const float *pInput, float *pOutput) const = 0;
 		virtual void forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const = 0;
 		virtual void forward(
+			const float *pInput,
+			float *pOutput,
+			float *pActivationInput,
+			float *pActivationOutput) const = 0;
+		virtual void forward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pInput,
 			std::vector<float> *pOutput,
 			std::vector<float> *pActivationInput,
 			std::vector<float> *pActivationOutput) const = 0;
+		virtual void backward(
+			const float *pActivationInput,
+			const float *pActivationOutput,
+			const float *pForwardInput,
+			const float *pBackwardInput,
+			float *pBackwardOutput,
+			float *pBiasDelta,
+			float *pWeightDelta) const = 0;
 		virtual void backward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pActivationInput,
@@ -71,8 +84,8 @@ namespace CaysNet::Layer
 			std::vector<float> *pBackwardOutput,
 			float *pBiasDelta,
 			float *pWeightDelta,
-			float *pBiasDeltaBuffer,
-			float *pWeightDeltaBuffer) const = 0;
+			float *pBiasDeltaBuffer) const = 0;
+		virtual void update(const float *pBiasDelta, const float *pWeightDelta) = 0;
 		virtual void update(float nFactor, const float *pBiasDelta, const float *pWeightDelta) = 0;
 		virtual void serialize(std::ofstream &sOutput) const override;
 		virtual void deserialize(std::ifstream &sInput) override;

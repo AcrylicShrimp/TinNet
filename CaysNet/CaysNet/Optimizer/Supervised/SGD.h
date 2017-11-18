@@ -11,6 +11,7 @@
 #include "../../CaysNetDLL.h"
 
 #include "../../Layer/Layer.h"
+#include "../../Layer/FullLayer.h"
 #include "../../NN.h"
 
 #include <algorithm>
@@ -31,7 +32,6 @@ namespace CaysNet::Optimizer::Supervised
 		std::vector<std::vector<float>> sBiasDelta;
 		std::vector<std::vector<float>> sWeightDelta;
 		std::vector<std::vector<float>> sBiasDeltaBuffer;
-		std::vector<std::vector<float>> sWeightDeltaBuffer;
 		std::vector<std::vector<std::vector<float>>> sForwardOutput;
 		std::vector<std::vector<std::vector<float>>> sBackwardOutput;
 		std::vector<std::vector<std::vector<float>>> sActivationInput;
@@ -51,6 +51,7 @@ namespace CaysNet::Optimizer::Supervised
 	public:
 		inline float &learningRate();
 		inline float learningRate() const;
+		template<class LossFunc> std::pair<float, float> calcNumericalGradient(const std::vector<float> &sInput, const std::vector<float> &sOutput, std::size_t nLayerIndex, std::size_t nOutIndex, std::size_t nInIndex);
 		template<class LossFunc> void train(std::size_t nEpoch, std::size_t nSize, std::vector<float> *pInput, std::vector<float> *pOutput);
 	};
 

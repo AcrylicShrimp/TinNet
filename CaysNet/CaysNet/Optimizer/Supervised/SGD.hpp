@@ -6,6 +6,58 @@
 
 namespace CaysNet::Optimizer::Supervised
 {
+	template<class LossFunc> std::pair<float, float> SGD::calcNumericalGradient(const std::vector<float> &sInput, const std::vector<float> &sOutput, std::size_t nLayerIndex, std::size_t nOutIndex, std::size_t nInIndex)
+	{
+		auto pLayer{reinterpret_cast<Layer::FullLayer *>(this->sNN[nLayerIndex])};
+		auto &nWeight = pLayer->weight()[nOutIndex][nInIndex];
+		auto nOriginal = nWeight;
+
+		nWeight = nOriginal + 1e-3f;
+		auto nFirstLoss = this->sNN.loss<LossFunc>(sInput.data(), sOutput.data());
+
+		nWeight = nOriginal - 1e-3f;
+		auto nSecondLoss = this->sNN.loss<LossFunc>(sInput.data(), sOutput.data());
+
+		auto nFirstGradient{(nFirstLoss - nSecondLoss) / 2e-3f};
+
+		nWeight = nOriginal;
+
+		for (auto &sBias : this->sBiasDelta)
+			std::fill(sBias.begin(), sBias.end(), .0f);
+
+		for (auto &sWeight : this->sWeightDelta)
+			std::fill(sWeight.begin(), sWeight.end(), .0f);
+
+		this->sNN.forward(
+			1,
+			&sInput,
+			this->sForwardOutput.data(),
+			this->sActivationInput.data(),
+			this->sActivationOutput.data());
+
+		LossFunc::derivative(
+			sOutput.size(),
+			this->sForwardOutput.back().front().data(),
+			sOutput.data(),
+			this->sForwardOutput.back().front().data());
+
+		this->sNN.backward(
+			1,
+			&sInput,
+			this->sForwardOutput.back().data(),
+			this->sForwardOutput.data(),
+			this->sActivationInput.data(),
+			this->sActivationOutput.data(),
+			this->sBiasDelta.data(),
+			this->sWeightDelta.data(),
+			this->sBiasDeltaBuffer.data(),
+			this->sBackwardOutput.data());
+
+		auto nSecondGradient{this->sWeightDelta[nLayerIndex][nOutIndex * pLayer->fanIn() + nInIndex]};
+
+		return std::make_pair(nFirstGradient, nSecondGradient);
+	}
+
 	template<class LossFunc> void SGD::train(std::size_t nEpoch, std::size_t nSize, std::vector<float> *pInput, std::vector<float> *pOutput)
 	{
 		auto nDimension{pOutput->size()};
@@ -25,7 +77,7 @@ namespace CaysNet::Optimizer::Supervised
 
 			while (nBatchIndex < nSize)
 			{
-				auto nActualBatchSize{nSize - nBatchIndex > this->nBatchSize ? this->nBatchSize : nSize - nBatchIndex};
+				auto nActualBatchSize{std::min(this->nBatchSize, nSize - nBatchIndex)};
 
 				//Initialize the delta buffers.
 				for (auto &sBias : this->sBiasDelta)
@@ -46,7 +98,7 @@ namespace CaysNet::Optimizer::Supervised
 					LossFunc::derivative(
 						nDimension,
 						this->sForwardOutput.back()[nIndex].data(),
-						pOutput[nIndex + nBatchIndex].data(),
+						pOutput[nBatchIndex + nIndex].data(),
 						this->sForwardOutput.back()[nIndex].data());
 
 				//Backward.
@@ -60,7 +112,6 @@ namespace CaysNet::Optimizer::Supervised
 					this->sBiasDelta.data(),
 					this->sWeightDelta.data(),
 					this->sBiasDeltaBuffer.data(),
-					this->sWeightDeltaBuffer.data(),
 					this->sBackwardOutput.data());
 
 				nBatchIndex += nActualBatchSize;

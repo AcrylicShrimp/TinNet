@@ -87,14 +87,13 @@ namespace CaysNet::Layer
 
 	void FullLayer::forward(const float *pInput, float *pOutput) const
 	{
-		//z = X * W + b
-		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-		{
-			auto &nDestination{pOutput[nOut] = this->sBias[nOut]};
+		//z = b
+		std::copy(this->sBias.cbegin(), this->sBias.cend(), pOutput);
 
+		//z += W * x
+		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
 			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-				nDestination += pInput[nIn] * this->sWeight[nOut][nIn];
-		}
+				pOutput[nOut] += pInput[nIn] * this->sWeight[nOut][nIn];
 
 		//a = f(z)
 		this->pActivation->activate(this->nFanOut, pOutput);
@@ -104,10 +103,9 @@ namespace CaysNet::Layer
 	{
 		//z = b
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
-			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-				pOutput[nBatch][nOut] = this->sBias[nOut];
+			std::copy(this->sBias.cbegin(), this->sBias.cend(), pOutput[nBatch].data());
 
-		//z += W * x;
+		//z += W * x
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
 				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
@@ -119,6 +117,30 @@ namespace CaysNet::Layer
 	}
 
 	void FullLayer::forward(
+		const float *pInput,
+		float *pOutput,
+		float *pActivationInput,
+		float *pActivationOutput) const
+	{
+		//z = b
+		std::copy(this->sBias.cbegin(), this->sBias.cend(), pOutput);
+
+		//z += W * x;
+		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+				pOutput[nOut] += pInput[nIn] * this->sWeight[nOut][nIn];
+
+		//Fill the activation input.
+		std::copy(pOutput, pOutput + this->nFanOut, pActivationInput);
+
+		//a = f(z)
+		this->pActivation->activate(this->nFanOut, pOutput);
+
+		//Fill the activation output.
+		std::copy(pOutput, pOutput + this->nFanOut, pActivationOutput);
+	}
+
+	void FullLayer::forward(
 		std::size_t nBatchSize,
 		const std::vector<float> *pInput,
 		std::vector<float> *pOutput,
@@ -127,8 +149,7 @@ namespace CaysNet::Layer
 	{
 		//z = b
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
-			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-				pOutput[nBatch][nOut] = this->sBias[nOut];
+			std::copy(this->sBias.cbegin(), this->sBias.cend(), pOutput[nBatch].data());
 
 		//z += W * x;
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
@@ -138,8 +159,7 @@ namespace CaysNet::Layer
 
 		//Fill the activation input.
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
-			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-				pActivationInput[nBatch][nOut] = pOutput[nBatch][nOut];
+			std::copy(pOutput[nBatch].cbegin(), pOutput[nBatch].cend(), pActivationInput[nBatch].data());
 
 		//a = f(z)
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
@@ -147,8 +167,29 @@ namespace CaysNet::Layer
 
 		//Fill the activation output.
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
-			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-				pActivationOutput[nBatch][nOut] = pOutput[nBatch][nOut];
+			std::copy(pOutput[nBatch].cbegin(), pOutput[nBatch].cend(), pActivationOutput[nBatch].data());
+	}
+
+	void FullLayer::backward(
+		const float *pActivationInput,
+		const float *pActivationOutput,
+		const float *pForwardInput,
+		const float *pBackwardInput,
+		float *pBackwardOutput,
+		float *pBiasDelta,
+		float *pWeightDelta) const
+	{
+		this->pActivation->derivative(this->nFanOut, pActivationInput, pActivationOutput, pBackwardInput, pBiasDelta);
+
+		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+				pWeightDelta[nOut * this->nFanIn + nIn] = pBiasDelta[nOut] * pForwardInput[nIn];
+
+		std::fill(pBackwardOutput, pBackwardOutput + this->nFanIn, .0f);
+
+		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+				pBackwardOutput[nIn] += pBiasDelta[nOut] * this->sWeight[nOut][nIn];
 	}
 
 	void FullLayer::backward(
@@ -160,31 +201,36 @@ namespace CaysNet::Layer
 		std::vector<float> *pBackwardOutput,
 		float *pBiasDelta,
 		float *pWeightDelta,
-		float *pBiasDeltaBuffer,
-		float *pWeightDeltaBuffer) const
+		float *pBiasDeltaBuffer) const
 	{
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			std::fill(pBackwardOutput[nBatch].begin(), pBackwardOutput[nBatch].end(), .0f);
+
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 		{
 			this->pActivation->derivative(this->nFanOut, pActivationInput[nBatch].data(), pActivationOutput[nBatch].data(), pBackwardInput[nBatch].data(), pBiasDeltaBuffer);
-
-			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-					pWeightDeltaBuffer[nOut * this->nFanIn + nIn] = pBiasDeltaBuffer[nOut] * pForwardInput[nBatch][nIn];
 
 			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
 				pBiasDelta[nOut] += pBiasDeltaBuffer[nOut];
 
 			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
 				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-					pWeightDelta[nOut * this->nFanIn + nIn] += pWeightDeltaBuffer[nOut * this->nFanIn + nIn];
-
-			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-				pBackwardOutput[nBatch][nIn] = .0f;
+					pWeightDelta[nOut * this->nFanIn + nIn] += pBiasDeltaBuffer[nOut] * pForwardInput[nBatch][nIn];
 
 			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
 				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
 					pBackwardOutput[nBatch][nIn] += pBiasDeltaBuffer[nOut] * this->sWeight[nOut][nIn];
 		}
+	}
+
+	void FullLayer::update(const float *pBiasDelta, const float *pWeightDelta)
+	{
+		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+			this->sBias[nOut] += pBiasDelta[nOut];
+
+		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+				this->sWeight[nOut][nIn] += pWeightDelta[nOut * this->nFanIn + nIn];
 	}
 
 	void FullLayer::update(float nFactor, const float *pBiasDelta, const float *pWeightDelta)

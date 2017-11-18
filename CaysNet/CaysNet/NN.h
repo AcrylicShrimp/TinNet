@@ -57,13 +57,27 @@ namespace CaysNet
 		void forward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pInput,
-			std::vector<std::vector<float>> *pOutputBuffer);
+			std::vector<std::vector<float>> *pOutputBuffer) const;
+		void forward(
+			const float *pInput,
+			std::vector<float> *pOutputBuffer,
+			std::vector<float> *pActivationInputBuffer,
+			std::vector<float> *pActivationOutputBuffer) const;
 		void forward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pInput,
 			std::vector<std::vector<float>> *pOutputBuffer,
 			std::vector<std::vector<float>> *pActivationInputBuffer,
-			std::vector<std::vector<float>> *pActivationOutputBuffer);
+			std::vector<std::vector<float>> *pActivationOutputBuffer) const;
+		void backward(
+			const float *pForwardInput,
+			const float *pBackwardInput,
+			const std::vector<float> *pForwardOutputBuffer,
+			const std::vector<float> *pActivationInputBuffer,
+			const std::vector<float> *pActivationOutputBuffer,
+			std::vector<float> *pBiasDelta,
+			std::vector<float> *pWeightDelta,
+			std::vector<float> *pBackwardOutputBuffer) const;
 		void backward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pForwardInput,
@@ -74,7 +88,6 @@ namespace CaysNet
 			std::vector<float> *pBiasDelta,
 			std::vector<float> *pWeightDelta,
 			std::vector<float> *pBiasDeltaBuffer,
-			std::vector<float> *pWeightDeltaBuffer,
 			std::vector<std::vector<float>> *pBackwardOutputBuffer) const;
 		std::size_t classify(const float *pInput);
 		void classify(std::size_t nBatchSize, const std::vector<float> *pInput, std::size_t *pOutput);
