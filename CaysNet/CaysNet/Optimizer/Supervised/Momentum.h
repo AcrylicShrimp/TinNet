@@ -25,22 +25,23 @@ namespace CaysNet::Optimizer::Supervised
 	class CAYSNET_DLL Momentum final
 	{
 	private:
+		NN &sNN;
+		std::size_t nBatchSize;
 		float nMomentumTerm;
 		float nLearningRate;
-		NN &sNN;
-		std::vector<std::vector<float>> sActivationInput;
-		std::vector<std::vector<float>> sActivationOutput;
+		std::mt19937_64 sEngine;
+		std::vector<std::vector<std::vector<float>>> sForwardOutput;
+		std::vector<std::vector<std::vector<float>>> sBackwardOutput;
+		std::vector<std::vector<std::vector<float>>> sActivationInput;
+		std::vector<std::vector<std::vector<float>>> sActivationOutput;
 		std::vector<std::vector<float>> sBiasDelta;
 		std::vector<std::vector<float>> sWeightDelta;
 		std::vector<std::vector<float>> sBiasMomentum;
 		std::vector<std::vector<float>> sWeightMomentum;
 		std::vector<std::vector<float>> sBiasDeltaBuffer;
-		std::vector<std::vector<float>> sWeightDeltaBuffer;
-		std::vector<std::vector<float>> sBackward;
-		std::mt19937_64 sEngine;
 		
 	public:
-		Momentum(NN &sNN, float nNewMomentumTerm, float nNewLearningRate);
+		Momentum(NN &sNN, std::size_t nBatchSize, float nNewMomentumTerm, float nNewLearningRate);
 		Momentum(const Momentum &sSrc) = delete;
 		Momentum(Momentum &&sSrc);
 		~Momentum() = default;
@@ -54,7 +55,7 @@ namespace CaysNet::Optimizer::Supervised
 		inline float momentumTerm() const;
 		inline float &learningRate();
 		inline float learningRate() const;
-		template<class LossFunc> void train(std::vector<std::vector<float>> &sInput, std::vector<std::vector<float>> &sOutput, std::size_t nBatchSize, std::size_t nEpoch);
+		template<class LossFunc> void train(std::size_t nEpoch, std::size_t nSize, std::vector<float> *pInput, std::vector<float> *pOutput);
 	};
 
 	inline float &Momentum::momentumTerm()

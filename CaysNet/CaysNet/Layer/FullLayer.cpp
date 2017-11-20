@@ -122,6 +122,50 @@ namespace CaysNet::Layer
 			pActivationOutput[nOut] = pOutput[nOut];
 	}
 
+	void FullLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const
+	{
+		assert(this->pActivation);
+
+		//z = b
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			std::copy(this->sBias.cbegin(), this->sBias.cend(), pOutput[nBatch].begin());
+
+		//z += X * W
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pOutput[nBatch][nOut] += pInput[nBatch][nIn] * this->sWeight[nOut][nIn];
+
+			//a = f(z)
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			this->pActivation->activate(this->nFanOut, pOutput[nBatch].data());
+	}
+
+	void FullLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, std::vector<float> *pActivationInput, std::vector<float> *pActivationOutput) const
+	{
+		assert(this->pActivation);
+
+		//z = b
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			std::copy(this->sBias.cbegin(), this->sBias.cend(), pOutput[nBatch].begin());
+
+		//z += X * W
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pOutput[nBatch][nOut] += pInput[nBatch][nIn] * this->sWeight[nOut][nIn];
+
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			std::copy(pOutput[nBatch].cbegin(), pOutput[nBatch].cend(), pActivationInput[nBatch].begin());
+
+		//a = f(z)
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			this->pActivation->activate(this->nFanOut, pOutput[nBatch].data());
+
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			std::copy(pOutput[nBatch].cbegin(), pOutput[nBatch].cend(), pActivationOutput[nBatch].begin());
+	}
+
 	void FullLayer::backward(const float *pActivationInput, const float *pActivationOutput, const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput, float *pBiasDelta, float *pWeightDelta) const
 	{
 		assert(this->pActivation);
@@ -141,6 +185,31 @@ namespace CaysNet::Layer
 				pBackwardOutput[nIn] += pBiasDelta[nOut] * this->sWeight[nOut][nIn];
 	}
 
+	void FullLayer::backward(std::size_t nBatchSize, const std::vector<float> *pActivationInput, const std::vector<float> *pActivationOutput, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pBiasDelta, float *pWeightDelta, float *pBiasDeltaBuffer) const
+	{
+		assert(this->pActivation);
+
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			std::fill(pBackwardOutput[nBatch].begin(), pBackwardOutput[nBatch].end(), .0f);
+
+		//Take the derivation of the activation function.
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+		{
+			this->pActivation->derivative(this->nFanOut, pActivationInput[nBatch].data(), pActivationOutput[nBatch].data(), pBackwardInput[nBatch].data(), pBiasDeltaBuffer);
+
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				pBiasDelta[nOut] += pBiasDeltaBuffer[nOut];
+
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pWeightDelta[nOut * this->nFanIn + nIn] += pBiasDeltaBuffer[nOut] * pForwardInput[nBatch][nIn];
+
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pBackwardOutput[nBatch][nIn] += pBiasDeltaBuffer[nOut] * this->sWeight[nOut][nIn];
+		}
+	}
+
 	void FullLayer::update(const float *pBiasDelta, const float *pWeightDelta)
 	{
 		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
@@ -149,6 +218,16 @@ namespace CaysNet::Layer
 		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
 			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
 				this->sWeight[nOut][nIn] += pWeightDelta[nOut * this->nFanIn + nIn];
+	}
+
+	void FullLayer::update(float nFactor, const float *pBiasDelta, const float *pWeightDelta)
+	{
+		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+			this->sBias[nOut] += nFactor * pBiasDelta[nOut];
+
+		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+				this->sWeight[nOut][nIn] += nFactor * pWeightDelta[nOut * this->nFanIn + nIn];
 	}
 
 	void FullLayer::serialize(std::ofstream &sOutput) const

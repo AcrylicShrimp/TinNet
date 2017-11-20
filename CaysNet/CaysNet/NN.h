@@ -59,28 +59,15 @@ namespace CaysNet
 			std::vector<std::vector<float>> &sActivationInputBuffer,
 			std::vector<std::vector<float>> &sActivationOutputBuffer);
 		void forward(
-			const float *const *pInput,
-			std::vector<std::vector<std::vector<float>>> &sOutputBuffer);
+			std::size_t nBatchSize,
+			const std::vector<float> *pInput,
+			std::vector<std::vector<float>> *pOutput) const;
 		void forward(
-			const float *const *pInput,
-			std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-			std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-			std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer);
-		void forward(
-			const std::vector<std::vector<float>> &sInput,
-			std::vector<std::vector<std::vector<float>>> &sOutputBuffer);
-		void forward(
-			const std::vector<std::vector<float>> &sInput,
-			std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-			std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-			std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer);
-		void forward(
-			std::size_t nOffset,
-			std::size_t nCount,
-			const std::vector<std::vector<float>> &sInput,
-			std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-			std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-			std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer);
+			std::size_t nBatchSize,
+			const std::vector<float> *pInput,
+			std::vector<std::vector<float>> *pOutput,
+			std::vector<std::vector<float>> *pActivationInput,
+			std::vector<std::vector<float>> *pActivationOutput) const;
 		void backward(
 			const std::vector<std::vector<float>> &sActivationInputBuffer,
 			const std::vector<std::vector<float>> &sActivationOutputBuffer,
@@ -90,42 +77,21 @@ namespace CaysNet
 			const float *pForwardInput,
 			const float *pBackwardInput) const;
 		void backward(
-			std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-			const std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-			const std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer,
-			std::vector<std::vector<float>> &sBiasDeltaBuffer,
-			std::vector<std::vector<float>> &sWeightDeltaBuffer,
-			std::vector<std::vector<std::vector<float>>> &sBackwardBuffer,
-			const float *const *pForwardInput,
-			const float *const *pBackwardInput) const;
-		void backward(
-			std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-			const std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-			const std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer,
-			std::vector<std::vector<float>> &sBiasDeltaBuffer,
-			std::vector<std::vector<float>> &sWeightDeltaBuffer,
-			std::vector<std::vector<std::vector<float>>> &sBackwardBuffer,
-			const std::vector<std::vector<float>> &sForwardInput,
-			const std::vector<std::vector<float>> &sBackwardInput) const;
-		void backward(
-			std::size_t nOffset,
-			std::size_t nCount,
-			std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-			const std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-			const std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer,
-			std::vector<std::vector<float>> &sBiasDeltaBuffer,
-			std::vector<std::vector<float>> &sWeightDeltaBuffer,
-			std::vector<std::vector<std::vector<float>>> &sBackwardBuffer,
-			const std::vector<std::vector<float>> &sForwardInput,
-			const std::vector<std::vector<float>> &sBackwardInput) const;
+			std::size_t nBatchSize,
+			const std::vector<float> *pForwardInput,
+			const std::vector<float> *pBackwardInput,
+			const std::vector<std::vector<float>> *pForwardOutput,
+			std::vector<std::vector<float>> *pBackwardOutput,
+			const std::vector<std::vector<float>> *pActivationInput,
+			const std::vector<std::vector<float>> *pActivationOutput,
+			std::vector<float> *pBiasDelta,
+			std::vector<float> *pWeightDelta,
+			std::vector<float> *pBiasDeltaBuffer) const;
 		std::size_t classify(const float *pInput);
-		void classify(const float *const *pInput, std::size_t *pOutput, std::size_t nBatchCount);
-		void classify(const std::vector<std::vector<float>> &sInput, std::size_t *pOutput);
+		void classify(std::size_t nBatchSize, const std::vector<float> *pInput, std::size_t *pOutput);
 		template<class LossFunc> float loss(const float *pInput, const float *pOutput);
-		template<class LossFunc> float loss(const float *const *pInput, const float *const *pOutput, std::size_t nBatchCount);
-		template<class LossFunc> float loss(const std::vector<std::vector<float>> &sInputList, const std::vector<std::vector<float>> &sOutputList);
-		float classificationLoss(const float *const *pInput, const float *const *pOutput, std::size_t nBatchCount);
-		float classificationLoss(const std::vector<std::vector<float>> &sInputList, const std::vector<std::vector<float>> &sOutputList);
+		template<class LossFunc> float loss(std::size_t nBatchSize, const std::vector<float> *pInput, const std::vector<float> *pOutput);
+		float classificationLoss(std::size_t nBatchSize, const std::vector<float> *pInput, const std::vector<float> *pOutput);
 		virtual void serialize(std::ofstream &sOutput) const override;
 		virtual void deserialize(std::ifstream &sInput) override;
 	};

@@ -102,94 +102,37 @@ namespace CaysNet
 			this->sLayerList[nIndex]->forward(this->sOutput[nIndex - 1].data(), this->sOutput[nIndex].data(), sActivationInputBuffer[nIndex].data(), sActivationOutputBuffer[nIndex].data());
 	}
 
-	void NN::forward(const float *const *pInput, std::vector<std::vector<std::vector<float>>> &sOutputBuffer)
+	void NN::forward(
+		std::size_t nBatchSize,
+		const std::vector<float> *pInput,
+		std::vector<std::vector<float>> *pOutput) const
 	{
 		assert(pInput);
-		assert(sOutputBuffer.size());
 		assert(this->sLayerList.size());
-		assert(sOutputBuffer.size() == this->sLayerList.size());
 
-		for (auto &sOutput : sOutputBuffer)
-			this->sLayerList.front()->forward(*pInput++, sOutput.front().data());
+		this->sLayerList.front()->forward(nBatchSize, pInput, pOutput->data());
 
-		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-			for (auto &sOutput : sOutputBuffer)
-				this->sLayerList[nIndex]->forward(sOutput[nIndex - 1].data(), sOutput[nIndex].data());
+		for (std::size_t nIndex{1}, nDepth{this->depth()}; nIndex < nDepth; ++nIndex)
+			this->sLayerList[nIndex]->forward(nBatchSize, pOutput[nIndex - 1].data(), pOutput[nIndex].data());
 	}
 
 	void NN::forward(
-		const float *const *pInput,
-		std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-		std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-		std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer)
+		std::size_t nBatchSize,
+		const std::vector<float> *pInput,
+		std::vector<std::vector<float>> *pOutput,
+		std::vector<std::vector<float>> *pActivationInput,
+		std::vector<std::vector<float>> *pActivationOutput) const
 	{
 		assert(pInput);
-		assert(sOutputBuffer.size());
 		assert(this->sLayerList.size());
-		assert(sOutputBuffer.size() == sActivationInputBuffer.size());
-		assert(sOutputBuffer.size() == sActivationOutputBuffer.size());
+		assert(nBatchSize == pOutput->size());
+		assert(nBatchSize == pActivationInput->size());
+		assert(nBatchSize == pActivationOutput->size());
 
-		for (std::size_t nOutputIndex{0}, nOutputSize{sOutputBuffer.size()}; nOutputIndex < nOutputSize; ++nOutputIndex)
-			this->sLayerList.front()->forward(*pInput++, sOutputBuffer[nOutputIndex].front().data(), sActivationInputBuffer[nOutputIndex].front().data(), sActivationOutputBuffer[nOutputIndex].front().data());
+		this->sLayerList.front()->forward(nBatchSize, pInput, pOutput->data(), pActivationInput->data(), pActivationOutput->data());
 
-		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-			for (std::size_t nOutputIndex{0}, nOutputSize{sOutputBuffer.size()}; nOutputIndex < nOutputSize; ++nOutputIndex)
-				this->sLayerList[nIndex]->forward(sOutputBuffer[nOutputIndex][nIndex - 1].data(), sOutputBuffer[nOutputIndex][nIndex].data(), sActivationInputBuffer[nOutputIndex][nIndex].data(), sActivationOutputBuffer[nOutputIndex][nIndex].data());
-	}
-
-	void NN::forward(const std::vector<std::vector<float>> &sInput, std::vector<std::vector<std::vector<float>>> &sOutputBuffer)
-	{
-		assert(sOutputBuffer.size());
-		assert(this->sLayerList.size());
-		assert(sOutputBuffer.size() == sInput.size());
-
-		for (std::size_t nOutputIndex{0}, nOutputSize{sOutputBuffer.size()}; nOutputIndex < nOutputSize; ++nOutputIndex)
-			this->sLayerList.front()->forward(sInput[nOutputIndex].data(), sOutputBuffer[nOutputIndex].front().data());
-
-		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-			for (auto &sOutput : sOutputBuffer)
-				this->sLayerList[nIndex]->forward(sOutput[nIndex - 1].data(), sOutput[nIndex].data());
-	}
-
-	void NN::forward(
-		const std::vector<std::vector<float>> &sInput,
-		std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-		std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-		std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer)
-	{
-		assert(sOutputBuffer.size());
-		assert(this->sLayerList.size());
-		assert(sOutputBuffer.size() == sInput.size());
-		assert(sOutputBuffer.size() == sActivationInputBuffer.size());
-		assert(sOutputBuffer.size() == sActivationOutputBuffer.size());
-
-		for (std::size_t nOutputIndex{0}, nOutputSize{sOutputBuffer.size()}; nOutputIndex < nOutputSize; ++nOutputIndex)
-			this->sLayerList.front()->forward(sInput[nOutputIndex].data(), sOutputBuffer[nOutputIndex].front().data(), sActivationInputBuffer[nOutputIndex].front().data(), sActivationOutputBuffer[nOutputIndex].front().data());
-
-		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-			for (std::size_t nOutputIndex{0}, nOutputSize{sOutputBuffer.size()}; nOutputIndex < nOutputSize; ++nOutputIndex)
-				this->sLayerList[nIndex]->forward(sOutputBuffer[nOutputIndex][nIndex - 1].data(), sOutputBuffer[nOutputIndex][nIndex].data(), sActivationInputBuffer[nOutputIndex][nIndex].data(), sActivationOutputBuffer[nOutputIndex][nIndex].data());
-	}
-
-	void NN::forward(
-		std::size_t nOffset,
-		std::size_t nCount,
-		const std::vector<std::vector<float>> &sInput,
-		std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-		std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-		std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer)
-	{
-		assert(sOutputBuffer.size());
-		assert(this->sLayerList.size());
-		assert(sOutputBuffer.size() == sActivationInputBuffer.size());
-		assert(sOutputBuffer.size() == sActivationOutputBuffer.size());
-
-		for (std::size_t nOutputIndex{0}; nOutputIndex < nCount; ++nOutputIndex)
-			this->sLayerList.front()->forward(sInput[nOutputIndex + nOffset].data(), sOutputBuffer[nOutputIndex].front().data(), sActivationInputBuffer[nOutputIndex].front().data(), sActivationOutputBuffer[nOutputIndex].front().data());
-
-		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-			for (std::size_t nOutputIndex{0}; nOutputIndex < nCount; ++nOutputIndex)
-				this->sLayerList[nIndex]->forward(sOutputBuffer[nOutputIndex][nIndex - 1].data(), sOutputBuffer[nOutputIndex][nIndex].data(), sActivationInputBuffer[nOutputIndex][nIndex].data(), sActivationOutputBuffer[nOutputIndex][nIndex].data());
+		for (std::size_t nIndex{1}, nDepth{this->depth()}; nIndex < nDepth; ++nIndex)
+			this->sLayerList[nIndex]->forward(nBatchSize, pOutput[nIndex - 1].data(), pOutput[nIndex].data(), pActivationInput[nIndex].data(), pActivationOutput[nIndex].data());
 	}
 
 	void NN::backward(
@@ -223,150 +166,34 @@ namespace CaysNet
 	}
 
 	void NN::backward(
-		std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-		const std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-		const std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer,
-		std::vector<std::vector<float>> &sBiasDeltaBuffer,
-		std::vector<std::vector<float>> &sWeightDeltaBuffer,
-		std::vector<std::vector<std::vector<float>>> &sBackwardBuffer,
-		const float *const *pForwardInput,
-		const float *const *pBackwardInput) const
+		std::size_t nBatchSize,
+		const std::vector<float> *pForwardInput,
+		const std::vector<float> *pBackwardInput,
+		const std::vector<std::vector<float>> *pForwardOutput,
+		std::vector<std::vector<float>> *pBackwardOutput,
+		const std::vector<std::vector<float>> *pActivationInput,
+		const std::vector<std::vector<float>> *pActivationOutput,
+		std::vector<float> *pBiasDelta,
+		std::vector<float> *pWeightDelta,
+		std::vector<float> *pBiasDeltaBuffer) const
 	{
-		std::vector<std::vector<float>> sBiasDelta(this->sLayerList.size());
-		std::vector<std::vector<float>> sWeightDelta(this->sLayerList.size());
-
-		for (std::size_t nIndex{0}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-		{
-			sBiasDelta[nIndex].resize(sBiasDeltaBuffer[nIndex].size(), .0f);
-			sWeightDelta[nIndex].resize(sWeightDeltaBuffer[nIndex].size(), .0f);
-		}
-
 		for (std::size_t nIndex{this->sLayerList.size() - 1}; ; --nIndex)
 		{
-			for (std::size_t nOutputIndex{0}, nOutputSize{sOutputBuffer.size()}; nOutputIndex < nOutputSize; ++nOutputIndex)
-			{
-				auto pLayer{this->sLayerList[nIndex]};
-				auto pLayerForwardInput{nIndex == 0 ? *pForwardInput++ : sOutputBuffer[nOutputIndex][nIndex - 1].data()};
-				auto pLayerBackwardInput{nIndex + 1 == this->sLayerList.size() ? *pBackwardInput++ : sBackwardBuffer[nOutputIndex][nIndex + 1].data()};
-				auto pLayerBackwardOutput{sBackwardBuffer[nOutputIndex][nIndex].data()};
+			auto pLayer{this->sLayerList[nIndex]};
+			auto pLayerForwardInput{nIndex == 0 ? pForwardInput : pForwardOutput[nIndex - 1].data()};
+			auto pLayerBackwardInput{nIndex + 1 == this->depth() ? pBackwardInput : pBackwardOutput[nIndex + 1].data()};
+			auto pLayerBackwardOutput{pBackwardOutput[nIndex].data()};
 
-				pLayer->backward(
-					sActivationInputBuffer[nOutputIndex][nIndex].data(),
-					sActivationOutputBuffer[nOutputIndex][nIndex].data(),
-					pLayerForwardInput,
-					pLayerBackwardInput,
-					pLayerBackwardOutput,
-					sBiasDelta[nIndex].data(),
-					sWeightDelta[nIndex].data());
-
-				for (std::size_t nBiasIndex{0}, nBiasSize{sBiasDelta.size()}; nBiasIndex < nBiasSize; ++nBiasIndex)
-					sBiasDeltaBuffer[nIndex][nBiasIndex] += sBiasDelta[nIndex][nBiasIndex];
-
-				for (std::size_t nWeightIndex{0}, nWeightSize{sWeightDelta.size()}; nWeightIndex < nWeightSize; ++nWeightIndex)
-					sWeightDeltaBuffer[nIndex][nWeightIndex] += sWeightDelta[nIndex][nWeightIndex];
-			}
-
-			if (!nIndex)
-				break;
-		}
-	}
-
-	void NN::backward(
-		std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-		const std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-		const std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer,
-		std::vector<std::vector<float>> &sBiasDeltaBuffer,
-		std::vector<std::vector<float>> &sWeightDeltaBuffer,
-		std::vector<std::vector<std::vector<float>>> &sBackwardBuffer,
-		const std::vector<std::vector<float>> &sForwardInput,
-		const std::vector<std::vector<float>> &sBackwardInput) const
-	{
-		std::vector<std::vector<float>> sBiasDelta(this->sLayerList.size());
-		std::vector<std::vector<float>> sWeightDelta(this->sLayerList.size());
-
-		for (std::size_t nIndex{0}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-		{
-			sBiasDelta[nIndex].resize(sBiasDeltaBuffer[nIndex].size(), .0f);
-			sWeightDelta[nIndex].resize(sWeightDeltaBuffer[nIndex].size(), .0f);
-		}
-
-		for (std::size_t nIndex{this->sLayerList.size() - 1}; ; --nIndex)
-		{
-			for (std::size_t nOutputIndex{0}, nOutputSize{sOutputBuffer.size()}; nOutputIndex < nOutputSize; ++nOutputIndex)
-			{
-				auto pLayer{this->sLayerList[nIndex]};
-				auto pLayerForwardInput{nIndex == 0 ? sForwardInput[nOutputIndex].data() : sOutputBuffer[nOutputIndex][nIndex - 1].data()};
-				auto pLayerBackwardInput{nIndex + 1 == this->sLayerList.size() ? sBackwardInput[nOutputIndex].data() : sBackwardBuffer[nOutputIndex][nIndex + 1].data()};
-				auto pLayerBackwardOutput{sBackwardBuffer[nOutputIndex][nIndex].data()};
-
-				pLayer->backward(
-					sActivationInputBuffer[nOutputIndex][nIndex].data(),
-					sActivationOutputBuffer[nOutputIndex][nIndex].data(),
-					pLayerForwardInput,
-					pLayerBackwardInput,
-					pLayerBackwardOutput,
-					sBiasDelta[nIndex].data(),
-					sWeightDelta[nIndex].data());
-
-				for (std::size_t nBiasIndex{0}, nBiasSize{sBiasDelta.size()}; nBiasIndex < nBiasSize; ++nBiasIndex)
-					sBiasDeltaBuffer[nIndex][nBiasIndex] += sBiasDelta[nIndex][nBiasIndex];
-
-				for (std::size_t nWeightIndex{0}, nWeightSize{sWeightDelta.size()}; nWeightIndex < nWeightSize; ++nWeightIndex)
-					sWeightDeltaBuffer[nIndex][nWeightIndex] += sWeightDelta[nIndex][nWeightIndex];
-
-				
-			}
-
-			if (!nIndex)
-				break;
-		}
-	}
-
-	void NN::backward(
-		std::size_t nOffset,
-		std::size_t nCount,
-		std::vector<std::vector<std::vector<float>>> &sOutputBuffer,
-		const std::vector<std::vector<std::vector<float>>> &sActivationInputBuffer,
-		const std::vector<std::vector<std::vector<float>>> &sActivationOutputBuffer,
-		std::vector<std::vector<float>> &sBiasDeltaBuffer,
-		std::vector<std::vector<float>> &sWeightDeltaBuffer,
-		std::vector<std::vector<std::vector<float>>> &sBackwardBuffer,
-		const std::vector<std::vector<float>> &sForwardInput,
-		const std::vector<std::vector<float>> &sBackwardInput) const
-	{
-		std::vector<std::vector<float>> sBiasDelta(this->sLayerList.size());
-		std::vector<std::vector<float>> sWeightDelta(this->sLayerList.size());
-
-		for (std::size_t nIndex{0}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-		{
-			sBiasDelta[nIndex].resize(sBiasDeltaBuffer[nIndex].size(), .0f);
-			sWeightDelta[nIndex].resize(sWeightDeltaBuffer[nIndex].size(), .0f);
-		}
-
-		for (std::size_t nIndex{this->sLayerList.size() - 1}; ; --nIndex)
-		{
-			for (std::size_t nOutputIndex{0}; nOutputIndex < nCount; ++nOutputIndex)
-			{
-				auto pLayer{this->sLayerList[nIndex]};
-				auto pLayerForwardInput{nIndex == 0 ? sForwardInput[nOutputIndex + nOffset].data() : sOutputBuffer[nOutputIndex][nIndex - 1].data()};
-				auto pLayerBackwardInput{nIndex + 1 == this->sLayerList.size() ? sBackwardInput[nOutputIndex].data() : sBackwardBuffer[nOutputIndex][nIndex + 1].data()};
-				auto pLayerBackwardOutput{sBackwardBuffer[nOutputIndex][nIndex].data()};
-
-				pLayer->backward(
-					sActivationInputBuffer[nOutputIndex][nIndex].data(),
-					sActivationOutputBuffer[nOutputIndex][nIndex].data(),
-					pLayerForwardInput,
-					pLayerBackwardInput,
-					pLayerBackwardOutput,
-					sBiasDelta[nIndex].data(),
-					sWeightDelta[nIndex].data());
-
-				for (std::size_t nBiasIndex{0}, nBiasSize{sBiasDelta.size()}; nBiasIndex < nBiasSize; ++nBiasIndex)
-					sBiasDeltaBuffer[nIndex][nBiasIndex] += sBiasDelta[nIndex][nBiasIndex];
-
-				for (std::size_t nWeightIndex{0}, nWeightSize{sWeightDelta.size()}; nWeightIndex < nWeightSize; ++nWeightIndex)
-					sWeightDeltaBuffer[nIndex][nWeightIndex] += sWeightDelta[nIndex][nWeightIndex];
-			}
+			pLayer->backward(
+				nBatchSize,
+				pActivationInput[nIndex].data(),
+				pActivationOutput[nIndex].data(),
+				pLayerForwardInput,
+				pLayerBackwardInput,
+				pLayerBackwardOutput,
+				pBiasDelta[nIndex].data(),
+				pWeightDelta[nIndex].data(),
+				pBiasDeltaBuffer[nIndex].data());
 
 			if (!nIndex)
 				break;
@@ -389,97 +216,51 @@ namespace CaysNet
 		return nMaxIndex;
 	}
 
-	void NN::classify(const float *const *pInput, std::size_t *pOutput, std::size_t nBatchCount)
+	void NN::classify(std::size_t nBatchSize, const std::vector<float> *pInput, std::size_t *pOutput)
 	{
 		assert(this->sLayerList.size());
 
-		std::vector<std::vector<std::vector<float>>> sOutput(nBatchCount);
+		std::size_t nIndex{0};
+		std::vector<std::vector<std::vector<float>>> sOutput(this->depth());
 
-		for (auto &sOutputBuffer : sOutput)
+		for (auto &sLayerBuffer : sOutput)
 		{
-			sOutputBuffer.resize(this->sLayerList.size());
+			sLayerBuffer.resize(nBatchSize);
 
-			std::size_t nIndex{0};
+			for (auto &sOutputBuffer : sLayerBuffer)
+				sOutputBuffer.resize(this->sLayerList[nIndex]->fanOut());
 
-			for (auto &sLayerBuffer : sOutputBuffer)
-				sLayerBuffer.resize(this->sLayerList[nIndex++]->fanOut());
+			++nIndex;
 		}
 
-		this->forward(pInput, sOutput);
+		this->forward(nBatchSize, pInput, sOutput.data());
 
-		for (const auto &sOutputBuffer : sOutput)
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 		{
 			std::size_t nMaxIndex{0};
-			auto nMaxValue{sOutputBuffer.back().front()};
+			auto nMaxValue{sOutput.back()[nBatch].front()};
 
-			for (std::size_t nOut{1}, nOutSize{sOutputBuffer.back().size()}; nOut < nOutSize; ++nOut)
-				if (nMaxValue < sOutputBuffer.back()[nOut])
-					nMaxValue = sOutputBuffer.back()[nMaxIndex = nOut];
+			for (std::size_t nOut{1}, nOutSize{sOutput.back()[nBatch].size()}; nOut < nOutSize; ++nOut)
+				if (nMaxValue < sOutput.back()[nBatch][nOut])
+					nMaxValue = sOutput.back()[nBatch][nMaxIndex = nOut];
 
 			*pOutput++ = nMaxIndex;
 		}
 	}
 
-	void NN::classify(const std::vector<std::vector<float>> &sInput, std::size_t *pOutput)
+	float NN::classificationLoss(std::size_t nBatchSize, const std::vector<float> *pInput, const std::vector<float> *pOutput)
 	{
 		assert(this->sLayerList.size());
 
-		std::vector<std::vector<std::vector<float>>> sOutput(sInput.size());
-
-		for (auto &sOutputBuffer : sOutput)
-		{
-			sOutputBuffer.resize(this->sLayerList.size());
-
-			std::size_t nIndex{0};
-
-			for (auto &sLayerBuffer : sOutputBuffer)
-				sLayerBuffer.resize(this->sLayerList[nIndex++]->fanOut());
-		}
-
-		this->forward(sInput, sOutput);
-
-		for (const auto &sOutputBuffer : sOutput)
-		{
-			std::size_t nMaxIndex{0};
-			auto nMaxValue{sOutputBuffer.back().front()};
-
-			for (std::size_t nOut{1}, nOutSize{sOutputBuffer.back().size()}; nOut < nOutSize; ++nOut)
-				if (nMaxValue < sOutputBuffer.back()[nOut])
-					nMaxValue = sOutputBuffer.back()[nMaxIndex = nOut];
-
-			*pOutput++ = nMaxIndex;
-		}
-	}
-
-	float NN::classificationLoss(const float *const *pInput, const float *const *pOutput, std::size_t nBatchCount)
-	{
-		assert(this->sLayerList.size());
-
-		std::vector<std::size_t> sResult(nBatchCount);
-		this->classify(pInput, sResult.data(), nBatchCount);
+		std::vector<std::size_t> sResult(nBatchSize);
+		this->classify(nBatchSize, pInput, sResult.data());
 
 		auto nResult{.0f};
 
-		for (std::size_t nIndex{0u}; nIndex < nBatchCount; ++nIndex)
+		for (std::size_t nIndex{0u}; nIndex < nBatchSize; ++nIndex)
 			nResult += pOutput[nIndex][sResult[nIndex]];
 
-		return 1.f - nResult / nBatchCount;
-	}
-
-	float NN::classificationLoss(const std::vector<std::vector<float>> &sInputList, const std::vector<std::vector<float>> &sOutputList)
-	{
-		assert(this->sLayerList.size());
-		assert(sInputList.size() == sOutputList.size());
-
-		std::vector<std::size_t> sResult(sInputList.size());
-		this->classify(sInputList, sResult.data());
-
-		auto nResult{.0f};
-
-		for (std::size_t nIndex{0u}, nSize{sInputList.size()}; nIndex < nSize; ++nIndex)
-			nResult += sOutputList[nIndex][sResult[nIndex]];
-
-		return 1.f - nResult / sInputList.size();
+		return 1.f - nResult / nBatchSize;
 	}
 
 	void NN::serialize(std::ofstream &sOutput) const
