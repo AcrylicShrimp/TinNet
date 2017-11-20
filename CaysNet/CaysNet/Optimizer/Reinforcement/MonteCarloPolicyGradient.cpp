@@ -9,143 +9,111 @@
 namespace CaysNet::Optimizer::Reinforcement
 {
 	MonteCarloPolicyGradient::MonteCarloPolicyGradient(NN &sNN, float nNewLearningRate) :
-		nLearningRate{nNewLearningRate},
 		sNN{sNN},
-		sOutput(sNN.depth()),
+		nLearningRate{nNewLearningRate},
+		sEngine{static_cast<std::mt19937_64::result_type>(std::chrono::system_clock::now().time_since_epoch().count())},
+		sForwardOutput(sNN.depth()),
+		sBackwardOutput(sNN.depth()),
+		sActivationInput(sNN.depth()),
+		sActivationOutput(sNN.depth()),
 		sBiasDelta(sNN.depth()),
-		sWeightDelta(sNN.depth())
+		sWeightDelta(sNN.depth()),
+		sBiasRate(sNN.depth()),
+		sWeightRate(sNN.depth())
 	{
-		for (std::size_t nIndex{0}, nSize{sNN.depth()}; nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{0}, nDepth{sNN.depth()}; nIndex < nDepth; ++nIndex)
 		{
 			auto pLayer{this->sNN[nIndex]};
 
-			this->sOutput[nIndex].resize(pLayer->fanIn(), .0f);
-			this->sBiasDelta[nIndex].resize(pLayer->fanOut(), .0f);
-			this->sWeightDelta[nIndex].resize(pLayer->fanOut());
+			std::size_t nActivationInputSize;
+			std::size_t nActivationOutputSize;
+			std::size_t nBiasDeltaSize;
+			std::size_t nWeightDeltaSize;
 
-			for (std::size_t nOut{0}, nOutSize{pLayer->fanOut()}, nInSize{pLayer->fanIn()}; nOut < nOutSize; ++nOut)
-				this->sWeightDelta[nIndex][nOut].resize(nInSize, .0f);
+			pLayer->specifySize(nActivationInputSize, nActivationOutputSize, nBiasDeltaSize, nWeightDeltaSize);
+
+			this->sForwardOutput[nIndex].resize(pLayer->fanOut(), .0f);
+			this->sBackwardOutput[nIndex].resize(pLayer->fanIn(), .0f);
+			this->sActivationInput[nIndex].resize(pLayer->fanOut(), .0f);
+			this->sActivationOutput[nIndex].resize(pLayer->fanOut(), .0f);
+			this->sBiasDelta[nIndex].resize(nBiasDeltaSize, .0f);
+			this->sWeightDelta[nIndex].resize(nWeightDeltaSize, .0f);
+			this->sBiasRate[nIndex].resize(nBiasDeltaSize, .0f);
+			this->sWeightRate[nIndex].resize(nWeightDeltaSize, .0f);
 		}
 	}
 
 	MonteCarloPolicyGradient::MonteCarloPolicyGradient(MonteCarloPolicyGradient &&sSrc) :
-		nLearningRate{sSrc.nLearningRate},
 		sNN{sSrc.sNN},
-		sOutput{std::move(sSrc.sOutput)},
+		nLearningRate{sSrc.nLearningRate},
+		sEngine{std::move(sSrc.sEngine)},
+		sForwardOutput{std::move(sSrc.sForwardOutput)},
+		sBackwardOutput{std::move(sSrc.sBackwardOutput)},
+		sActivationInput{std::move(sSrc.sActivationInput)},
+		sActivationOutput{std::move(sSrc.sActivationOutput)},
 		sBiasDelta{std::move(sSrc.sBiasDelta)},
-		sWeightDelta{std::move(sSrc.sWeightDelta)}
+		sWeightDelta{std::move(sSrc.sWeightDelta)},
+		sBiasRate{std::move(sSrc.sBiasRate)},
+		sWeightRate{std::move(sSrc.sWeightRate)}
 	{
 		//Empty.
 	}
 
-	//double CaysNet::Optimizer::Reinforcement::MonteCarloPolicyGradient::checkGradient(const float *pState, const float *pActionTaken, float nReward, std::size_t nLayerIndex, std::size_t nInputIndex, std::size_t nOutputIndex)
-	//{
-	//	constexpr auto nEpsilon{1e-3f};
-	//
-	//	float nWeight{this->sNN[nLayerIndex]->weight()[nOutputIndex][nInputIndex]};
-	//
-	//	this->sNN[nLayerIndex].weight()[nOutputIndex][nInputIndex] = nWeight + nEpsilon;
-	//	this->sNN.calc(pState);
-	//
-	//	const auto *pAction{pActionTaken};
-	//	float nFirst{.0f};
-	//
-	//	for (auto &nOutput : this->sNN.output().back())
-	//		nFirst += -std::log(nOutput + 1e-4f) * *pAction++ * nReward;
-	//
-	//	this->sNN[nLayerIndex].weight()[nOutputIndex][nInputIndex] = nWeight - nEpsilon;
-	//	float nSecond{this->sNN.loss<Loss::MulticlassCE>(pState, pActionTaken)};
-	//
-	//	float nFirstGradient{(nFirst - nSecond) / (2.f * nEpsilon)};
-	//
-	//	this->sNN[nLayerIndex].weight()[nOutputIndex][nInputIndex] = nWeight;
-	//
-	//	//Forward pass.
-	//	this->sNN.calcForTrain(pState);
-	//
-	//	//Give the backward input - derivative of the loss function.
-	//	Loss::MulticlassCE::derivative(sOutput.size(), this->sNN.output().back().data(), pActionTaken, this->sNN.output().back().data());
-	//
-	//	//Backward pass; accrue the gradients.
-	//	for (std::size_t nIndex{this->sNN.depth() - 1}; ; --nIndex)
-	//	{
-	//		auto &sLayer{this->sNN[nIndex]};
-	//		auto pLayerInput{nIndex == 0 ? pState : this->sNN.output()[nIndex - 1].data()};
-	//		auto pLayerBackInput{nIndex + 1 == this->sNN.depth() ? this->sNN.output().back().data() : this->sOutput[nIndex + 1].data()};
-	//		auto pLayerBackOutput{this->sOutput[nIndex].data()};
-	//
-	//		pLayer->backward(pLayerBackInput, pLayerBackOutput);
-	//
-	//		for (std::size_t nOut{0}, nOutSize{pLayer->fanOut()}; nOut < nOutSize; ++nOut)
-	//		{
-	//			this->sBiasDelta[nIndex][nOut] = pLayerBackInput[nOut];
-	//
-	//			for (std::size_t nIn{0}, nInSize{pLayer->fanIn()}; nIn < nInSize; ++nIn)
-	//				this->sWeightDelta[nIndex][nOut][nIn] = pLayerInput[nIn] * pLayerBackInput[nOut];
-	//		}
-	//
-	//		if (nIndex == 0)
-	//			break;
-	//	}
-	//
-	//	float nSecondGradient{this->sWeightDelta[nLayerIndex][nOutputIndex][nInputIndex]};
-	//
-	//	if (nFirstGradient == nSecondGradient)
-	//		return .0;
-	//
-	//	return std::abs(nFirstGradient - nSecondGradient) / std::max(std::abs(nFirstGradient), std::abs(nSecondGradient));
-	//}
-
-	void MonteCarloPolicyGradient::update(const float *pState, const float *pActionTaken, std::size_t nActionTakenIndex, float nReward)
+	void MonteCarloPolicyGradient::update(std::size_t nSize, std::vector<float> *pState, std::vector<float> *pActionTaken, float *pReward)
 	{
-		this->sNN.forward(pState);
+		auto nDimension{pActionTaken->size()};
 
-		auto nExpectation{-nReward * std::log(this->sNN.output().back()[nActionTakenIndex] + 1e-4f)};
-
-		for (auto &nOutput : this->sNN.output().back())
+		//Shuffle the input/output vector.
+		for (std::size_t nRand{0}, nRandSize{nSize - 1}; nRand < nRandSize; ++nRand)
 		{
-			nOutput = nExpectation;
-			//++pActionTaken;
+			auto nIndex = std::uniform_int_distribution<std::size_t>{nRand + 1, nRandSize}(this->sEngine);
+
+			pState[nRand].swap(pState[nIndex]);
+			pActionTaken[nRand].swap(pActionTaken[nIndex]);
+			std::swap(pReward[nRand], pReward[nIndex]);
 		}
 
-		//Loss::MSE::derivative(this->sNN.output().back().size(), this->sNN.output().back().data(), pActionTaken, this->sNN.output().back().data());
-
-		//for (auto &nOutput : this->sNN.output().back())
-		//{
-		//	nOutput *= nReward;
-		//	//++pActionTaken;
-		//}
-
-		for (std::size_t nIndex{this->sNN.depth() - 1}; ; --nIndex)
+		for (std::size_t nIn{0}; nIn < nSize; ++nIn)
 		{
-			auto pLayer{this->sNN[nIndex]};
-			auto pLayerInput{nIndex == 0 ? pState : this->sNN.output()[nIndex - 1].data()};
-			auto pLayerBackInput{nIndex + 1 == this->sNN.depth() ? this->sNN.output().back().data() : this->sOutput[nIndex + 1].data()};
-			auto pLayerBackOutput{this->sOutput[nIndex].data()};
+			//Forward pass.
+			this->sNN.forward(pState[nIn].data(), this->sForwardOutput.data(), this->sActivationInput.data(), this->sActivationOutput.data());
 
-			//pLayer->backward(pLayerBackInput, pLayerBackOutput);
+			//Give the backward input.
+			std::copy(pActionTaken[nIn].cbegin(), pActionTaken[nIn].cend(), this->sForwardOutput.back().begin());
 
-			for (std::size_t nOut{0}, nOutSize{pLayer->fanOut()}; nOut < nOutSize; ++nOut)
+			//Backward pass.
+			this->sNN.backward(
+				pState[nIn].data(),
+				this->sForwardOutput.back().data(),
+				this->sForwardOutput.data(),
+				this->sBackwardOutput.data(),
+				this->sActivationInput.data(),
+				this->sActivationOutput.data(),
+				this->sBiasDelta.data(),
+				this->sWeightDelta.data());
+
+			const auto nFactor{-this->nLearningRate * pReward[nIn]};
+
+			for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
 			{
-				this->sBiasDelta[nIndex][nOut] = pLayerBackInput[nOut];
+				for (std::size_t nBiasIndex{0}, nBiasSize{this->sBiasRate[nIndex].size()}; nBiasIndex < nBiasSize; ++nBiasIndex)
+					this->sBiasRate[nIndex][nBiasIndex] += this->sBiasDelta[nIndex][nBiasIndex] * this->sBiasDelta[nIndex][nBiasIndex];
 
-				for (std::size_t nIn{0}, nInSize{pLayer->fanIn()}; nIn < nInSize; ++nIn)
-					this->sWeightDelta[nIndex][nOut][nIn] = pLayerInput[nIn] * pLayerBackInput[nOut];
+				for (std::size_t nWeightIndex{0}, nWeightSize{this->sWeightRate[nIndex].size()}; nWeightIndex < nWeightSize; ++nWeightIndex)
+					this->sWeightRate[nIndex][nWeightIndex] += this->sWeightDelta[nIndex][nWeightIndex] * this->sWeightDelta[nIndex][nWeightIndex];
 			}
 
-			if (nIndex == 0)
-				break;
+			for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
+			{
+				for (std::size_t nBiasIndex{0}, nBiasSize{this->sBiasDelta[nIndex].size()}; nBiasIndex < nBiasSize; ++nBiasIndex)
+					this->sBiasDelta[nIndex][nBiasIndex] *= nFactor / std::sqrt(this->sBiasRate[nIndex][nBiasIndex] + 1e-4f);
+
+				for (std::size_t nWeightIndex{0}, nWeightSize{this->sWeightDelta[nIndex].size()}; nWeightIndex < nWeightSize; ++nWeightIndex)
+					this->sWeightDelta[nIndex][nWeightIndex] *= nFactor / std::sqrt(this->sWeightRate[nIndex][nWeightIndex] + 1e-4f);
+			}
+
+			for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
+				this->sNN[nIndex]->update(this->sBiasDelta[nIndex].data(), this->sWeightDelta[nIndex].data());
 		}
-
-		auto nFactor{this->nLearningRate};
-
-		//for (std::size_t nIndex{0}, nSize{this->sNN.depth()}; nIndex < nSize; ++nIndex)
-		//	for (std::size_t nOut{0}, nOutSize{this->sNN[nIndex]->fanOut()}; nOut < nOutSize; ++nOut)
-		//	{
-		//		this->sNN[nIndex]->bias()[nOut] += nFactor * this->sBiasDelta[nIndex][nOut];
-		//
-		//		for (std::size_t nIn{0}, nInSize{this->sNN[nIndex]->fanIn()}; nIn < nInSize; ++nIn)
-		//			this->sNN[nIndex]->weight()[nOut][nIn] += nFactor * this->sWeightDelta[nIndex][nOut][nIn];
-		//	}
 	}
 }

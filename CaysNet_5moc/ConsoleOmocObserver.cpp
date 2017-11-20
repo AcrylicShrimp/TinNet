@@ -20,7 +20,7 @@ void ConsoleOmocObserver::handleGameStart()
 	printf("°ÔÀÓ ½ÃÀÛµÊ\n");
 }
 
-void ConsoleOmocObserver::handleGameEnd(const float *pPlace, int nWinner, int nFinalPlace)
+void ConsoleOmocObserver::handleGameEnd(const float *pPlace, int nWinner, int nFinalPlace, int nErrorBlack, int nErrorWhite)
 {
 	++this->nGameCount;
 
@@ -36,15 +36,17 @@ void ConsoleOmocObserver::handleGameEnd(const float *pPlace, int nWinner, int nF
 	}
 
 	if (this->nNondrawGameCount == 0)
-		printf("%llu°ÔÀÓ ³¡ - ¹«½ÂºÎ : %0.2lf%%(%llu)\n",
-			this->nGameCount,
-			static_cast<double>(this->nGameCount - this->nNondrawGameCount) / this->nGameCount * 100.,
-			this->nGameCount - this->nNondrawGameCount);
-	else
-		printf("%llu°ÔÀÓ ³¡ - ¹«½ÂºÎ : %0.2lf%%(%llu), ½Â·ü(B vs W) : %0.2lf%%(%llu) vs %0.2lf%%(%llu)\n",
+		printf("%llu°ÔÀÓ ³¡ - ¹«½ÂºÎ : %0.2lf%%(%llu), ¿¡·¯(%d vs %d)\n",
 			this->nGameCount,
 			static_cast<double>(this->nGameCount - this->nNondrawGameCount) / this->nGameCount * 100.,
 			this->nGameCount - this->nNondrawGameCount,
+			nErrorBlack, nErrorWhite);
+	else
+		printf("%llu°ÔÀÓ ³¡ - ¹«½ÂºÎ : %0.2lf%%(%llu), ¿¡·¯(%d vs %d), ½Â·ü(B vs W) : %0.2lf%%(%llu) vs %0.2lf%%(%llu)\n",
+			this->nGameCount,
+			static_cast<double>(this->nGameCount - this->nNondrawGameCount) / this->nGameCount * 100.,
+			this->nGameCount - this->nNondrawGameCount,
+			nErrorBlack, nErrorWhite,
 			static_cast<double>(this->nBlackWinCount) / this->nNondrawGameCount * 100.,
 			this->nBlackWinCount,
 			static_cast<double>(this->nWhiteWinCount) / this->nNondrawGameCount * 100.,
@@ -52,16 +54,16 @@ void ConsoleOmocObserver::handleGameEnd(const float *pPlace, int nWinner, int nF
 
 	printf("±âº¸ :\n");
 
-	for (int h = 0; h < 5; ++h)
+	for (int h = 0; h < 10; ++h)
 	{
 		printf("\t");
 
-		for (int w = 0; w < 5; ++w)
+		for (int w = 0; w < 10; ++w)
 		{
-			if (h * 5 + w == nFinalPlace)
-				printf("%c", pPlace[h * 5 + w] == 0 ? '`' : pPlace[h * 5 + w] < 0 ? 'X' : 'O');
+			if (h * 10 + w == nFinalPlace)
+				printf("%c", pPlace[h * 10 + w] == 0 ? '`' : pPlace[h * 10 + w] < 0 ? 'X' : 'O');
 			else
-				printf("%c", pPlace[h * 5 + w] == 0 ? '`' : pPlace[h * 5 + w] < 0 ? 'b' : 'w');
+				printf("%c", pPlace[h * 10 + w] == 0 ? '`' : pPlace[h * 10 + w] < 0 ? 'b' : 'w');
 		}
 
 		printf("\n");

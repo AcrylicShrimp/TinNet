@@ -13,11 +13,10 @@
 #include "../../Layer/Layer.h"
 #include "../../NN.h"
 
-#include "../../Loss/Losses.h"
-
 #include <algorithm>
-#include <cmath>
+#include <chrono>
 #include <cstddef>
+#include <random>
 #include <utility>
 #include <vector>
 
@@ -26,11 +25,17 @@ namespace CaysNet::Optimizer::Reinforcement
 	class CAYSNET_DLL MonteCarloPolicyGradient final
 	{
 	private:
-		float nLearningRate;
-		std::vector<std::vector<float>> sOutput;
-		std::vector<std::vector<float>> sBiasDelta;
-		std::vector<std::vector<std::vector<float>>> sWeightDelta;
 		NN &sNN;
+		float nLearningRate;
+		std::mt19937_64 sEngine;
+		std::vector<std::vector<float>> sForwardOutput;
+		std::vector<std::vector<float>> sBackwardOutput;
+		std::vector<std::vector<float>> sActivationInput;
+		std::vector<std::vector<float>> sActivationOutput;
+		std::vector<std::vector<float>> sBiasDelta;
+		std::vector<std::vector<float>> sWeightDelta;
+		std::vector<std::vector<float>> sBiasRate;
+		std::vector<std::vector<float>> sWeightRate;
 		
 	public:
 		MonteCarloPolicyGradient(NN &sNN, float nNewLearningRate);
@@ -45,8 +50,7 @@ namespace CaysNet::Optimizer::Reinforcement
 	public:
 		inline float &learningRate();
 		inline float learningRate() const;
-		//double checkGradient(const float *pState, const float *pActionTaken, float nReward, std::size_t nLayerIndex, std::size_t nInputIndex, std::size_t nOutputIndex);
-		void update(const float *pState, const float *pActionTaken, std::size_t nActionTakenIndex, float nReward);
+		void update(std::size_t nSize, std::vector<float> *pState, std::vector<float> *pActionTaken, float *pReward);
 	};
 
 	inline float &MonteCarloPolicyGradient::learningRate()

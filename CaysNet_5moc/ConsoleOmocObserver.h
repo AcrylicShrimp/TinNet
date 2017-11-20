@@ -33,7 +33,7 @@ public:
 	
 public:
 	virtual void handleGameStart() override;
-	virtual void handleGameEnd(const float *pPlace, int nWinner, int nFinalPlace) override;
+	virtual void handleGameEnd(const float *pPlace, int nWinner, int nFinalPlace, int nErrorBlack, int nErrorWhite) override;
 };
 
 #endif

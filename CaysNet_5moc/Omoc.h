@@ -35,7 +35,7 @@ public:
 
 public:
 	virtual void handleGameStart() = 0;
-	virtual void handleGameEnd(const float *pPlace, int nWinner, int nFinalPlace) = 0;
+	virtual void handleGameEnd(const float *pPlace, int nWinner, int nFinalPlace, int nErrorBlack, int nErrorWhite) = 0;
 };
 
 class Omoc
@@ -48,6 +48,8 @@ private:
 	OmocAgent *pBlack;
 	OmocAgent *pWhite;
 	OmocObserver *pObserver;
+	int nErrorBlack;
+	int nErrorWhite;
 	
 public:
 	Omoc(int nWidth, int nHeight);

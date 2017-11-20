@@ -23,6 +23,7 @@ Omoc::~Omoc()
 void Omoc::playNewGame()
 {
 	std::fill(this->pPlace, this->pPlace + this->nPlaceCount, .0f);
+	this->nErrorBlack = this->nErrorWhite = 0;
 
 	this->pObserver->handleGameStart();
 	this->pBlack->handleStart(-1.f);
@@ -32,7 +33,7 @@ void Omoc::playNewGame()
 	int nFinalPlace;
 	while (!this->nextStep(&nWinner, &nFinalPlace));
 
-	this->pObserver->handleGameEnd(this->pPlace, nWinner, nFinalPlace);
+	this->pObserver->handleGameEnd(this->pPlace, nWinner, nFinalPlace, this->nErrorBlack, this->nErrorWhite);
 
 	if (nWinner == -1)
 	{
@@ -60,6 +61,7 @@ bool Omoc::nextStep(int *pWinner, int *nFinalPlace)
 
 	while (this->pPlace[nPlace] != .0f)
 	{
+		++this->nErrorBlack;
 		this->pBlack->handlePlaceRejected(nPlace);
 		nPlace = this->pBlack->place(this->pPlace);
 	}
@@ -68,8 +70,8 @@ bool Omoc::nextStep(int *pWinner, int *nFinalPlace)
 	this->pWhite->handlePlaceOtherOK(nPlace);
 	this->pPlace[nPlace] = -1.f;
 
-	//if (this->checkGameWinner(nPlace, -1.f))
-	if (nPlace == this->nPlaceWidth - 1)
+	if (this->checkGameWinner(nPlace, -1.f))
+	//if (nPlace == this->nPlaceWidth - 1)
 	{
 		*pWinner = -1;
 		*nFinalPlace = nPlace;
@@ -89,6 +91,7 @@ WHITE_PART:
 
 	while (this->pPlace[nPlace] != .0f)
 	{
+		++this->nErrorWhite;
 		this->pWhite->handlePlaceRejected(nPlace);
 		nPlace = this->pWhite->place(this->pPlace);
 	}
@@ -106,8 +109,8 @@ WHITE_PART:
 	this->pWhite->handlePlaceOK(nPlace);
 	this->pPlace[nPlace] = 1.f;
 
-	//if (this->checkGameWinner(nPlace, 1.f))
-	if (nPlace == this->nPlaceWidth - 1)
+	if (this->checkGameWinner(nPlace, 1.f))
+	//if (nPlace == this->nPlaceWidth - 1)
 	{
 		*pWinner = 1;
 		*nFinalPlace = nPlace;
@@ -135,7 +138,7 @@ bool Omoc::checkGameWinner(int nPlace, float nIdentifier)
 	for (int x = nX + 1; x < this->nPlaceWidth && this->pPlace[nY * this->nPlaceWidth + x] == nIdentifier; ++x)
 		++nSum;
 
-	if (nSum == 3)
+	if (nSum == 5)
 		return true;
 
 	nSum = 1;
@@ -146,7 +149,7 @@ bool Omoc::checkGameWinner(int nPlace, float nIdentifier)
 	for (int y = nY + 1; y < this->nPlaceHeight && this->pPlace[y * this->nPlaceWidth + nX] == nIdentifier; ++y)
 		++nSum;
 
-	if (nSum == 3)
+	if (nSum == 5)
 		return true;
 
 	nSum = 1;
@@ -157,7 +160,7 @@ bool Omoc::checkGameWinner(int nPlace, float nIdentifier)
 	for (int x = nX + 1, y = nY + 1; x < this->nPlaceWidth && y < this->nPlaceHeight && this->pPlace[y * this->nPlaceWidth + x] == nIdentifier; ++x, ++y)
 		++nSum;
 
-	if (nSum == 3)
+	if (nSum == 5)
 		return true;
 
 	nSum = 1;
@@ -168,7 +171,7 @@ bool Omoc::checkGameWinner(int nPlace, float nIdentifier)
 	for (int x = nX + 1, y = nY - 1; x < this->nPlaceWidth && y >= 0 && this->pPlace[y * this->nPlaceWidth + x] == nIdentifier; ++x, --y)
 		++nSum;
 
-	if (nSum == 3)
+	if (nSum == 5)
 		return true;
 
 	return false;

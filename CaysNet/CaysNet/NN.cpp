@@ -66,9 +66,6 @@ namespace CaysNet
 
 	void NN::forward(const float *pInput)
 	{
-		assert(pInput);
-		assert(this->sLayerList.size());
-
 		this->sLayerList.front()->forward(pInput, this->sOutput.front().data());
 
 		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
@@ -77,9 +74,6 @@ namespace CaysNet
 
 	void NN::forward(const float *pInput, float *pOutput)
 	{
-		assert(pInput);
-		assert(pOutput);
-
 		this->forward(pInput);
 
 		for (auto nValue : this->sOutput.back())
@@ -88,18 +82,14 @@ namespace CaysNet
 
 	void NN::forward(
 		const float *pInput,
-		std::vector<std::vector<float>> &sActivationInputBuffer,
-		std::vector<std::vector<float>> &sActivationOutputBuffer)
+		std::vector<float> *pOutput,
+		std::vector<float> *pActivationInput,
+		std::vector<float> *pActivationOutput) const
 	{
-		assert(pInput);
-		assert(this->sLayerList.size());
-		assert(this->sLayerList.size() == sActivationInputBuffer.size());
-		assert(this->sLayerList.size() == sActivationOutputBuffer.size());
+		this->sLayerList.front()->forward(pInput, pOutput->data(), pActivationInput->data(), pActivationOutput->data());
 
-		this->sLayerList.front()->forward(pInput, this->sOutput.front().data(), sActivationInputBuffer.front().data(), sActivationOutputBuffer.front().data());
-
-		for (std::size_t nIndex{1}, nSize{this->sLayerList.size()}; nIndex < nSize; ++nIndex)
-			this->sLayerList[nIndex]->forward(this->sOutput[nIndex - 1].data(), this->sOutput[nIndex].data(), sActivationInputBuffer[nIndex].data(), sActivationOutputBuffer[nIndex].data());
+		for (std::size_t nIndex{1}, nDepth{this->depth()}; nIndex < nDepth; ++nIndex)
+			this->sLayerList[nIndex]->forward(pOutput[nIndex - 1].data(), pOutput[nIndex].data(), pActivationInput[nIndex].data(), pActivationOutput[nIndex].data());
 	}
 
 	void NN::forward(
@@ -107,9 +97,6 @@ namespace CaysNet
 		const std::vector<float> *pInput,
 		std::vector<std::vector<float>> *pOutput) const
 	{
-		assert(pInput);
-		assert(this->sLayerList.size());
-
 		this->sLayerList.front()->forward(nBatchSize, pInput, pOutput->data());
 
 		for (std::size_t nIndex{1}, nDepth{this->depth()}; nIndex < nDepth; ++nIndex)
@@ -123,12 +110,6 @@ namespace CaysNet
 		std::vector<std::vector<float>> *pActivationInput,
 		std::vector<std::vector<float>> *pActivationOutput) const
 	{
-		assert(pInput);
-		assert(this->sLayerList.size());
-		assert(nBatchSize == pOutput->size());
-		assert(nBatchSize == pActivationInput->size());
-		assert(nBatchSize == pActivationOutput->size());
-
 		this->sLayerList.front()->forward(nBatchSize, pInput, pOutput->data(), pActivationInput->data(), pActivationOutput->data());
 
 		for (std::size_t nIndex{1}, nDepth{this->depth()}; nIndex < nDepth; ++nIndex)
@@ -136,29 +117,30 @@ namespace CaysNet
 	}
 
 	void NN::backward(
-		const std::vector<std::vector<float>> &sActivationInputBuffer,
-		const std::vector<std::vector<float>> &sActivationOutputBuffer,
-		std::vector<std::vector<float>> &sBiasDeltaBuffer,
-		std::vector<std::vector<float>> &sWeightDeltaBuffer,
-		std::vector<std::vector<float>> &sBackwardBuffer,
 		const float *pForwardInput,
-		const float *pBackwardInput) const
+		const float *pBackwardInput,
+		const std::vector<float> *pForwardOutput,
+		std::vector<float> *pBackwardOutput,
+		const std::vector<float> *pActivationInput,
+		const std::vector<float> *pActivationOutput,
+		std::vector<float> *pBiasDelta,
+		std::vector<float> *pWeightDelta) const
 	{
 		for (std::size_t nIndex{this->sLayerList.size() - 1}; ; --nIndex)
 		{
 			auto pLayer{this->sLayerList[nIndex]};
-			auto pLayerForwardInput{nIndex == 0 ? pForwardInput : this->sOutput[nIndex - 1].data()};
-			auto pLayerBackwardInput{nIndex + 1 == this->sLayerList.size() ? pBackwardInput : sBackwardBuffer[nIndex + 1].data()};
-			auto pLayerBackwardOutput{sBackwardBuffer[nIndex].data()};
+			auto pLayerForwardInput{nIndex == 0 ? pForwardInput : pForwardOutput[nIndex - 1].data()};
+			auto pLayerBackwardInput{nIndex + 1 == this->depth() ? pBackwardInput : pBackwardOutput[nIndex + 1].data()};
+			auto pLayerBackwardOutput{pBackwardOutput[nIndex].data()};
 
 			pLayer->backward(
-				sActivationInputBuffer[nIndex].data(),
-				sActivationOutputBuffer[nIndex].data(),
+				pActivationInput[nIndex].data(),
+				pActivationOutput[nIndex].data(),
 				pLayerForwardInput,
 				pLayerBackwardInput,
 				pLayerBackwardOutput,
-				sBiasDeltaBuffer[nIndex].data(),
-				sWeightDeltaBuffer[nIndex].data());
+				pBiasDelta[nIndex].data(),
+				pWeightDelta[nIndex].data());
 
 			if (!nIndex)
 				break;
@@ -202,8 +184,6 @@ namespace CaysNet
 
 	std::size_t NN::classify(const float *pInput)
 	{
-		assert(this->sLayerList.size());
-
 		this->forward(pInput);
 
 		std::size_t nMaxIndex{0};
@@ -218,8 +198,6 @@ namespace CaysNet
 
 	void NN::classify(std::size_t nBatchSize, const std::vector<float> *pInput, std::size_t *pOutput)
 	{
-		assert(this->sLayerList.size());
-
 		std::size_t nIndex{0};
 		std::vector<std::vector<std::vector<float>>> sOutput(this->depth());
 
@@ -250,8 +228,6 @@ namespace CaysNet
 
 	float NN::classificationLoss(std::size_t nBatchSize, const std::vector<float> *pInput, const std::vector<float> *pOutput)
 	{
-		assert(this->sLayerList.size());
-
 		std::vector<std::size_t> sResult(nBatchSize);
 		this->classify(nBatchSize, pInput, sResult.data());
 

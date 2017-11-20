@@ -17,17 +17,18 @@ int main()
 {
 	CaysNet::NN sBlack
 	{
-		CaysNet::Layer::FullLayer::make<CaysNet::Activation::Softmax>(25, 25)
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::Softmax>(100, 100)
 	};
 
 	CaysNet::NN sWhite
 	{
-		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(25, 50),
-		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(50, 45),
-		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(45, 40),
-		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(40, 35),
-		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(35, 30),
-		CaysNet::Layer::FullLayer::make<CaysNet::Activation::Softmax>(30, 25)
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(100, 100),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(100, 75),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(75, 50),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(50, 50),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(50, 50),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::LReLU>(50, 50),
+		CaysNet::Layer::FullLayer::make<CaysNet::Activation::Softmax>(50, 100)
 	};
 
 	sBlack.initBias<CaysNet::Initializer::Constant>(.0f);
@@ -35,7 +36,7 @@ int main()
 	sWhite.initBias<CaysNet::Initializer::Constant>(.0f);
 	sWhite.initWeight<CaysNet::Initializer::He>();
 
-	Omoc sOmoc{5, 5};
+	Omoc sOmoc{10, 10};
 	ConsoleOmocObserver sConsoleObserver;
 	AIOmocAgent sAIBlack{&sBlack};
 	LearningAIOmocAgent sAIWhite{&sWhite};
@@ -47,11 +48,11 @@ int main()
 	{
 		sOmoc.playNewGame();
 
-		if (nTemp == 5000)
-		{
-			nTemp = 0;
-			sWhite.serialize(std::ofstream{"5moc.cn", std::ofstream::binary | std::ofstream::out});
-		}
+		//if (nTemp == 5000)
+		//{
+		//	nTemp = 0;
+		//	sWhite.serialize(std::ofstream{"5moc.cn", std::ofstream::binary | std::ofstream::out});
+		//}
 	}
 
 	return 0;

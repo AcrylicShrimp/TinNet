@@ -8,7 +8,7 @@
 
 LearningAIOmocAgent::LearningAIOmocAgent(CaysNet::NN *pNewNetwork) :
 	pNetwork{pNewNetwork},
-	sUpdater{*this->pNetwork, .001f},
+	sUpdater{*this->pNetwork, .0001f},
 	sEngine{static_cast<std::mt19937_64::result_type>(std::chrono::system_clock::now().time_since_epoch().count())}
 {
 	//Empty.
@@ -16,44 +16,42 @@ LearningAIOmocAgent::LearningAIOmocAgent(CaysNet::NN *pNewNetwork) :
 
 int LearningAIOmocAgent::place(const float *pPlace)
 {
-	this->pNetwork->calc(this->pPlace = pPlace);
+	this->pNetwork->forward(this->pPlace = pPlace);
 
-	for (int i = 0; i < 24; ++i)
+	for (int i = 0; i < 99; ++i)
 		this->pNetwork->output().back()[i + 1] += this->pNetwork->output().back()[i];
 
 	std::uniform_real_distribution<float> sDist{.0f, this->pNetwork->output().back().back()};
 	auto nValue{sDist(this->sEngine)};
 
-	for (int i = 0; i < 25; ++i)
+	for (int i = 0; i < 100; ++i)
 		if (this->pNetwork->output().back()[i] >= nValue)
 			return i;
 
-	return 24;
+	return 99;
 }
 
 void LearningAIOmocAgent::handleStart(float nIdentifier)
 {
-	this->sEpList.clear();
+	//Empty.
 }
 
 void LearningAIOmocAgent::handlePlaceRejected(int nPlace)
 {
-	this->sEpList.emplace_back(Ep
-	{
-		std::vector<float>(this->pPlace, this->pPlace + 25),
-		nPlace,
-		-10.f
-	});
+	this->sEpList.sState.emplace_back(this->pPlace, this->pPlace + 100);
+	this->sEpList.sAction.emplace_back(100u, .0f);
+	this->sEpList.sReward.emplace_back(-.0001f);
+
+	this->sEpList.sAction.back()[nPlace] = 1.f;
 }
 
 void LearningAIOmocAgent::handlePlaceOK(int nPlace)
 {
-	this->sEpList.emplace_back(Ep
-	{
-		std::vector<float>(this->pPlace, this->pPlace + 25),
-		nPlace,
-		1.f
-	});
+	this->sEpList.sState.emplace_back(this->pPlace, this->pPlace + 100);
+	this->sEpList.sAction.emplace_back(100u, .0f);
+	this->sEpList.sReward.emplace_back(.0f);
+
+	this->sEpList.sAction.back()[nPlace] = 1.f;
 }
 
 void LearningAIOmocAgent::handlePlaceOtherOK(int nPlace)
@@ -63,57 +61,59 @@ void LearningAIOmocAgent::handlePlaceOtherOK(int nPlace)
 
 void LearningAIOmocAgent::handleWin()
 {
-	if (this->sEpList.empty())
-		return;
-
-	this->sEpList.back().nReward = -1.f;
+	this->sEpList.sReward.back() = .0005f;
 	this->update();
 }
 
 void LearningAIOmocAgent::handleLose()
 {
-	if (this->sEpList.empty())
-		return;
-
-	this->sEpList.back().nReward = 1.f;
+	this->sEpList.sReward.back() = -.001f;
 	this->update();
 }
 
 void LearningAIOmocAgent::handleDraw()
 {
-	if (this->sEpList.empty())
-		return;
-
-	//this->sEpList.back().nReward += 10.f;
 	this->update();
 }
 
 void LearningAIOmocAgent::update()
 {
-	if (!this->sEpList.size())
+	//리워드 업데이트
+	for (std::size_t nTime{this->nEpIndex}, nLength{this->sEpList.sState.size()}; nTime < nLength; ++nTime)
+	{
+		auto nFactor{1.f};
+		auto nRewardSum{.0f};
+
+		for (std::size_t nRewardTime{nTime}; nRewardTime < nLength; ++nRewardTime)
+		{
+			nRewardSum += this->sEpList.sReward[nRewardTime];
+			nFactor *= .8f;
+		}
+
+		this->sEpList.sReward[nTime] = nRewardSum;
+	}
+
+	if ((this->nEpIndex = this->sEpList.sState.size()) < 10000)
 		return;
 
-	int nLastTempAction{0};
-	float vTempAction[25]{};
-	auto nRewardSum{.0f};
-	constexpr float nFactor{.0f};
-
-	//float nRewardAvg{.0f};
+	////업데이트 실시
 	//
-	//for (const auto &sEp : this->sEpList)
-	//	nRewardAvg += sEp.nReward;
+	//for (;;)
+	//{
+	//	for (std::size_t nIndex{0}; nIndex < 1000; ++nIndex)
+	//		this->sUpdater.update(this->nEpIndex, this->sEpList.sState.data(), this->sEpList.sAction.data(), this->sEpList.sReward.data());
 	//
-	//nRewardAvg /= this->sEpList.size();
+	//	for (std::size_t nTime{0}; nTime < this->nEpIndex; ++nTime)
+	//	{
+	//
+	//	}
+	//}
 
-	for (std::size_t nTime{0}, nLength{this->sEpList.size()}; nTime < nLength; ++nTime)
-	{
-		nRewardSum = this->sEpList[nTime].nReward + nRewardSum * nFactor;
+	this->sUpdater.update(this->nEpIndex, this->sEpList.sState.data(), this->sEpList.sAction.data(), this->sEpList.sReward.data());
 
-		vTempAction[nLastTempAction] = .0f;
-		vTempAction[nLastTempAction = this->sEpList[nTime].nAction] = 1.f;
-
-		//printf("Gradient : %lf", this->sUpdater.checkGradient(this->sEpList[nTime].sState.data(), vTempAction, 0, 0, 0));
-
-		this->sUpdater.update(this->sEpList[nTime].sState.data(), vTempAction, this->sEpList[nTime].nAction, nRewardSum);
-	}
+	//리플레이 메모리 초기화
+	this->nEpIndex = 0;
+	this->sEpList.sState.clear();
+	this->sEpList.sAction.clear();
+	this->sEpList.sReward.clear();
 }

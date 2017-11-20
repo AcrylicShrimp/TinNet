@@ -15,11 +15,11 @@ AIOmocAgent::AIOmocAgent(CaysNet::NN *pNewNetwork) :
 
 int AIOmocAgent::place(const float *pPlace)
 {
-	this->pNetwork->calc(pPlace);
+	this->pNetwork->forward(pPlace);
 
 	int nBufferSize = 0;
 
-	for (int i = 0; i < 25; ++i)
+	for (int i = 0; i < 100; ++i)
 		if (pPlace[i] == .0f)
 		{
 			this->vIndexBuffer[nBufferSize] = i;

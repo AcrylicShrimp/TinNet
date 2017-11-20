@@ -17,22 +17,23 @@
 #include <random>
 #include <vector>
 
-struct Ep
+struct EpList
 {
 public:
-	std::vector<float> sState;
-	int nAction;
-	float nReward;
+	std::vector<std::vector<float>> sState;
+	std::vector<std::vector<float>> sAction;
+	std::vector<float> sReward;
 };
 
 class LearningAIOmocAgent : public OmocAgent
 {
 private:
 	CaysNet::NN *pNetwork;
-	CaysNet::Optimizer::Reinforcement::MonteCarloPolicyGradient sUpdater;
 	std::mt19937_64 sEngine;
-	std::vector<Ep> sEpList;
+	EpList sEpList;
 	const float *pPlace;
+	std::size_t nEpIndex{0};
+	CaysNet::Optimizer::Reinforcement::MonteCarloPolicyGradient sUpdater;
 	
 public:
 	LearningAIOmocAgent(CaysNet::NN *pNewNetwork);

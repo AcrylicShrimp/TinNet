@@ -56,8 +56,9 @@ namespace CaysNet
 		void forward(const float *pInput, float *pOutput);
 		void forward(
 			const float *pInput,
-			std::vector<std::vector<float>> &sActivationInputBuffer,
-			std::vector<std::vector<float>> &sActivationOutputBuffer);
+			std::vector<float> *pOutput,
+			std::vector<float> *pActivationInput,
+			std::vector<float> *pActivationOutput) const;
 		void forward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pInput,
@@ -69,13 +70,14 @@ namespace CaysNet
 			std::vector<std::vector<float>> *pActivationInput,
 			std::vector<std::vector<float>> *pActivationOutput) const;
 		void backward(
-			const std::vector<std::vector<float>> &sActivationInputBuffer,
-			const std::vector<std::vector<float>> &sActivationOutputBuffer,
-			std::vector<std::vector<float>> &sBiasDeltaBuffer,
-			std::vector<std::vector<float>> &sWeightDeltaBuffer,
-			std::vector<std::vector<float>> &sBackwardBuffer,
 			const float *pForwardInput,
-			const float *pBackwardInput) const;
+			const float *pBackwardInput,
+			const std::vector<float> *pForwardOutput,
+			std::vector<float> *pBackwardOutput,
+			const std::vector<float> *pActivationInput,
+			const std::vector<float> *pActivationOutput,
+			std::vector<float> *pBiasDelta,
+			std::vector<float> *pWeightDelta) const;
 		void backward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pForwardInput,

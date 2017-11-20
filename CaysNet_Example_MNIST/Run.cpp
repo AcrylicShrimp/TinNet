@@ -148,15 +148,15 @@ int32_t main()
 	for (;;)
 	{
 		float nLoss{sNetwork.classificationLoss(10000u, sTestInput.data(), sTestOutput.data())};
-
 		printf("Validation data classification accuracy : %0.2f%%\n", (1.f - nLoss) * 100.f);
+
 		sExporter.accrueLoss(nLoss);
 		sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
 
 		std::cout << "Serializing network...";
 		sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
 		std::cout << " saved." << std::endl;
-
+		
 		sOptimizer.train<Loss::MulticlassCE>(1, 60000, sTrainInput.data(), sTrainOutput.data());
 	}
 
