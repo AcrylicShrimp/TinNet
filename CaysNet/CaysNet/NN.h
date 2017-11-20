@@ -55,40 +55,38 @@ namespace CaysNet
 		void forward(const float *pInput);
 		void forward(const float *pInput, float *pOutput);
 		void forward(
-			std::size_t nBatchSize,
-			const std::vector<float> *pInput,
-			std::vector<std::vector<float>> *pOutputBuffer) const;
-		void forward(
 			const float *pInput,
-			std::vector<float> *pOutputBuffer,
-			std::vector<float> *pActivationInputBuffer,
-			std::vector<float> *pActivationOutputBuffer) const;
+			std::vector<std::vector<float>> &sActivationInputBuffer,
+			std::vector<std::vector<float>> &sActivationOutputBuffer);
 		void forward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pInput,
-			std::vector<std::vector<float>> *pOutputBuffer,
-			std::vector<std::vector<float>> *pActivationInputBuffer,
-			std::vector<std::vector<float>> *pActivationOutputBuffer) const;
+			std::vector<std::vector<float>> *pOutput) const;
+		void forward(
+			std::size_t nBatchSize,
+			const std::vector<float> *pInput,
+			std::vector<std::vector<float>> *pOutput,
+			std::vector<std::vector<float>> *pActivationInput,
+			std::vector<std::vector<float>> *pActivationOutput) const;
 		void backward(
+			const std::vector<std::vector<float>> &sActivationInputBuffer,
+			const std::vector<std::vector<float>> &sActivationOutputBuffer,
+			std::vector<std::vector<float>> &sBiasDeltaBuffer,
+			std::vector<std::vector<float>> &sWeightDeltaBuffer,
+			std::vector<std::vector<float>> &sBackwardBuffer,
 			const float *pForwardInput,
-			const float *pBackwardInput,
-			const std::vector<float> *pForwardOutputBuffer,
-			const std::vector<float> *pActivationInputBuffer,
-			const std::vector<float> *pActivationOutputBuffer,
-			std::vector<float> *pBiasDelta,
-			std::vector<float> *pWeightDelta,
-			std::vector<float> *pBackwardOutputBuffer) const;
+			const float *pBackwardInput) const;
 		void backward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pForwardInput,
 			const std::vector<float> *pBackwardInput,
-			const std::vector<std::vector<float>> *pForwardOutputBuffer,
-			const std::vector<std::vector<float>> *pActivationInputBuffer,
-			const std::vector<std::vector<float>> *pActivationOutputBuffer,
+			const std::vector<std::vector<float>> *pForwardOutput,
+			std::vector<std::vector<float>> *pBackwardOutput,
+			const std::vector<std::vector<float>> *pActivationInput,
+			const std::vector<std::vector<float>> *pActivationOutput,
 			std::vector<float> *pBiasDelta,
 			std::vector<float> *pWeightDelta,
-			std::vector<float> *pBiasDeltaBuffer,
-			std::vector<std::vector<float>> *pBackwardOutputBuffer) const;
+			std::vector<float> *pBiasDeltaBuffer) const;
 		std::size_t classify(const float *pInput);
 		void classify(std::size_t nBatchSize, const std::vector<float> *pInput, std::size_t *pOutput);
 		template<class LossFunc> float loss(const float *pInput, const float *pOutput);

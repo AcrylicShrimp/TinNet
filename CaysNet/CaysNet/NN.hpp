@@ -24,6 +24,8 @@ namespace CaysNet
 
 	template<class LossFunc> float NN::loss(const float *pInput, const float *pOutput)
 	{
+		assert(this->sLayerList.size());
+
 		this->forward(pInput);
 
 		return LossFunc::loss(this->sOutput.back().size(), this->sOutput.back().data(), pOutput);
@@ -31,25 +33,27 @@ namespace CaysNet
 
 	template<class LossFunc> float NN::loss(std::size_t nBatchSize, const std::vector<float> *pInput, const std::vector<float> *pOutput)
 	{
+		assert(this->sLayerList.size());
+
 		std::size_t nIndex{0};
-		std::vector<std::vector<std::vector<float>>> sOutput(this->sLayerList.size());
+		std::vector<std::vector<std::vector<float>>> sOutput(this->depth());
 
-		for (auto &sOutputBuffer : sOutput)
+		for (auto &sLayerBuffer : sOutput)
 		{
-			sOutputBuffer.resize(nBatchSize);
+			sLayerBuffer.resize(nBatchSize);
 
-			for (auto &sLayerBuffer : sOutputBuffer)
-				sLayerBuffer.resize(this->sLayerList[nIndex]->fanOut());
+			for (auto &sOutputBuffer : sLayerBuffer)
+				sOutputBuffer.resize(this->sLayerList[nIndex]->fanOut());
 
 			++nIndex;
 		}
 
 		this->forward(nBatchSize, pInput, sOutput.data());
 
-		float nLossSum{.0f};
+		auto nLossSum{.0f};
 
-		for (std::size_t nIndex{0u}; nIndex < nBatchSize; ++nIndex)
-			nLossSum += LossFunc::loss(sOutput.back()[nIndex].size(), sOutput.back()[nIndex].data(), pOutput[nIndex]);
+		for (std::size_t nBatch{0u}; nBatch < nBatchSize; ++nBatch)
+			nLossSum += LossFunc::loss(sOutput.back()[nBatch].size(), sOutput.back()[nBatch].data(), pOutput[nBatch].data());
 
 		//Take average of the loss.
 		return nLossSum / nBatchSize;
