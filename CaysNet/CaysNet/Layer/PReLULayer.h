@@ -1,42 +1,35 @@
 
 /*
-	2017.11.03
+	2018.01.14
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_CAYSNET_LAYER_FULL_LAYER_H
+#ifndef _CLASS_CAYSNET_LAYER_PRELULAYER_H
 
-#define _CLASS_CAYSNET_LAYER_FULL_LAYER_H
+#define _CLASS_CAYSNET_LAYER_PRELULAYER_H
 
 #include "../CaysNetDLL.h"
 
 #include "../Layer/Layer.h"
 #include "../IO/Serializable.h"
 
-#include <algorithm>
-#include <cassert>
 #include <cstddef>
 #include <memory>
-#include <utility>
-#include <vector>
 
 namespace CaysNet::Layer
 {
-	class CAYSNET_DLL FullLayer final : public Layer
+	class CAYSNET_DLL PReLULayer : public Layer
 	{
-	protected:
-		std::vector<float> sBias;
-		std::vector<std::vector<float>> sWeight;
+	private:
+		float nParam;
 		
 	public:
-		FullLayer(std::size_t nFanIn, std::size_t nFanOut);
-		FullLayer(const FullLayer &sSrc);
-		FullLayer(FullLayer &&sSrc);
-		~FullLayer() = default;
+		PReLULayer(std::size_t nFanIn, float nParam);
+		PReLULayer(const PReLULayer &sSrc);
+		~PReLULayer() = default;
 		
 	public:
-		FullLayer &operator=(const FullLayer &sSrc);
-		FullLayer &operator=(FullLayer &&sSrc);
+		PReLULayer &operator=(const PReLULayer &sSrc);
 		
 	public:
 		virtual std::unique_ptr<Layer> duplicate() const override;

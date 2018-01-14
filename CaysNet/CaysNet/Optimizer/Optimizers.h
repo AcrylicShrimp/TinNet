@@ -10,8 +10,8 @@
 
 #include "Supervised/SGD.h"
 #include "Supervised/Momentum.h"
-#include "Supervised/NAG.h"
 #include "Supervised/Adagrad.h"
+#include "Supervised/RMSProp.h"
 
 #include "Reinforcement/MonteCarloPolicyGradient.h"
 

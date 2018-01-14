@@ -257,15 +257,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CaysNet\Activation\Activation.cpp" />
-    <ClCompile Include="CaysNet\Activation\Activations.cpp" />
-    <ClCompile Include="CaysNet\Activation\Linear.cpp" />
-    <ClCompile Include="CaysNet\Activation\LReLU.cpp" />
-    <ClCompile Include="CaysNet\Activation\PReLU.cpp" />
-    <ClCompile Include="CaysNet\Activation\ReLU.cpp" />
-    <ClCompile Include="CaysNet\Activation\Sigmoid.cpp" />
-    <ClCompile Include="CaysNet\Activation\Softmax.cpp" />
-    <ClCompile Include="CaysNet\Activation\TanH.cpp" />
     <ClCompile Include="CaysNet\Initializer\Constant.cpp" />
     <ClCompile Include="CaysNet\Initializer\Glorot.cpp" />
     <ClCompile Include="CaysNet\Initializer\He.cpp" />
@@ -273,31 +264,73 @@
     <ClCompile Include="CaysNet\Initializer\Uniform.cpp" />
     <ClCompile Include="CaysNet\Initializer\Xavier.cpp" />
     <ClCompile Include="CaysNet\IO\Serializable.cpp" />
-    <ClCompile Include="CaysNet\Layer\AveragePoolingLayer.cpp" />
-    <ClCompile Include="CaysNet\Layer\ConvLayer.cpp" />
     <ClCompile Include="CaysNet\Layer\FullLayer.cpp" />
     <ClCompile Include="CaysNet\Layer\Layer.cpp" />
-    <ClCompile Include="CaysNet\Layer\MaxPoolingLayer.cpp" />
+    <ClCompile Include="CaysNet\Layer\LReLULayer.cpp" />
+    <ClCompile Include="CaysNet\Layer\PReLULayer.cpp" />
+    <ClCompile Include="CaysNet\Layer\ReLULayer.cpp" />
+    <ClCompile Include="CaysNet\Layer\SigmoidLayer.cpp" />
+    <ClCompile Include="CaysNet\Layer\SoftmaxLayer.cpp" />
+    <ClCompile Include="CaysNet\Layer\TanhLayer.cpp" />
     <ClCompile Include="CaysNet\Loss\CE.cpp" />
     <ClCompile Include="CaysNet\Loss\MSE.cpp" />
     <ClCompile Include="CaysNet\Loss\MulticlassCE.cpp" />
     <ClCompile Include="CaysNet\NN.cpp" />
-    <ClCompile Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.cpp" />
-    <ClCompile Include="CaysNet\Optimizer\Supervised\Adagrad.cpp" />
-    <ClCompile Include="CaysNet\Optimizer\Supervised\Momentum.cpp" />
-    <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp" />
+    <ClCompile Include="CaysNet\Optimizer\OptimizerHelper.cpp" />
+    <ClCompile Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Optimizer\Supervised\Adagrad.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Optimizer\Supervised\Momentum.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Optimizer\Supervised\RMSProp.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="CaysNet\Optimizer\Supervised\SGD.cpp" />
+    <ClCompile Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.cpp" />
     <ClCompile Include="CaysNet\Visualizer\ConsoleVisualizer.cpp" />
     <ClCompile Include="CaysNet\Visualizer\CSVLossExporter.cpp" />
-    <ClInclude Include="CaysNet\Activation\Activation.h" />
-    <ClInclude Include="CaysNet\Activation\Activations.h" />
-    <ClInclude Include="CaysNet\Activation\Linear.h" />
-    <ClInclude Include="CaysNet\Activation\LReLU.h" />
-    <ClInclude Include="CaysNet\Activation\PReLU.h" />
-    <ClInclude Include="CaysNet\Activation\ReLU.h" />
-    <ClInclude Include="CaysNet\Activation\Sigmoid.h" />
-    <ClInclude Include="CaysNet\Activation\Softmax.h" />
-    <ClInclude Include="CaysNet\Activation\TanH.h" />
     <ClInclude Include="CaysNet\CaysNet.h" />
     <ClInclude Include="CaysNet\CaysNetDLL.h" />
     <ClInclude Include="CaysNet\Initializer\Constant.h" />
@@ -308,30 +341,78 @@
     <ClInclude Include="CaysNet\Initializer\Uniform.h" />
     <ClInclude Include="CaysNet\Initializer\Xavier.h" />
     <ClInclude Include="CaysNet\IO\Serializable.h" />
-    <ClInclude Include="CaysNet\Layer\AveragePoolingLayer.h" />
-    <ClInclude Include="CaysNet\Layer\ConvLayer.h" />
     <ClInclude Include="CaysNet\Layer\FullLayer.h" />
     <ClInclude Include="CaysNet\Layer\Layer.h" />
     <ClInclude Include="CaysNet\Layer\Layers.h" />
-    <ClInclude Include="CaysNet\Layer\MaxPoolingLayer.h" />
+    <ClInclude Include="CaysNet\Layer\LReLULayer.h" />
+    <ClInclude Include="CaysNet\Layer\PReLULayer.h" />
+    <ClInclude Include="CaysNet\Layer\ReLULayer.h" />
+    <ClInclude Include="CaysNet\Layer\SigmoidLayer.h" />
+    <ClInclude Include="CaysNet\Layer\SoftmaxLayer.h" />
+    <ClInclude Include="CaysNet\Layer\TanhLayer.h" />
     <ClInclude Include="CaysNet\Loss\CE.h" />
     <ClInclude Include="CaysNet\Loss\Losses.h" />
     <ClInclude Include="CaysNet\Loss\MSE.h" />
     <ClInclude Include="CaysNet\Loss\MulticlassCE.h" />
     <ClInclude Include="CaysNet\NN.h" />
     <ClInclude Include="CaysNet\NN.hpp" />
+    <ClInclude Include="CaysNet\Optimizer\OptimizerHelper.h" />
     <ClInclude Include="CaysNet\Optimizer\Optimizers.h" />
-    <ClInclude Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.h" />
-    <ClInclude Include="CaysNet\Optimizer\Supervised\Adagrad.h" />
-    <ClInclude Include="CaysNet\Optimizer\Supervised\Adagrad.hpp" />
-    <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.h" />
-    <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.hpp" />
-    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.h" />
-    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.hpp" />
+    <ClInclude Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\Adagrad.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\RMSProp.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.h" />
-    <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.h" />
+    <ClInclude Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.hpp" />
     <ClInclude Include="CaysNet\Visualizer\ConsoleVisualizer.h" />
     <ClInclude Include="CaysNet\Visualizer\CSVLossExporter.h" />
   </ItemGroup>

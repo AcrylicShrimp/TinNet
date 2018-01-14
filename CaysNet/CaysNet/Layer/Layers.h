@@ -12,9 +12,13 @@
 
 #include "FullLayer.h"
 
-#include "ConvLayer.h"
+#include "SigmoidLayer.h"
+#include "SoftmaxLayer.h"
 
-#include "MaxPoolingLayer.h"
-#include "AveragePoolingLayer.h"
+#include "TanhLayer.h"
+
+#include "ReLULayer.h"
+#include "LReLULayer.h"
+#include "PReLULayer.h"
 
 #endif

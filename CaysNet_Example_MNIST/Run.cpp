@@ -46,8 +46,6 @@ int32_t main()
 				std::cout << "\tSummary of the Layer No. " << ++nCount << " :" << std::endl;
 				std::cout << "\tFan in : " << pLayer->fanIn() << std::endl;
 				std::cout << "\tFan out : " << pLayer->fanOut() << std::endl;
-				std::cout << "\tActivation : ";
-				std::wcout << pLayer->activation()->name();
 				std::cout << std::endl << std::endl;
 			}
 
@@ -55,13 +53,20 @@ int32_t main()
 		}
 		else if (sCommand == "new")
 		{
-			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(784, 50));
-			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
-			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
-			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
-			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
-			sNetwork.addLayer(Layer::FullLayer::make<Activation::LReLU>(50, 50));
-			sNetwork.addLayer(Layer::FullLayer::make<Activation::Softmax>(50, 10));
+			sNetwork.addLayer<Layer::FullLayer>(784, 50);
+			sNetwork.addLayer<Layer::LReLULayer>(50);
+			sNetwork.addLayer<Layer::FullLayer>(50, 50);
+			sNetwork.addLayer<Layer::LReLULayer>(50);
+			sNetwork.addLayer<Layer::FullLayer>(50, 50);
+			sNetwork.addLayer<Layer::LReLULayer>(50);
+			sNetwork.addLayer<Layer::FullLayer>(50, 50);
+			sNetwork.addLayer<Layer::LReLULayer>(50);
+			sNetwork.addLayer<Layer::FullLayer>(50, 50);
+			sNetwork.addLayer<Layer::LReLULayer>(50);
+			sNetwork.addLayer<Layer::FullLayer>(50, 50);
+			sNetwork.addLayer<Layer::LReLULayer>(50);
+			sNetwork.addLayer<Layer::FullLayer>(50, 10);
+			sNetwork.addLayer<Layer::SoftmaxLayer>(10);
 
 			std::cout << "Successfully created." << std::endl;
 			std::cout << "Number of the layers : " << sNetwork.layer().size() << std::endl;
@@ -74,8 +79,6 @@ int32_t main()
 				std::cout << "\tSummary of the Layer No. " << ++nCount << " :" << std::endl;
 				std::cout << "\tFan in : " << pLayer->fanIn() << std::endl;
 				std::cout << "\tFan out : " << pLayer->fanOut() << std::endl;
-				std::cout << "\tActivation : ";
-				std::wcout << pLayer->activation()->name();
 				std::cout << std::endl << std::endl;
 			}
 
@@ -138,10 +141,11 @@ int32_t main()
 		}
 	}
 
-	//Optimizer::Supervised::SGD sOptimizer{sNetwork, .001f};
-	Optimizer::Supervised::Momentum sOptimizer{sNetwork, 32, .9f, .001f};
+	//Optimizer::Supervised::SGD sOptimizer{sNetwork, 32u, .001f};
+	//Optimizer::Supervised::Momentum sOptimizer{sNetwork, 32, .9f, .001f};
 	//Optimizer::Supervised::NAG sOptimizer{sNetwork, .9f, .001f};
-	//Optimizer::Supervised::Adagrad sOptimizer{sNetwork, .001f};
+	//Optimizer::Supervised::Adagrad sOptimizer{sNetwork, 32, .001f};
+	Optimizer::Supervised::RMSProp sOptimizer{sNetwork, 32, .9f, .00005f};
 
 	Visualizer::CSVLossExporter sExporter;
 

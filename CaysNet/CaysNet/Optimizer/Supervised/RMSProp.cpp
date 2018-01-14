@@ -1,15 +1,16 @@
 
 /*
-	2017.11.14
+	2018.01.15
 	Created by AcrylicShrimp.
 */
 
-#include "Adagrad.h"
+#include "RMSProp.h"
 
 namespace CaysNet::Optimizer::Supervised
 {
-	Adagrad::Adagrad(NN &sNN, std::size_t nNewBatchSize, float nNewLearningRate) :
+	RMSProp::RMSProp(NN &sNN, std::size_t nNewBatchSize, float nNewDecay, float nNewLearningRate) :
 		SupervisedOptimizerBase(sNN, nNewBatchSize),
+		nDecay{nNewDecay},
 		nLearningRate{nNewLearningRate},
 		sBiasRate(sNN.depth()),
 		sWeightRate(sNN.depth())
@@ -25,9 +26,10 @@ namespace CaysNet::Optimizer::Supervised
 			this->sWeightRate[nIndex].resize(nWeightDeltaSize, .0f);
 		}
 	}
-
-	Adagrad::Adagrad(Adagrad &&sSrc) :
+	
+	RMSProp::RMSProp(RMSProp &&sSrc) :
 		SupervisedOptimizerBase(std::move(sSrc)),
+		nDecay{sSrc.nDecay},
 		nLearningRate{sSrc.nLearningRate},
 		sBiasRate{std::move(sSrc.sBiasRate)},
 		sWeightRate{std::move(sSrc.sWeightRate)}
@@ -35,17 +37,17 @@ namespace CaysNet::Optimizer::Supervised
 		//Empty.
 	}
 
-	void Adagrad::applyGradient(std::size_t nActualBatchSize)
+	void RMSProp::applyGradient(std::size_t nActualBatchSize)
 	{
 		const auto nDivisor{1.f / nActualBatchSize};
 
 		for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
 		{
 			for (std::size_t nBiasIndex{0}, nBiasSize{this->sBiasDelta[nIndex].size()}; nBiasIndex < nBiasSize; ++nBiasIndex)
-				this->sBiasRate[nIndex][nBiasIndex] += (this->sBiasDelta[nIndex][nBiasIndex] * nDivisor) * (this->sBiasDelta[nIndex][nBiasIndex] * nDivisor);
+				this->sBiasRate[nIndex][nBiasIndex] = this->nDecay * this->sBiasRate[nIndex][nBiasIndex] + (1.f - this->nDecay) * (this->sBiasDelta[nIndex][nBiasIndex] * nDivisor) * (this->sBiasDelta[nIndex][nBiasIndex] * nDivisor);
 
 			for (std::size_t nWeightIndex{0}, nWeightSize{this->sWeightDelta[nIndex].size()}; nWeightIndex < nWeightSize; ++nWeightIndex)
-				this->sWeightRate[nIndex][nWeightIndex] += (this->sWeightDelta[nIndex][nWeightIndex] * nDivisor) * (this->sWeightDelta[nIndex][nWeightIndex] * nDivisor);
+				this->sWeightRate[nIndex][nWeightIndex] = this->nDecay * this->sWeightRate[nIndex][nWeightIndex] + (1.f - this->nDecay) * (this->sWeightDelta[nIndex][nWeightIndex] * nDivisor) * (this->sWeightDelta[nIndex][nWeightIndex] * nDivisor);
 		}
 
 		for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)

@@ -18,6 +18,7 @@
 #include <cstddef>
 #include <initializer_list>
 #include <limits>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -27,12 +28,11 @@ namespace CaysNet
 	class CAYSNET_DLL NN final : public IO::Serializable
 	{
 	private:
-		std::vector<Layer::Layer *> sLayerList;
+		std::vector<std::unique_ptr<Layer::Layer>> sLayerList;
 		std::vector<std::vector<float>> sOutput;
 
 	public:
 		NN() = default;
-		NN(std::initializer_list<Layer::Layer *> sLayerList);
 		NN(const NN &sSrc);
 		NN(NN &&sSrc);
 		~NN();
@@ -40,42 +40,29 @@ namespace CaysNet
 	public:
 		NN &operator=(const NN &sSrc);
 		NN &operator=(NN &&sSrc);
-		inline Layer::Layer *operator[](std::size_t nIndex);
-		inline const Layer::Layer *operator[](std::size_t nIndex) const;
+		inline std::unique_ptr<Layer::Layer> &operator[](std::size_t nIndex);
+		inline const std::unique_ptr<Layer::Layer> &operator[](std::size_t nIndex) const;
 
 	public:
-		inline std::vector<Layer::Layer *> &layer();
-		inline const std::vector<Layer::Layer *> &layer() const;
+		inline std::vector<std::unique_ptr<Layer::Layer>> &layer();
+		inline const std::vector<std::unique_ptr<Layer::Layer>> &layer() const;
 		inline std::size_t depth() const;
 		inline std::vector<std::vector<float>> &output();
 		inline const std::vector<std::vector<float>> &output() const;
-		inline void addLayer(Layer::Layer *pLayer);
+		template<class NewLayer, class ...NewLayerInitializerParam> void addLayer(NewLayerInitializerParam && ...sParam);
 		template<class Initializer, class ...InitializerParam> void initWeight(InitializerParam && ...sParam);
 		template<class Initializer, class ...InitializerParam> void initBias(InitializerParam && ...sParam);
 		void forward(const float *pInput);
 		void forward(const float *pInput, float *pOutput);
 		void forward(
-			const float *pInput,
-			std::vector<float> *pOutput,
-			std::vector<float> *pActivationInput,
-			std::vector<float> *pActivationOutput) const;
-		void forward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pInput,
 			std::vector<std::vector<float>> *pOutput) const;
-		void forward(
-			std::size_t nBatchSize,
-			const std::vector<float> *pInput,
-			std::vector<std::vector<float>> *pOutput,
-			std::vector<std::vector<float>> *pActivationInput,
-			std::vector<std::vector<float>> *pActivationOutput) const;
 		void backward(
 			const float *pForwardInput,
 			const float *pBackwardInput,
 			const std::vector<float> *pForwardOutput,
 			std::vector<float> *pBackwardOutput,
-			const std::vector<float> *pActivationInput,
-			const std::vector<float> *pActivationOutput,
 			std::vector<float> *pBiasDelta,
 			std::vector<float> *pWeightDelta) const;
 		void backward(
@@ -84,11 +71,8 @@ namespace CaysNet
 			const std::vector<float> *pBackwardInput,
 			const std::vector<std::vector<float>> *pForwardOutput,
 			std::vector<std::vector<float>> *pBackwardOutput,
-			const std::vector<std::vector<float>> *pActivationInput,
-			const std::vector<std::vector<float>> *pActivationOutput,
 			std::vector<float> *pBiasDelta,
-			std::vector<float> *pWeightDelta,
-			std::vector<float> *pBiasDeltaBuffer) const;
+			std::vector<float> *pWeightDelta) const;
 		std::size_t classify(const float *pInput);
 		void classify(std::size_t nBatchSize, const std::vector<float> *pInput, std::size_t *pOutput);
 		template<class LossFunc> float loss(const float *pInput, const float *pOutput);
@@ -98,22 +82,22 @@ namespace CaysNet
 		virtual void deserialize(std::ifstream &sInput) override;
 	};
 
-	inline Layer::Layer *NN::operator[](std::size_t nIndex)
+	inline std::unique_ptr<Layer::Layer> &NN::operator[](std::size_t nIndex)
 	{
 		return this->sLayerList[nIndex];
 	}
 
-	inline const Layer::Layer *NN::operator[](std::size_t nIndex) const
+	inline const std::unique_ptr<Layer::Layer> &NN::operator[](std::size_t nIndex) const
 	{
 		return this->sLayerList[nIndex];
 	}
 
-	inline std::vector<Layer::Layer *> &NN::layer()
+	inline std::vector<std::unique_ptr<Layer::Layer>> &NN::layer()
 	{
 		return this->sLayerList;
 	}
 
-	inline const std::vector<Layer::Layer *> &NN::layer() const
+	inline const std::vector<std::unique_ptr<Layer::Layer>> &NN::layer() const
 	{
 		return this->sLayerList;
 	}
@@ -131,12 +115,6 @@ namespace CaysNet
 	inline const std::vector<std::vector<float>> &NN::output() const
 	{
 		return this->sOutput;
-	}
-
-	void NN::addLayer(Layer::Layer *pLayer)
-	{
-		this->sLayerList.emplace_back(pLayer);
-		this->sOutput.emplace_back(this->sLayerList.back()->fanOut(), .0f);
 	}
 }
 

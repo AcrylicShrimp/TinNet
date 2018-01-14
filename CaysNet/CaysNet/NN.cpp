@@ -8,17 +8,10 @@
 
 namespace CaysNet
 {
-	NN::NN(std::initializer_list<Layer::Layer *> sLayerList) :
-		sLayerList(sLayerList)
-	{
-		for (const auto pLayer : this->sLayerList)
-			this->sOutput.emplace_back(pLayer->fanOut(), .0f);
-	}
-
 	NN::NN(const NN &sSrc) :
 		sOutput{sSrc.sOutput}
 	{
-		for (const auto pLayer : sSrc.sLayerList)
+		for (const auto &pLayer : sSrc.sLayerList)
 			this->sLayerList.emplace_back(pLayer->duplicate());
 	}
 
@@ -31,9 +24,6 @@ namespace CaysNet
 
 	NN::~NN()
 	{
-		for (auto pLayer : this->sLayerList)
-			delete pLayer;
-
 		this->sLayerList.clear();
 		this->sOutput.clear();
 	}
@@ -45,7 +35,9 @@ namespace CaysNet
 
 		this->~NN();
 
-		this->sLayerList = sSrc.sLayerList;
+		for (const auto &pLayer : sSrc.sLayerList)
+			this->sLayerList.emplace_back(pLayer->duplicate());
+
 		this->sOutput = sSrc.sOutput;
 
 		return *this;
@@ -81,18 +73,6 @@ namespace CaysNet
 	}
 
 	void NN::forward(
-		const float *pInput,
-		std::vector<float> *pOutput,
-		std::vector<float> *pActivationInput,
-		std::vector<float> *pActivationOutput) const
-	{
-		this->sLayerList.front()->forward(pInput, pOutput->data(), pActivationInput->data(), pActivationOutput->data());
-
-		for (std::size_t nIndex{1}, nDepth{this->depth()}; nIndex < nDepth; ++nIndex)
-			this->sLayerList[nIndex]->forward(pOutput[nIndex - 1].data(), pOutput[nIndex].data(), pActivationInput[nIndex].data(), pActivationOutput[nIndex].data());
-	}
-
-	void NN::forward(
 		std::size_t nBatchSize,
 		const std::vector<float> *pInput,
 		std::vector<std::vector<float>> *pOutput) const
@@ -103,43 +83,28 @@ namespace CaysNet
 			this->sLayerList[nIndex]->forward(nBatchSize, pOutput[nIndex - 1].data(), pOutput[nIndex].data());
 	}
 
-	void NN::forward(
-		std::size_t nBatchSize,
-		const std::vector<float> *pInput,
-		std::vector<std::vector<float>> *pOutput,
-		std::vector<std::vector<float>> *pActivationInput,
-		std::vector<std::vector<float>> *pActivationOutput) const
-	{
-		this->sLayerList.front()->forward(nBatchSize, pInput, pOutput->data(), pActivationInput->data(), pActivationOutput->data());
-
-		for (std::size_t nIndex{1}, nDepth{this->depth()}; nIndex < nDepth; ++nIndex)
-			this->sLayerList[nIndex]->forward(nBatchSize, pOutput[nIndex - 1].data(), pOutput[nIndex].data(), pActivationInput[nIndex].data(), pActivationOutput[nIndex].data());
-	}
-
 	void NN::backward(
 		const float *pForwardInput,
 		const float *pBackwardInput,
 		const std::vector<float> *pForwardOutput,
 		std::vector<float> *pBackwardOutput,
-		const std::vector<float> *pActivationInput,
-		const std::vector<float> *pActivationOutput,
 		std::vector<float> *pBiasDelta,
 		std::vector<float> *pWeightDelta) const
 	{
 		for (std::size_t nIndex{this->sLayerList.size() - 1}; ; --nIndex)
 		{
-			auto pLayer{this->sLayerList[nIndex]};
-			auto pLayerForwardInput{nIndex == 0 ? pForwardInput : pForwardOutput[nIndex - 1].data()};
-			auto pLayerBackwardInput{nIndex + 1 == this->depth() ? pBackwardInput : pBackwardOutput[nIndex + 1].data()};
+			const auto &pLayer{this->sLayerList[nIndex]};
+			const auto pLayerForwardInput{nIndex == 0 ? pForwardInput : pForwardOutput[nIndex - 1].data()};
+			const auto pLayerBackwardInput{nIndex + 1 == this->depth() ? pBackwardInput : pBackwardOutput[nIndex + 1].data()};
 			auto pLayerBackwardOutput{pBackwardOutput[nIndex].data()};
 
+			for (std::size_t nOut{0}, nOutSize{pBiasDelta[nIndex].size()}; nOut < nOutSize; ++nOut)
+				pBiasDelta[nIndex][nOut] = pLayerBackwardInput[nOut];
+
 			pLayer->backward(
-				pActivationInput[nIndex].data(),
-				pActivationOutput[nIndex].data(),
 				pLayerForwardInput,
 				pLayerBackwardInput,
 				pLayerBackwardOutput,
-				pBiasDelta[nIndex].data(),
 				pWeightDelta[nIndex].data());
 
 			if (!nIndex)
@@ -153,29 +118,26 @@ namespace CaysNet
 		const std::vector<float> *pBackwardInput,
 		const std::vector<std::vector<float>> *pForwardOutput,
 		std::vector<std::vector<float>> *pBackwardOutput,
-		const std::vector<std::vector<float>> *pActivationInput,
-		const std::vector<std::vector<float>> *pActivationOutput,
 		std::vector<float> *pBiasDelta,
-		std::vector<float> *pWeightDelta,
-		std::vector<float> *pBiasDeltaBuffer) const
+		std::vector<float> *pWeightDelta) const
 	{
 		for (std::size_t nIndex{this->sLayerList.size() - 1}; ; --nIndex)
 		{
-			auto pLayer{this->sLayerList[nIndex]};
-			auto pLayerForwardInput{nIndex == 0 ? pForwardInput : pForwardOutput[nIndex - 1].data()};
-			auto pLayerBackwardInput{nIndex + 1 == this->depth() ? pBackwardInput : pBackwardOutput[nIndex + 1].data()};
+			const auto &pLayer{this->sLayerList[nIndex]};
+			const auto pLayerForwardInput{nIndex == 0 ? pForwardInput : pForwardOutput[nIndex - 1].data()};
+			const auto pLayerBackwardInput{nIndex + 1 == this->depth() ? pBackwardInput : pBackwardOutput[nIndex + 1].data()};
 			auto pLayerBackwardOutput{pBackwardOutput[nIndex].data()};
+
+			for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+				for (std::size_t nOut{0}, nOutSize{pBiasDelta[nIndex].size()}; nOut < nOutSize; ++nOut)
+					pBiasDelta[nIndex][nOut] += pLayerBackwardInput[nBatch][nOut];
 
 			pLayer->backward(
 				nBatchSize,
-				pActivationInput[nIndex].data(),
-				pActivationOutput[nIndex].data(),
 				pLayerForwardInput,
 				pLayerBackwardInput,
 				pLayerBackwardOutput,
-				pBiasDelta[nIndex].data(),
-				pWeightDelta[nIndex].data(),
-				pBiasDeltaBuffer[nIndex].data());
+				pWeightDelta[nIndex].data());
 
 			if (!nIndex)
 				break;

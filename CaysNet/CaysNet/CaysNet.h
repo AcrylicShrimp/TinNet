@@ -14,7 +14,6 @@
 
 #include "Layer\Layers.h"
 
-#include "Activation/Activations.h"
 #include "Initializer/Initializers.h"
 #include "Loss/Losses.h"
 #include "Optimizer/Optimizers.h"

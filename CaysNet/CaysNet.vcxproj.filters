@@ -4,9 +4,6 @@
     <Filter Include="CaysNet">
       <UniqueIdentifier>{fb4d872a-1aff-48b9-a082-b5685cfd0211}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CaysNet\Activation">
-      <UniqueIdentifier>{d45bb795-2d2a-4e76-a7ed-43f8b717ccb8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="CaysNet\Optimizer">
       <UniqueIdentifier>{a4417830-d9b1-4f56-b66a-a9b999c2f283}</UniqueIdentifier>
     </Filter>
@@ -33,30 +30,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CaysNet\Activation\Activations.cpp">
-      <Filter>CaysNet\Activation</Filter>
-    </ClCompile>
-    <ClCompile Include="CaysNet\Activation\Linear.cpp">
-      <Filter>CaysNet\Activation</Filter>
-    </ClCompile>
-    <ClCompile Include="CaysNet\Activation\LReLU.cpp">
-      <Filter>CaysNet\Activation</Filter>
-    </ClCompile>
-    <ClCompile Include="CaysNet\Activation\PReLU.cpp">
-      <Filter>CaysNet\Activation</Filter>
-    </ClCompile>
-    <ClCompile Include="CaysNet\Activation\ReLU.cpp">
-      <Filter>CaysNet\Activation</Filter>
-    </ClCompile>
-    <ClCompile Include="CaysNet\Activation\Sigmoid.cpp">
-      <Filter>CaysNet\Activation</Filter>
-    </ClCompile>
-    <ClCompile Include="CaysNet\Activation\Softmax.cpp">
-      <Filter>CaysNet\Activation</Filter>
-    </ClCompile>
-    <ClCompile Include="CaysNet\Activation\TanH.cpp">
-      <Filter>CaysNet\Activation</Filter>
-    </ClCompile>
     <ClCompile Include="CaysNet\Initializer\Constant.cpp">
       <Filter>CaysNet\Initializer</Filter>
     </ClCompile>
@@ -105,59 +78,44 @@
     <ClCompile Include="CaysNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.cpp">
       <Filter>CaysNet\Optimizer\Reinforcement</Filter>
     </ClCompile>
-    <ClCompile Include="CaysNet\Layer\ConvLayer.cpp">
-      <Filter>CaysNet\Layer</Filter>
-    </ClCompile>
     <ClCompile Include="CaysNet\Layer\Layer.cpp">
       <Filter>CaysNet\Layer</Filter>
     </ClCompile>
     <ClCompile Include="CaysNet\Layer\FullLayer.cpp">
       <Filter>CaysNet\Layer</Filter>
     </ClCompile>
-    <ClCompile Include="CaysNet\Activation\Activation.cpp">
-      <Filter>CaysNet\Activation</Filter>
-    </ClCompile>
-    <ClCompile Include="CaysNet\Layer\AveragePoolingLayer.cpp">
-      <Filter>CaysNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="CaysNet\Layer\MaxPoolingLayer.cpp">
-      <Filter>CaysNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="CaysNet\Optimizer\Supervised\NAG.cpp">
+    <ClCompile Include="CaysNet\Optimizer\Supervised\Adagrad.cpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClCompile>
-    <ClCompile Include="CaysNet\Optimizer\Supervised\Adagrad.cpp">
+    <ClCompile Include="CaysNet\Layer\SigmoidLayer.cpp">
+      <Filter>CaysNet\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Optimizer\OptimizerHelper.cpp">
+      <Filter>CaysNet\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Layer\LReLULayer.cpp">
+      <Filter>CaysNet\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Layer\PReLULayer.cpp">
+      <Filter>CaysNet\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Layer\ReLULayer.cpp">
+      <Filter>CaysNet\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Layer\SoftmaxLayer.cpp">
+      <Filter>CaysNet\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Layer\TanhLayer.cpp">
+      <Filter>CaysNet\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Optimizer\Supervised\RMSProp.cpp">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.cpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CaysNet\Activation\Activation.h">
-      <Filter>CaysNet\Activation</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Activation\Activations.h">
-      <Filter>CaysNet\Activation</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Activation\Linear.h">
-      <Filter>CaysNet\Activation</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Activation\LReLU.h">
-      <Filter>CaysNet\Activation</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Activation\PReLU.h">
-      <Filter>CaysNet\Activation</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Activation\ReLU.h">
-      <Filter>CaysNet\Activation</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Activation\Sigmoid.h">
-      <Filter>CaysNet\Activation</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Activation\Softmax.h">
-      <Filter>CaysNet\Activation</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Activation\TanH.h">
-      <Filter>CaysNet\Activation</Filter>
-    </ClInclude>
     <ClInclude Include="CaysNet\Initializer\Constant.h">
       <Filter>CaysNet\Initializer</Filter>
     </ClInclude>
@@ -194,13 +152,7 @@
     <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.h">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClInclude>
-    <ClInclude Include="CaysNet\Optimizer\Supervised\Momentum.hpp">
-      <Filter>CaysNet\Optimizer\Supervised</Filter>
-    </ClInclude>
     <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.h">
-      <Filter>CaysNet\Optimizer\Supervised</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Optimizer\Supervised\SGD.hpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClInclude>
     <ClInclude Include="CaysNet\Optimizer\Optimizers.h">
@@ -233,31 +185,43 @@
     <ClInclude Include="CaysNet\Layer\Layers.h">
       <Filter>CaysNet\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="CaysNet\Layer\ConvLayer.h">
-      <Filter>CaysNet\Layer</Filter>
-    </ClInclude>
     <ClInclude Include="CaysNet\Layer\Layer.h">
       <Filter>CaysNet\Layer</Filter>
     </ClInclude>
     <ClInclude Include="CaysNet\Layer\FullLayer.h">
       <Filter>CaysNet\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="CaysNet\Layer\AveragePoolingLayer.h">
-      <Filter>CaysNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Layer\MaxPoolingLayer.h">
-      <Filter>CaysNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.h">
-      <Filter>CaysNet\Optimizer\Supervised</Filter>
-    </ClInclude>
-    <ClInclude Include="CaysNet\Optimizer\Supervised\NAG.hpp">
-      <Filter>CaysNet\Optimizer\Supervised</Filter>
-    </ClInclude>
     <ClInclude Include="CaysNet\Optimizer\Supervised\Adagrad.h">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClInclude>
-    <ClInclude Include="CaysNet\Optimizer\Supervised\Adagrad.hpp">
+    <ClInclude Include="CaysNet\Layer\SigmoidLayer.h">
+      <Filter>CaysNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\OptimizerHelper.h">
+      <Filter>CaysNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Layer\LReLULayer.h">
+      <Filter>CaysNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Layer\PReLULayer.h">
+      <Filter>CaysNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Layer\ReLULayer.h">
+      <Filter>CaysNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Layer\SoftmaxLayer.h">
+      <Filter>CaysNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Layer\TanhLayer.h">
+      <Filter>CaysNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\RMSProp.h">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.h">
+      <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.hpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClInclude>
   </ItemGroup>

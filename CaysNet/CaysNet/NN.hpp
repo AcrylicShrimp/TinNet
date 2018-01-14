@@ -6,11 +6,17 @@
 
 namespace CaysNet
 {
+	template<class NewLayer, class ...NewLayerInitializerParam> void NN::addLayer(NewLayerInitializerParam && ...sParam)
+	{
+		this->sLayerList.emplace_back(std::make_unique<NewLayer>(std::forward<NewLayerInitializerParam>(sParam)...));
+		this->sOutput.emplace_back(this->sLayerList.back()->fanOut(), .0f);
+	}
+
 	template<class Initializer, class ...InitializerParam> void NN::initWeight(InitializerParam && ...sParam)
 	{
 		Initializer sInitialier(std::forward<InitializerParam>(sParam)...);
 
-		for (auto pLayer : this->sLayerList)
+		for (auto &pLayer : this->sLayerList)
 			sInitialier.initializeWeight(*pLayer);
 	}
 
@@ -18,7 +24,7 @@ namespace CaysNet
 	{
 		Initializer sInitialier(std::forward<InitializerParam>(sParam)...);
 
-		for (auto pLayer : this->sLayerList)
+		for (auto &pLayer : this->sLayerList)
 			sInitialier.initializeBias(*pLayer);
 	}
 
