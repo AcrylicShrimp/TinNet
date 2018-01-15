@@ -29,7 +29,8 @@ namespace CaysNet::Optimizer::Supervised
 				this->sNN.forward(
 					nActualBatchSize,
 					pInput + nBatchIndex,
-					this->sForwardOutput.data());
+					this->sForwardOutput.data(),
+					true);
 
 				for (std::size_t nBatch{0}; nBatch < nActualBatchSize; ++nBatch)
 					LossFunc::derivative(

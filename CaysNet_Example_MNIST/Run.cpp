@@ -44,6 +44,7 @@ int32_t main()
 			for (const auto &pLayer : sNetwork.layer())
 			{
 				std::cout << "\tSummary of the Layer No. " << ++nCount << " :" << std::endl;
+				std::cout << "\tLayer type : " << pLayer->name() << std::endl;
 				std::cout << "\tFan in : " << pLayer->fanIn() << std::endl;
 				std::cout << "\tFan out : " << pLayer->fanOut() << std::endl;
 				std::cout << std::endl << std::endl;
@@ -83,6 +84,7 @@ int32_t main()
 			for (const auto &pLayer : sNetwork.layer())
 			{
 				std::cout << "\tSummary of the Layer No. " << ++nCount << " :" << std::endl;
+				std::cout << "\tLayer type : " << pLayer->name() << std::endl;
 				std::cout << "\tFan in : " << pLayer->fanIn() << std::endl;
 				std::cout << "\tFan out : " << pLayer->fanOut() << std::endl;
 				std::cout << std::endl << std::endl;
@@ -147,13 +149,17 @@ int32_t main()
 		}
 	}
 
-	//Optimizer::Supervised::SGD sOptimizer{sNetwork, 32u, .001f};
-	//Optimizer::Supervised::Momentum sOptimizer{sNetwork, 32, .9f, .001f};
+	Optimizer::Supervised::SGD sOptimizer{sNetwork, 32u, .1f};
+	//Optimizer::Supervised::Momentum sOptimizer{sNetwork, 32, .9f, .005f};
 	//Optimizer::Supervised::NAG sOptimizer{sNetwork, .9f, .001f};
-	Optimizer::Supervised::Adagrad sOptimizer{sNetwork, 32, .005f};
+	//Optimizer::Supervised::Adagrad sOptimizer{sNetwork, 32, .005f};
 	//Optimizer::Supervised::RMSProp sOptimizer{sNetwork, 32, .9f, .001f};
 
 	Visualizer::CSVLossExporter sExporter;
+
+	std::cout << "Serializing network...";
+	sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
+	std::cout << " saved." << std::endl;
 
 	for (;;)
 	{
@@ -163,11 +169,11 @@ int32_t main()
 		sExporter.accrueLoss(nLoss);
 		sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
 
+		sOptimizer.train<Loss::MulticlassCE>(1, 60000, sTrainInput.data(), sTrainOutput.data());
+
 		std::cout << "Serializing network...";
 		sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
 		std::cout << " saved." << std::endl;
-		
-		sOptimizer.train<Loss::MulticlassCE>(1, 60000, sTrainInput.data(), sTrainOutput.data());
 	}
 
 	system("pause");

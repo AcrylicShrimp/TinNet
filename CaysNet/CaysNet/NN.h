@@ -11,6 +11,7 @@
 #include "CaysNetDLL.h"
 
 #include "Layer/Layer.h"
+#include "Layer/LayerIO.h"
 #include "IO/Serializable.h"
 
 #include <algorithm>
@@ -20,6 +21,7 @@
 #include <limits>
 #include <memory>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -57,7 +59,8 @@ namespace CaysNet
 		void forward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pInput,
-			std::vector<std::vector<float>> *pOutput) const;
+			std::vector<std::vector<float>> *pOutput,
+			bool bTrainingPhase = false) const;
 		void backward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pForwardInput,

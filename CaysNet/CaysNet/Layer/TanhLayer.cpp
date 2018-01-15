@@ -30,9 +30,14 @@ namespace CaysNet::Layer
 		return *this;
 	}
 
+	const char *TanhLayer::name() const
+	{
+		return "TanhLayer";
+	}
+
 	std::unique_ptr<Layer> TanhLayer::duplicate() const
 	{
-		return std::make_unique<TanhLayer>(this->nFanIn);
+		return std::make_unique<TanhLayer>(*this);
 	}
 
 	void TanhLayer::initBias(std::function<float()> sGenerator)
@@ -56,7 +61,7 @@ namespace CaysNet::Layer
 			pOutput[nIndex] = std::tanh(pInput[nIndex]);
 	}
 
-	void TanhLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const
+	void TanhLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, bool bTrainingPhase) const
 	{
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 			for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
@@ -81,15 +86,5 @@ namespace CaysNet::Layer
 	void TanhLayer::update(float nFactor, const float *pBiasDelta, const float *pWeightDelta)
 	{
 		//Empty.
-	}
-
-	void TanhLayer::serialize(std::ofstream &sOutput) const
-	{
-		IO::Serializable::write(sOutput, this->nFanIn);
-	}
-
-	void TanhLayer::deserialize(std::ifstream &sInput)
-	{
-		this->nFanIn = this->nFanOut = IO::Serializable::read<std::size_t>(sInput);
 	}
 }

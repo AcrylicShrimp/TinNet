@@ -30,9 +30,14 @@ namespace CaysNet::Layer
 		return *this;
 	}
 
+	const char *SigmoidLayer::name() const
+	{
+		return "SigmoidLayer";
+	}
+
 	std::unique_ptr<Layer> SigmoidLayer::duplicate() const
 	{
-		return std::make_unique<SigmoidLayer>(this->nFanIn);
+		return std::make_unique<SigmoidLayer>(*this);
 	}
 
 	void SigmoidLayer::initBias(std::function<float()> sGenerator)
@@ -56,7 +61,7 @@ namespace CaysNet::Layer
 			pOutput[nIndex] = 1.f / (std::exp(-pInput[nIndex]) + 1.f);
 	}
 
-	void SigmoidLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const
+	void SigmoidLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, bool bTrainingPhase) const
 	{
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 			for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
@@ -81,15 +86,5 @@ namespace CaysNet::Layer
 	void SigmoidLayer::update(float nFactor, const float *pBiasDelta, const float *pWeightDelta)
 	{
 		//Empty.
-	}
-
-	void SigmoidLayer::serialize(std::ofstream &sOutput) const
-	{
-		IO::Serializable::write(sOutput, this->nFanIn);
-	}
-
-	void SigmoidLayer::deserialize(std::ifstream &sInput)
-	{
-		this->nFanIn = this->nFanOut = IO::Serializable::read<std::size_t>(sInput);
 	}
 }

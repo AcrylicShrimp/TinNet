@@ -75,12 +75,13 @@ namespace CaysNet
 	void NN::forward(
 		std::size_t nBatchSize,
 		const std::vector<float> *pInput,
-		std::vector<std::vector<float>> *pOutput) const
+		std::vector<std::vector<float>> *pOutput,
+		bool bTrainingPhase) const
 	{
-		this->sLayerList.front()->forward(nBatchSize, pInput, pOutput->data());
+		this->sLayerList.front()->forward(nBatchSize, pInput, pOutput->data(), bTrainingPhase);
 
 		for (std::size_t nIndex{1}, nDepth{this->depth()}; nIndex < nDepth; ++nIndex)
-			this->sLayerList[nIndex]->forward(nBatchSize, pOutput[nIndex - 1].data(), pOutput[nIndex].data());
+			this->sLayerList[nIndex]->forward(nBatchSize, pOutput[nIndex - 1].data(), pOutput[nIndex].data(), bTrainingPhase);
 	}
 
 	void NN::backward(
@@ -174,26 +175,23 @@ namespace CaysNet
 
 	void NN::serialize(std::ofstream &sOutput) const
 	{
-		//IO::Serializable::write(sOutput, this->sLayerList.size());
-		//
-		//for (auto &pLayer : this->sLayerList)
-		//	pLayer->serialize(sOutput);
+		IO::Serializable::write(sOutput, this->sLayerList.size());
+		
+		for (auto &pLayer : this->sLayerList)
+			Layer::LayerIO::serializeLayer(sOutput, pLayer);
 	}
 
 	void NN::deserialize(std::ifstream &sInput)
 	{
-		//this->sLayerList.clear();
-		//this->sOutput.clear();
-		//
-		//for (std::size_t nIndex{0}, nSize{IO::Serializable::read<std::size_t>(sInput)}; nIndex < nSize; ++nIndex)
-		//{
-		//	auto nFanIn{IO::Serializable::read<std::size_t>(sInput)};
-		//	auto nFanOut{IO::Serializable::read<std::size_t>(sInput)};
-		//
-		//	this->sLayerList.emplace_back(nFanIn, nFanOut, Activation::Activations::createByName(IO::Serializable::readWideString(sInput), sInput));
-		//	this->sOutput.emplace_back(nFanOut, .0f);
-		//
-		//	this->sLayerList.back().deserialize(sInput);
-		//}
+		this->sLayerList.clear();
+		this->sOutput.clear();
+
+		auto nSize{IO::Serializable::read<std::remove_reference_t<decltype(this->sLayerList.size())>>(sInput)};
+		
+		for (std::size_t nIndex{0}; nIndex < nSize; ++nIndex)
+		{
+			this->sLayerList.push_back(Layer::LayerIO::deserializeLayer(sInput));
+			this->sOutput.emplace_back(this->sLayerList.back()->fanOut(), .0f);
+		}
 	}
 }

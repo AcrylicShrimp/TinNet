@@ -24,7 +24,7 @@ namespace CaysNet::Optimizer::Supervised
 
 	void SGD::applyGradient(std::size_t nActualBatchSize)
 	{
-		auto nFactor{this->nLearningRate / nActualBatchSize};
+		auto nFactor{-this->nLearningRate / nActualBatchSize};
 
 		for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
 			this->sNN[nIndex]->update(nFactor, this->sBiasDelta[nIndex].data(), this->sWeightDelta[nIndex].data());

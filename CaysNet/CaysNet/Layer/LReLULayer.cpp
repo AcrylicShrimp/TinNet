@@ -30,9 +30,14 @@ namespace CaysNet::Layer
 		return *this;
 	}
 
+	const char *LReLULayer::name() const
+	{
+		return "LReLULayer";
+	}
+
 	std::unique_ptr<Layer> LReLULayer::duplicate() const
 	{
-		return std::make_unique<LReLULayer>(this->nFanIn);
+		return std::make_unique<LReLULayer>(*this);
 	}
 
 	void LReLULayer::initBias(std::function<float()> sGenerator)
@@ -58,7 +63,7 @@ namespace CaysNet::Layer
 			pOutput[nIndex] = vDesk[pInput[nIndex] > .0f] * pInput[nIndex];
 	}
 
-	void LReLULayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const
+	void LReLULayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, bool bTrainingPhase) const
 	{
 		static constexpr float vDesk[2]{.01f, 1.f};
 
@@ -84,15 +89,5 @@ namespace CaysNet::Layer
 	void LReLULayer::update(float nFactor, const float *pBiasDelta, const float *pWeightDelta)
 	{
 		//Empty.
-	}
-
-	void LReLULayer::serialize(std::ofstream &sOutput) const
-	{
-		IO::Serializable::write(sOutput, this->nFanIn);
-	}
-
-	void LReLULayer::deserialize(std::ifstream &sInput)
-	{
-		this->nFanIn = this->nFanOut = IO::Serializable::read<std::size_t>(sInput);
 	}
 }

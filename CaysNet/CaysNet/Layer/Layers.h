@@ -15,9 +15,9 @@
 #include "FullLayer.h"
 
 #include "SigmoidLayer.h"
-#include "SoftmaxLayer.h"
-
 #include "TanhLayer.h"
+
+#include "SoftmaxLayer.h"
 
 #include "ReLULayer.h"
 #include "LReLULayer.h"

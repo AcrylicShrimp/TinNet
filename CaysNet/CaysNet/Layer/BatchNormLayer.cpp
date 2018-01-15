@@ -86,9 +86,14 @@ namespace CaysNet::Layer
 		return *this;
 	}
 
+	const char *BatchNormLayer::name() const
+	{
+		return "BatchNormLayer";
+	}
+
 	std::unique_ptr<Layer> BatchNormLayer::duplicate() const
 	{
-		return std::unique_ptr<BatchNormLayer>(new BatchNormLayer(this->nFanIn, this->nFanOut));
+		return std::make_unique<BatchNormLayer>(*this);
 	}
 
 	void BatchNormLayer::initBias(std::function<float()> sGenerator)
@@ -117,8 +122,17 @@ namespace CaysNet::Layer
 			pOutput[nIndex] = this->sShift[nIndex] + this->sScale[nIndex] * (pInput[nIndex] - this->sMean[nIndex]) / std::sqrt(this->sVariance[nIndex] + 1e-4f);
 	}
 
-	void BatchNormLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const
+	void BatchNormLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, bool bTrainingPhase) const
 	{
+		if (!bTrainingPhase)
+		{
+			for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+				for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
+					pOutput[nBatch][nIndex] = this->sShift[nIndex] + this->sScale[nIndex] * (pInput[nBatch][nIndex] - this->sMean[nIndex]) / std::sqrt(this->sVariance[nIndex] + 1e-4f);
+
+			return;
+		}
+
 		//Compute the mini-batch mean.
 		std::fill(this->sMeanBuffer.begin(), this->sMeanBuffer.end(), .0f);
 
@@ -211,11 +225,47 @@ namespace CaysNet::Layer
 
 	void BatchNormLayer::serialize(std::ofstream &sOutput) const
 	{
-		//Empty.
+		this->Layer::serialize(sOutput);
+
+		IO::Serializable::write(sOutput, this->nMomentum);
+
+		for (auto nShift : this->sShift)
+			IO::Serializable::write(sOutput, nShift);
+
+		for (auto nScale : this->sScale)
+			IO::Serializable::write(sOutput, nScale);
+
+		for (auto nMean : this->sMean)
+			IO::Serializable::write(sOutput, nMean);
+
+		for (auto nVariance : this->sVariance)
+			IO::Serializable::write(sOutput, nVariance);
 	}
 
 	void BatchNormLayer::deserialize(std::ifstream &sInput)
 	{
-		//Empty.
+		this->Layer::deserialize(sInput);
+
+		this->sShift.resize(this->nFanIn);
+		this->sScale.resize(this->nFanIn);
+		this->sMean.resize(this->nFanIn);
+		this->sVariance.resize(this->nFanIn);
+		this->sMeanBuffer.resize(this->nFanIn, .0f);
+		this->sVarianceBuffer.resize(this->nFanIn, .0f);
+		this->sVarianceInversed.resize(this->nFanIn, .0f);
+
+		this->nMomentum = IO::Serializable::read<decltype(this->nMomentum)>(sInput);
+
+		for (auto &nShift : this->sShift)
+			nShift = IO::Serializable::read<std::remove_reference_t<decltype(nShift)>>(sInput);
+
+		for (auto &nScale : this->sScale)
+			nScale = IO::Serializable::read<std::remove_reference_t<decltype(nScale)>>(sInput);
+
+		for (auto &nMean : this->sMean)
+			nMean = IO::Serializable::read<std::remove_reference_t<decltype(nMean)>>(sInput);
+
+		for (auto &nVariance : this->sVariance)
+			nVariance = IO::Serializable::read<std::remove_reference_t<decltype(nVariance)>>(sInput);
 	}
 }

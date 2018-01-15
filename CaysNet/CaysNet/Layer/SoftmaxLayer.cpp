@@ -22,6 +22,13 @@ namespace CaysNet::Layer
 		//Empty.
 	}
 
+	SoftmaxLayer::SoftmaxLayer(SoftmaxLayer &&sSrc) :
+		Layer(sSrc),
+		sOutput(std::move(sSrc.sOutput))
+	{
+		//Empty.
+	}
+
 	SoftmaxLayer &SoftmaxLayer::operator=(const SoftmaxLayer &sSrc)
 	{
 		if (&sSrc == this)
@@ -33,9 +40,25 @@ namespace CaysNet::Layer
 		return *this;
 	}
 
+	SoftmaxLayer &SoftmaxLayer::operator=(SoftmaxLayer &&sSrc)
+	{
+		if (&sSrc == this)
+			return *this;
+
+		this->Layer::operator=(sSrc);
+		this->sOutput = std::move(sSrc.sOutput);
+
+		return *this;
+	}
+
+	const char *SoftmaxLayer::name() const
+	{
+		return "SoftmaxLayer";
+	}
+
 	std::unique_ptr<Layer> SoftmaxLayer::duplicate() const
 	{
-		return std::make_unique<SoftmaxLayer>(this->nFanIn);
+		return std::make_unique<SoftmaxLayer>(*this);
 	}
 
 	void SoftmaxLayer::initBias(std::function<float()> sGenerator)
@@ -78,7 +101,7 @@ namespace CaysNet::Layer
 			pOutput[nIndex] /= vDesk[1];
 	}
 
-	void SoftmaxLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const
+	void SoftmaxLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, bool bTrainingPhase) const
 	{
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 		{
@@ -128,13 +151,9 @@ namespace CaysNet::Layer
 		//Empty.
 	}
 
-	void SoftmaxLayer::serialize(std::ofstream &sOutput) const
-	{
-		IO::Serializable::write(sOutput, this->nFanIn);
-	}
-
 	void SoftmaxLayer::deserialize(std::ifstream &sInput)
 	{
-		this->nFanIn = this->nFanOut = IO::Serializable::read<std::size_t>(sInput);
+		this->Layer::deserialize(sInput);
+		this->sOutput.resize(this->nFanIn);
 	}
 }

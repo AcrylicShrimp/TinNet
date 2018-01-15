@@ -120,6 +120,9 @@
     <ClCompile Include="CaysNet\Vector.cpp">
       <Filter>CaysNet</Filter>
     </ClCompile>
+    <ClCompile Include="CaysNet\Layer\LayerIO.cpp">
+      <Filter>CaysNet\Layer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaysNet\Initializer\Constant.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="CaysNet\Vector.h">
       <Filter>CaysNet</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Layer\LayerIO.h">
+      <Filter>CaysNet\Layer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

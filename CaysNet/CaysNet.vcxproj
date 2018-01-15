@@ -267,6 +267,7 @@
     <ClCompile Include="CaysNet\Layer\BatchNormLayer.cpp" />
     <ClCompile Include="CaysNet\Layer\FullLayer.cpp" />
     <ClCompile Include="CaysNet\Layer\Layer.cpp" />
+    <ClCompile Include="CaysNet\Layer\LayerIO.cpp" />
     <ClCompile Include="CaysNet\Layer\LReLULayer.cpp" />
     <ClCompile Include="CaysNet\Layer\PReLULayer.cpp" />
     <ClCompile Include="CaysNet\Layer\ReLULayer.cpp" />
@@ -346,6 +347,7 @@
     <ClInclude Include="CaysNet\Layer\BatchNormLayer.h" />
     <ClInclude Include="CaysNet\Layer\FullLayer.h" />
     <ClInclude Include="CaysNet\Layer\Layer.h" />
+    <ClInclude Include="CaysNet\Layer\LayerIO.h" />
     <ClInclude Include="CaysNet\Layer\Layers.h" />
     <ClInclude Include="CaysNet\Layer\LReLULayer.h" />
     <ClInclude Include="CaysNet\Layer\PReLULayer.h" />

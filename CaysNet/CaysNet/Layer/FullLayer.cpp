@@ -11,9 +11,10 @@ namespace CaysNet::Layer
 	FullLayer::FullLayer(std::size_t nFanIn, std::size_t nFanOut) :
 		Layer(nFanIn, nFanOut),
 		sBias(nFanOut, .0f),
-		sWeight(nFanOut, std::vector<float>(nFanIn, .0f))
+		sWeight(nFanOut)
 	{
-		//Empty.
+		for (auto &sWeight : this->sWeight)
+			sWeight.resize(this->nFanIn);
 	}
 
 	FullLayer::FullLayer(const FullLayer &sSrc) :
@@ -37,10 +38,9 @@ namespace CaysNet::Layer
 		if (&sSrc == this)
 			return *this;
 
-		this->sWeight = sSrc.sWeight;
-		this->sBias = sSrc.sBias;
-
 		this->Layer::operator=(sSrc);
+		this->sBias = sSrc.sBias;
+		this->sWeight = sSrc.sWeight;
 
 		return *this;
 	}
@@ -50,17 +50,21 @@ namespace CaysNet::Layer
 		if (&sSrc == this)
 			return *this;
 
+		this->Layer::operator=(std::move(sSrc));
 		this->sWeight = std::move(sSrc.sWeight);
 		this->sBias = std::move(sSrc.sBias);
-
-		this->Layer::operator=(std::move(sSrc));
 
 		return *this;
 	}
 
+	const char *FullLayer::name() const
+	{
+		return "FullLayer";
+	}
+
 	std::unique_ptr<Layer> FullLayer::duplicate() const
 	{
-		return std::unique_ptr<FullLayer>(new FullLayer(this->nFanIn, this->nFanOut));
+		return std::unique_ptr<FullLayer>(new FullLayer(*this));
 	}
 
 	void FullLayer::initBias(std::function<float()> sGenerator)
@@ -93,7 +97,7 @@ namespace CaysNet::Layer
 		}
 	}
 
-	void FullLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const
+	void FullLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, bool bTrainingPhase) const
 	{
 		//z = b
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
@@ -142,21 +146,32 @@ namespace CaysNet::Layer
 
 	void FullLayer::serialize(std::ofstream &sOutput) const
 	{
-		for (auto &sWeight : this->sWeight)
-			for (auto nWeight : sWeight)
-				IO::Serializable::write(sOutput, nWeight);
+		this->Layer::serialize(sOutput);
 
 		for (auto nBias : this->sBias)
 			IO::Serializable::write(sOutput, nBias);
+
+		for (auto &sWeight : this->sWeight)
+			for (auto nWeight : sWeight)
+				IO::Serializable::write(sOutput, nWeight);
 	}
 
 	void FullLayer::deserialize(std::ifstream &sInput)
 	{
-		for (auto &sWeight : this->sWeight)
-			for (auto &nWeight : sWeight)
-				nWeight = IO::Serializable::read<float>(sInput);
+		this->Layer::deserialize(sInput);
+
+		this->sBias.resize(this->nFanOut);
+		this->sWeight.resize(this->nFanOut);
 
 		for (auto &nBias : this->sBias)
-			nBias = IO::Serializable::read<float>(sInput);
+			nBias = IO::Serializable::read<std::remove_reference_t<decltype(nBias)>>(sInput);
+
+		for (auto &sWeight : this->sWeight)
+		{
+			sWeight.resize(this->nFanIn);
+
+			for (auto &nWeight : sWeight)
+				nWeight = IO::Serializable::read<std::remove_reference_t<decltype(nWeight)>>(sInput);
+		}
 	}
 }

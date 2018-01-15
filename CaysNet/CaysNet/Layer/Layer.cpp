@@ -32,4 +32,16 @@ namespace CaysNet::Layer
 
 		return *this;
 	}
+
+	void Layer::serialize(std::ofstream &sOutput) const
+	{
+		IO::Serializable::write(sOutput, this->nFanIn);
+		IO::Serializable::write(sOutput, this->nFanOut);
+	}
+
+	void Layer::deserialize(std::ifstream &sInput)
+	{
+		this->nFanIn = IO::Serializable::read<decltype(this->nFanIn)>(sInput);
+		this->nFanOut = IO::Serializable::read<decltype(this->nFanOut)>(sInput);
+	}
 }

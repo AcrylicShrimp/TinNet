@@ -33,9 +33,14 @@ namespace CaysNet::Layer
 		return *this;
 	}
 	
+	const char *PReLULayer::name() const
+	{
+		return "PReLULayer";
+	}
+
 	std::unique_ptr<Layer> PReLULayer::duplicate() const
 	{
-		return std::make_unique<PReLULayer>(this->nFanIn, this->nParam);
+		return std::make_unique<PReLULayer>(*this);
 	}
 
 	void PReLULayer::initBias(std::function<float()> sGenerator)
@@ -61,7 +66,7 @@ namespace CaysNet::Layer
 			pOutput[nIndex] = vDesk[pInput[nIndex] > .0f] * pInput[nIndex];
 	}
 
-	void PReLULayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput) const
+	void PReLULayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, bool bTrainingPhase) const
 	{
 		float vDesk[2]{this->nParam, 1.f};
 
@@ -91,11 +96,13 @@ namespace CaysNet::Layer
 
 	void PReLULayer::serialize(std::ofstream &sOutput) const
 	{
-		IO::Serializable::write(sOutput, this->nFanIn);
+		this->Layer::serialize(sOutput);
+		IO::Serializable::write(sOutput, this->nParam);
 	}
 
 	void PReLULayer::deserialize(std::ifstream &sInput)
 	{
-		this->nFanIn = this->nFanOut = IO::Serializable::read<std::size_t>(sInput);
+		this->Layer::deserialize(sInput);
+		this->nParam = IO::Serializable::read<std::remove_reference_t<decltype(nParam)>>(sInput);
 	}
 }
