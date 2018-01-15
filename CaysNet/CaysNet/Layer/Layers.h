@@ -10,6 +10,8 @@
 
 #include "Layer.h"
 
+#include "BatchNormLayer.h"
+
 #include "FullLayer.h"
 
 #include "SigmoidLayer.h"

@@ -59,13 +59,6 @@ namespace CaysNet
 			const std::vector<float> *pInput,
 			std::vector<std::vector<float>> *pOutput) const;
 		void backward(
-			const float *pForwardInput,
-			const float *pBackwardInput,
-			const std::vector<float> *pForwardOutput,
-			std::vector<float> *pBackwardOutput,
-			std::vector<float> *pBiasDelta,
-			std::vector<float> *pWeightDelta) const;
-		void backward(
 			std::size_t nBatchSize,
 			const std::vector<float> *pForwardInput,
 			const std::vector<float> *pBackwardInput,

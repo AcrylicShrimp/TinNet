@@ -264,6 +264,7 @@
     <ClCompile Include="CaysNet\Initializer\Uniform.cpp" />
     <ClCompile Include="CaysNet\Initializer\Xavier.cpp" />
     <ClCompile Include="CaysNet\IO\Serializable.cpp" />
+    <ClCompile Include="CaysNet\Layer\BatchNormLayer.cpp" />
     <ClCompile Include="CaysNet\Layer\FullLayer.cpp" />
     <ClCompile Include="CaysNet\Layer\Layer.cpp" />
     <ClCompile Include="CaysNet\Layer\LReLULayer.cpp" />
@@ -329,6 +330,7 @@
     </ClCompile>
     <ClCompile Include="CaysNet\Optimizer\Supervised\SGD.cpp" />
     <ClCompile Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.cpp" />
+    <ClCompile Include="CaysNet\Vector.cpp" />
     <ClCompile Include="CaysNet\Visualizer\ConsoleVisualizer.cpp" />
     <ClCompile Include="CaysNet\Visualizer\CSVLossExporter.cpp" />
     <ClInclude Include="CaysNet\CaysNet.h" />
@@ -341,6 +343,7 @@
     <ClInclude Include="CaysNet\Initializer\Uniform.h" />
     <ClInclude Include="CaysNet\Initializer\Xavier.h" />
     <ClInclude Include="CaysNet\IO\Serializable.h" />
+    <ClInclude Include="CaysNet\Layer\BatchNormLayer.h" />
     <ClInclude Include="CaysNet\Layer\FullLayer.h" />
     <ClInclude Include="CaysNet\Layer\Layer.h" />
     <ClInclude Include="CaysNet\Layer\Layers.h" />
@@ -413,6 +416,7 @@
   <ItemGroup>
     <ClInclude Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.h" />
     <ClInclude Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.hpp" />
+    <ClInclude Include="CaysNet\Vector.h" />
     <ClInclude Include="CaysNet\Visualizer\ConsoleVisualizer.h" />
     <ClInclude Include="CaysNet\Visualizer\CSVLossExporter.h" />
   </ItemGroup>

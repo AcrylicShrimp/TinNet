@@ -1,36 +1,49 @@
 
 /*
-	2018.01.14
+	2018.01.15
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_CAYSNET_LAYER_SOFTMAXLAYER_H
+#ifndef _CLASS_CAYSNET_OPTIMIZER_SUPERVISED_BATCHNORMLAYER_H
 
-#define _CLASS_CAYSNET_LAYER_SOFTMAXLAYER_H
+#define _CLASS_CAYSNET_OPTIMIZER_SUPERVISED_BATCHNORMLAYER_H
 
 #include "../CaysNetDLL.h"
 
 #include "../Layer/Layer.h"
 #include "../IO/Serializable.h"
+#include "../Vector.h"
 
-#include <cmath>
+#include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <memory>
+#include <utility>
+#include <vector>
 
 namespace CaysNet::Layer
 {
-	class CAYSNET_DLL SoftmaxLayer : public Layer
+	class CAYSNET_DLL BatchNormLayer final : public Layer
 	{
-	private:
-		mutable std::vector<float> sOutput;
+	protected:
+		float nMomentum;
+		mutable std::vector<float> sShift;
+		mutable std::vector<float> sScale;
+		mutable std::vector<float> sMean;
+		mutable std::vector<float> sVariance;
+		mutable std::vector<float> sMeanBuffer;
+		mutable std::vector<float> sVarianceBuffer;
+		mutable std::vector<float> sVarianceInversed;
 
 	public:
-		SoftmaxLayer(std::size_t nFanIn);
-		SoftmaxLayer(const SoftmaxLayer &sSrc);
-		~SoftmaxLayer() = default;
+		BatchNormLayer(std::size_t nFanIn, float nNewMomentum);
+		BatchNormLayer(const BatchNormLayer &sSrc);
+		BatchNormLayer(BatchNormLayer &&sSrc);
+		~BatchNormLayer() = default;
 		
 	public:
-		SoftmaxLayer &operator=(const SoftmaxLayer &sSrc);
+		BatchNormLayer &operator=(const BatchNormLayer &sSrc);
+		BatchNormLayer &operator=(BatchNormLayer &&sSrc);
 		
 	public:
 		virtual std::unique_ptr<Layer> duplicate() const override;

@@ -70,14 +70,6 @@ namespace CaysNet::Layer
 				pOutput[nBatch][nIndex] = vDesk[pInput[nBatch][nIndex] > .0f] * pInput[nBatch][nIndex];
 	}
 
-	void PReLULayer::backward(const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput, float *pWeightDelta) const
-	{
-		float vDesk[2]{this->nParam, 1.f};
-
-		for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
-			pBackwardOutput[nIndex] = pBackwardInput[nIndex] * vDesk[pForwardInput[nIndex] > .0f];
-	}
-
 	void PReLULayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pWeightDelta) const
 	{
 		float vDesk[2]{this->nParam, 1.f};

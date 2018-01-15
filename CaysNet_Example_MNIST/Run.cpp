@@ -54,16 +54,22 @@ int32_t main()
 		else if (sCommand == "new")
 		{
 			sNetwork.addLayer<Layer::FullLayer>(784, 50);
+			sNetwork.addLayer<Layer::BatchNormLayer>(50, .9f);
 			sNetwork.addLayer<Layer::LReLULayer>(50);
 			sNetwork.addLayer<Layer::FullLayer>(50, 50);
+			sNetwork.addLayer<Layer::BatchNormLayer>(50, .9f);
 			sNetwork.addLayer<Layer::LReLULayer>(50);
 			sNetwork.addLayer<Layer::FullLayer>(50, 50);
+			sNetwork.addLayer<Layer::BatchNormLayer>(50, .9f);
 			sNetwork.addLayer<Layer::LReLULayer>(50);
 			sNetwork.addLayer<Layer::FullLayer>(50, 50);
+			sNetwork.addLayer<Layer::BatchNormLayer>(50, .9f);
 			sNetwork.addLayer<Layer::LReLULayer>(50);
 			sNetwork.addLayer<Layer::FullLayer>(50, 50);
+			sNetwork.addLayer<Layer::BatchNormLayer>(50, .9f);
 			sNetwork.addLayer<Layer::LReLULayer>(50);
 			sNetwork.addLayer<Layer::FullLayer>(50, 50);
+			sNetwork.addLayer<Layer::BatchNormLayer>(50, .9f);
 			sNetwork.addLayer<Layer::LReLULayer>(50);
 			sNetwork.addLayer<Layer::FullLayer>(50, 10);
 			sNetwork.addLayer<Layer::SoftmaxLayer>(10);
@@ -144,8 +150,8 @@ int32_t main()
 	//Optimizer::Supervised::SGD sOptimizer{sNetwork, 32u, .001f};
 	//Optimizer::Supervised::Momentum sOptimizer{sNetwork, 32, .9f, .001f};
 	//Optimizer::Supervised::NAG sOptimizer{sNetwork, .9f, .001f};
-	//Optimizer::Supervised::Adagrad sOptimizer{sNetwork, 32, .001f};
-	Optimizer::Supervised::RMSProp sOptimizer{sNetwork, 32, .9f, .00005f};
+	Optimizer::Supervised::Adagrad sOptimizer{sNetwork, 32, .005f};
+	//Optimizer::Supervised::RMSProp sOptimizer{sNetwork, 32, .9f, .001f};
 
 	Visualizer::CSVLossExporter sExporter;
 

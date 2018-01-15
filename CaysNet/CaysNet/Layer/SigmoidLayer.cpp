@@ -63,15 +63,6 @@ namespace CaysNet::Layer
 				pOutput[nBatch][nIndex] = 1.f / (std::exp(-pInput[nBatch][nIndex]) + 1.f);
 	}
 
-	void SigmoidLayer::backward(const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput, float *pWeightDelta) const
-	{
-		for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
-		{
-			auto nValue{1.f / (std::exp(-pForwardInput[nIndex]) + 1.f)};
-			pBackwardOutput[nIndex] = pBackwardInput[nIndex] * nValue * (1.f - nValue);
-		}
-	}
-
 	void SigmoidLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pWeightDelta) const
 	{
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)

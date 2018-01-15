@@ -106,20 +106,8 @@ namespace CaysNet::Layer
 					pOutput[nBatch][nOut] += pInput[nBatch][nIn] * this->sWeight[nOut][nIn];
 	}
 
-	void FullLayer::backward(const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput, float *pWeightDelta) const
-	{
-		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-				pWeightDelta[nOut * this->nFanIn + nIn] = pBackwardInput[nOut] * pForwardInput[nIn];
-
-		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
-			for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
-				pBackwardOutput[nIn] += pBackwardInput[nOut] * this->sWeight[nOut][nIn];
-	}
-
 	void FullLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pWeightDelta) const
 	{
-		//Take the derivation of the activation function.
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 		{
 			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)

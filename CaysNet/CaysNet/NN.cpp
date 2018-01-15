@@ -84,35 +84,6 @@ namespace CaysNet
 	}
 
 	void NN::backward(
-		const float *pForwardInput,
-		const float *pBackwardInput,
-		const std::vector<float> *pForwardOutput,
-		std::vector<float> *pBackwardOutput,
-		std::vector<float> *pBiasDelta,
-		std::vector<float> *pWeightDelta) const
-	{
-		for (std::size_t nIndex{this->sLayerList.size() - 1}; ; --nIndex)
-		{
-			const auto &pLayer{this->sLayerList[nIndex]};
-			const auto pLayerForwardInput{nIndex == 0 ? pForwardInput : pForwardOutput[nIndex - 1].data()};
-			const auto pLayerBackwardInput{nIndex + 1 == this->depth() ? pBackwardInput : pBackwardOutput[nIndex + 1].data()};
-			auto pLayerBackwardOutput{pBackwardOutput[nIndex].data()};
-
-			for (std::size_t nOut{0}, nOutSize{pBiasDelta[nIndex].size()}; nOut < nOutSize; ++nOut)
-				pBiasDelta[nIndex][nOut] = pLayerBackwardInput[nOut];
-
-			pLayer->backward(
-				pLayerForwardInput,
-				pLayerBackwardInput,
-				pLayerBackwardOutput,
-				pWeightDelta[nIndex].data());
-
-			if (!nIndex)
-				break;
-		}
-	}
-
-	void NN::backward(
 		std::size_t nBatchSize,
 		const std::vector<float> *pForwardInput,
 		const std::vector<float> *pBackwardInput,

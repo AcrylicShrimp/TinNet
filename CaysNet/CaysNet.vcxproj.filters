@@ -114,6 +114,12 @@
     <ClCompile Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.cpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
     </ClCompile>
+    <ClCompile Include="CaysNet\Layer\BatchNormLayer.cpp">
+      <Filter>CaysNet\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="CaysNet\Vector.cpp">
+      <Filter>CaysNet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaysNet\Initializer\Constant.h">
@@ -223,6 +229,12 @@
     </ClInclude>
     <ClInclude Include="CaysNet\Optimizer\Supervised\SupervisedOptimizerBase.hpp">
       <Filter>CaysNet\Optimizer\Supervised</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Layer\BatchNormLayer.h">
+      <Filter>CaysNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="CaysNet\Vector.h">
+      <Filter>CaysNet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

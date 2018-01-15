@@ -63,15 +63,6 @@ namespace CaysNet::Layer
 				pOutput[nBatch][nIndex] = std::tanh(pInput[nBatch][nIndex]);
 	}
 
-	void TanhLayer::backward(const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput, float *pWeightDelta) const
-	{
-		for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
-		{
-			auto nValue{std::tanh(pForwardInput[nIndex])};
-			pBackwardOutput[nIndex] = pBackwardInput[nIndex] * (1.f - nValue * nValue);
-		}
-	}
-
 	void TanhLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pWeightDelta) const
 	{
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
