@@ -11,6 +11,7 @@ A C++14 based deep learning library. Easy to use!
 * Momentum
 * Adagrad
 * RMSProp
+* Adam
 
 ### Supported loss functions
 * MSE
