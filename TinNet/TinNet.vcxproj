@@ -213,6 +213,7 @@
     <ClCompile Include="TinNet\Initializer\Xavier.cpp" />
     <ClCompile Include="TinNet\IO\Serializable.cpp" />
     <ClCompile Include="TinNet\Layer\BatchNormLayer.cpp" />
+    <ClCompile Include="TinNet\Layer\ConvLayer.cpp" />
     <ClCompile Include="TinNet\Layer\FullLayer.cpp" />
     <ClCompile Include="TinNet\Layer\Layer.cpp" />
     <ClCompile Include="TinNet\Layer\LayerIO.cpp" />
@@ -254,6 +255,7 @@
     <ClInclude Include="TinNet\Initializer\Xavier.h" />
     <ClInclude Include="TinNet\IO\Serializable.h" />
     <ClInclude Include="TinNet\Layer\BatchNormLayer.h" />
+    <ClInclude Include="TinNet\Layer\ConvLayer.h" />
     <ClInclude Include="TinNet\Layer\FullLayer.h" />
     <ClInclude Include="TinNet\Layer\Layer.h" />
     <ClInclude Include="TinNet\Layer\LayerIO.h" />

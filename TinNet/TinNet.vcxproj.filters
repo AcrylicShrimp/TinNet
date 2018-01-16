@@ -123,6 +123,9 @@
     <ClCompile Include="TinNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.cpp">
       <Filter>TinNet\Optimizer\Reinforcement</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Layer\ConvLayer.cpp">
+      <Filter>TinNet\Layer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\NN.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="TinNet\Optimizer\Reinforcement\MonteCarloPolicyGradient.h">
       <Filter>TinNet\Optimizer\Reinforcement</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Layer\ConvLayer.h">
+      <Filter>TinNet\Layer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

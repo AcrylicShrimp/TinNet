@@ -23,7 +23,7 @@
 
 namespace TinNet::Layer
 {
-	class TINNET_DLL FullLayer final : public Layer
+	class TINNET_DLL FullLayer : public Layer
 	{
 	protected:
 		std::vector<float> sBias;

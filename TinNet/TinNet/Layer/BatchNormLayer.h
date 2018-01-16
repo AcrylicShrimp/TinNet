@@ -23,7 +23,7 @@
 
 namespace TinNet::Layer
 {
-	class TINNET_DLL BatchNormLayer final : public Layer
+	class TINNET_DLL BatchNormLayer : public Layer
 	{
 	protected:
 		float nMomentum;
