@@ -100,18 +100,18 @@ namespace TinNet::Layer
 
 	void MaxPoolingLayer::forward(const float *pInput, float *pOutput) const
 	{
-		for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
+		for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
 		{
-			const auto pChannelInput{pInput + nChannelIndex * this->nWidth * this->nHeight};
-			auto pChannelOutput{pOutput + nChannelIndex * this->nOutputWidth * this->nOutputHeight};
+			const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
 
-			for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
+			for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
 			{
-				const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
+				const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
 
-				for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+				for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
 				{
-					const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+					const auto pChannelInput{pInput + nChannelIndex * this->nWidth * this->nHeight};
+					auto pChannelOutput{pOutput + nChannelIndex * this->nOutputWidth * this->nOutputHeight};
 
 					for (std::size_t nPoolingY{0}; nPoolingY < this->nPoolingHeight; ++nPoolingY)
 					{
@@ -134,18 +134,18 @@ namespace TinNet::Layer
 	void MaxPoolingLayer::forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, bool bTrainingPhase) const
 	{
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
-			for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
+			for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
 			{
-				const auto pChannelInput{pInput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
-				auto pChannelOutput{pOutput[nBatch].data() + nChannelIndex * this->nOutputWidth * this->nOutputHeight};
+				const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
 
-				for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
+				for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
 				{
-					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
+					const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
 
-					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+					for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
 					{
-						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+						const auto pChannelInput{pInput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
+						auto pChannelOutput{pOutput[nBatch].data() + nChannelIndex * this->nOutputWidth * this->nOutputHeight};
 
 						for (std::size_t nPoolingY{0}; nPoolingY < this->nPoolingHeight; ++nPoolingY)
 						{
@@ -168,19 +168,19 @@ namespace TinNet::Layer
 	void MaxPoolingLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pBiasDelta, float *pWeightDelta) const
 	{
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
-			for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
+			for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
 			{
-				const auto pChannelForwardInput{pForwardInput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
-				const auto pChannelBackwardInput{pBackwardInput[nBatch].data() + nChannelIndex * this->nOutputWidth * this->nOutputHeight};
-				auto pChannelBackwardOutput{pBackwardOutput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
+				const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
 
-				for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
+				for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
 				{
-					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
+					const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
 
-					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+					for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
 					{
-						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+						const auto pChannelForwardInput{pForwardInput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
+						const auto pChannelBackwardInput{pBackwardInput[nBatch].data() + nChannelIndex * this->nOutputWidth * this->nOutputHeight};
+						auto pChannelBackwardOutput{pBackwardOutput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
 
 						for (std::size_t nPoolingY{0}; nPoolingY < this->nPoolingHeight; ++nPoolingY)
 						{

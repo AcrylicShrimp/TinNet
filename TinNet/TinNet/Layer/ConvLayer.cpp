@@ -162,41 +162,41 @@ namespace TinNet::Layer
 			for (std::size_t nOutputIndex{0}, nOutputSize{this->nOutputWidth * this->nOutputHeight}; nOutputIndex < nOutputSize; ++nOutputIndex)
 				pFilterOutput[nOutputIndex] = this->sBias[nFilterIndex];
 
-			for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
+			for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
 			{
-				const auto pChannelInput{pInput + nChannelIndex * this->nWidth * this->nHeight};
+				const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
 
-				for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
+				for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
 				{
-					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
+					const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
 
-					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+					for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
 					{
-						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+						const auto nY{nStrideOffsetY + nFilterY};
 
-						for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
+						if (nY < this->nZeroPaddingVerticalNegative)
+							continue;
+
+						if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+							continue;
+
+						const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+
+						for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
 						{
-							const auto nY{nStrideOffsetY + nFilterY};
+							const auto nX{nStrideOffsetX + nFilterX};
 
-							if (nY < this->nZeroPaddingVerticalNegative)
+							if (nX < this->nZeroPaddingHorizontalNegative)
 								continue;
 
-							if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+							if (nX >= this->nZeroPaddingHorizontalNegative + this->nWidth)
 								continue;
 
-							const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+							const auto nInputX{nX - this->nZeroPaddingHorizontalNegative};
 
-							for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
+							for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
 							{
-								const auto nX{nStrideOffsetX + nFilterX};
-
-								if (nX < this->nZeroPaddingHorizontalNegative)
-									continue;
-
-								if (nX >= this->nZeroPaddingHorizontalNegative + this->nWidth)
-									continue;
-
-								const auto nInputX{nX - this->nZeroPaddingHorizontalNegative};
+								const auto pChannelInput{pInput + nChannelIndex * this->nWidth * this->nHeight};
 
 								pFilterOutput[nOutputY * this->nOutputWidth + nOutputX] +=
 									pChannelInput[nInputY * this->nWidth + nInputX] *
@@ -224,41 +224,41 @@ namespace TinNet::Layer
 			for (std::size_t nOutputIndex{0}, nOutputSize{this->nOutputWidth * this->nOutputHeight}; nOutputIndex < nOutputSize; ++nOutputIndex)
 				pFilterOutput[nOutputIndex] = this->sBias[nFilterIndex];
 
-			for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
+			for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
 			{
-				const auto pChannelInput{pInput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
+				const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
 
-				for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
+				for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
 				{
-					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
+					const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
 
-					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+					for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
 					{
-						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+						const auto nY{nStrideOffsetY + nFilterY};
 
-						for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
+						if (nY < this->nZeroPaddingVerticalNegative)
+							continue;
+
+						if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+							continue;
+
+						const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+
+						for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
 						{
-							const auto nY{nStrideOffsetY + nFilterY};
+							const auto nX{nStrideOffsetX + nFilterX};
 
-							if (nY < this->nZeroPaddingVerticalNegative)
+							if (nX < this->nZeroPaddingHorizontalNegative)
 								continue;
 
-							if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+							if (nX >= this->nZeroPaddingHorizontalNegative + this->nWidth)
 								continue;
 
-							const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+							const auto nInputX{nX - this->nZeroPaddingHorizontalNegative};
 
-							for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
+							for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
 							{
-								const auto nX{nStrideOffsetX + nFilterX};
-
-								if (nX < this->nZeroPaddingHorizontalNegative)
-									continue;
-
-								if (nX >= this->nZeroPaddingHorizontalNegative + this->nWidth)
-									continue;
-
-								const auto nInputX{nX - this->nZeroPaddingHorizontalNegative};
+								const auto pChannelInput{pInput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
 
 								pFilterOutput[nOutputY * this->nOutputWidth + nOutputX] +=
 									pChannelInput[nInputY * this->nWidth + nInputX] *
@@ -290,43 +290,43 @@ namespace TinNet::Layer
 			for (std::size_t nOutputIndex{0}, nOutputSize{this->nOutputWidth * this->nOutputHeight}; nOutputIndex < nOutputSize; ++nOutputIndex)
 				pBiasDelta[nFilterIndex] += pFilterBackwardInput[nOutputIndex];
 
-			for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
+			for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
 			{
-				const auto pChannelForwardInput{pForwardInput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
-				auto pChannelBackwardOutput{pBackwardOutput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
-				auto pChannelWeightDelta{pFilterWeightDelta + nChannelIndex * this->nFilterWidth * this->nFilterHeight};
+				const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
 
-				for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
+				for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
 				{
-					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
+					const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
 
-					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+					for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
 					{
-						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+						const auto nY{nStrideOffsetY + nFilterY};
 
-						for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
+						if (nY < this->nZeroPaddingVerticalNegative)
+							continue;
+
+						if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+							continue;
+
+						const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+
+						for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
 						{
-							const auto nY{nStrideOffsetY + nFilterY};
+							const auto nX{nStrideOffsetX + nFilterX};
 
-							if (nY < this->nZeroPaddingVerticalNegative)
+							if (nX < this->nZeroPaddingHorizontalNegative)
 								continue;
 
-							if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+							if (nX >= this->nZeroPaddingHorizontalNegative + this->nWidth)
 								continue;
 
-							const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+							const auto nInputX{nX - this->nZeroPaddingHorizontalNegative};
 
-							for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
+							for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
 							{
-								const auto nX{nStrideOffsetX + nFilterX};
-
-								if (nX < this->nZeroPaddingHorizontalNegative)
-									continue;
-
-								if (nX >= this->nZeroPaddingHorizontalNegative + this->nWidth)
-									continue;
-
-								const auto nInputX{nX - this->nZeroPaddingHorizontalNegative};
+								const auto pChannelForwardInput{pForwardInput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
+								auto pChannelBackwardOutput{pBackwardOutput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
+								auto pChannelWeightDelta{pFilterWeightDelta + nChannelIndex * this->nFilterWidth * this->nFilterHeight};
 
 								pChannelWeightDelta[nFilterY * this->nFilterWidth + nFilterX] +=
 									pFilterBackwardInput[nOutputY * this->nOutputWidth + nOutputX] *
