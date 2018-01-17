@@ -167,7 +167,7 @@ namespace TinNet::Layer
 				pOutput[nBatch][nIndex] = this->sShift[nIndex] + this->sScale[nIndex] * (pInput[nBatch][nIndex] - this->sMeanBuffer[nIndex]) * this->sVarianceInversed[nIndex];
 	}
 
-	void BatchNormLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pWeightDelta) const
+	void BatchNormLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pBiasDelta, float *pWeightDelta) const
 	{
 		//Shift delta
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)

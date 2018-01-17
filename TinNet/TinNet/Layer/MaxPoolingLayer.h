@@ -1,12 +1,12 @@
 
 /*
-	2018.01.15
+	2018.01.17
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_OPTIMIZER_SUPERVISED_BATCHNORMLAYER_H
+#ifndef _CLASS_TINNET_LAYER_MAXPOOLINGLAYER_H
 
-#define _CLASS_TINNET_OPTIMIZER_SUPERVISED_BATCHNORMLAYER_H
+#define _CLASS_TINNET_LAYER_MAXPOOLINGLAYER_H
 
 #include "../TinNetDLL.h"
 
@@ -14,36 +14,44 @@
 #include "../IO/Serializable.h"
 
 #include <algorithm>
-#include <cassert>
 #include <cstddef>
-#include <memory>
-#include <type_traits>
+#include <tuple>
 #include <utility>
 #include <vector>
 
 namespace TinNet::Layer
 {
-	class TINNET_DLL BatchNormLayer : public Layer
+	class TINNET_DLL MaxPoolingLayer : public Layer
 	{
 	protected:
-		float nMomentum;
-		mutable std::vector<float> sShift;
-		mutable std::vector<float> sScale;
-		mutable std::vector<float> sMean;
-		mutable std::vector<float> sVariance;
-		mutable std::vector<float> sMeanBuffer;
-		mutable std::vector<float> sVarianceBuffer;
-		mutable std::vector<float> sVarianceInversed;
-
-	public:
-		BatchNormLayer(std::size_t nFanIn, float nNewMomentum);
-		BatchNormLayer(const BatchNormLayer &sSrc);
-		BatchNormLayer(BatchNormLayer &&sSrc);
-		~BatchNormLayer() = default;
+		std::size_t nWidth;
+		std::size_t nHeight;
+		std::size_t nChannel;
+		std::size_t nPoolingWidth;
+		std::size_t nPoolingHeight;
+		std::size_t nStrideHorizontal;
+		std::size_t nStrideVertical;
+		std::size_t nOutputWidth;
+		std::size_t nOutputHeight;
+		mutable std::vector<float> sMax;
+		mutable std::vector<std::tuple<std::size_t, std::size_t>> sMaxPosition;
 		
 	public:
-		BatchNormLayer &operator=(const BatchNormLayer &sSrc);
-		BatchNormLayer &operator=(BatchNormLayer &&sSrc);
+		MaxPoolingLayer(std::size_t nNewWidth, std::size_t nNewHeight, std::size_t nNewChannel,
+						std::size_t nNewPoolingWidth,
+						std::size_t nNewPoolingHeight);
+		MaxPoolingLayer(std::size_t nNewWidth, std::size_t nNewHeight, std::size_t nNewChannel,
+						std::size_t nNewPoolingWidth,
+						std::size_t nNewPoolingHeight,
+						std::size_t nStrideHorizontal,
+						std::size_t nStrideVertical);
+		MaxPoolingLayer(const MaxPoolingLayer &sSrc);
+		MaxPoolingLayer(MaxPoolingLayer &&sSrc);
+		~MaxPoolingLayer() = default;
+		
+	public:
+		MaxPoolingLayer &operator=(const MaxPoolingLayer &sSrc);
+		MaxPoolingLayer &operator=(MaxPoolingLayer &&sSrc);
 		
 	public:
 		virtual const char *name() const override;

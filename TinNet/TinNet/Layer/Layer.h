@@ -44,7 +44,7 @@ namespace TinNet::Layer
 		virtual void specifySize(std::size_t &nBiasDeltaSize, std::size_t &nWeightDeltaSize) const = 0;
 		virtual void forward(const float *pInput, float *pOutput) const = 0;
 		virtual void forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, bool bTrainingPhase = false) const = 0;
-		virtual void backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pWeightDelta) const = 0;
+		virtual void backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pBiasDelta, float *pWeightDelta) const = 0;
 		virtual void update(const float *pBiasDelta, const float *pWeightDelta) = 0;
 		virtual void update(float nFactor, const float *pBiasDelta, const float *pWeightDelta) = 0;
 		virtual void serialize(std::ofstream &sOutput) const override;

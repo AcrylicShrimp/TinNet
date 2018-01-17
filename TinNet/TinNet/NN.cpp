@@ -100,15 +100,12 @@ namespace TinNet
 			const auto pLayerBackwardInput{nIndex + 1 == this->depth() ? pBackwardInput : pBackwardOutput[nIndex + 1].data()};
 			auto pLayerBackwardOutput{pBackwardOutput[nIndex].data()};
 
-			for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
-				for (std::size_t nOut{0}, nOutSize{pBiasDelta[nIndex].size()}; nOut < nOutSize; ++nOut)
-					pBiasDelta[nIndex][nOut] += pLayerBackwardInput[nBatch][nOut];
-
 			pLayer->backward(
 				nBatchSize,
 				pLayerForwardInput,
 				pLayerBackwardInput,
 				pLayerBackwardOutput,
+				pBiasDelta[nIndex].data(),
 				pWeightDelta[nIndex].data());
 
 			if (!nIndex)

@@ -129,7 +129,7 @@ namespace TinNet::Layer
 		}
 	}
 
-	void SoftmaxLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pWeightDelta) const
+	void SoftmaxLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pBiasDelta, float *pWeightDelta) const
 	{
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 		{

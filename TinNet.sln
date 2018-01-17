@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example_MNIST", "Example_MN
 		{D09C5062-ECA6-4002-9EF5-E613F9183971} = {D09C5062-ECA6-4002-9EF5-E613F9183971}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example_MNIST_CNN", "Example_MNIST_CNN\Example_MNIST_CNN.vcxproj", "{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D09C5062-ECA6-4002-9EF5-E613F9183971} = {D09C5062-ECA6-4002-9EF5-E613F9183971}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -44,6 +49,18 @@ Global
 		{C284C98F-F84D-43D8-9053-72657EED5ECC}.Release|x64.Build.0 = Release|x64
 		{C284C98F-F84D-43D8-9053-72657EED5ECC}.Release|x86.ActiveCfg = Debug|Win32
 		{C284C98F-F84D-43D8-9053-72657EED5ECC}.Release|x86.Build.0 = Debug|Win32
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Debug|x64.ActiveCfg = Debug|x64
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Debug|x64.Build.0 = Debug|x64
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Debug|x86.ActiveCfg = Debug|Win32
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Debug|x86.Build.0 = Debug|Win32
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Export|x64.ActiveCfg = Export|x64
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Export|x64.Build.0 = Export|x64
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Export|x86.ActiveCfg = Release|Win32
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Export|x86.Build.0 = Release|Win32
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Release|x64.ActiveCfg = Release|x64
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Release|x64.Build.0 = Release|x64
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Release|x86.ActiveCfg = Release|Win32
+		{FBE3EDE3-D464-4A69-B670-9451A1AF9EF8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

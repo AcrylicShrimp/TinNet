@@ -218,6 +218,20 @@
     <ClCompile Include="TinNet\Layer\Layer.cpp" />
     <ClCompile Include="TinNet\Layer\LayerIO.cpp" />
     <ClCompile Include="TinNet\Layer\LReLULayer.cpp" />
+    <ClCompile Include="TinNet\Layer\MaxPoolingLayer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="TinNet\Layer\PReLULayer.cpp" />
     <ClCompile Include="TinNet\Layer\ReLULayer.cpp" />
     <ClCompile Include="TinNet\Layer\SigmoidLayer.cpp" />
@@ -261,6 +275,20 @@
     <ClInclude Include="TinNet\Layer\LayerIO.h" />
     <ClInclude Include="TinNet\Layer\Layers.h" />
     <ClInclude Include="TinNet\Layer\LReLULayer.h" />
+    <ClInclude Include="TinNet\Layer\MaxPoolingLayer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="TinNet\Layer\PReLULayer.h" />
     <ClInclude Include="TinNet\Layer\ReLULayer.h" />
     <ClInclude Include="TinNet\Layer\SigmoidLayer.h" />

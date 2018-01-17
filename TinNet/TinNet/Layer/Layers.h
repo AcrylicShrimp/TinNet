@@ -13,6 +13,9 @@
 #include "BatchNormLayer.h"
 
 #include "FullLayer.h"
+#include "ConvLayer.h"
+
+#include "MaxPoolingLayer.h"
 
 #include "SigmoidLayer.h"
 #include "TanhLayer.h"

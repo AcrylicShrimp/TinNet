@@ -126,6 +126,9 @@
     <ClCompile Include="TinNet\Layer\ConvLayer.cpp">
       <Filter>TinNet\Layer</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Layer\MaxPoolingLayer.cpp">
+      <Filter>TinNet\Layer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\NN.h">
@@ -246,6 +249,9 @@
       <Filter>TinNet\Optimizer\Reinforcement</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Layer\ConvLayer.h">
+      <Filter>TinNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Layer\MaxPoolingLayer.h">
       <Filter>TinNet\Layer</Filter>
     </ClInclude>
   </ItemGroup>
