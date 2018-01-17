@@ -3,6 +3,8 @@ A C++14 based deep learning library. Easy to use!
 
 ### Supported layer types
 * Fully-connected layer
+* Convolution layer
+* Max pooling layer
 * Batch normalization layer
 * Some activation layers
 
