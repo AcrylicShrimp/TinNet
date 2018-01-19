@@ -4,9 +4,9 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_LAYER_LAYERS_H
+#ifndef _TINNET_LAYERS_H
 
-#define _CLASS_TINNET_LAYER_LAYERS_H
+#define _TINNET_LAYERS_H
 
 #include "Layer.h"
 

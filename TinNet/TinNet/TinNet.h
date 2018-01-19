@@ -12,7 +12,7 @@
 
 #include "NN.h"
 
-#include "Layer\Layers.h"
+#include "Layer/Layers.h"
 
 #include "Initializer/Initializers.h"
 #include "Loss/Losses.h"
