@@ -254,5 +254,8 @@
     <ClInclude Include="TinNet\Layer\MaxPoolingLayer.h">
       <Filter>TinNet\Layer</Filter>
     </ClInclude>
+    <ClInclude Include="TinNet\Layer\LayerBase.h">
+      <Filter>TinNet\Layer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

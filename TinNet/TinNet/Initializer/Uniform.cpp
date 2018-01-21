@@ -74,7 +74,7 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void Uniform::initializeBias(Layer::Layer &sLayer)
+	void Uniform::initializeBias(Layer::LayerBase &sLayer)
 	{
 		std::uniform_real_distribution<double> sDist{this->nMin, this->nMax};
 
@@ -84,7 +84,7 @@ namespace TinNet::Initializer
 		});
 	}
 
-	void Uniform::initializeWeight(Layer::Layer &sLayer)
+	void Uniform::initializeWeight(Layer::LayerBase &sLayer)
 	{
 		std::uniform_real_distribution<double> sDist{this->nMin, this->nMax};
 

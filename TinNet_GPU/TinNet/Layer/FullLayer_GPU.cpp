@@ -8,81 +8,74 @@
 
 namespace TinNet::Layer
 {
-	/*
-		TODO : Place the static class member variable definitions here.
-	*/
-	
-	
-	FullLayer_GPU::FullLayer_GPU()
+	FullLayer_GPU::FullLayer_GPU(std::size_t nFanIn, std::size_t nFanOut) :
+		Layer_GPU(nFanIn, nFanOut)
 	{
-		/*
-			TODO : Place the default constructor here.
-		*/
-		
+		cuMemAlloc(&this->pBias, sizeof(float) * nFanOut);
+		cuMemAlloc(&this->pWeight, sizeof(float) * nFanIn * nFanOut);
 	}
-	
-	FullLayer_GPU::FullLayer_GPU(const FullLayer_GPU &sSrc)
-	{
-		/*
-			TODO : Place the implementation of the copy constructor here.
-		*/
-		
-	}
-	
-	FullLayer_GPU::FullLayer_GPU(FullLayer_GPU &&sSrc)
-	{
-		/*
-			TODO : Place the implementation of the move constructor here.
-		*/
-		
-	}
-	
+
 	FullLayer_GPU::~FullLayer_GPU()
 	{
-		/*
-			TODO : Place the implementation of the destructor here.
-		*/
-		
+		cuMemFree(this->pBias);
+		cuMemFree(this->pWeight);
+
+		this->pBias = 0;
+		this->pWeight = 0;
 	}
-	
-	/*
-		TODO : Place the implementations of other constructors here.
-	*/
-	
-	
-	FullLayer_GPU &FullLayer_GPU::operator=(const FullLayer_GPU &sSrc)
+
+	const char *FullLayer_GPU::name() const
 	{
-		if (&sSrc == this)
-			return *this;
-		
-		/*
-			TODO : Place the implementation of the copy assignment operator here.
-		*/
-		
-		
-		return *this;
+		return "FullLayer_GPU";
 	}
-	
-	FullLayer_GPU &FullLayer_GPU::operator=(FullLayer_GPU &&sSrc)
+
+	void FullLayer_GPU::initBias(std::function<float()> sGenerator)
 	{
-		if (&sSrc == this)
-			return *this;
-		
-		/*
-			TODO : Place the implementation of the move assignment operator here.
-		*/
-		
-		
-		return *this;
+		std::vector<float> sBias(this->nFanOut);
+
+		for (auto &nBias : sBias)
+			nBias = sGenerator();
+
+		cuMemcpyHtoD(this->pBias, sBias.data(), sizeof(float) * this->nFanOut);
 	}
-	
-	/*
-		TODO : Implement other operator overloadings here.
-	*/
-	
-	
-	/*
-		TODO : Place the member function implementations here.
-	*/
-	
+
+	void FullLayer_GPU::initWeight(std::function<float()> sGenerator)
+	{
+		std::vector<float> sWeight(this->nFanIn * this->nFanOut);
+
+		for (auto &nWeight : sWeight)
+			nWeight = sGenerator();
+
+		cuMemcpyHtoD(this->pWeight, sWeight.data(), sizeof(float) * this->nFanIn * this->nFanOut);
+	}
+
+	void FullLayer_GPU::specifySize(std::size_t &nBiasDeltaSize, std::size_t &nWeightDeltaSize) const
+	{
+		nWeightDeltaSize = this->nFanIn * (nBiasDeltaSize = this->nFanOut);
+	}
+
+	void FullLayer_GPU::forward(CUdeviceptr pInput, CUdeviceptr pOutput) const
+	{
+		::FullLayer_GPU_forward(this->nFanIn, this->nFanOut, pInput, pOutput, this->pBias, this->pWeight);
+	}
+
+	void FullLayer_GPU::forward(std::size_t nBatchSize, CUdeviceptr pInput, CUdeviceptr pOutput, bool bTrainingPhase) const
+	{
+		::FullLayer_GPU_forwardBatch(nBatchSize, this->nFanIn, this->nFanOut, pInput, pOutput, this->pBias, this->pWeight);
+	}
+
+	void FullLayer_GPU::backward(std::size_t nBatchSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta) const
+	{
+		::FullLayer_GPU_backwardBatch(nBatchSize, this->nFanIn, this->nFanOut, pForwardInput, pBackwardInput, pBackwardOutput, pBiasDelta, pWeightDelta, this->pWeight);
+	}
+
+	void FullLayer_GPU::update(CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	{
+		::FullLayer_GPU_updateParam(this->nFanOut, this->nFanIn * this->nFanOut, this->pBias, this->pWeight, pBiasDelta, pWeightDelta);
+	}
+
+	void FullLayer_GPU::update(float nFactor, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	{
+		::FullLayer_GPU_updateParamFactor(this->nFanOut, this->nFanIn * this->nFanOut, this->pBias, this->pWeight, pBiasDelta, pWeightDelta, nFactor);
+	}
 }

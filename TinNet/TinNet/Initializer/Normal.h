@@ -43,8 +43,8 @@ namespace TinNet::Initializer
 		Normal &operator=(Normal &&sSrc);
 
 	public:
-		void initializeBias(Layer::Layer &sLayer);
-		void initializeWeight(Layer::Layer &sLayer);
+		void initializeBias(Layer::LayerBase &sLayer);
+		void initializeWeight(Layer::LayerBase &sLayer);
 	};
 }
 

@@ -1,10 +1,11 @@
 
 /*
-	2018.01.16
+	2018.01.19
 	Created by AcrylicShrimp.
 */
 
 #include "../TinNet/TinNet/TinNet.h"
+#include "../TinNet_GPU/TinNet/TinNet_GPU.h"
 
 #include <cstdint>
 #include <fstream>
@@ -15,7 +16,9 @@ int32_t main()
 {
 	using namespace TinNet;
 
-	NN sNetwork;
+	initTinNetGPU();
+
+	NN_GPU sNetwork;
 
 	for (std::string sCommand;;)
 	{
@@ -33,7 +36,7 @@ int32_t main()
 				continue;
 			}
 
-			sNetwork.deserialize(sInput);
+			//sNetwork.deserialize(sInput);
 
 			std::cout << "Successfully loaded." << std::endl;
 			std::cout << "Number of the layers : " << sNetwork.layer().size() << std::endl;
@@ -54,16 +57,27 @@ int32_t main()
 		}
 		else if (sCommand == "new")
 		{
-			sNetwork.addLayer<Layer::FullLayer>(784, 300);
-			sNetwork.addLayer<Layer::TanhLayer>(300);
-			sNetwork.addLayer<Layer::FullLayer>(300, 300);
-			sNetwork.addLayer<Layer::TanhLayer>(300);
-			sNetwork.addLayer<Layer::FullLayer>(300, 300);
-			sNetwork.addLayer<Layer::TanhLayer>(300);
-			sNetwork.addLayer<Layer::FullLayer>(300, 100);
-			sNetwork.addLayer<Layer::TanhLayer>(100);
-			sNetwork.addLayer<Layer::FullLayer>(100, 10);
-			sNetwork.addLayer<Layer::TanhLayer>(10);
+			sNetwork.addLayer<Layer::FullLayer_GPU>(784, 300);
+			sNetwork.addLayer<Layer::TanhLayer_GPU>(300);
+			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
+			sNetwork.addLayer<Layer::TanhLayer_GPU>(300);
+			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
+			sNetwork.addLayer<Layer::TanhLayer_GPU>(300);
+			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 100);
+			sNetwork.addLayer<Layer::TanhLayer_GPU>(100);
+			sNetwork.addLayer<Layer::FullLayer_GPU>(100, 10);
+			sNetwork.addLayer<Layer::TanhLayer_GPU>(10);
+
+			//sNetwork.addLayer<Layer::FullLayer>(784, 300);
+			//sNetwork.addLayer<Layer::LReLULayer>(300);
+			//sNetwork.addLayer<Layer::FullLayer>(300, 300);
+			//sNetwork.addLayer<Layer::LReLULayer>(300);
+			//sNetwork.addLayer<Layer::FullLayer>(300, 300);
+			//sNetwork.addLayer<Layer::LReLULayer>(300);
+			//sNetwork.addLayer<Layer::FullLayer>(300, 100);
+			//sNetwork.addLayer<Layer::LReLULayer>(100);
+			//sNetwork.addLayer<Layer::FullLayer>(100, 10);
+			//sNetwork.addLayer<Layer::SoftmaxLayer>(10);
 
 			std::cout << "Successfully created." << std::endl;
 			std::cout << "Number of the layers : " << sNetwork.layer().size() << std::endl;
@@ -139,14 +153,17 @@ int32_t main()
 		}
 	}
 
-	Optimizer::Supervised::SGD sOptimizer{sNetwork, 32u, .001f};
+	Optimizer::Supervised::SGD_GPU sOptimizer{sNetwork, 32u, .001f};
+	//Optimizer::Supervised::SGD sOptimizer{sNetwork, 32u, .1f};
 	//Optimizer::Supervised::Momentum sOptimizer{sNetwork, 32, .9f, .005f};
 	//Optimizer::Supervised::NAG sOptimizer{sNetwork, .9f, .001f};
 	//Optimizer::Supervised::Adagrad sOptimizer{sNetwork, 32, .005f};
 	//Optimizer::Supervised::RMSProp sOptimizer{sNetwork, 32, .9f, .001f};
 	//Optimizer::Supervised::Adam sOptimizer{sNetwork, 32, .001f, .9f, .999f};
 
-	Visualizer::CSVLossExporter sExporter;
+	sOptimizer.addTrainingSet(60000u, sTrainInput.data(), sTrainOutput.data());
+
+	//Visualizer::CSVLossExporter sExporter;
 
 	//std::cout << "Serializing network...";
 	//sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
@@ -164,11 +181,12 @@ int32_t main()
 
 		//float nLoss{sNetwork.classificationLoss(10000u, sTestInput.data(), sTestOutput.data())};
 		//printf("Validation data classification accuracy : %0.2f%%\n", (1.f - nLoss) * 100.f);
-		
-		sExporter.accrueLoss(.0f);
-		sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
 
-		sOptimizer.train<Loss::MSE>(1, 60000, sTrainInput.data(), sTrainOutput.data());
+		//sExporter.accrueLoss(nLoss);
+		//sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
+
+		sOptimizer.train<Loss::MSE_GPU>(1);
+		printf("trained!\n");
 
 		//std::cout << "Serializing network...";
 		//sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
@@ -176,6 +194,8 @@ int32_t main()
 	}
 
 	system("pause");
+
+	finTinNetGPU();
 
 	return 0;
 }

@@ -10,7 +10,7 @@
 
 #include "../TinNetDLL.h"
 
-#include "../Layer/Layer.h"
+#include "../Layer/LayerBase.h"
 
 #include <chrono>
 #include <cmath>
@@ -37,8 +37,8 @@ namespace TinNet::Initializer
 		Glorot &operator=(Glorot &&sSrc);
 		
 	public:
-		void initializeBias(Layer::Layer &sLayer);
-		void initializeWeight(Layer::Layer &sLayer);
+		void initializeBias(Layer::LayerBase &sLayer);
+		void initializeWeight(Layer::LayerBase &sLayer);
 	};
 }
 

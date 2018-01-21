@@ -52,7 +52,7 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void He::initializeBias(Layer::Layer &sLayer)
+	void He::initializeBias(Layer::LayerBase &sLayer)
 	{
 		std::normal_distribution<double> sDist{.0, std::sqrt(2. / sLayer.fanIn())};
 
@@ -62,7 +62,7 @@ namespace TinNet::Initializer
 		});
 	}
 
-	void He::initializeWeight(Layer::Layer &sLayer)
+	void He::initializeWeight(Layer::LayerBase &sLayer)
 	{
 		std::normal_distribution<double> sDist{.0, std::sqrt(2. / sLayer.fanIn())};
 

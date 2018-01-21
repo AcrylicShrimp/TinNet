@@ -52,7 +52,7 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void Xavier::initializeBias(Layer::Layer &sLayer)
+	void Xavier::initializeBias(Layer::LayerBase &sLayer)
 	{
 		std::normal_distribution<double> sDist{.0, std::sqrt(1. / sLayer.fanIn())};
 
@@ -62,7 +62,7 @@ namespace TinNet::Initializer
 		});
 	}
 
-	void Xavier::initializeWeight(Layer::Layer &sLayer)
+	void Xavier::initializeWeight(Layer::LayerBase &sLayer)
 	{
 		std::normal_distribution<double> sDist{.0, std::sqrt(1. / sLayer.fanIn())};
 

@@ -272,6 +272,7 @@
     <ClInclude Include="TinNet\Layer\ConvLayer.h" />
     <ClInclude Include="TinNet\Layer\FullLayer.h" />
     <ClInclude Include="TinNet\Layer\Layer.h" />
+    <ClInclude Include="TinNet\Layer\LayerBase.h" />
     <ClInclude Include="TinNet\Layer\LayerIO.h" />
     <ClInclude Include="TinNet\Layer\Layers.h" />
     <ClInclude Include="TinNet\Layer\LReLULayer.h" />

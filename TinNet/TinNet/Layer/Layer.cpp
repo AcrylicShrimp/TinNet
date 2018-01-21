@@ -33,6 +33,16 @@ namespace TinNet::Layer
 		return *this;
 	}
 
+	std::size_t Layer::fanIn() const
+	{
+		return this->nFanIn;
+	}
+
+	std::size_t Layer::fanOut() const
+	{
+		return this->nFanOut;
+	}
+
 	void Layer::serialize(std::ofstream &sOutput) const
 	{
 		IO::Serializable::write(sOutput, this->nFanIn);

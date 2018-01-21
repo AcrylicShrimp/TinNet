@@ -96,7 +96,7 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void Normal::initializeBias(Layer::Layer &sLayer)
+	void Normal::initializeBias(Layer::LayerBase &sLayer)
 	{
 		std::normal_distribution<double> sDist{this->nMean, this->nStdDev};
 
@@ -106,7 +106,7 @@ namespace TinNet::Initializer
 		});
 	}
 
-	void Normal::initializeWeight(Layer::Layer &sLayer)
+	void Normal::initializeWeight(Layer::LayerBase &sLayer)
 	{
 		std::normal_distribution<double> sDist{this->nMean, this->nStdDev};
 

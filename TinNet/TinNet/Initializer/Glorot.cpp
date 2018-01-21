@@ -52,7 +52,7 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void Glorot::initializeBias(Layer::Layer &sLayer)
+	void Glorot::initializeBias(Layer::LayerBase &sLayer)
 	{
 		std::normal_distribution<double> sDist{.0, std::sqrt(2. / (sLayer.fanIn() + sLayer.fanOut()))};
 
@@ -62,7 +62,7 @@ namespace TinNet::Initializer
 		});
 	}
 
-	void Glorot::initializeWeight(Layer::Layer &sLayer)
+	void Glorot::initializeWeight(Layer::LayerBase &sLayer)
 	{
 		std::normal_distribution<double> sDist{.0, std::sqrt(2. / (sLayer.fanIn() + sLayer.fanOut()))};
 

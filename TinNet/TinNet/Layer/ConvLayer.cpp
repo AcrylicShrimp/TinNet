@@ -170,21 +170,21 @@ namespace TinNet::Layer
 				{
 					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
 
-					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+					for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
 					{
-						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+						const auto nY{nStrideOffsetY + nFilterY};
 
-						for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
+						if (nY < this->nZeroPaddingVerticalNegative)
+							continue;
+
+						if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+							continue;
+
+						const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+
+						for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
 						{
-							const auto nY{nStrideOffsetY + nFilterY};
-
-							if (nY < this->nZeroPaddingVerticalNegative)
-								continue;
-
-							if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
-								continue;
-
-							const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+							const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
 
 							for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
 							{
@@ -208,10 +208,12 @@ namespace TinNet::Layer
 			}
 		};
 
-		for (std::size_t nFilterIndex{0}; nFilterIndex < this->nFilter; ++nFilterIndex)
+		for (std::size_t nFilterIndex{1}; nFilterIndex < this->nFilter; ++nFilterIndex)
 			this->sFuture[nFilterIndex] = std::async(fFilterBehaviour, nFilterIndex);
 
-		for (std::size_t nFilterIndex{0}; nFilterIndex < this->nFilter; ++nFilterIndex)
+		fFilterBehaviour(0);
+
+		for (std::size_t nFilterIndex{1}; nFilterIndex < this->nFilter; ++nFilterIndex)
 			this->sFuture[nFilterIndex].wait();
 	}
 
@@ -232,21 +234,21 @@ namespace TinNet::Layer
 				{
 					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
 
-					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+					for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
 					{
-						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+						const auto nY{nStrideOffsetY + nFilterY};
 
-						for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
+						if (nY < this->nZeroPaddingVerticalNegative)
+							continue;
+
+						if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+							continue;
+
+						const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+
+						for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
 						{
-							const auto nY{nStrideOffsetY + nFilterY};
-
-							if (nY < this->nZeroPaddingVerticalNegative)
-								continue;
-
-							if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
-								continue;
-
-							const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+							const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
 
 							for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
 							{
@@ -272,10 +274,12 @@ namespace TinNet::Layer
 
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 		{
-			for (std::size_t nFilterIndex{0}; nFilterIndex < this->nFilter; ++nFilterIndex)
+			for (std::size_t nFilterIndex{1}; nFilterIndex < this->nFilter; ++nFilterIndex)
 				this->sFuture[nFilterIndex] = std::async(fFilterBehaviour, nBatch, nFilterIndex);
 
-			for (std::size_t nFilterIndex{0}; nFilterIndex < this->nFilter; ++nFilterIndex)
+			fFilterBehaviour(nBatch, 0);
+
+			for (std::size_t nFilterIndex{1}; nFilterIndex < this->nFilter; ++nFilterIndex)
 				this->sFuture[nFilterIndex].wait();
 		}
 	}
@@ -300,21 +304,21 @@ namespace TinNet::Layer
 				{
 					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
 
-					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+					for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
 					{
-						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+						const auto nY{nStrideOffsetY + nFilterY};
 
-						for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
+						if (nY < this->nZeroPaddingVerticalNegative)
+							continue;
+
+						if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+							continue;
+
+						const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+
+						for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
 						{
-							const auto nY{nStrideOffsetY + nFilterY};
-
-							if (nY < this->nZeroPaddingVerticalNegative)
-								continue;
-
-							if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
-								continue;
-
-							const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+							const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
 
 							for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
 							{
@@ -344,10 +348,12 @@ namespace TinNet::Layer
 
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
 		{
-			for (std::size_t nFilterIndex{0}; nFilterIndex < this->nFilter; ++nFilterIndex)
+			for (std::size_t nFilterIndex{1}; nFilterIndex < this->nFilter; ++nFilterIndex)
 				this->sFuture[nFilterIndex] = std::async(fFilterBehaviour, nBatch, nFilterIndex);
 
-			for (std::size_t nFilterIndex{0}; nFilterIndex < this->nFilter; ++nFilterIndex)
+			fFilterBehaviour(nBatch, 0);
+
+			for (std::size_t nFilterIndex{1}; nFilterIndex < this->nFilter; ++nFilterIndex)
 				this->sFuture[nFilterIndex].wait();
 		}
 	}

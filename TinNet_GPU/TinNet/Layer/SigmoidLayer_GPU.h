@@ -1,12 +1,12 @@
 
 /*
-	2018.01.19
+	2018.01.21
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_LAYER_FULLLAYER_GPU_H
+#ifndef _CLASS_TINNET_LAYER_SIGMOIDLAYER_GPU_H
 
-#define _CLASS_TINNET_LAYER_FULLLAYER_GPU_H
+#define _CLASS_TINNET_LAYER_SIGMOIDLAYER_GPU_H
 
 #include "../../../TinNet/TinNet/TinNetDLL.h"
 
@@ -15,23 +15,19 @@
 
 #include "cuda.h"
 
-#include <vector>
+#include <cstddef>
 
 namespace TinNet::Layer
 {
-	class TINNET_DLL FullLayer_GPU : public Layer_GPU
+	class TINNET_DLL SigmoidLayer_GPU : public Layer_GPU
 	{
-	protected:
-		CUdeviceptr pBias;
-		CUdeviceptr pWeight;
+	public:
+		SigmoidLayer_GPU(std::size_t nFanIn);
+		SigmoidLayer_GPU(const SigmoidLayer_GPU &sSrc) = delete;
+		~SigmoidLayer_GPU() = default;
 		
 	public:
-		FullLayer_GPU(std::size_t nFanIn, std::size_t nFanOut);
-		FullLayer_GPU(const FullLayer_GPU &sSrc) = delete;
-		~FullLayer_GPU();
-		
-	public:
-		FullLayer_GPU &operator=(const FullLayer_GPU &sSrc) = delete;
+		SigmoidLayer_GPU &operator=(const SigmoidLayer_GPU &sSrc) = delete;
 		
 	public:
 		virtual const char *name() const override;

@@ -12,4 +12,13 @@
 
 #include "Layer/Layers_GPU.h"
 
+#include "Loss/Losses_GPU.h"
+#include "Optimizer/Optimizers_GPU.h"
+
+namespace TinNet
+{
+	TINNET_DLL void initTinNetGPU();
+	TINNET_DLL void finTinNetGPU();
+}
+
 #endif

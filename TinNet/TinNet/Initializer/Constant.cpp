@@ -30,7 +30,7 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void Constant::initializeBias(Layer::Layer &sLayer) const
+	void Constant::initializeBias(Layer::LayerBase &sLayer) const
 	{
 		sLayer.initBias([this]()
 		{
@@ -38,7 +38,7 @@ namespace TinNet::Initializer
 		});
 	}
 
-	void Constant::initializeWeight(Layer::Layer &sLayer) const
+	void Constant::initializeWeight(Layer::LayerBase &sLayer) const
 	{
 		sLayer.initWeight([this]()
 		{

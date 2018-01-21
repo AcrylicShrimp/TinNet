@@ -10,6 +10,7 @@
 
 #include "../TinNetDLL.h"
 
+#include "LayerBase.h"
 #include "../IO/Serializable.h"
 
 #include <cstddef>
@@ -19,7 +20,7 @@
 
 namespace TinNet::Layer
 {
-	class TINNET_DLL Layer : public IO::Serializable
+	class TINNET_DLL Layer : public LayerBase, public IO::Serializable
 	{
 	protected:
 		std::size_t nFanIn;
@@ -34,13 +35,10 @@ namespace TinNet::Layer
 		Layer &operator=(const Layer &sSrc);
 
 	public:
-		inline std::size_t fanIn() const;
-		inline std::size_t fanOut() const;
-		
+		virtual std::size_t fanIn() const override;
+		virtual std::size_t fanOut() const override;
 		virtual const char *name() const = 0;
 		virtual std::unique_ptr<Layer> duplicate() const = 0;
-		virtual void initBias(std::function<float()> sGenerator) = 0;
-		virtual void initWeight(std::function<float()> sGenerator) = 0;
 		virtual void specifySize(std::size_t &nBiasDeltaSize, std::size_t &nWeightDeltaSize) const = 0;
 		virtual void forward(const float *pInput, float *pOutput) const = 0;
 		virtual void forward(std::size_t nBatchSize, const std::vector<float> *pInput, std::vector<float> *pOutput, bool bTrainingPhase = false) const = 0;
@@ -50,16 +48,6 @@ namespace TinNet::Layer
 		virtual void serialize(std::ofstream &sOutput) const override;
 		virtual void deserialize(std::ifstream &sInput) override;
 	};
-
-	inline std::size_t Layer::fanIn() const
-	{
-		return this->nFanIn;
-	}
-
-	inline std::size_t Layer::fanOut() const
-	{
-		return this->nFanOut;
-	}
 }
 
 #endif

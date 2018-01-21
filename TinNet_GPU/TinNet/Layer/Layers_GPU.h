@@ -10,4 +10,7 @@
 
 #include "FullLayer_GPU.h"
 
+#include "SigmoidLayer_GPU.h"
+#include "TanhLayer_GPU.h"
+
 #endif
