@@ -1,24 +1,24 @@
 # TinNet
 A C++14 based deep learning library. Easy to use!
 
-#### Limited GPU acceleration now available!
+#### Limited GPU accelerations now available!
 
 ### Supported layer types
-* Fully-connected layer (GPU acceleration available)
+* Fully-connected layer (GPU accelerations available)
 * Convolution layer
 * Max pooling layer
 * Batch normalization layer
-* Some activation layers (Limited GPU acceleration available)
+* Some activation layers (Limited GPU accelerations available)
 
 ### Supported optimizers
-* SGD (GPU acceleration available)
+* SGD (GPU accelerations available)
 * Momentum
 * Adagrad
 * RMSProp
 * Adam
 
 ### Supported loss functions
-* MSE (GPU acceleration available)
+* MSE (GPU accelerations available)
 * CE
 * Multiclass CE
 
