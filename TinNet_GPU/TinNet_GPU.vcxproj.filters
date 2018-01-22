@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CudaCompile Include="TinNet\Layer\FullLayer_GPU.cu">
-      <Filter>TinNet\Layer</Filter>
-    </CudaCompile>
-    <CudaCompile Include="TinNet\TinNet_GPU_Backend.cu" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="TinNet">
       <UniqueIdentifier>{bb976147-2a53-4e3d-a651-6d49a90fc85a}</UniqueIdentifier>
     </Filter>
@@ -98,5 +92,10 @@
     <ClInclude Include="TinNet\Layer\TanhLayer_GPU.h">
       <Filter>TinNet\Layer</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="TinNet\TinNet_GPU_Backend.cu">
+      <Filter>TinNet</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>
