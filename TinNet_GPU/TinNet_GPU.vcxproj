@@ -309,7 +309,9 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClCompile Include="TinNet\Layer\ReLULayer_GPU.cpp" />
     <ClCompile Include="TinNet\Layer\SigmoidLayer_GPU.cpp" />
     <ClCompile Include="TinNet\Layer\TanhLayer_GPU.cpp" />
+    <ClCompile Include="TinNet\Loss\CE_GPU.cpp" />
     <ClCompile Include="TinNet\Loss\MSE_GPU.cpp" />
+    <ClCompile Include="TinNet\Loss\MulticlassCE_GPU.cpp" />
     <ClCompile Include="TinNet\NN_GPU.cpp" />
     <ClCompile Include="TinNet\Optimizer\Supervised\SGD_GPU.cpp" />
     <ClCompile Include="TinNet\Optimizer\Supervised\SupervisedOptimizerBase_GPU.cpp" />
@@ -326,8 +328,10 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="TinNet\Layer\ReLULayer_GPU.h" />
     <ClInclude Include="TinNet\Layer\SigmoidLayer_GPU.h" />
     <ClInclude Include="TinNet\Layer\TanhLayer_GPU.h" />
+    <ClInclude Include="TinNet\Loss\CE_GPU.h" />
     <ClInclude Include="TinNet\Loss\Losses_GPU.h" />
     <ClInclude Include="TinNet\Loss\MSE_GPU.h" />
+    <ClInclude Include="TinNet\Loss\MulticlassCE_GPU.h" />
     <ClInclude Include="TinNet\NN_GPU.h" />
     <ClInclude Include="TinNet\NN_GPU.hpp" />
     <ClInclude Include="TinNet\Optimizer\Optimizers_GPU.h" />

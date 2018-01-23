@@ -13,7 +13,9 @@
 #include "device_launch_parameters.h"
 #include "math_functions.h"
 
+#if (_DEBUG)
 #include <cstdio>
+#endif
 
 #pragma region Kernel
 
@@ -38,6 +40,32 @@ __global__ void kernel_MSE_GPU_derivative(unsigned int nSize, unsigned int nOutp
 
 	nUnifiedOut = vMax[nUnifiedOut < nSize];
 	pResult[nUnifiedOut] = 2.f / nOutputSize * (pOutput[nUnifiedOut] - pDesiredOutput[nUnifiedOut]);
+}
+
+__global__ void kernel_CE_GPU_derivative(unsigned int nSize, unsigned int nOutputSize, const float *pOutput, const float *pDesiredOutput, float *pResult)
+{
+	unsigned int nUnifiedOut = blockDim.x * blockIdx.x + threadIdx.x;
+	unsigned int vMax[2] =
+	{
+		nSize - 1,
+		nUnifiedOut
+	};
+
+	nUnifiedOut = vMax[nUnifiedOut < nSize];
+	pResult[nUnifiedOut] = (pOutput[nUnifiedOut] - pDesiredOutput[nUnifiedOut]) / (pOutput[nUnifiedOut] - pOutput[nUnifiedOut] * pOutput[nUnifiedOut] + 1e-4f);
+}
+
+__global__ void kernel_MulticlassCE_GPU_derivative(unsigned int nSize, unsigned int nOutputSize, const float *pOutput, const float *pDesiredOutput, float *pResult)
+{
+	unsigned int nUnifiedOut = blockDim.x * blockIdx.x + threadIdx.x;
+	unsigned int vMax[2] =
+	{
+		nSize - 1,
+		nUnifiedOut
+	};
+
+	nUnifiedOut = vMax[nUnifiedOut < nSize];
+	pResult[nUnifiedOut] = -pDesiredOutput[nUnifiedOut] / (pOutput[nUnifiedOut] + 1e-4f);
 }
 
 
@@ -186,7 +214,7 @@ __global__ void kernel_LReLULayer_GPU_backwardBatch(unsigned int nSize, const fl
 		1.f
 	};
 
-	pBackwardOutput[nSize * blockIdx.x + nUnifiedIndex] = pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] * vValue[pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] > .0f];
+	pBackwardOutput[nSize * blockIdx.x + nUnifiedIndex] = pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] * vValue[pForwardInput[nSize * blockIdx.x + nUnifiedIndex] > .0f];
 }
 
 
@@ -236,7 +264,7 @@ __global__ void kernel_ReLULayer_GPU_backwardBatch(unsigned int nSize, const flo
 		1.f
 	};
 
-	pBackwardOutput[nSize * blockIdx.x + nUnifiedIndex] = pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] * vValue[pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] > .0f];
+	pBackwardOutput[nSize * blockIdx.x + nUnifiedIndex] = pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] * vValue[pForwardInput[nSize * blockIdx.x + nUnifiedIndex] > .0f];
 }
 
 
@@ -328,13 +356,15 @@ void mergeBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, C
 
 	kernel_mergeBatch<<<sDimGrid, sDimBlock>>>(nBatchSize, nSize, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("mergeBatch : %d\n", nError);
+#endif
 }
 
-#pragma region MSE_GPU
+#pragma region Loss_GPU
 
 void MSE_GPU_derivative(std::size_t nBatchSize, std::size_t nOutputSize, CUdeviceptr pOutput, CUdeviceptr pDesiredOutput, CUdeviceptr pResult)
 {
@@ -353,10 +383,62 @@ void MSE_GPU_derivative(std::size_t nBatchSize, std::size_t nOutputSize, CUdevic
 
 	kernel_MSE_GPU_derivative<<<sDimGrid, sDimBlock>>>(nSize, nOutputSize, (const float *)pOutput, (const float *)pDesiredOutput, (float *)pResult);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("MSE_GPU_derivative : %d\n", nError);
+#endif
+}
+
+void CE_GPU_derivative(std::size_t nBatchSize, std::size_t nOutputSize, CUdeviceptr pOutput, CUdeviceptr pDesiredOutput, CUdeviceptr pResult)
+{
+	std::size_t nSize = nBatchSize * nOutputSize;
+
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = (nSize - 1) / 1024 + 1;
+	sDimGrid.y = 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_CE_GPU_derivative<<<sDimGrid, sDimBlock>>>(nSize, nOutputSize, (const float *)pOutput, (const float *)pDesiredOutput, (float *)pResult);
+
+#if (_DEBUG)
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("CE_GPU_derivative : %d\n", nError);
+#endif
+}
+
+void MulticlassCE_GPU_derivative(std::size_t nBatchSize, std::size_t nOutputSize, CUdeviceptr pOutput, CUdeviceptr pDesiredOutput, CUdeviceptr pResult)
+{
+	std::size_t nSize = nBatchSize * nOutputSize;
+
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = (nSize - 1) / 1024 + 1;
+	sDimGrid.y = 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_MulticlassCE_GPU_derivative<<<sDimGrid, sDimBlock>>>(nSize, nOutputSize, (const float *)pOutput, (const float *)pDesiredOutput, (float *)pResult);
+
+#if (_DEBUG)
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("MulticlassCE_GPU_derivative : %d\n", nError);
+#endif
 }
 
 #pragma endregion
@@ -378,10 +460,12 @@ void FullLayer_GPU_forward(std::size_t nInputSize, std::size_t nOutputSize, CUde
 
 	kernel_FullLayer_GPU_forward<<<sDimGrid, sDimBlock, sizeof(float) * nInputSize>>>(nInputSize, nOutputSize, (const float *)pBias, (const float *)pWeight, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("FullLayer_GPU_forward : %d\n", nError);
+#endif
 }
 
 void FullLayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nInputSize, std::size_t nOutputSize, CUdeviceptr pInput, CUdeviceptr pOutput, CUdeviceptr pBias, CUdeviceptr pWeight)
@@ -399,10 +483,12 @@ void FullLayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nInputSize, 
 
 	kernel_FullLayer_GPU_forwardBatch<<<sDimGrid, sDimBlock, sizeof(float) * nInputSize>>>(nInputSize, nOutputSize, (const float *)pBias, (const float *)pWeight, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("FullLayer_GPU_forwardBatch : %d\n", nError);
+#endif
 }
 
 void FullLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nInputSize, std::size_t nOutputSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta, CUdeviceptr pWeight)
@@ -420,10 +506,12 @@ void FullLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nInputSize,
 
 	kernel_FullLayer_GPU_backwardBatch<<<sDimGrid, sDimBlock, sizeof(float) * (nInputSize + nOutputSize)>>>(nInputSize, nOutputSize, (const float *)pForwardInput, (const float *)pBackwardInput, (float *)pBackwardOutput, (float *)pBiasDelta, (float *)pWeightDelta, (const float *)pWeight);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("FullLayer_GPU_backwardBatch : %d\n", nError);
+#endif
 }
 
 void FullLayer_GPU_updateParam(std::size_t nBiasSize, std::size_t nWeightSize, CUdeviceptr pBias, CUdeviceptr pWeight, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
@@ -441,10 +529,12 @@ void FullLayer_GPU_updateParam(std::size_t nBiasSize, std::size_t nWeightSize, C
 
 	kernel_FullLayer_GPU_update << <sDimGrid, sDimBlock >> > (nBiasSize, (const float *)pBiasDelta, (float *)pBias);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("FullLayer_GPU_updateParam__BIAS : %d\n", nError);
+#endif
 
 	sDimGrid.x = (nWeightSize - 1) / 1024 + 1;
 	sDimGrid.y = 1;
@@ -456,10 +546,12 @@ void FullLayer_GPU_updateParam(std::size_t nBiasSize, std::size_t nWeightSize, C
 
 	kernel_FullLayer_GPU_update<<<sDimGrid, sDimBlock>>>(nWeightSize, (const float *)pWeightDelta, (float *)pWeight);
 
+#if (_DEBUG)
 	nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("FullLayer_GPU_updateParam__WEIGHT : %d\n", nError);
+#endif
 }
 
 void FullLayer_GPU_updateParamFactor(std::size_t nBiasSize, std::size_t nWeightSize, CUdeviceptr pBias, CUdeviceptr pWeight, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta, float nFactor)
@@ -477,10 +569,12 @@ void FullLayer_GPU_updateParamFactor(std::size_t nBiasSize, std::size_t nWeightS
 
 	kernel_FullLayer_GPU_updateFactor<<<sDimGrid, sDimBlock>>>(nBiasSize, (const float *)pBiasDelta, (float *)pBias, nFactor);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("FullLayer_GPU_updateParamFactor__BIAS : %d\n", nError);
+#endif
 
 	sDimGrid.x = (nWeightSize - 1) / 1024 + 1;
 	sDimGrid.y = 1;
@@ -492,10 +586,12 @@ void FullLayer_GPU_updateParamFactor(std::size_t nBiasSize, std::size_t nWeightS
 
 	kernel_FullLayer_GPU_updateFactor<<<sDimGrid, sDimBlock>>>(nWeightSize, (const float *)pWeightDelta, (float *)pWeight, nFactor);
 
+#if (_DEBUG)
 	nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("FullLayer_GPU_updateParamFactor__WEIGHT : %d\n", nError);
+#endif
 }
 
 
@@ -515,10 +611,12 @@ void LReLULayer_GPU_forward(std::size_t nSize, CUdeviceptr pInput, CUdeviceptr p
 
 	kernel_LReLULayer_GPU_forward<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("LReLULayer_GPU_forward : %d\n", nError);
+#endif
 }
 
 void LReLULayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput)
@@ -536,10 +634,12 @@ void LReLULayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUde
 
 	kernel_LReLULayer_GPU_forwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("LReLULayer_GPU_forwardBatch : %d\n", nError);
+#endif
 }
 
 void LReLULayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput)
@@ -557,10 +657,12 @@ void LReLULayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUd
 
 	kernel_LReLULayer_GPU_backwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pForwardInput, (const float *)pBackwardInput, (float *)pBackwardOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("LReLULayer_GPU_backwardBatch : %d\n", nError);
+#endif
 }
 
 
@@ -580,10 +682,12 @@ void ReLULayer_GPU_forward(std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pO
 
 	kernel_ReLULayer_GPU_forward<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("ReLULayer_GPU_forward : %d\n", nError);
+#endif
 }
 
 void ReLULayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput)
@@ -601,10 +705,12 @@ void ReLULayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdev
 
 	kernel_ReLULayer_GPU_forwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("ReLULayer_GPU_forwardBatch : %d\n", nError);
+#endif
 }
 
 void ReLULayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput)
@@ -622,10 +728,12 @@ void ReLULayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUde
 
 	kernel_ReLULayer_GPU_backwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pForwardInput, (const float *)pBackwardInput, (float *)pBackwardOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("ReLULayer_GPU_backwardBatch : %d\n", nError);
+#endif
 }
 
 
@@ -645,10 +753,12 @@ void SigmoidLayer_GPU_forward(std::size_t nSize, CUdeviceptr pInput, CUdeviceptr
 
 	kernel_SigmoidLayer_GPU_forward<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("SigmoidLayer_GPU_forward : %d\n", nError);
+#endif
 }
 
 void SigmoidLayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput)
@@ -666,10 +776,12 @@ void SigmoidLayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CU
 
 	kernel_SigmoidLayer_GPU_forwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("SigmoidLayer_GPU_forwardBatch : %d\n", nError);
+#endif
 }
 
 void SigmoidLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput)
@@ -687,10 +799,12 @@ void SigmoidLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, C
 
 	kernel_SigmoidLayer_GPU_backwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pForwardInput, (const float *)pBackwardInput, (float *)pBackwardOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("SigmoidLayer_GPU_backwardBatch : %d\n", nError);
+#endif
 }
 
 
@@ -710,10 +824,12 @@ void TanhLayer_GPU_forward(std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pO
 
 	kernel_TanhLayer_GPU_forward<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("TanhLayer_GPU_forward : %d\n", nError);
+#endif
 }
 
 void TanhLayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput)
@@ -731,10 +847,12 @@ void TanhLayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdev
 
 	kernel_TanhLayer_GPU_forwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("TanhLayer_GPU_forwardBatch : %d\n", nError);
+#endif
 }
 
 void TanhLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput)
@@ -752,10 +870,12 @@ void TanhLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUde
 
 	kernel_TanhLayer_GPU_backwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pForwardInput, (const float *)pBackwardInput, (float *)pBackwardOutput);
 
+#if (_DEBUG)
 	cudaError_t nError = cudaGetLastError();
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("TanhLayer_GPU_backwardBatch : %d\n", nError);
+#endif
 }
 
 #pragma endregion

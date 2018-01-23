@@ -18,11 +18,9 @@ TINNET_DLL void mergeBatch(std::size_t nBatchSize, std::size_t nSize, CUdevicept
 
 #pragma region Loss_GPU
 
-#pragma region MSE_GPU
-
 TINNET_DLL void MSE_GPU_derivative(std::size_t nBatchSize, std::size_t nOutputSize, CUdeviceptr pOutput, CUdeviceptr pDesiredOutput, CUdeviceptr pResult);
-
-#pragma endregion
+TINNET_DLL void CE_GPU_derivative(std::size_t nBatchSize, std::size_t nOutputSize, CUdeviceptr pOutput, CUdeviceptr pDesiredOutput, CUdeviceptr pResult);
+TINNET_DLL void MulticlassCE_GPU_derivative(std::size_t nBatchSize, std::size_t nOutputSize, CUdeviceptr pOutput, CUdeviceptr pDesiredOutput, CUdeviceptr pResult);
 
 #pragma endregion
 

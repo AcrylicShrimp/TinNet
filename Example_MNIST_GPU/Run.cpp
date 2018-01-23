@@ -185,7 +185,7 @@ int32_t main()
 		//sExporter.accrueLoss(nLoss);
 		//sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
 
-		sOptimizer.train<Loss::MSE_GPU>(1);
+		sOptimizer.train<Loss::CE_GPU>(1);
 		printf("trained!\n");
 
 		//std::cout << "Serializing network...";

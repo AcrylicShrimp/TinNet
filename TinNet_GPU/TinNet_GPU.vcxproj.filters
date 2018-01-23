@@ -51,6 +51,12 @@
     <ClCompile Include="TinNet\Layer\LReLULayer_GPU.cpp">
       <Filter>TinNet\Layer</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Loss\CE_GPU.cpp">
+      <Filter>TinNet\Loss</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Loss\MulticlassCE_GPU.cpp">
+      <Filter>TinNet\Loss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Layer\FullLayer_GPU.h">
@@ -103,6 +109,12 @@
     </ClInclude>
     <ClInclude Include="TinNet\Layer\LReLULayer_GPU.h">
       <Filter>TinNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Loss\CE_GPU.h">
+      <Filter>TinNet\Loss</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Loss\MulticlassCE_GPU.h">
+      <Filter>TinNet\Loss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
