@@ -58,26 +58,15 @@ int32_t main()
 		else if (sCommand == "new")
 		{
 			sNetwork.addLayer<Layer::FullLayer_GPU>(784, 300);
-			sNetwork.addLayer<Layer::LReLULayer_GPU>(300);
+			sNetwork.addLayer<Layer::PReLULayer_GPU>(300, .01f);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
-			sNetwork.addLayer<Layer::LReLULayer_GPU>(300);
+			sNetwork.addLayer<Layer::PReLULayer_GPU>(300, .01f);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
-			sNetwork.addLayer<Layer::LReLULayer_GPU>(300);
+			sNetwork.addLayer<Layer::PReLULayer_GPU>(300, .01f);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 100);
-			sNetwork.addLayer<Layer::LReLULayer_GPU>(100);
+			sNetwork.addLayer<Layer::PReLULayer_GPU>(100, .01f);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(100, 10);
-			sNetwork.addLayer<Layer::SigmoidLayer_GPU>(10);
-
-			//sNetwork.addLayer<Layer::FullLayer>(784, 300);
-			//sNetwork.addLayer<Layer::LReLULayer>(300);
-			//sNetwork.addLayer<Layer::FullLayer>(300, 300);
-			//sNetwork.addLayer<Layer::LReLULayer>(300);
-			//sNetwork.addLayer<Layer::FullLayer>(300, 300);
-			//sNetwork.addLayer<Layer::LReLULayer>(300);
-			//sNetwork.addLayer<Layer::FullLayer>(300, 100);
-			//sNetwork.addLayer<Layer::LReLULayer>(100);
-			//sNetwork.addLayer<Layer::FullLayer>(100, 10);
-			//sNetwork.addLayer<Layer::SoftmaxLayer>(10);
+			sNetwork.addLayer<Layer::SoftmaxLayer_GPU>(10);
 
 			std::cout << "Successfully created." << std::endl;
 			std::cout << "Number of the layers : " << sNetwork.layer().size() << std::endl;
@@ -185,7 +174,7 @@ int32_t main()
 		//sExporter.accrueLoss(nLoss);
 		//sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
 
-		sOptimizer.train<Loss::CE_GPU>(1);
+		sOptimizer.train<Loss::MulticlassCE_GPU>(1);
 		printf("trained!\n");
 
 		//std::cout << "Serializing network...";

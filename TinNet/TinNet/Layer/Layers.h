@@ -8,8 +8,6 @@
 
 #define _TINNET_LAYERS_H
 
-#include "Layer.h"
-
 #include "BatchNormLayer.h"
 
 #include "FullLayer.h"
