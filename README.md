@@ -10,7 +10,7 @@ Fully-connected layer | Yes
 Convolution layer | No
 Max pooling layer | No
 Batch normalization layer | No
-Some activation layers | Limited
+Activation layers | Yes
 
 ### Supported optimizers (Limited GPU accelerations available)
 Optimizer | Supports GPU
@@ -69,7 +69,7 @@ sNetwork.addLayer<TinNet::Layer::SoftmaxLayer>(10);
 sNetwork.addLayer<TinNet::Layer::FullLayer_GPU>(784, 50);
 sNetwork.addLayer<TinNet::Layer::LReLULayer_GPU>(50);
 sNetwork.addLayer<TinNet::Layer::FullLayer_GPU>(50, 10);
-sNetwork.addLayer<TinNet::Layer::SigmoidLayer_GPU>(10);
+sNetwork.addLayer<TinNet::Layer::SoftmaxLayer_GPU>(10);
 ```
 
 #### 4. Initialize network
@@ -96,5 +96,5 @@ sOptimizer::train<TinNet::Loss::MulticlassCE>(1, 60000, sTrainInput.data(), sTra
 ```
 ###### For GPU,
 ```cpp
-sOptimizer.train<Loss::CE_GPU>(1);
+sOptimizer.train<Loss::MulticlassCE_GPU>(1);
 ```
