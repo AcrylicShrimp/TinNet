@@ -4,18 +4,22 @@ A C++14 based deep learning library. Easy to use!
 #### Limited GPU accelerations now available!
 
 ### Supported layer types (Limited GPU accelerations available)
-* Fully-connected layer (GPU accelerations available)
-* Convolution layer
-* Max pooling layer
-* Batch normalization layer
-* Some activation layers (Limited GPU accelerations available)
+Layer | Supports GPU
+------|-------------
+Fully-connected layer | Yes
+Convolution layer | No
+Max pooling layer | No
+Batch normalization layer | No
+Some activation layers | Limited
 
 ### Supported optimizers (Limited GPU accelerations available)
-* SGD (GPU accelerations available)
-* Momentum
-* Adagrad
-* RMSProp
-* Adam
+Optimizer | Supports GPU
+----------|-------------
+SGD | Yes
+Momentum | No
+Adagrad | No
+RMSProp | No
+Adam | No
 
 ### Supported loss functions (GPU accelerations available)
 * MSE
