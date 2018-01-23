@@ -301,6 +301,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TinNet\Layer\ConvLayer_GPU.cpp" />
     <ClCompile Include="TinNet\Layer\FullLayer_GPU.cpp">
       <FileType>Document</FileType>
     </ClCompile>
@@ -323,6 +324,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </CudaCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TinNet\Layer\ConvLayer_GPU.h" />
     <ClInclude Include="TinNet\Layer\FullLayer_GPU.h" />
     <ClInclude Include="TinNet\Layer\Layers_GPU.h" />
     <ClInclude Include="TinNet\Layer\Layer_GPU.h" />

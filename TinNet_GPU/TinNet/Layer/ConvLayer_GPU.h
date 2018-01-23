@@ -1,12 +1,12 @@
 
 /*
-	2018.01.19
+	2018.01.24
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_LAYER_FULLLAYER_GPU_H
+#ifndef _CLASS_TINNET_LAYER_CONVLAYER_GPU_H
 
-#define _CLASS_TINNET_LAYER_FULLLAYER_GPU_H
+#define _CLASS_TINNET_LAYER_CONVLAYER_GPU_H
 
 #include "../../../TinNet/TinNet/TinNetDLL.h"
 
@@ -17,19 +17,34 @@
 
 namespace TinNet::Layer
 {
-	class TINNET_DLL FullLayer_GPU : public Layer_GPU
+	class TINNET_DLL ConvLayer_GPU : public Layer_GPU
 	{
 	protected:
 		CUdeviceptr pBias;
 		CUdeviceptr pWeight;
+		CUdeviceptr pParam;
 		
 	public:
-		FullLayer_GPU(std::size_t nFanIn, std::size_t nFanOut);
-		FullLayer_GPU(const FullLayer_GPU &sSrc) = delete;
-		~FullLayer_GPU();
+		ConvLayer_GPU(std::size_t nNewWidth, std::size_t nNewHeight, std::size_t nNewChannel, std::size_t nNewFilter,
+					  std::size_t nNewFilterWidth,
+					  std::size_t nNewFilterHeight);
+		ConvLayer_GPU(std::size_t nNewWidth, std::size_t nNewHeight, std::size_t nNewChannel, std::size_t nNewFilter,
+					  std::size_t nNewFilterWidth,
+					  std::size_t nNewFilterHeight,
+					  std::size_t nNewStrideHorizontal,
+					  std::size_t nNewStrideVertical);
+		ConvLayer_GPU(std::size_t nNewWidth, std::size_t nNewHeight, std::size_t nNewChannel, std::size_t nNewFilter,
+					  std::size_t nNewFilterWidth,
+					  std::size_t nNewFilterHeight,
+					  std::size_t nNewStrideHorizontal,
+					  std::size_t nNewStrideVertical,
+					  std::size_t nNewOutputWidth,
+					  std::size_t nNewOutputHeight);
+		ConvLayer_GPU(const ConvLayer_GPU &sSrc) = delete;
+		~ConvLayer_GPU();
 		
 	public:
-		FullLayer_GPU &operator=(const FullLayer_GPU &sSrc) = delete;
+		ConvLayer_GPU &operator=(const ConvLayer_GPU &sSrc) = delete;
 		
 	public:
 		virtual const char *name() const override;
