@@ -58,15 +58,15 @@ int32_t main()
 		else if (sCommand == "new")
 		{
 			sNetwork.addLayer<Layer::FullLayer_GPU>(784, 300);
-			sNetwork.addLayer<Layer::TanhLayer_GPU>(300);
+			sNetwork.addLayer<Layer::LReLULayer_GPU>(300);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
-			sNetwork.addLayer<Layer::TanhLayer_GPU>(300);
+			sNetwork.addLayer<Layer::LReLULayer_GPU>(300);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
-			sNetwork.addLayer<Layer::TanhLayer_GPU>(300);
+			sNetwork.addLayer<Layer::LReLULayer_GPU>(300);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 100);
-			sNetwork.addLayer<Layer::TanhLayer_GPU>(100);
+			sNetwork.addLayer<Layer::LReLULayer_GPU>(100);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(100, 10);
-			sNetwork.addLayer<Layer::TanhLayer_GPU>(10);
+			sNetwork.addLayer<Layer::SigmoidLayer_GPU>(10);
 
 			//sNetwork.addLayer<Layer::FullLayer>(784, 300);
 			//sNetwork.addLayer<Layer::LReLULayer>(300);

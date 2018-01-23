@@ -45,6 +45,12 @@
     <ClCompile Include="TinNet\Layer\TanhLayer_GPU.cpp">
       <Filter>TinNet\Layer</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Layer\ReLULayer_GPU.cpp">
+      <Filter>TinNet\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Layer\LReLULayer_GPU.cpp">
+      <Filter>TinNet\Layer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Layer\FullLayer_GPU.h">
@@ -90,6 +96,12 @@
       <Filter>TinNet\Layer</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Layer\TanhLayer_GPU.h">
+      <Filter>TinNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Layer\ReLULayer_GPU.h">
+      <Filter>TinNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Layer\LReLULayer_GPU.h">
       <Filter>TinNet\Layer</Filter>
     </ClInclude>
   </ItemGroup>

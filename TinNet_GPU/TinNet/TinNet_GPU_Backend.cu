@@ -141,6 +141,106 @@ __global__ void kernel_FullLayer_GPU_updateFactor(unsigned int nParamSize, const
 
 
 
+__global__ void kernel_LReLULayer_GPU_forward(unsigned int nSize, const float *pInput, float *pOutput)
+{
+	unsigned int nUnifiedIndex = blockDim.x * blockIdx.x + threadIdx.x;
+	unsigned int vMax[2] =
+	{
+		nSize - 1,
+		nUnifiedIndex
+	};
+	const float vValue[2] =
+	{
+		.01f,
+		1.f
+	};
+
+	nUnifiedIndex = vMax[nUnifiedIndex < nSize];
+	pOutput[nUnifiedIndex] = vValue[pInput[nUnifiedIndex] > .0f] * pInput[nUnifiedIndex];
+}
+
+__global__ void kernel_LReLULayer_GPU_forwardBatch(unsigned int nSize, const float *pInput, float *pOutput)
+{
+	unsigned int nUnifiedIndex = blockDim.x * blockIdx.y + threadIdx.x;
+	unsigned int vMax[2] =
+	{
+		nSize - 1,
+		nUnifiedIndex
+	};
+	const float vValue[2] =
+	{
+		.01f,
+		1.f
+	};
+
+	nUnifiedIndex = vMax[nUnifiedIndex < nSize];
+	pOutput[nSize * blockIdx.x + nUnifiedIndex] = vValue[pInput[nSize * blockIdx.x + nUnifiedIndex] > .0f] * pInput[nSize * blockIdx.x + nUnifiedIndex];
+}
+
+__global__ void kernel_LReLULayer_GPU_backwardBatch(unsigned int nSize, const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput)
+{
+	unsigned int nUnifiedIndex = blockDim.x * blockIdx.y + threadIdx.x;
+	const float vValue[2] =
+	{
+		.01f,
+		1.f
+	};
+
+	pBackwardOutput[nSize * blockIdx.x + nUnifiedIndex] = pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] * vValue[pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] > .0f];
+}
+
+
+
+__global__ void kernel_ReLULayer_GPU_forward(unsigned int nSize, const float *pInput, float *pOutput)
+{
+	unsigned int nUnifiedIndex = blockDim.x * blockIdx.x + threadIdx.x;
+	unsigned int vMax[2] =
+	{
+		nSize - 1,
+		nUnifiedIndex
+	};
+	const float vValue[2] =
+	{
+		.0f,
+		1.f
+	};
+
+	nUnifiedIndex = vMax[nUnifiedIndex < nSize];
+	pOutput[nUnifiedIndex] = vValue[pInput[nUnifiedIndex] > .0f] * pInput[nUnifiedIndex];
+}
+
+__global__ void kernel_ReLULayer_GPU_forwardBatch(unsigned int nSize, const float *pInput, float *pOutput)
+{
+	unsigned int nUnifiedIndex = blockDim.x * blockIdx.y + threadIdx.x;
+	unsigned int vMax[2] =
+	{
+		nSize - 1,
+		nUnifiedIndex
+	};
+	const float vValue[2] =
+	{
+		.0f,
+		1.f
+	};
+
+	nUnifiedIndex = vMax[nUnifiedIndex < nSize];
+	pOutput[nSize * blockIdx.x + nUnifiedIndex] = vValue[pInput[nSize * blockIdx.x + nUnifiedIndex] > .0f] * pInput[nSize * blockIdx.x + nUnifiedIndex];
+}
+
+__global__ void kernel_ReLULayer_GPU_backwardBatch(unsigned int nSize, const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput)
+{
+	unsigned int nUnifiedIndex = blockDim.x * blockIdx.y + threadIdx.x;
+	const float vValue[2] =
+	{
+		.0f,
+		1.f
+	};
+
+	pBackwardOutput[nSize * blockIdx.x + nUnifiedIndex] = pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] * vValue[pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] > .0f];
+}
+
+
+
 __global__ void kernel_SigmoidLayer_GPU_forward(unsigned int nSize, const float *pInput, float *pOutput)
 {
 	unsigned int nUnifiedIndex = blockDim.x * blockIdx.x + threadIdx.x;
@@ -396,6 +496,136 @@ void FullLayer_GPU_updateParamFactor(std::size_t nBiasSize, std::size_t nWeightS
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("FullLayer_GPU_updateParamFactor__WEIGHT : %d\n", nError);
+}
+
+
+
+void LReLULayer_GPU_forward(std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = (nSize - 1) / 1024 + 1;
+	sDimGrid.y = 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_LReLULayer_GPU_forward<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
+
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("LReLULayer_GPU_forward : %d\n", nError);
+}
+
+void LReLULayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = nBatchSize;
+	sDimGrid.y = (nSize - 1) / 1024 + 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_LReLULayer_GPU_forwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
+
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("LReLULayer_GPU_forwardBatch : %d\n", nError);
+}
+
+void LReLULayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = nBatchSize;
+	sDimGrid.y = (nSize - 1) / 1024 + 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_LReLULayer_GPU_backwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pForwardInput, (const float *)pBackwardInput, (float *)pBackwardOutput);
+
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("LReLULayer_GPU_backwardBatch : %d\n", nError);
+}
+
+
+
+void ReLULayer_GPU_forward(std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = (nSize - 1) / 1024 + 1;
+	sDimGrid.y = 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_ReLULayer_GPU_forward<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
+
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("ReLULayer_GPU_forward : %d\n", nError);
+}
+
+void ReLULayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = nBatchSize;
+	sDimGrid.y = (nSize - 1) / 1024 + 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_ReLULayer_GPU_forwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput);
+
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("ReLULayer_GPU_forwardBatch : %d\n", nError);
+}
+
+void ReLULayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = nBatchSize;
+	sDimGrid.y = (nSize - 1) / 1024 + 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_ReLULayer_GPU_backwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pForwardInput, (const float *)pBackwardInput, (float *)pBackwardOutput);
+
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("ReLULayer_GPU_backwardBatch : %d\n", nError);
 }
 
 
