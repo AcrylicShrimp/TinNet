@@ -5,7 +5,7 @@ A C++14 based deep learning library. Easy to use!
 
 ### Supported layer types (Limited GPU accelerations available)
 Layer | Supports GPU
-------|-------------
+------|:-----------:
 Fully-connected layer | Yes
 Convolution layer | No
 Max pooling layer | No
@@ -14,7 +14,7 @@ Activation layers | Yes
 
 ### Supported optimizers (Limited GPU accelerations available)
 Optimizer | Supports GPU
-----------|-------------
+----------|:-----------:
 SGD | Yes
 Momentum | No
 Adagrad | No
