@@ -23,6 +23,20 @@ namespace TinNet::Layer
 		CUdeviceptr pBias;
 		CUdeviceptr pWeight;
 		CUdeviceptr pParam;
+		std::size_t nWidth;
+		std::size_t nHeight;
+		std::size_t nChannel;
+		std::size_t nFilter;
+		std::size_t nFilterWidth;
+		std::size_t nFilterHeight;
+		std::size_t nStrideHorizontal;
+		std::size_t nStrideVertical;
+		std::size_t nOutputWidth;
+		std::size_t nOutputHeight;
+		std::size_t nZeroPaddingHorizontalNegative;
+		std::size_t nZeroPaddingHorizontalPositive;
+		std::size_t nZeroPaddingVerticalNegative;
+		std::size_t nZeroPaddingVerticalPositive;
 		
 	public:
 		ConvLayer_GPU(std::size_t nNewWidth, std::size_t nNewHeight, std::size_t nNewChannel, std::size_t nNewFilter,

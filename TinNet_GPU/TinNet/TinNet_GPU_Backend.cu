@@ -70,6 +70,102 @@ __global__ void kernel_MulticlassCE_GPU_derivative(unsigned int nSize, unsigned 
 
 
 
+__global__ void kernel_ConvLayer_GPU_forward(
+	unsigned int nWidth,
+	unsigned int nHeight,
+	unsigned int nChannel,
+	unsigned int nFilterWidth,
+	unsigned int nFilterHeight,
+	unsigned int nStrideHorizontal,
+	unsigned int nStrideVertical,
+	unsigned int nZeroPaddingHorizontalNegative,
+	unsigned int nZeroPaddingVerticalNegative,
+	const float *pBias, const float *pWeight, const float *pInput, float *pOutput)
+{
+	float nValue = pBias[blockIdx.x];
+	
+	for (unsigned int nFilterY = 0; nFilterY < nFilterHeight; ++nFilterY)
+	{
+		const unsigned int nY = threadIdx.y * nStrideVertical + nFilterY;
+
+		if (nY < nZeroPaddingVerticalNegative)
+			continue;
+
+		if (nY >= nZeroPaddingVerticalNegative + nHeight)
+			continue;
+
+		const unsigned int nInputY = nY - nZeroPaddingVerticalNegative;
+
+		for (unsigned int nFilterX = 0; nFilterX < nFilterWidth; ++nFilterX)
+		{
+			const unsigned int nX = threadIdx.x * nStrideHorizontal + nFilterX;
+
+			if (nX < nZeroPaddingHorizontalNegative)
+				continue;
+
+			if (nX >= nZeroPaddingHorizontalNegative + nWidth)
+				continue;
+
+			const unsigned int nInputX = nX - nZeroPaddingHorizontalNegative;
+
+			for (unsigned int nChannelIndex = 0; nChannelIndex < nChannel; ++nChannelIndex)
+				nValue += pInput[nChannelIndex * nWidth * nHeight + nInputY * nWidth + nInputX] * pWeight[blockIdx.x * nChannel * nFilterWidth * nFilterHeight + nChannelIndex * nFilterWidth * nFilterHeight + nFilterY * nFilterWidth + nFilterX];
+		}
+	}
+
+	pOutput[threadIdx.y * blockDim.x + threadIdx.x] = nValue;
+}
+
+__global__ void kernel_ConvLayer_GPU_forwardBatch(
+	unsigned int nWidth,
+	unsigned int nHeight,
+	unsigned int nChannel,
+	unsigned int nFilterWidth,
+	unsigned int nFilterHeight,
+	unsigned int nStrideHorizontal,
+	unsigned int nStrideVertical,
+	unsigned int nZeroPaddingHorizontalNegative,
+	unsigned int nZeroPaddingVerticalNegative,
+	const float *pBias, const float *pWeight, const float *pInput, float *pOutput)
+{
+	float nValue = pBias[blockIdx.x];
+
+	for (unsigned int nFilterY = 0; nFilterY < nFilterHeight; ++nFilterY)
+	{
+		const unsigned int nY = threadIdx.y * nStrideVertical + nFilterY;
+
+		if (nY < nZeroPaddingVerticalNegative)
+			continue;
+
+		if (nY >= nZeroPaddingVerticalNegative + nHeight)
+			continue;
+
+		const unsigned int nInputY = nY - nZeroPaddingVerticalNegative;
+
+		for (unsigned int nFilterX = 0; nFilterX < nFilterWidth; ++nFilterX)
+		{
+			const unsigned int nX = threadIdx.x * nStrideHorizontal + nFilterX;
+
+			if (nX < nZeroPaddingHorizontalNegative)
+				continue;
+
+			if (nX >= nZeroPaddingHorizontalNegative + nWidth)
+				continue;
+
+			const unsigned int nInputX = nX - nZeroPaddingHorizontalNegative;
+
+			for (unsigned int nChannelIndex = 0; nChannelIndex < nChannel; ++nChannelIndex)
+				nValue += pInput[blockIdx.y * nWidth * nHeight + nChannelIndex * nWidth * nHeight + nInputY * nWidth + nInputX] * pWeight[blockIdx.x * nChannel * nFilterWidth * nFilterHeight + nChannelIndex * nFilterWidth * nFilterHeight + nFilterY * nFilterWidth + nFilterX];
+		}
+	}
+
+	pOutput[blockIdx.y * blockDim.x * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x] = nValue;
+}
+
+
+
+
+
 __global__ void kernel_FullLayer_GPU_forward(unsigned int nInputSize, unsigned int nOutputSize, const float *pBias, const float *pWeight, const float *pInput, float *pOutput)
 {
 	extern __shared__ float pCopiedInput[];
