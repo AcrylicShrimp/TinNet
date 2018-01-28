@@ -304,21 +304,21 @@ namespace TinNet::Layer
 				{
 					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
 
-					for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
+					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
 					{
-						const auto nY{nStrideOffsetY + nFilterY};
+						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
 
-						if (nY < this->nZeroPaddingVerticalNegative)
-							continue;
-
-						if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
-							continue;
-
-						const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
-
-						for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+						for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
 						{
-							const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+							const auto nY{nStrideOffsetY + nFilterY};
+
+							if (nY < this->nZeroPaddingVerticalNegative)
+								continue;
+
+							if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+								continue;
+
+							const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
 
 							for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
 							{

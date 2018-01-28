@@ -57,16 +57,14 @@ int32_t main()
 		}
 		else if (sCommand == "new")
 		{
-			sNetwork.addLayer<Layer::FullLayer_GPU>(784, 300);
-			sNetwork.addLayer<Layer::PReLULayer_GPU>(300, .01f);
-			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
-			sNetwork.addLayer<Layer::PReLULayer_GPU>(300, .01f);
-			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
-			sNetwork.addLayer<Layer::PReLULayer_GPU>(300, .01f);
-			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 100);
-			sNetwork.addLayer<Layer::PReLULayer_GPU>(100, .01f);
+			sNetwork.addLayer<Layer::ConvLayer_GPU>(28, 28, 1, 30, 5, 5, 1, 1, 24, 24);
+			sNetwork.addLayer<Layer::LReLULayer_GPU>(17280);
+			sNetwork.addLayer<Layer::ConvLayer_GPU>(24, 24, 30, 60, 4, 4, 2, 2, 11, 11);
+			sNetwork.addLayer<Layer::LReLULayer_GPU>(7260);
+			sNetwork.addLayer<Layer::FullLayer_GPU>(7260, 100);
+			sNetwork.addLayer<Layer::LReLULayer_GPU>(100);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(100, 10);
-			sNetwork.addLayer<Layer::SoftmaxLayer_GPU>(10);
+			//sNetwork.addLayer<Layer::SoftmaxLayer_GPU>(10);
 
 			std::cout << "Successfully created." << std::endl;
 			std::cout << "Number of the layers : " << sNetwork.layer().size() << std::endl;
@@ -152,7 +150,7 @@ int32_t main()
 
 	sOptimizer.addTrainingSet(60000u, sTrainInput.data(), sTrainOutput.data());
 
-	//Visualizer::CSVLossExporter sExporter;
+	Visualizer::CSVLossExporter sExporter;
 
 	//std::cout << "Serializing network...";
 	//sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
@@ -171,8 +169,8 @@ int32_t main()
 		//float nLoss{sNetwork.classificationLoss(10000u, sTestInput.data(), sTestOutput.data())};
 		//printf("Validation data classification accuracy : %0.2f%%\n", (1.f - nLoss) * 100.f);
 
-		//sExporter.accrueLoss(nLoss);
-		//sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
+		sExporter.accrueLoss(.0f);
+		sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
 
 		sOptimizer.train<Loss::MulticlassCE_GPU>(1);
 		printf("trained!\n");

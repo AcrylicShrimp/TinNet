@@ -71,11 +71,11 @@ namespace TinNet::Layer
 
 	void FullLayer_GPU::update(CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
 	{
-		::FullLayer_GPU_updateParam(this->nFanOut, this->nFanIn * this->nFanOut, this->pBias, this->pWeight, pBiasDelta, pWeightDelta);
+		::updateParam(this->nFanOut, this->nFanIn * this->nFanOut, this->pBias, this->pWeight, pBiasDelta, pWeightDelta);
 	}
 
 	void FullLayer_GPU::update(float nFactor, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
 	{
-		::FullLayer_GPU_updateParamFactor(this->nFanOut, this->nFanIn * this->nFanOut, this->pBias, this->pWeight, pBiasDelta, pWeightDelta, nFactor);
+		::updateParamFactor(this->nFanOut, this->nFanIn * this->nFanOut, this->pBias, this->pWeight, pBiasDelta, pWeightDelta, nFactor);
 	}
 }

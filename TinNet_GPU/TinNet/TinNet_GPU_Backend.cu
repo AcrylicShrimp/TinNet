@@ -27,6 +27,26 @@ __global__ void kernel_mergeBatch(unsigned int nBatchSize, unsigned int nSize, c
 		pOutput[nUnifiedIndex] += pInput[nSize * nBatch + nUnifiedIndex];
 }
 
+__global__ void kernel_update(unsigned int nParamSize, const float *pParamDelta, float *pParam)
+{
+	unsigned int nUnifiedOut = blockDim.x * blockIdx.x + threadIdx.x;
+
+	if (nUnifiedOut >= nParamSize)
+		return;
+
+	pParam[nUnifiedOut] += pParamDelta[nUnifiedOut];
+}
+
+__global__ void kernel_updateFactor(unsigned int nParamSize, const float *pParamDelta, float *pParam, float nFactor)
+{
+	unsigned int nUnifiedOut = blockDim.x * blockIdx.x + threadIdx.x;
+
+	if (nUnifiedOut >= nParamSize)
+		return;
+
+	pParam[nUnifiedOut] += nFactor * pParamDelta[nUnifiedOut];
+}
+
 
 
 __global__ void kernel_MSE_GPU_derivative(unsigned int nSize, unsigned int nOutputSize, const float *pOutput, const float *pDesiredOutput, float *pResult)
@@ -109,11 +129,13 @@ __global__ void kernel_ConvLayer_GPU_forward(
 			const unsigned int nInputX = nX - nZeroPaddingHorizontalNegative;
 
 			for (unsigned int nChannelIndex = 0; nChannelIndex < nChannel; ++nChannelIndex)
-				nValue += pInput[nChannelIndex * nWidth * nHeight + nInputY * nWidth + nInputX] * pWeight[blockIdx.x * nChannel * nFilterWidth * nFilterHeight + nChannelIndex * nFilterWidth * nFilterHeight + nFilterY * nFilterWidth + nFilterX];
+				nValue +=
+					pInput[nChannelIndex * nWidth * nHeight + nInputY * nWidth + nInputX] *
+				pWeight[blockIdx.x * nChannel * nFilterWidth * nFilterHeight + nChannelIndex * nFilterWidth * nFilterHeight + nFilterY * nFilterWidth + nFilterX];
 		}
 	}
 
-	pOutput[threadIdx.y * blockDim.x + threadIdx.x] = nValue;
+	pOutput[blockIdx.x * blockDim.x * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x] = nValue;
 }
 
 __global__ void kernel_ConvLayer_GPU_forwardBatch(
@@ -154,15 +176,72 @@ __global__ void kernel_ConvLayer_GPU_forwardBatch(
 
 			const unsigned int nInputX = nX - nZeroPaddingHorizontalNegative;
 
+			nValue = .0f;
+
 			for (unsigned int nChannelIndex = 0; nChannelIndex < nChannel; ++nChannelIndex)
-				nValue += pInput[blockIdx.y * nWidth * nHeight + nChannelIndex * nWidth * nHeight + nInputY * nWidth + nInputX] * pWeight[blockIdx.x * nChannel * nFilterWidth * nFilterHeight + nChannelIndex * nFilterWidth * nFilterHeight + nFilterY * nFilterWidth + nFilterX];
+				nValue += pInput[blockIdx.y * nChannel * nWidth * nHeight + nChannelIndex * nWidth * nHeight + nInputY * nWidth + nInputX] * pWeight[blockIdx.x * nChannel * nFilterWidth * nFilterHeight + nChannelIndex * nFilterWidth * nFilterHeight + nFilterY * nFilterWidth + nFilterX];
 		}
 	}
 
-	pOutput[blockIdx.y * blockDim.x * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x] = nValue;
+	pOutput[blockIdx.y * gridDim.x * blockDim.x * blockDim.y + blockIdx.x * blockDim.x * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x] = nValue;
 }
 
+__global__ void kernel_ConvLayer_GPU_backwardBatch(
+	unsigned int nWidth,
+	unsigned int nHeight,
+	unsigned int nChannel,
+	unsigned int nFilterWidth,
+	unsigned int nFilterHeight,
+	unsigned int nStrideHorizontal,
+	unsigned int nStrideVertical,
+	unsigned int nZeroPaddingHorizontalNegative,
+	unsigned int nZeroPaddingVerticalNegative,
+	const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput, float *pBiasDelta, float *pWeightDelta, const float *pWeight)
+{
+	float nDelta = .0f;
 
+	for(unsigned int nOutputIndex = 0, nOutputSize = blockDim.x * blockDim.y; nOutputIndex < nOutputSize; ++nOutputIndex)
+		nDelta += pBackwardInput[blockIdx.y * gridDim.x * nOutputSize + blockIdx.x * nOutputSize + nOutputIndex];
+
+	pBiasDelta[blockIdx.y * gridDim.x + blockIdx.x] = nDelta;
+
+	for (unsigned int nFilterY = 0; nFilterY < nFilterHeight; ++nFilterY)
+	{
+		const unsigned int nY = threadIdx.y * nStrideVertical + nFilterY;
+
+		if (nY < nZeroPaddingVerticalNegative)
+			continue;
+
+		if (nY >= nZeroPaddingVerticalNegative + nHeight)
+			continue;
+
+		const unsigned int nInputY = nY - nZeroPaddingVerticalNegative;
+
+		for (unsigned int nFilterX = 0; nFilterX < nFilterWidth; ++nFilterX)
+		{
+			const unsigned int nX = threadIdx.x * nStrideHorizontal + nFilterX;
+
+			if (nX < nZeroPaddingHorizontalNegative)
+				continue;
+
+			if (nX >= nZeroPaddingHorizontalNegative + nWidth)
+				continue;
+
+			const unsigned int nInputX = nX - nZeroPaddingHorizontalNegative;
+
+			for (unsigned int nChannelIndex = 0; nChannelIndex < nChannel; ++nChannelIndex)
+			{
+				atomicAdd(&pWeightDelta[blockIdx.y * gridDim.x * nChannel * nFilterWidth * nFilterHeight + blockIdx.x * nChannel * nFilterWidth * nFilterHeight + nChannelIndex * nFilterWidth * nFilterHeight + nFilterY * nFilterWidth + nFilterX],
+					pBackwardInput[blockIdx.y * gridDim.x * blockDim.x * blockDim.y + blockIdx.x * blockDim.x * blockDim.y + threadIdx.y * blockDim.y * threadIdx.x] *
+					pForwardInput[blockIdx.y * nChannel * nWidth * nHeight + nChannelIndex * nWidth * nHeight + nInputY * nWidth + nInputX]);
+
+				atomicAdd(&pBackwardOutput[blockIdx.y * nChannel * nWidth * nHeight + nChannelIndex * nWidth * nHeight + nInputY * nWidth + nInputX],
+					pBackwardInput[blockIdx.y * gridDim.x * blockDim.x * blockDim.y + blockIdx.x * blockDim.x * blockDim.y + threadIdx.y * blockDim.y * threadIdx.x] *
+					pWeight[blockIdx.x * nChannel * nFilterWidth * nFilterHeight + nChannelIndex * nFilterWidth * nFilterHeight + nFilterY * nFilterWidth + nFilterX]);
+			}
+		}
+	}
+}
 
 
 
@@ -241,26 +320,6 @@ __global__ void kernel_FullLayer_GPU_backwardBatch(unsigned int nInputSize, unsi
 	}
 
 	pBackwardOutput[nInputSize * blockIdx.x + nUnifiedIn] = nValue;
-}
-
-__global__ void kernel_FullLayer_GPU_update(unsigned int nParamSize, const float *pParamDelta, float *pParam)
-{
-	unsigned int nUnifiedOut = blockDim.x * blockIdx.x + threadIdx.x;
-
-	if (nUnifiedOut >= nParamSize)
-		return;
-
-	pParam[nUnifiedOut] += pParamDelta[nUnifiedOut];
-}
-
-__global__ void kernel_FullLayer_GPU_updateFactor(unsigned int nParamSize, const float *pParamDelta, float *pParam, float nFactor)
-{
-	unsigned int nUnifiedOut = blockDim.x * blockIdx.x + threadIdx.x;
-
-	if (nUnifiedOut >= nParamSize)
-		return;
-
-	pParam[nUnifiedOut] += nFactor * pParamDelta[nUnifiedOut];
 }
 
 
@@ -639,6 +698,86 @@ void mergeBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, C
 #endif
 }
 
+void updateParam(std::size_t nBiasSize, std::size_t nWeightSize, CUdeviceptr pBias, CUdeviceptr pWeight, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = (nBiasSize - 1) / 1024 + 1;
+	sDimGrid.y = 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nBiasSize < 1024 ? nBiasSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_update<<<sDimGrid, sDimBlock>>>(nBiasSize, (const float *)pBiasDelta, (float *)pBias);
+
+#if (_DEBUG)
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("updateParam__BIAS : %d\n", nError);
+#endif
+
+	sDimGrid.x = (nWeightSize - 1) / 1024 + 1;
+	sDimGrid.y = 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nWeightSize < 1024 ? nWeightSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_update<<<sDimGrid, sDimBlock>>>(nWeightSize, (const float *)pWeightDelta, (float *)pWeight);
+
+#if (_DEBUG)
+	nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("updateParam__WEIGHT : %d\n", nError);
+#endif
+}
+
+void updateParamFactor(std::size_t nBiasSize, std::size_t nWeightSize, CUdeviceptr pBias, CUdeviceptr pWeight, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta, float nFactor)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = (nBiasSize - 1) / 1024 + 1;
+	sDimGrid.y = 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nBiasSize < 1024 ? nBiasSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_updateFactor<<<sDimGrid, sDimBlock>>>(nBiasSize, (const float *)pBiasDelta, (float *)pBias, nFactor);
+
+#if (_DEBUG)
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("kernel_updateFactor__BIAS : %d\n", nError);
+#endif
+
+	sDimGrid.x = (nWeightSize - 1) / 1024 + 1;
+	sDimGrid.y = 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nWeightSize < 1024 ? nWeightSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_updateFactor<<<sDimGrid, sDimBlock>>>(nWeightSize, (const float *)pWeightDelta, (float *)pWeight, nFactor);
+
+#if (_DEBUG)
+	nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("kernel_updateFactor__WEIGHT : %d\n", nError);
+#endif
+}
+
 #pragma region Loss_GPU
 
 void MSE_GPU_derivative(std::size_t nBatchSize, std::size_t nOutputSize, CUdeviceptr pOutput, CUdeviceptr pDesiredOutput, CUdeviceptr pResult)
@@ -720,6 +859,148 @@ void MulticlassCE_GPU_derivative(std::size_t nBatchSize, std::size_t nOutputSize
 
 #pragma region Layer_GPU
 
+void ConvLayer_GPU_forward(
+	std::size_t nWidth,
+	std::size_t nHeight,
+	std::size_t nChannel,
+	std::size_t nFilter,
+	std::size_t nFilterWidth,
+	std::size_t nFilterHeight,
+	std::size_t nStrideHorizontal,
+	std::size_t nStrideVertical,
+	std::size_t nOutputWidth,
+	std::size_t nOutputHeight,
+	std::size_t nZeroPaddingHorizontalNegative,
+	std::size_t nZeroPaddingVerticalNegative,
+	CUdeviceptr pInput, CUdeviceptr pOutput, CUdeviceptr pBias, CUdeviceptr pWeight)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = nFilter;
+	sDimGrid.y = 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nOutputWidth;
+	sDimBlock.y = nOutputHeight;
+	sDimBlock.z = 1;
+
+	kernel_ConvLayer_GPU_forward<<<sDimGrid, sDimBlock>>>(
+		nWidth,
+		nHeight,
+		nChannel,
+		nFilterWidth,
+		nFilterHeight,
+		nStrideHorizontal,
+		nStrideVertical,
+		nZeroPaddingHorizontalNegative,
+		nZeroPaddingVerticalNegative,
+		(const float *)pBias, (const float *)pWeight, (const float *)pInput, (float *)pOutput);
+
+#if (_DEBUG)
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("ConvLayer_GPU_forward : %d\n", nError);
+#endif
+}
+
+void ConvLayer_GPU_forwardBatch(
+	std::size_t nBatchSize,
+	std::size_t nWidth,
+	std::size_t nHeight,
+	std::size_t nChannel,
+	std::size_t nFilter,
+	std::size_t nFilterWidth,
+	std::size_t nFilterHeight,
+	std::size_t nStrideHorizontal,
+	std::size_t nStrideVertical,
+	std::size_t nOutputWidth,
+	std::size_t nOutputHeight,
+	std::size_t nZeroPaddingHorizontalNegative,
+	std::size_t nZeroPaddingVerticalNegative,
+	CUdeviceptr pInput, CUdeviceptr pOutput, CUdeviceptr pBias, CUdeviceptr pWeight)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = nFilter;
+	sDimGrid.y = nBatchSize;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nOutputWidth;
+	sDimBlock.y = nOutputHeight;
+	sDimBlock.z = 1;
+
+	kernel_ConvLayer_GPU_forwardBatch<<<sDimGrid, sDimBlock>>>(
+		nWidth,
+		nHeight,
+		nChannel,
+		nFilterWidth,
+		nFilterHeight,
+		nStrideHorizontal,
+		nStrideVertical,
+		nZeroPaddingHorizontalNegative,
+		nZeroPaddingVerticalNegative,
+		(const float *)pBias, (const float *)pWeight, (const float *)pInput, (float *)pOutput);
+
+#if (_DEBUG)
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("ConvLayer_GPU_forwardBatch : %d\n", nError);
+#endif
+}
+
+TINNET_DLL void ConvLayer_GPU_backwardBatch(
+	std::size_t nBatchSize,
+	std::size_t nWidth,
+	std::size_t nHeight,
+	std::size_t nChannel,
+	std::size_t nFilter,
+	std::size_t nFilterWidth,
+	std::size_t nFilterHeight,
+	std::size_t nStrideHorizontal,
+	std::size_t nStrideVertical,
+	std::size_t nOutputWidth,
+	std::size_t nOutputHeight,
+	std::size_t nZeroPaddingHorizontalNegative,
+	std::size_t nZeroPaddingVerticalNegative,
+	CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta, CUdeviceptr pWeight)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = nFilter;
+	sDimGrid.y = nBatchSize;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nOutputWidth;
+	sDimBlock.y = nOutputHeight;
+	sDimBlock.z = 1;
+
+	kernel_ConvLayer_GPU_backwardBatch<<<sDimGrid, sDimBlock>>>(
+		nWidth,
+		nHeight,
+		nChannel,
+		nFilterWidth,
+		nFilterHeight,
+		nStrideHorizontal,
+		nStrideVertical,
+		nZeroPaddingHorizontalNegative,
+		nZeroPaddingVerticalNegative,
+		(const float *)pForwardInput, (const float *)pBackwardInput, (float *)pBackwardOutput, (float *)pBiasDelta, (float *)pWeightDelta, (const float *)pWeight);
+
+#if (_DEBUG)
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("ConvLayer_GPU_backwardBatch : %d\n", nError);
+#endif
+}
+
+
+
 void FullLayer_GPU_forward(std::size_t nInputSize, std::size_t nOutputSize, CUdeviceptr pInput, CUdeviceptr pOutput, CUdeviceptr pBias, CUdeviceptr pWeight)
 {
 	uint3 sDimGrid;
@@ -786,86 +1067,6 @@ void FullLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nInputSize,
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("FullLayer_GPU_backwardBatch : %d\n", nError);
-#endif
-}
-
-void FullLayer_GPU_updateParam(std::size_t nBiasSize, std::size_t nWeightSize, CUdeviceptr pBias, CUdeviceptr pWeight, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
-{
-	uint3 sDimGrid;
-	uint3 sDimBlock;
-
-	sDimGrid.x = (nBiasSize - 1) / 1024 + 1;
-	sDimGrid.y = 1;
-	sDimGrid.z = 1;
-
-	sDimBlock.x = nBiasSize < 1024 ? nBiasSize : 1024;
-	sDimBlock.y = 1;
-	sDimBlock.z = 1;
-
-	kernel_FullLayer_GPU_update << <sDimGrid, sDimBlock >> > (nBiasSize, (const float *)pBiasDelta, (float *)pBias);
-
-#if (_DEBUG)
-	cudaError_t nError = cudaGetLastError();
-
-	if (nError != cudaError_t::cudaSuccess)
-		printf("FullLayer_GPU_updateParam__BIAS : %d\n", nError);
-#endif
-
-	sDimGrid.x = (nWeightSize - 1) / 1024 + 1;
-	sDimGrid.y = 1;
-	sDimGrid.z = 1;
-
-	sDimBlock.x = nWeightSize < 1024 ? nWeightSize : 1024;
-	sDimBlock.y = 1;
-	sDimBlock.z = 1;
-
-	kernel_FullLayer_GPU_update<<<sDimGrid, sDimBlock>>>(nWeightSize, (const float *)pWeightDelta, (float *)pWeight);
-
-#if (_DEBUG)
-	nError = cudaGetLastError();
-
-	if (nError != cudaError_t::cudaSuccess)
-		printf("FullLayer_GPU_updateParam__WEIGHT : %d\n", nError);
-#endif
-}
-
-void FullLayer_GPU_updateParamFactor(std::size_t nBiasSize, std::size_t nWeightSize, CUdeviceptr pBias, CUdeviceptr pWeight, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta, float nFactor)
-{
-	uint3 sDimGrid;
-	uint3 sDimBlock;
-
-	sDimGrid.x = (nBiasSize - 1) / 1024 + 1;
-	sDimGrid.y = 1;
-	sDimGrid.z = 1;
-
-	sDimBlock.x = nBiasSize < 1024 ? nBiasSize : 1024;
-	sDimBlock.y = 1;
-	sDimBlock.z = 1;
-
-	kernel_FullLayer_GPU_updateFactor<<<sDimGrid, sDimBlock>>>(nBiasSize, (const float *)pBiasDelta, (float *)pBias, nFactor);
-
-#if (_DEBUG)
-	cudaError_t nError = cudaGetLastError();
-
-	if (nError != cudaError_t::cudaSuccess)
-		printf("FullLayer_GPU_updateParamFactor__BIAS : %d\n", nError);
-#endif
-
-	sDimGrid.x = (nWeightSize - 1) / 1024 + 1;
-	sDimGrid.y = 1;
-	sDimGrid.z = 1;
-
-	sDimBlock.x = nWeightSize < 1024 ? nWeightSize : 1024;
-	sDimBlock.y = 1;
-	sDimBlock.z = 1;
-
-	kernel_FullLayer_GPU_updateFactor<<<sDimGrid, sDimBlock>>>(nWeightSize, (const float *)pWeightDelta, (float *)pWeight, nFactor);
-
-#if (_DEBUG)
-	nError = cudaGetLastError();
-
-	if (nError != cudaError_t::cudaSuccess)
-		printf("FullLayer_GPU_updateParamFactor__WEIGHT : %d\n", nError);
 #endif
 }
 

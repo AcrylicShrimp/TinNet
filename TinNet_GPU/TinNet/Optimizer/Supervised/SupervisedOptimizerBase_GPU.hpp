@@ -21,17 +21,17 @@ namespace TinNet::Optimizer::Supervised
 				auto nActualBatchSize{this->nBatchSize < this->nTrainingSize - nBatchIndex ? this->nBatchSize : this->nTrainingSize - nBatchIndex};
 
 				//Initialize the delta buffers.
-				//for (std::size_t nIndex{0}, nSize{sNN.depth()}; nIndex < nSize; ++nIndex)
-				//{
-				//	std::size_t nBiasDeltaSize;
-				//	std::size_t nWeightDeltaSize;
-				//
-				//	this->sNN[nIndex]->specifySize(nBiasDeltaSize, nWeightDeltaSize);
-				//
-				//	cuMemsetD32(this->sBiasDelta[nIndex], 0, this->nBatchSize * nBiasDeltaSize);
-				//	cuMemsetD32(this->sWeightDelta[nIndex], 0, this->nBatchSize * nWeightDeltaSize);
-				//	cuMemsetD32(this->sBackwardOutput[nIndex], 0, this->nBatchSize * this->sNN[nIndex]->fanIn());
-				//}
+				for (std::size_t nIndex{0}, nSize{sNN.depth()}; nIndex < nSize; ++nIndex)
+				{
+					std::size_t nBiasDeltaSize;
+					std::size_t nWeightDeltaSize;
+				
+					this->sNN[nIndex]->specifySize(nBiasDeltaSize, nWeightDeltaSize);
+				
+					cuMemsetD32(this->sBiasDelta[nIndex], 0, this->nBatchSize * nBiasDeltaSize);
+					cuMemsetD32(this->sWeightDelta[nIndex], 0, this->nBatchSize * nWeightDeltaSize);
+					cuMemsetD32(this->sBackwardOutput[nIndex], 0, this->nBatchSize * this->sNN[nIndex]->fanIn());
+				}
 
 				//Forward.
 				this->sNN.forward(

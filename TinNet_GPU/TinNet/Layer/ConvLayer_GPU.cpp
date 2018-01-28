@@ -61,40 +61,17 @@ namespace TinNet::Layer
 		if ((this->nZeroPaddingVerticalNegative = this->nZeroPaddingVerticalPositive = ((this->nOutputHeight - 1u) * this->nStrideVertical + this->nFilterHeight - this->nHeight) / 2u) & 1u)
 			++this->nZeroPaddingVerticalPositive;
 
-		std::size_t vParam[14]
-		{
-			this->nWidth,
-			this->nHeight,
-			this->nChannel,
-			this->nFilter,
-			this->nFilterWidth,
-			this->nFilterHeight,
-			this->nStrideHorizontal,
-			this->nStrideVertical,
-			this->nOutputWidth,
-			this->nOutputHeight,
-			this->nZeroPaddingHorizontalNegative,
-			this->nZeroPaddingHorizontalPositive,
-			this->nZeroPaddingVerticalNegative,
-			this->nZeroPaddingVerticalPositive
-		};
-
 		cuMemAlloc(&this->pBias, sizeof(float) * nNewFilter);
 		cuMemAlloc(&this->pWeight, sizeof(float) * nNewFilter * nNewChannel * nNewFilterWidth * nNewFilterHeight);
-		cuMemAlloc(&this->pParam, sizeof(vParam));
-
-		cuMemcpyHtoD(this->pParam, vParam, sizeof(vParam));
 	}
-	
+
 	ConvLayer_GPU::~ConvLayer_GPU()
 	{
 		cuMemFree(this->pBias);
 		cuMemFree(this->pWeight);
-		cuMemFree(this->pParam);
 
 		this->pBias = 0;
 		this->pWeight = 0;
-		this->pParam = 0;
 	}
 
 	const char *ConvLayer_GPU::name() const
@@ -129,26 +106,67 @@ namespace TinNet::Layer
 
 	void ConvLayer_GPU::forward(CUdeviceptr pInput, CUdeviceptr pOutput) const
 	{
-		::ConvLayer_GPU_forward(this->nFanIn, this->nFanOut, pInput, pOutput, this->pBias, this->pWeight, this->pParam);
+		::ConvLayer_GPU_forward(
+			this->nWidth,
+			this->nHeight,
+			this->nChannel,
+			this->nFilter,
+			this->nFilterWidth,
+			this->nFilterHeight,
+			this->nStrideHorizontal,
+			this->nStrideVertical,
+			this->nOutputWidth,
+			this->nOutputHeight,
+			this->nZeroPaddingHorizontalNegative,
+			this->nZeroPaddingVerticalNegative,
+			pInput, pOutput, this->pBias, this->pWeight);
 	}
 
 	void ConvLayer_GPU::forward(std::size_t nBatchSize, CUdeviceptr pInput, CUdeviceptr pOutput, bool bTrainingPhase) const
 	{
-		::ConvLayer_GPU_forwardBatch(nBatchSize, this->nFanIn, this->nFanOut, pInput, pOutput, this->pBias, this->pWeight, this->pParam);
+		::ConvLayer_GPU_forwardBatch(
+			nBatchSize,
+			this->nWidth,
+			this->nHeight,
+			this->nChannel,
+			this->nFilter,
+			this->nFilterWidth,
+			this->nFilterHeight,
+			this->nStrideHorizontal,
+			this->nStrideVertical,
+			this->nOutputWidth,
+			this->nOutputHeight,
+			this->nZeroPaddingHorizontalNegative,
+			this->nZeroPaddingVerticalNegative,
+			pInput, pOutput, this->pBias, this->pWeight);
 	}
 
 	void ConvLayer_GPU::backward(std::size_t nBatchSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta) const
 	{
-		::ConvLayer_GPU_backwardBatch(nBatchSize, this->nFanIn, this->nFanOut, pForwardInput, pBackwardInput, pBackwardOutput, pBiasDelta, pWeightDelta, this->pWeight, this->pParam);
+		::ConvLayer_GPU_backwardBatch(
+			nBatchSize,
+			this->nWidth,
+			this->nHeight,
+			this->nChannel,
+			this->nFilter,
+			this->nFilterWidth,
+			this->nFilterHeight,
+			this->nStrideHorizontal,
+			this->nStrideVertical,
+			this->nOutputWidth,
+			this->nOutputHeight,
+			this->nZeroPaddingHorizontalNegative,
+			this->nZeroPaddingVerticalNegative,
+			pForwardInput, pBackwardInput, pBackwardOutput, pBiasDelta, pWeightDelta, this->pWeight);
 	}
 
 	void ConvLayer_GPU::update(CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
 	{
-		::ConvLayer_GPU_updateParam(this->nFanOut, this->nFanIn * this->nFanOut, this->pBias, this->pWeight, pBiasDelta, pWeightDelta);
+		::updateParam(this->nFilter, this->nFilter * this->nChannel * this->nFilterWidth * this->nFilterHeight, this->pBias, this->pWeight, pBiasDelta, pWeightDelta);
 	}
 
 	void ConvLayer_GPU::update(float nFactor, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
 	{
-		::ConvLayer_GPU_updateParamFactor(this->nFanOut, this->nFanIn * this->nFanOut, this->pBias, this->pWeight, pBiasDelta, pWeightDelta, nFactor);
+		::updateParamFactor(this->nFilter, this->nFilter * this->nChannel * this->nFilterWidth * this->nFilterHeight, this->pBias, this->pWeight, pBiasDelta, pWeightDelta, nFactor);
 	}
 }
