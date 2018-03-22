@@ -93,6 +93,10 @@ TINNET_DLL void SigmoidLayer_GPU_forward(std::size_t nSize, CUdeviceptr pInput, 
 TINNET_DLL void SigmoidLayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput);
 TINNET_DLL void SigmoidLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput);
 
+TINNET_DLL void SwishLayer_GPU_forward(std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput, float nBeta);
+TINNET_DLL void SwishLayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput, float nBeta);
+TINNET_DLL void SwishLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, float nBeta);
+
 TINNET_DLL void SoftmaxLayer_GPU_forward(std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput);
 TINNET_DLL void SoftmaxLayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput);
 TINNET_DLL void SoftmaxLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput);

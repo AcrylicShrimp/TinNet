@@ -21,7 +21,7 @@ namespace TinNet::Layer
 {
 	class TINNET_DLL PReLULayer_GPU : public Layer_GPU
 	{
-	private:
+	protected:
 		float nParam;
 		
 	public:

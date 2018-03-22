@@ -21,4 +21,6 @@
 #include "LReLULayer_GPU.h"
 #include "PReLULayer_GPU.h"
 
+#include "SwishLayer_GPU.h"
+
 #endif

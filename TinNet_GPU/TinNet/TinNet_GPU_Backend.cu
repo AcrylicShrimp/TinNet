@@ -23,6 +23,9 @@ __global__ void kernel_mergeBatch(unsigned int nBatchSize, unsigned int nSize, c
 {
 	unsigned int nUnifiedIndex = blockDim.x * blockIdx.x + threadIdx.x;
 
+	if (nUnifiedIndex >= nSize)
+		return;
+
 	for (unsigned int nBatch = 1; nBatch < nBatchSize; ++nBatch)
 		pOutput[nUnifiedIndex] += pInput[nSize * nBatch + nUnifiedIndex];
 }
@@ -198,12 +201,12 @@ __global__ void kernel_ConvLayer_GPU_backwardBatch(
 	unsigned int nZeroPaddingVerticalNegative,
 	const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput, float *pBiasDelta, float *pWeightDelta, const float *pWeight)
 {
-	float nDelta = .0f;
+	float nBias = .0f;
 
 	for(unsigned int nOutputIndex = 0, nOutputSize = blockDim.x * blockDim.y; nOutputIndex < nOutputSize; ++nOutputIndex)
-		nDelta += pBackwardInput[blockIdx.y * gridDim.x * nOutputSize + blockIdx.x * nOutputSize + nOutputIndex];
+		nBias += pBackwardInput[blockIdx.y * gridDim.x * nOutputSize + blockIdx.x * nOutputSize + nOutputIndex];
 
-	pBiasDelta[blockIdx.y * gridDim.x + blockIdx.x] = nDelta;
+	pBiasDelta[blockIdx.y * gridDim.x + blockIdx.x] = nBias;
 
 	for (unsigned int nFilterY = 0; nFilterY < nFilterHeight; ++nFilterY)
 	{
@@ -237,10 +240,40 @@ __global__ void kernel_ConvLayer_GPU_backwardBatch(
 
 				atomicAdd(&pBackwardOutput[blockIdx.y * nChannel * nWidth * nHeight + nChannelIndex * nWidth * nHeight + nInputY * nWidth + nInputX],
 					pBackwardInput[blockIdx.y * gridDim.x * blockDim.x * blockDim.y + blockIdx.x * blockDim.x * blockDim.y + threadIdx.y * blockDim.y * threadIdx.x] *
-					pWeight[blockIdx.x * nChannel * nFilterWidth * nFilterHeight + nChannelIndex * nFilterWidth * nFilterHeight + nFilterY * nFilterWidth + nFilterX]);
+					pWeight[blockIdx.x * nChannel * nFilterWidth * nFilterHeight + nChannelIndex * nFilterWidth * nFilterHeight + (nFilterHeight - nFilterY - 1) * nFilterWidth + (nFilterWidth - nFilterX - 1)]);
 			}
 		}
 	}
+}
+
+//__global__ void kernel_ConvLayer_GPU_mergeWeightDelta(
+//	unsigned int nChannel,
+//	unsigned int nOutputWidth,
+//	unsigned int nOutputHeight,
+//	float *pWeightDelta)
+//{
+//	for (unsigned int nOutputIndex = 0, nOutputSize = nOutputWidth * nOutputHeight; nOutputIndex < nOutputSize; ++nOutputIndex)
+//		for (unsigned int nChannelIndex = 0; nChannelIndex < nChannel; ++nChannelIndex)
+//			pWeightDelta[blockIdx.y * (gridDim.x + 1) * nOutputSize * nChannel * blockDim.x * blockDim.y + nOutputIndex * nChannel * blockDim.x * blockDim.y + nChannelIndex * blockDim.x * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x] = .0f;
+//
+//	for (unsigned int nOutputY = 0; nOutputY < nOutputHeight; ++nOutputY)
+//	for (unsigned int nOutputX = 0; nOutputX < nOutputWidth; ++nOutputX)
+//		pWeightDelta[blockIdx.y * (gridDim.x + 1) * nOutputWidth * nOutputHeight * nChannel * blockDim.x * blockDim.y] +=
+//}
+
+__global__ void kernel_ConvLayer_GPU_Merge(
+	unsigned int nWidth,
+	unsigned int nHeight,
+	unsigned int nChannel,
+	unsigned int nFilterWidth,
+	unsigned int nFilterHeight,
+	unsigned int nStrideHorizontal,
+	unsigned int nStrideVertical,
+	unsigned int nZeroPaddingHorizontalNegative,
+	unsigned int nZeroPaddingVerticalNegative,
+	float *pBackwardInput, float *pWeightDelta)
+{
+
 }
 
 
@@ -524,6 +557,42 @@ __global__ void kernel_SigmoidLayer_GPU_backwardBatch(unsigned int nSize, const 
 
 	float nValue = 1.f / (expf(-pForwardInput[nSize * blockIdx.x + nUnifiedIndex]) + 1.f);
 	pBackwardOutput[nSize * blockIdx.x + nUnifiedIndex] = pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] * nValue * (1.f - nValue);
+}
+
+
+
+__global__ void kernel_SwishLayer_GPU_forward(unsigned int nSize, const float *pInput, float *pOutput, float nBeta)
+{
+	unsigned int nUnifiedIndex = blockDim.x * blockIdx.x + threadIdx.x;
+	unsigned int vMax[2] =
+	{
+		nSize - 1,
+		nUnifiedIndex
+	};
+
+	nUnifiedIndex = vMax[nUnifiedIndex < nSize];
+	pOutput[nUnifiedIndex] = pInput[nUnifiedIndex] / (expf(-nBeta * pInput[nUnifiedIndex]) + 1.f);
+}
+
+__global__ void kernel_SwishLayer_GPU_forwardBatch(unsigned int nSize, const float *pInput, float *pOutput, float nBeta)
+{
+	unsigned int nUnifiedIndex = blockDim.x * blockIdx.y + threadIdx.x;
+	unsigned int vMax[2] =
+	{
+		nSize - 1,
+		nUnifiedIndex
+	};
+
+	nUnifiedIndex = vMax[nUnifiedIndex < nSize];
+	pOutput[nSize * blockIdx.x + nUnifiedIndex] = pInput[nSize * blockIdx.x + nUnifiedIndex] / (expf(-nBeta * pInput[nSize * blockIdx.x + nUnifiedIndex]) + 1.f);
+}
+
+__global__ void kernel_SwishLayer_GPU_backwardBatch(unsigned int nSize, const float *pForwardInput, const float *pBackwardInput, float *pBackwardOutput, float nBeta)
+{
+	unsigned int nUnifiedIndex = blockDim.x * blockIdx.y + threadIdx.x;
+
+	float nValue = 1.f / (expf(-nBeta * pForwardInput[nSize * blockIdx.x + nUnifiedIndex]) + 1.f);
+	pBackwardOutput[nSize * blockIdx.x + nUnifiedIndex] = pBackwardInput[nSize * blockIdx.x + nUnifiedIndex] * (nValue + nBeta * pForwardInput[nSize * blockIdx.x + nUnifiedIndex] * nValue * (1.f - nValue));
 }
 
 
@@ -1351,6 +1420,77 @@ void SigmoidLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, C
 
 	if (nError != cudaError_t::cudaSuccess)
 		printf("SigmoidLayer_GPU_backwardBatch : %d\n", nError);
+#endif
+}
+
+
+
+void SwishLayer_GPU_forward(std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput, float nBeta)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = (nSize - 1) / 1024 + 1;
+	sDimGrid.y = 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_SwishLayer_GPU_forward<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput, nBeta);
+
+#if (_DEBUG)
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("SwishLayer_GPU_forward : %d\n", nError);
+#endif
+}
+
+void SwishLayer_GPU_forwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pInput, CUdeviceptr pOutput, float nBeta)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = nBatchSize;
+	sDimGrid.y = (nSize - 1) / 1024 + 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_SwishLayer_GPU_forwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pInput, (float *)pOutput, nBeta);
+
+#if (_DEBUG)
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("SwishLayer_GPU_forwardBatch : %d\n", nError);
+#endif
+}
+
+void SwishLayer_GPU_backwardBatch(std::size_t nBatchSize, std::size_t nSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, float nBeta)
+{
+	uint3 sDimGrid;
+	uint3 sDimBlock;
+
+	sDimGrid.x = nBatchSize;
+	sDimGrid.y = (nSize - 1) / 1024 + 1;
+	sDimGrid.z = 1;
+
+	sDimBlock.x = nSize < 1024 ? nSize : 1024;
+	sDimBlock.y = 1;
+	sDimBlock.z = 1;
+
+	kernel_SwishLayer_GPU_backwardBatch<<<sDimGrid, sDimBlock>>>(nSize, (const float *)pForwardInput, (const float *)pBackwardInput, (float *)pBackwardOutput, nBeta);
+
+#if (_DEBUG)
+	cudaError_t nError = cudaGetLastError();
+
+	if (nError != cudaError_t::cudaSuccess)
+		printf("SwishLayer_GPU_backwardBatch : %d\n", nError);
 #endif
 }
 

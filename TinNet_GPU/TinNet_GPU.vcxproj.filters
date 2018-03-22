@@ -66,6 +66,9 @@
     <ClCompile Include="TinNet\Layer\ConvLayer_GPU.cpp">
       <Filter>TinNet\Layer</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Layer\SwishLayer_GPU.cpp">
+      <Filter>TinNet\Layer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Layer\FullLayer_GPU.h">
@@ -132,6 +135,9 @@
       <Filter>TinNet\Layer</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Layer\ConvLayer_GPU.h">
+      <Filter>TinNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Layer\SwishLayer_GPU.h">
       <Filter>TinNet\Layer</Filter>
     </ClInclude>
   </ItemGroup>

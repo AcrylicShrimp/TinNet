@@ -6,10 +6,10 @@
 
 #include "Momentum.h"
 
-namespace TinNet::Optimizer::Supervised
+namespace TinNet::Optimizer
 {
 	Momentum::Momentum(NN &sNN, std::size_t nNewBatchSize, float nNewMomentumTerm, float nNewLearningRate) :
-		SupervisedOptimizerBase(sNN, nNewBatchSize),
+		OptimizerBase(sNN, nNewBatchSize),
 		nMomentumTerm{nNewMomentumTerm},
 		nLearningRate{nNewLearningRate},
 		sBiasMomentum(sNN.depth()),
@@ -28,7 +28,7 @@ namespace TinNet::Optimizer::Supervised
 	}
 
 	Momentum::Momentum(Momentum &&sSrc) :
-		SupervisedOptimizerBase(std::move(sSrc)),
+		OptimizerBase(std::move(sSrc)),
 		nMomentumTerm{sSrc.nMomentumTerm},
 		nLearningRate{sSrc.nLearningRate},
 		sBiasMomentum{std::move(sSrc.sBiasMomentum)},
@@ -37,9 +37,9 @@ namespace TinNet::Optimizer::Supervised
 		//Empty.
 	}
 
-	void Momentum::applyGradient(std::size_t nActualBatchSize)
+	void Momentum::applyGradient(std::size_t nActualBatchSize, float nGradientFactor)
 	{
-		auto nFactor{-this->nLearningRate / nActualBatchSize};
+		auto nFactor{-this->nLearningRate / nActualBatchSize * nGradientFactor};
 
 		for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
 		{

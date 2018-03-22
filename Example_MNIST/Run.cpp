@@ -5,6 +5,7 @@
 */
 
 #include "../TinNet/TinNet/TinNet.h"
+#include "../TinNet_Dot/TinNet/Dot/Dot.h"
 
 #include <cstdint>
 #include <fstream>
@@ -54,16 +55,8 @@ int32_t main()
 		}
 		else if (sCommand == "new")
 		{
-			sNetwork.addLayer<Layer::FullLayer>(784, 300);
-			sNetwork.addLayer<Layer::TanhLayer>(300);
-			sNetwork.addLayer<Layer::FullLayer>(300, 300);
-			sNetwork.addLayer<Layer::TanhLayer>(300);
-			sNetwork.addLayer<Layer::FullLayer>(300, 300);
-			sNetwork.addLayer<Layer::TanhLayer>(300);
-			sNetwork.addLayer<Layer::FullLayer>(300, 100);
-			sNetwork.addLayer<Layer::TanhLayer>(100);
-			sNetwork.addLayer<Layer::FullLayer>(100, 10);
-			sNetwork.addLayer<Layer::TanhLayer>(10);
+			sNetwork.addLayer<Layer::FullLayer>(784, 10);
+			sNetwork.addLayer<Layer::SoftmaxLayer>(10);
 
 			std::cout << "Successfully created." << std::endl;
 			std::cout << "Number of the layers : " << sNetwork.layer().size() << std::endl;
@@ -139,12 +132,14 @@ int32_t main()
 		}
 	}
 
-	Optimizer::Supervised::SGD sOptimizer{sNetwork, 32u, .001f};
-	//Optimizer::Supervised::Momentum sOptimizer{sNetwork, 32, .9f, .005f};
-	//Optimizer::Supervised::NAG sOptimizer{sNetwork, .9f, .001f};
-	//Optimizer::Supervised::Adagrad sOptimizer{sNetwork, 32, .005f};
-	//Optimizer::Supervised::RMSProp sOptimizer{sNetwork, 32, .9f, .001f};
-	//Optimizer::Supervised::Adam sOptimizer{sNetwork, 32, .001f, .9f, .999f};
+	Optimizer::SGD sOptimizer{sNetwork, 1u, .001f};
+	//Optimizer::Momentum sOptimizer{sNetwork, 32, .9f, .005f};
+	//Optimizer::NAG sOptimizer{sNetwork, .9f, .001f};
+	//Optimizer::Adagrad sOptimizer{sNetwork, 32, .005f};
+	//Optimizer::RMSProp sOptimizer{sNetwork, 32, .9f, .001f};
+	//Optimizer::Adam sOptimizer{sNetwork, 32, .001f, .9f, .999f};
+
+	TinNet::Dot::Dot::createWindow();
 
 	Visualizer::CSVLossExporter sExporter;
 
@@ -152,23 +147,17 @@ int32_t main()
 	//sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
 	//std::cout << " saved." << std::endl;
 
-	float vOutput[10];
-
 	for (;;)
 	{
-		sNetwork.forward(sTestInput[0].data(), vOutput);
-
-		printf("%.2lf %.2lf %.2lf %.2lf %.2lf %.2lf %.2lf %.2lf %.2lf %.2lf\n",
-			   vOutput[0], vOutput[1], vOutput[2], vOutput[3], vOutput[4],
-			   vOutput[5], vOutput[6], vOutput[7], vOutput[8], vOutput[9]);
-
-		//float nLoss{sNetwork.classificationLoss(10000u, sTestInput.data(), sTestOutput.data())};
-		//printf("Validation data classification accuracy : %0.2f%%\n", (1.f - nLoss) * 100.f);
+		float nLoss{sNetwork.classificationLoss(10000u, sTestInput.data(), sTestOutput.data())};
+		printf("Validation data classification accuracy : %0.2f%%\n", (1.f - nLoss) * 100.f);
 		
-		sExporter.accrueLoss(.0f);
+		TinNet::Dot::Dot::display().push(nLoss);
+
+		sExporter.accrueLoss(nLoss);
 		sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
 
-		sOptimizer.train<Loss::MSE>(1, 60000, sTrainInput.data(), sTrainOutput.data());
+		sOptimizer.train<Loss::MulticlassCE>(1, 60000, sTrainInput.data(), sTrainOutput.data());
 
 		//std::cout << "Serializing network...";
 		//sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});

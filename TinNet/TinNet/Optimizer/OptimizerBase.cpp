@@ -4,11 +4,11 @@
 	Created by AcrylicShrimp.
 */
 
-#include "SupervisedOptimizerBase.h"
+#include "OptimizerBase.h"
 
-namespace TinNet::Optimizer::Supervised
+namespace TinNet::Optimizer
 {
-	SupervisedOptimizerBase::SupervisedOptimizerBase(NN &sNN, std::size_t nNewBatchSize) :
+	OptimizerBase::OptimizerBase(NN &sNN, std::size_t nNewBatchSize) :
 		sNN{sNN},
 		nBatchSize{nNewBatchSize},
 		sBiasDelta(sNN.depth()),
@@ -43,8 +43,8 @@ namespace TinNet::Optimizer::Supervised
 			}
 		}
 	}
-	
-	SupervisedOptimizerBase::SupervisedOptimizerBase(SupervisedOptimizerBase &&sSrc) :
+
+	OptimizerBase::OptimizerBase(OptimizerBase &&sSrc) :
 		sNN{sSrc.sNN},
 		nBatchSize{sSrc.nBatchSize},
 		sBiasDelta{std::move(sSrc.sBiasDelta)},
@@ -55,5 +55,38 @@ namespace TinNet::Optimizer::Supervised
 		sEngine{std::move(sSrc.sEngine)}
 	{
 		//Empty.
+	}
+
+	void OptimizerBase::computeGradient(std::size_t nSize, const std::vector<float> *pInput, const std::vector<float> *pOutput, std::function<const float *(std::size_t, std::vector<std::vector<float>> &, std::vector<std::vector<float>> &)> fBefore, std::function<void(std::size_t)> fAfter)
+	{
+		auto nDimension{pOutput->size()};
+		auto nActualBatchSize{std::min(this->nBatchSize, nSize)};
+
+		//Initialize the delta buffers.
+		OptimizerHelper::zeros(this->sBiasDelta);
+		OptimizerHelper::zeros(this->sWeightDelta);
+		OptimizerHelper::zeros(this->sBackwardOutput);
+
+		//Forward.
+		this->sNN.forward(
+			nActualBatchSize,
+			pInput,
+			this->sForwardOutput.data(),
+			true);
+
+		auto pFactor{fBefore(nActualBatchSize, this->sForwardOutput.back(), this->sBackwardInput)};
+
+		//Backward.
+		this->sNN.backward(
+			nActualBatchSize,
+			pInput,
+			this->sBackwardInput.data(),
+			this->sForwardOutput.data(),
+			this->sBackwardOutput.data(),
+			this->sBiasDelta.data(),
+			this->sWeightDelta.data(),
+			pFactor);
+
+		fAfter(nActualBatchSize);
 	}
 }

@@ -202,6 +202,43 @@ namespace TinNet::Layer
 			}
 	}
 
+	void MaxPoolingLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pBiasDelta, float *pWeightDelta, const float *pFactor) const
+	{
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
+			{
+				const auto pChannelForwardInput{pForwardInput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
+				const auto pChannelBackwardInput{pBackwardInput[nBatch].data() + nChannelIndex * this->nOutputWidth * this->nOutputHeight};
+				auto pChannelBackwardOutput{pBackwardOutput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
+
+				for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
+				{
+					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
+
+					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+					{
+						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+
+						for (std::size_t nPoolingY{0}; nPoolingY < this->nPoolingHeight; ++nPoolingY)
+						{
+							const auto nY{nStrideOffsetY + nPoolingY};
+
+							for (std::size_t nPoolingX{0}; nPoolingX < this->nPoolingWidth; ++nPoolingX)
+							{
+								const auto nX{nStrideOffsetX + nPoolingX};
+
+								this->sMax[nPoolingY * this->nPoolingWidth + nPoolingX] = pChannelForwardInput[nY * this->nWidth + nX];
+								this->sMaxPosition[nPoolingY * this->nPoolingWidth + nPoolingX] = std::make_tuple(nPoolingX, nPoolingY);
+							}
+						}
+
+						auto sPosition{this->sMaxPosition[std::distance(this->sMax.cbegin(), std::max_element(this->sMax.cbegin(), this->sMax.cend()))]};
+						pChannelBackwardOutput[(nStrideOffsetY + std::get<1>(sPosition)) * this->nWidth + (nStrideOffsetX + std::get<0>(sPosition))] = pChannelBackwardInput[nOutputY * this->nOutputWidth + nOutputX];
+					}
+				}
+			}
+	}
+
 	void MaxPoolingLayer::update(const float *pBiasDelta, const float *pWeightDelta)
 	{
 		//Empty.

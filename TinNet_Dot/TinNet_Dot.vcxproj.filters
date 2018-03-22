@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="TinNet">
+      <UniqueIdentifier>{7ef91560-b2a0-4b19-9f26-06536a251604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TinNet\Dot">
+      <UniqueIdentifier>{82de2ca2-a93c-4792-9c8b-ea1117c8700e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TinNet\Dot\Window.cpp">
+      <Filter>TinNet\Dot</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Dot\WindowMessageHandler.cpp">
+      <Filter>TinNet\Dot</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Dot\Dot.cpp">
+      <Filter>TinNet\Dot</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Dot\Display.cpp">
+      <Filter>TinNet\Dot</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TinNet\Dot\Window.h">
+      <Filter>TinNet\Dot</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Dot\WindowMessageHandler.h">
+      <Filter>TinNet\Dot</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\TinNet_Dot.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Dot\Dot.h">
+      <Filter>TinNet\Dot</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Dot\Display.h">
+      <Filter>TinNet\Dot</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

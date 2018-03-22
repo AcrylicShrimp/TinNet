@@ -4,23 +4,23 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_OPTIMIZER_SUPERVISED_ADAM_H
+#ifndef _CLASS_TINNET_OPTIMIZER_ADAM_H
 
-#define _CLASS_TINNET_OPTIMIZER_SUPERVISED_ADAM_H
+#define _CLASS_TINNET_OPTIMIZER_ADAM_H
 
-#include "../../TinNetDLL.h"
+#include "../TinNetDLL.h"
 
-#include "../../NN.h"
-#include "SupervisedOptimizerBase.h"
+#include "../NN.h"
+#include "OptimizerBase.h"
 
 #include <cmath>
 #include <cstddef>
 #include <utility>
 #include <vector>
 
-namespace TinNet::Optimizer::Supervised
+namespace TinNet::Optimizer
 {
-	class TINNET_DLL Adam : public SupervisedOptimizerBase
+	class TINNET_DLL Adam : public OptimizerBase
 	{
 	private:
 		float nLearningRate;
@@ -47,9 +47,7 @@ namespace TinNet::Optimizer::Supervised
 		inline float beta1() const;
 		inline float &beta2();
 		inline float beta2() const;
-
-	protected:
-		virtual void applyGradient(std::size_t nActualBatchSize) override;
+		virtual void applyGradient(std::size_t nActualBatchSize, float nGradientFactor) override;
 	};
 
 	inline float &Adam::learningRate()

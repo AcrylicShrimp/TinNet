@@ -68,7 +68,8 @@ namespace TinNet
 			const std::vector<std::vector<float>> *pForwardOutput,
 			std::vector<std::vector<float>> *pBackwardOutput,
 			std::vector<float> *pBiasDelta,
-			std::vector<float> *pWeightDelta) const;
+			std::vector<float> *pWeightDelta,
+			const float *pFactor = nullptr) const;
 		std::size_t classify(const float *pInput);
 		void classify(std::size_t nBatchSize, const std::vector<float> *pInput, std::size_t *pOutput);
 		template<class LossFunc> float loss(const float *pInput, const float *pOutput);

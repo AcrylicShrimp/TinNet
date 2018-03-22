@@ -8,12 +8,12 @@
 
 #define _CLASS_TINNET_OPTIMIZER_OPTIMIZERS_H
 
-#include "Supervised/SGD.h"
-#include "Supervised/Momentum.h"
-#include "Supervised/Adagrad.h"
-#include "Supervised/RMSProp.h"
-#include "Supervised/Adam.h"
+#include "SGD.h"
+#include "Momentum.h"
+#include "Adagrad.h"
+#include "RMSProp.h"
+#include "Adam.h"
 
-#include "Reinforcement/MonteCarloPolicyGradient.h"
+#include "MonteCarloPolicyGradient.h"
 
 #endif

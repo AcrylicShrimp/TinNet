@@ -205,6 +205,44 @@ namespace TinNet::Layer
 				pBackwardOutput[nBatch][nIndex] = nFactorInv * this->sVarianceInversed[nIndex] * (nFactor * sDInputHat[nBatch][nIndex] - sDInputHatSum[nIndex] - (pForwardInput[nBatch][nIndex] - this->sMeanBuffer[nIndex]) * this->sVarianceInversed[nIndex] * sDInputHatMulSum[nIndex]);
 	}
 
+	void BatchNormLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pBiasDelta, float *pWeightDelta, const float *pFactor) const
+	{
+		//Shift delta
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
+				pWeightDelta[nIndex] += pFactor[nBatch] * pBackwardInput[nBatch][nIndex];
+
+		//Scale delta
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
+				pWeightDelta[this->nFanIn + nIndex] += pFactor[nBatch] * pBackwardInput[nBatch][nIndex] * (pForwardInput[nBatch][nIndex] - this->sMeanBuffer[nIndex]) * this->sVarianceInversed[nIndex];
+
+		const auto nFactor{nBatchSize};
+		const auto nFactorInv{1.f / nBatchSize};
+
+		std::vector<std::vector<float>> sDInputHat(nBatchSize);
+		std::vector<float> sDInputHatSum(this->nFanIn, .0f);
+		std::vector<float> sDInputHatMulSum(this->nFanIn, .0f);
+
+		for (auto &sVector : sDInputHat)
+			sVector.resize(this->nFanIn);
+
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
+				sDInputHat[nBatch][nIndex] = pBackwardInput[nBatch][nIndex] * this->sScale[nIndex];
+
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
+			{
+				sDInputHatSum[nIndex] += sDInputHat[nBatch][nIndex];
+				sDInputHatMulSum[nIndex] += sDInputHat[nBatch][nIndex] * (pForwardInput[nBatch][nIndex] - this->sMeanBuffer[nIndex]) * this->sVarianceInversed[nIndex];
+			}
+
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
+				pBackwardOutput[nBatch][nIndex] = nFactorInv * this->sVarianceInversed[nIndex] * (nFactor * sDInputHat[nBatch][nIndex] - sDInputHatSum[nIndex] - (pForwardInput[nBatch][nIndex] - this->sMeanBuffer[nIndex]) * this->sVarianceInversed[nIndex] * sDInputHatMulSum[nIndex]);
+	}
+
 	void BatchNormLayer::update(const float *pBiasDelta, const float *pWeightDelta)
 	{
 		for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)

@@ -4,9 +4,9 @@
 	Created by AcrylicShrimp.
 */
 
-namespace TinNet::Optimizer::Supervised
+namespace TinNet::Optimizer
 {
-	template<class LossFunc> void SupervisedOptimizerBase::train(std::size_t nEpoch, std::size_t nSize, std::vector<float> *pInput, std::vector<float> *pOutput)
+	template<class LossFunc> void OptimizerBase::train(std::size_t nEpoch, std::size_t nSize, std::vector<float> *pInput, std::vector<float> *pOutput)
 	{
 		auto nDimension{pOutput->size()};
 
@@ -51,7 +51,7 @@ namespace TinNet::Optimizer::Supervised
 
 				nBatchIndex += nActualBatchSize;
 
-				this->applyGradient(nActualBatchSize);
+				this->applyGradient(nActualBatchSize, 1.f);
 			}
 		}
 	}

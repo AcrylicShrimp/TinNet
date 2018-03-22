@@ -101,7 +101,7 @@ namespace TinNet::Layer
 
 	void ConvLayer_GPU::specifySize(std::size_t &nBiasDeltaSize, std::size_t &nWeightDeltaSize) const
 	{
-		nWeightDeltaSize = (nBiasDeltaSize = this->nFilter) * this->nChannel * this->nFilterWidth * this->nFilterHeight;
+		nWeightDeltaSize = (nBiasDeltaSize = this->nFilter) * this->nChannel * this->nFilterWidth * this->nFilterHeight * this->nOutputWidth * this->nOutputHeight * 2;
 	}
 
 	void ConvLayer_GPU::forward(CUdeviceptr pInput, CUdeviceptr pOutput) const

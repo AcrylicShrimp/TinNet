@@ -6,10 +6,10 @@
 
 #include "Adam.h"
 
-namespace TinNet::Optimizer::Supervised
+namespace TinNet::Optimizer
 {
 	Adam::Adam(NN &sNN, std::size_t nNewBatchSize, float nNewLearningRate, float nNewBeta1, float nNewBeta2) :
-		SupervisedOptimizerBase(sNN, nNewBatchSize),
+		OptimizerBase(sNN, nNewBatchSize),
 		nLearningRate{nNewLearningRate},
 		nBeta1{nNewBeta1},
 		nBeta2{nNewBeta2},
@@ -33,7 +33,7 @@ namespace TinNet::Optimizer::Supervised
 	}
 	
 	Adam::Adam(Adam &&sSrc) :
-		SupervisedOptimizerBase(std::move(sSrc)),
+		OptimizerBase(std::move(sSrc)),
 		nLearningRate{sSrc.nLearningRate},
 		nBeta1{sSrc.nBeta1},
 		nBeta2{sSrc.nBeta2},
@@ -45,9 +45,9 @@ namespace TinNet::Optimizer::Supervised
 		//Empty.
 	}
 
-	void Adam::applyGradient(std::size_t nActualBatchSize)
+	void Adam::applyGradient(std::size_t nActualBatchSize, float nGradientFactor)
 	{
-		const auto nDivisor{1.f / nActualBatchSize};
+		const auto nDivisor{nGradientFactor / nActualBatchSize};
 
 		for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
 		{

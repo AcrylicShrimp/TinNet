@@ -55,10 +55,10 @@ int32_t main()
 		else if (sCommand == "new")
 		{
 			sNetwork.addLayer<Layer::ConvLayer>(28, 28, 1, 30, 5, 5, 1, 1, 24, 24);
-			sNetwork.addLayer<Layer::LReLULayer>(17280);
+			sNetwork.addLayer<Layer::SwishLayer>(17280);
 			sNetwork.addLayer<Layer::MaxPoolingLayer>(24, 24, 30, 2, 2);
 			sNetwork.addLayer<Layer::FullLayer>(4320, 100);
-			sNetwork.addLayer<Layer::LReLULayer>(100);
+			sNetwork.addLayer<Layer::SwishLayer>(100);
 			sNetwork.addLayer<Layer::FullLayer>(100, 10);
 			sNetwork.addLayer<Layer::SoftmaxLayer>(10);
 
@@ -141,7 +141,7 @@ int32_t main()
 	//Optimizer::Supervised::NAG sOptimizer{sNetwork, .9f, .001f};
 	//Optimizer::Supervised::Adagrad sOptimizer{sNetwork, 32, .005f};
 	//Optimizer::Supervised::RMSProp sOptimizer{sNetwork, 32, .9f, .001f};
-	Optimizer::Supervised::Adam sOptimizer{sNetwork, 32, .001f, .9f, .999f};
+	Optimizer::Adam sOptimizer{sNetwork, 32, .001f, .9f, .999f};
 
 	Visualizer::CSVLossExporter sExporter;
 

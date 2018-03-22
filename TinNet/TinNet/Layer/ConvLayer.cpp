@@ -358,6 +358,81 @@ namespace TinNet::Layer
 		}
 	}
 
+	void ConvLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pBiasDelta, float *pWeightDelta, const float *pFactor) const
+	{
+		auto fFilterBehaviour = [&](std::size_t nBatch, std::size_t nFilterIndex)
+		{
+			const auto pFilterBackwardInput{pBackwardInput[nBatch].data() + nFilterIndex * this->nOutputWidth * this->nOutputHeight};
+			auto pFilterWeightDelta{pWeightDelta + nFilterIndex * this->nChannel * this->nFilterWidth * this->nFilterHeight};
+
+			for (std::size_t nOutputIndex{0}, nOutputSize{this->nOutputWidth * this->nOutputHeight}; nOutputIndex < nOutputSize; ++nOutputIndex)
+				pBiasDelta[nFilterIndex] += pFactor[nBatch] * pFilterBackwardInput[nOutputIndex];
+
+			for (std::size_t nChannelIndex{0}; nChannelIndex < this->nChannel; ++nChannelIndex)
+			{
+				const auto pChannelForwardInput{pForwardInput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
+				auto pChannelBackwardOutput{pBackwardOutput[nBatch].data() + nChannelIndex * this->nWidth * this->nHeight};
+				auto pChannelWeightDelta{pFilterWeightDelta + nChannelIndex * this->nFilterWidth * this->nFilterHeight};
+
+				for (std::size_t nOutputY{0}; nOutputY < this->nOutputHeight; ++nOutputY)
+				{
+					const auto nStrideOffsetY{nOutputY * this->nStrideVertical};
+
+					for (std::size_t nOutputX{0}; nOutputX < this->nOutputWidth; ++nOutputX)
+					{
+						const auto nStrideOffsetX{nOutputX * this->nStrideHorizontal};
+
+						for (std::size_t nFilterY{0}; nFilterY < this->nFilterHeight; ++nFilterY)
+						{
+							const auto nY{nStrideOffsetY + nFilterY};
+
+							if (nY < this->nZeroPaddingVerticalNegative)
+								continue;
+
+							if (nY >= this->nZeroPaddingVerticalNegative + this->nHeight)
+								continue;
+
+							const auto nInputY{nY - this->nZeroPaddingVerticalNegative};
+
+							for (std::size_t nFilterX{0}; nFilterX < this->nFilterWidth; ++nFilterX)
+							{
+								const auto nX{nStrideOffsetX + nFilterX};
+
+								if (nX < this->nZeroPaddingHorizontalNegative)
+									continue;
+
+								if (nX >= this->nZeroPaddingHorizontalNegative + this->nWidth)
+									continue;
+
+								const auto nInputX{nX - this->nZeroPaddingHorizontalNegative};
+
+								pChannelWeightDelta[nFilterY * this->nFilterWidth + nFilterX] +=
+									pFactor[nBatch] *
+									pFilterBackwardInput[nOutputY * this->nOutputWidth + nOutputX] *
+									pChannelForwardInput[nInputY * this->nWidth + nInputX];
+
+								pChannelBackwardOutput[nInputY * this->nWidth + nInputX] +=
+									pFilterBackwardInput[nOutputY * this->nOutputWidth + nOutputX] *
+									this->sWeight[nFilterIndex][nChannelIndex][(this->nFilterHeight - nFilterY) * this->nFilterWidth + (this->nFilterWidth - nFilterX)];
+							}
+						}
+					}
+				}
+			}
+		};
+
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+		{
+			for (std::size_t nFilterIndex{1}; nFilterIndex < this->nFilter; ++nFilterIndex)
+				this->sFuture[nFilterIndex] = std::async(fFilterBehaviour, nBatch, nFilterIndex);
+
+			fFilterBehaviour(nBatch, 0);
+
+			for (std::size_t nFilterIndex{1}; nFilterIndex < this->nFilter; ++nFilterIndex)
+				this->sFuture[nFilterIndex].wait();
+		}
+	}
+
 	void ConvLayer::update(const float *pBiasDelta, const float *pWeightDelta)
 	{
 		for (std::size_t nFilterIndex{0}; nFilterIndex < this->nFilter; ++nFilterIndex)

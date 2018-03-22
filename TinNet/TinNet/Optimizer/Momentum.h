@@ -4,22 +4,22 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_OPTIMIZER_SUPERVISED_MOMENTUM_H
+#ifndef _CLASS_TINNET_OPTIMIZER_MOMENTUM_H
 
-#define _CLASS_TINNET_OPTIMIZER_SUPERVISED_MOMENTUM_H
+#define _CLASS_TINNET_OPTIMIZER_MOMENTUM_H
 
-#include "../../TinNetDLL.h"
+#include "../TinNetDLL.h"
 
-#include "../../NN.h"
-#include "SupervisedOptimizerBase.h"
+#include "../NN.h"
+#include "OptimizerBase.h"
 
 #include <cstddef>
 #include <utility>
 #include <vector>
 
-namespace TinNet::Optimizer::Supervised
+namespace TinNet::Optimizer
 {
-	class TINNET_DLL Momentum : public SupervisedOptimizerBase
+	class TINNET_DLL Momentum : public OptimizerBase
 	{
 	protected:
 		float nMomentumTerm;
@@ -41,9 +41,7 @@ namespace TinNet::Optimizer::Supervised
 		inline float momentumTerm() const;
 		inline float &learningRate();
 		inline float learningRate() const;
-
-	protected:
-		virtual void applyGradient(std::size_t nActualBatchSize) override;
+		virtual void applyGradient(std::size_t nActualBatchSize, float nGradientFactor) override;
 	};
 
 	inline float &Momentum::momentumTerm()

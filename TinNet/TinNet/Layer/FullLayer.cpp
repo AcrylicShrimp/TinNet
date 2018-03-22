@@ -127,6 +127,23 @@ namespace TinNet::Layer
 					pBackwardOutput[nBatch][nIn] += pBackwardInput[nBatch][nOut] * this->sWeight[nOut][nIn];
 	}
 
+	void FullLayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pBiasDelta, float *pWeightDelta, const float *pFactor) const
+	{
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				pBiasDelta[nOut] += pFactor[nBatch] * pBackwardInput[nBatch][nOut];
+
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pWeightDelta[nOut * this->nFanIn + nIn] += pFactor[nBatch] * pBackwardInput[nBatch][nOut] * pForwardInput[nBatch][nIn];
+
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)
+				for (std::size_t nIn{0}; nIn < this->nFanIn; ++nIn)
+					pBackwardOutput[nBatch][nIn] += pBackwardInput[nBatch][nOut] * this->sWeight[nOut][nIn];
+	}
+
 	void FullLayer::update(const float *pBiasDelta, const float *pWeightDelta)
 	{
 		for (std::size_t nOut{0}; nOut < this->nFanOut; ++nOut)

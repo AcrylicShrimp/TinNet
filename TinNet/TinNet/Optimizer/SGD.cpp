@@ -6,27 +6,27 @@
 
 #include "SGD.h"
 
-namespace TinNet::Optimizer::Supervised
+namespace TinNet::Optimizer
 {
 	SGD::SGD(NN &sNN, std::size_t nNewBatchSize, float nNewLearningRate) :
-		SupervisedOptimizerBase(sNN, nNewBatchSize),
+		OptimizerBase(sNN, nNewBatchSize),
 		nLearningRate{nNewLearningRate}
 	{
 		//Empty.
 	}
 
 	SGD::SGD(SGD &&sSrc) :
-		SupervisedOptimizerBase(std::move(sSrc)),
+		OptimizerBase(std::move(sSrc)),
 		nLearningRate{sSrc.nLearningRate}
 	{
 		//Empty.
 	}
 
-	void SGD::applyGradient(std::size_t nActualBatchSize)
+	void SGD::applyGradient(std::size_t nActualBatchSize, float nGradientFactor)
 	{
 		auto nFactor{-this->nLearningRate / nActualBatchSize};
 
 		for (std::size_t nIndex{0}, nDepth{this->sNN.depth()}; nIndex < nDepth; ++nIndex)
-			this->sNN[nIndex]->update(nFactor, this->sBiasDelta[nIndex].data(), this->sWeightDelta[nIndex].data());
+			this->sNN[nIndex]->update(nFactor * nGradientFactor, this->sBiasDelta[nIndex].data(), this->sWeightDelta[nIndex].data());
 	}
 }

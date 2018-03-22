@@ -91,7 +91,8 @@ namespace TinNet
 		const std::vector<std::vector<float>> *pForwardOutput,
 		std::vector<std::vector<float>> *pBackwardOutput,
 		std::vector<float> *pBiasDelta,
-		std::vector<float> *pWeightDelta) const
+		std::vector<float> *pWeightDelta,
+		const float *pFactor) const
 	{
 		for (std::size_t nIndex{this->sLayerList.size() - 1}; ; --nIndex)
 		{
@@ -100,13 +101,23 @@ namespace TinNet
 			const auto pLayerBackwardInput{nIndex + 1 == this->depth() ? pBackwardInput : pBackwardOutput[nIndex + 1].data()};
 			auto pLayerBackwardOutput{pBackwardOutput[nIndex].data()};
 
-			pLayer->backward(
-				nBatchSize,
-				pLayerForwardInput,
-				pLayerBackwardInput,
-				pLayerBackwardOutput,
-				pBiasDelta[nIndex].data(),
-				pWeightDelta[nIndex].data());
+			if (pFactor)
+				pLayer->backward(
+					nBatchSize,
+					pLayerForwardInput,
+					pLayerBackwardInput,
+					pLayerBackwardOutput,
+					pBiasDelta[nIndex].data(),
+					pWeightDelta[nIndex].data(),
+					pFactor);
+			else
+				pLayer->backward(
+					nBatchSize,
+					pLayerForwardInput,
+					pLayerBackwardInput,
+					pLayerBackwardOutput,
+					pBiasDelta[nIndex].data(),
+					pWeightDelta[nIndex].data());
 
 			if (!nIndex)
 				break;
@@ -173,7 +184,7 @@ namespace TinNet
 	void NN::serialize(std::ofstream &sOutput) const
 	{
 		IO::Serializable::write(sOutput, this->sLayerList.size());
-		
+
 		for (auto &pLayer : this->sLayerList)
 			Layer::LayerIO::serializeLayer(sOutput, pLayer);
 	}
@@ -184,7 +195,7 @@ namespace TinNet
 		this->sOutput.clear();
 
 		auto nSize{IO::Serializable::read<std::remove_reference_t<decltype(this->sLayerList.size())>>(sInput)};
-		
+
 		for (std::size_t nIndex{0}; nIndex < nSize; ++nIndex)
 		{
 			this->sLayerList.push_back(Layer::LayerIO::deserializeLayer(sInput));

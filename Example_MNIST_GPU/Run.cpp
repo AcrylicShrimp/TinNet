@@ -57,14 +57,25 @@ int32_t main()
 		}
 		else if (sCommand == "new")
 		{
-			sNetwork.addLayer<Layer::ConvLayer_GPU>(28, 28, 1, 30, 5, 5, 1, 1, 24, 24);
-			sNetwork.addLayer<Layer::LReLULayer_GPU>(17280);
-			sNetwork.addLayer<Layer::ConvLayer_GPU>(24, 24, 30, 60, 4, 4, 2, 2, 11, 11);
-			sNetwork.addLayer<Layer::LReLULayer_GPU>(7260);
-			sNetwork.addLayer<Layer::FullLayer_GPU>(7260, 100);
-			sNetwork.addLayer<Layer::LReLULayer_GPU>(100);
-			sNetwork.addLayer<Layer::FullLayer_GPU>(100, 10);
+			//sNetwork.addLayer<Layer::ConvLayer_GPU>(28, 28, 1, 30, 5, 5, 1, 1, 24, 24);
+			//sNetwork.addLayer<Layer::LReLULayer_GPU>(17280);
+			//sNetwork.addLayer<Layer::ConvLayer_GPU>(24, 24, 30, 60, 4, 4, 2, 2, 11, 11);
+			//sNetwork.addLayer<Layer::LReLULayer_GPU>(7260);
+			//sNetwork.addLayer<Layer::FullLayer_GPU>(7260, 100);
+			//sNetwork.addLayer<Layer::LReLULayer_GPU>(100);
+			//sNetwork.addLayer<Layer::FullLayer_GPU>(100, 10);
 			//sNetwork.addLayer<Layer::SoftmaxLayer_GPU>(10);
+
+			sNetwork.addLayer<Layer::FullLayer_GPU>(784, 300);
+			sNetwork.addLayer<Layer::SwishLayer_GPU>(300);
+			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
+			sNetwork.addLayer<Layer::SwishLayer_GPU>(300);
+			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
+			sNetwork.addLayer<Layer::SwishLayer_GPU>(300);
+			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 100);
+			sNetwork.addLayer<Layer::SwishLayer_GPU>(100);
+			sNetwork.addLayer<Layer::FullLayer_GPU>(100, 10);
+			sNetwork.addLayer<Layer::SoftmaxLayer_GPU>(10);
 
 			std::cout << "Successfully created." << std::endl;
 			std::cout << "Number of the layers : " << sNetwork.layer().size() << std::endl;

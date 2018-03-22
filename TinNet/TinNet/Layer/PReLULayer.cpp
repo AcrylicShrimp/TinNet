@@ -84,6 +84,15 @@ namespace TinNet::Layer
 				pBackwardOutput[nBatch][nIndex] = pBackwardInput[nBatch][nIndex] * vDesk[pForwardInput[nBatch][nIndex] > .0f];
 	}
 
+	void PReLULayer::backward(std::size_t nBatchSize, const std::vector<float> *pForwardInput, const std::vector<float> *pBackwardInput, std::vector<float> *pBackwardOutput, float *pBiasDelta, float *pWeightDelta, const float *pFactor) const
+	{
+		float vDesk[2]{this->nParam, 1.f};
+
+		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
+			for (std::size_t nIndex{0}; nIndex < this->nFanIn; ++nIndex)
+				pBackwardOutput[nBatch][nIndex] = pBackwardInput[nBatch][nIndex] * vDesk[pForwardInput[nBatch][nIndex] > .0f];
+	}
+
 	void PReLULayer::update(const float *pBiasDelta, const float *pWeightDelta)
 	{
 		//Empty.

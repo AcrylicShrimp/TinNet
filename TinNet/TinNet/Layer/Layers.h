@@ -24,4 +24,6 @@
 #include "LReLULayer.h"
 #include "PReLULayer.h"
 
+#include "SwishLayer.h"
+
 #endif

@@ -4,22 +4,22 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_OPTIMIZER_SUPERVISED_RMSPROP_H
+#ifndef _CLASS_TINNET_OPTIMIZER_RMSPROP_H
 
-#define _CLASS_TINNET_OPTIMIZER_SUPERVISED_RMSPROP_H
+#define _CLASS_TINNET_OPTIMIZER_RMSPROP_H
 
-#include "../../TinNetDLL.h"
+#include "../TinNetDLL.h"
 
-#include "../../NN.h"
-#include "SupervisedOptimizerBase.h"
+#include "../NN.h"
+#include "OptimizerBase.h"
 
 #include <cstddef>
 #include <utility>
 #include <vector>
 
-namespace TinNet::Optimizer::Supervised
+namespace TinNet::Optimizer
 {
-	class TINNET_DLL RMSProp : public SupervisedOptimizerBase
+	class TINNET_DLL RMSProp : public OptimizerBase
 	{
 	private:
 		float nDecay;
@@ -41,9 +41,7 @@ namespace TinNet::Optimizer::Supervised
 		inline float decay() const;
 		inline float &learningRate();
 		inline float learningRate() const;
-
-	protected:
-		virtual void applyGradient(std::size_t nActualBatchSize) override;
+		virtual void applyGradient(std::size_t nActualBatchSize, float nGradientFactor) override;
 	};
 
 	inline float &RMSProp::decay()
