@@ -6,11 +6,13 @@
     <ClCompile Include="ConsoleOmocObserver.cpp" />
     <ClCompile Include="AIOmocAgent.cpp" />
     <ClCompile Include="LearningAIOmocAgent.cpp" />
+    <ClCompile Include="OmocAgent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Omoc.h" />
     <ClInclude Include="ConsoleOmocObserver.h" />
     <ClInclude Include="AIOmocAgent.h" />
     <ClInclude Include="LearningAIOmocAgent.h" />
+    <ClInclude Include="OmocAgent.h" />
   </ItemGroup>
 </Project>

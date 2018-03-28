@@ -60,20 +60,19 @@ namespace TinNet_Example
 		int nPlace;
 
 		nPlace = this->pBlack->place(this->pPlace);
-		
+
 		while (this->pPlace[nPlace] != .0f)
 		{
 			++this->nErrorBlack;
 			this->pBlack->handlePlaceRejected(nPlace);
 			nPlace = this->pBlack->place(this->pPlace);
 		}
-		
+
 		this->pBlack->handlePlaceOK(nPlace);
 		this->pWhite->handlePlaceOtherOK(nPlace);
 		this->pPlace[nPlace] = -1.f;
 
 		if (this->checkGameWinner(nPlace, -1.f))
-			//if (nPlace == this->nPlaceWidth - 1)
 		{
 			*pWinner = -1;
 			*nFinalPlace = nPlace;
@@ -103,7 +102,6 @@ WHITE_PART:
 		this->pPlace[nPlace] = 1.f;
 
 		if (this->checkGameWinner(nPlace, 1.f))
-			//if (nPlace == this->nPlaceWidth - 1)
 		{
 			*pWinner = 1;
 			*nFinalPlace = nPlace;

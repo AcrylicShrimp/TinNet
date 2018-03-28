@@ -10,6 +10,8 @@
 
 #include "../../TinNet/TinNet/TinNetDLL.h"
 
+#include "GPUVector.h"
+
 #include "Layer/Layers_GPU.h"
 
 #include "Loss/Losses_GPU.h"

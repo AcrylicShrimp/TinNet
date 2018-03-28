@@ -140,32 +140,8 @@ namespace TinNet
 
 	void NN::classify(std::size_t nBatchSize, const std::vector<float> *pInput, std::size_t *pOutput)
 	{
-		std::size_t nIndex{0};
-		std::vector<std::vector<std::vector<float>>> sOutput(this->depth());
-
-		for (auto &sLayerBuffer : sOutput)
-		{
-			sLayerBuffer.resize(nBatchSize);
-
-			for (auto &sOutputBuffer : sLayerBuffer)
-				sOutputBuffer.resize(this->sLayerList[nIndex]->fanOut());
-
-			++nIndex;
-		}
-
-		this->forward(nBatchSize, pInput, sOutput.data());
-
 		for (std::size_t nBatch{0}; nBatch < nBatchSize; ++nBatch)
-		{
-			std::size_t nMaxIndex{0};
-			auto nMaxValue{sOutput.back()[nBatch].front()};
-
-			for (std::size_t nOut{1}, nOutSize{sOutput.back()[nBatch].size()}; nOut < nOutSize; ++nOut)
-				if (nMaxValue < sOutput.back()[nBatch][nOut])
-					nMaxValue = sOutput.back()[nBatch][nMaxIndex = nOut];
-
-			*pOutput++ = nMaxIndex;
-		}
+			pOutput[nBatch] = this->classify(pInput[nBatch].data());
 	}
 
 	float NN::classificationLoss(std::size_t nBatchSize, const std::vector<float> *pInput, const std::vector<float> *pOutput)

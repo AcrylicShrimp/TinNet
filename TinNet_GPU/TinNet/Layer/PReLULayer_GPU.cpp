@@ -53,27 +53,27 @@ namespace TinNet::Layer
 		nBiasDeltaSize = nWeightDeltaSize = 0;
 	}
 
-	void PReLULayer_GPU::forward(CUdeviceptr pInput, CUdeviceptr pOutput) const
+	void PReLULayer_GPU::forward(const GPUVector &sInput, GPUVector &sOutput) const
 	{
-		::PReLULayer_GPU_forward(this->nFanIn, pInput, pOutput, this->nParam);
+		::PReLULayer_GPU_forward(this->nFanIn, sInput, sOutput, this->nParam);
 	}
 
-	void PReLULayer_GPU::forward(std::size_t nBatchSize, CUdeviceptr pInput, CUdeviceptr pOutput, bool bTrainingPhase) const
+	void PReLULayer_GPU::forward(std::size_t nIndex, std::size_t nBatchSize, const GPUVector &sInput, GPUVector &sOutput, bool bTrainingPhase) const
 	{
-		::PReLULayer_GPU_forwardBatch(nBatchSize, this->nFanIn, pInput, pOutput, this->nParam);
+		::PReLULayer_GPU_forwardBatch(nIndex, nBatchSize, this->nFanIn, sInput, sOutput, this->nParam);
 	}
 
-	void PReLULayer_GPU::backward(std::size_t nBatchSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta) const
+	void PReLULayer_GPU::backward(std::size_t nIndex, std::size_t nBatchSize, const GPUVector &sForwardInput, const GPUVector &sBackwardInput, GPUVector &sBackwardOutput, GPUVector &sBiasDelta, GPUVector &sWeightDelta) const
 	{
-		::PReLULayer_GPU_backwardBatch(nBatchSize, this->nFanIn, pForwardInput, pBackwardInput, pBackwardOutput, this->nParam);
+		::PReLULayer_GPU_backwardBatch(nIndex, nBatchSize, this->nFanIn, sForwardInput, sBackwardInput, sBackwardOutput, this->nParam);
 	}
 
-	void PReLULayer_GPU::update(CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	void PReLULayer_GPU::update(const GPUVector &sBiasDelta, const GPUVector &sWeightDelta)
 	{
 		//Empty.
 	}
 
-	void PReLULayer_GPU::update(float nFactor, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	void PReLULayer_GPU::update(float nFactor, const GPUVector &sBiasDelta, const GPUVector &sWeightDelta)
 	{
 		//Empty.
 	}

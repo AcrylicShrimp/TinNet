@@ -4,18 +4,18 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_OPTIMIZER_SUPERVISED_SGD_GPU_H
+#ifndef _CLASS_TINNET_OPTIMIZER_SGD_GPU_H
 
-#define _CLASS_TINNET_OPTIMIZER_SUPERVISED_SGD_GPU_H
+#define _CLASS_TINNET_OPTIMIZER_SGD_GPU_H
 
-#include "../../../../TinNet/TinNet/TinNetDLL.h"
+#include "../../../TinNet/TinNet/TinNetDLL.h"
 
-#include "../../NN_GPU.h"
-#include "SupervisedOptimizerBase_GPU.h"
+#include "../NN_GPU.h"
+#include "OptimizerBase_GPU.h"
 
-namespace TinNet::Optimizer::Supervised
+namespace TinNet::Optimizer
 {
-	class TINNET_DLL SGD_GPU : public SupervisedOptimizerBase_GPU
+	class TINNET_DLL SGD_GPU : public OptimizerBase_GPU
 	{
 	protected:
 		float nLearningRate;
@@ -33,7 +33,7 @@ namespace TinNet::Optimizer::Supervised
 		inline float learningRate() const;
 
 	protected:
-		virtual void applyGradient(std::size_t nActualBatchSize) override;
+		virtual void applyGradient(std::size_t nActualBatchSize, float nGradientFactor) override;
 	};
 
 	inline float &SGD_GPU::learningRate()

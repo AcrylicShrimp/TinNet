@@ -6,6 +6,7 @@
 
 #include "../TinNet/TinNet/TinNet.h"
 #include "../TinNet_GPU/TinNet/TinNet_GPU.h"
+#include "../TinNet_Dot/TinNet/Dot/Dot.h"
 
 #include <cstdint>
 #include <fstream>
@@ -57,23 +58,10 @@ int32_t main()
 		}
 		else if (sCommand == "new")
 		{
-			//sNetwork.addLayer<Layer::ConvLayer_GPU>(28, 28, 1, 30, 5, 5, 1, 1, 24, 24);
-			//sNetwork.addLayer<Layer::LReLULayer_GPU>(17280);
-			//sNetwork.addLayer<Layer::ConvLayer_GPU>(24, 24, 30, 60, 4, 4, 2, 2, 11, 11);
-			//sNetwork.addLayer<Layer::LReLULayer_GPU>(7260);
-			//sNetwork.addLayer<Layer::FullLayer_GPU>(7260, 100);
-			//sNetwork.addLayer<Layer::LReLULayer_GPU>(100);
-			//sNetwork.addLayer<Layer::FullLayer_GPU>(100, 10);
-			//sNetwork.addLayer<Layer::SoftmaxLayer_GPU>(10);
-
 			sNetwork.addLayer<Layer::FullLayer_GPU>(784, 300);
-			sNetwork.addLayer<Layer::SwishLayer_GPU>(300);
-			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
-			sNetwork.addLayer<Layer::SwishLayer_GPU>(300);
-			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 300);
-			sNetwork.addLayer<Layer::SwishLayer_GPU>(300);
+			sNetwork.addLayer<Layer::ReLULayer_GPU>(300);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(300, 100);
-			sNetwork.addLayer<Layer::SwishLayer_GPU>(100);
+			sNetwork.addLayer<Layer::ReLULayer_GPU>(100);
 			sNetwork.addLayer<Layer::FullLayer_GPU>(100, 10);
 			sNetwork.addLayer<Layer::SoftmaxLayer_GPU>(10);
 
@@ -151,7 +139,24 @@ int32_t main()
 		}
 	}
 
-	Optimizer::Supervised::SGD_GPU sOptimizer{sNetwork, 32u, .001f};
+	GPUVector sTrainInputGPU{784 * 60000};
+	GPUVector sTrainOutputGPU{10 * 60000};
+	std::vector<GPUVector> sTestInputGPU(10000);
+	std::vector<GPUVector> sTestOutputGPU(10000);
+
+	for (std::size_t nIndex{0}; nIndex < 60000; ++nIndex)
+	{
+		sTrainInputGPU.insert(784 * nIndex, sTrainInput[nIndex]);
+		sTrainOutputGPU.insert(10 * nIndex, sTrainOutput[nIndex]);
+	}
+
+	for (std::size_t nIndex{0}; nIndex < 10000; ++nIndex)
+	{
+		sTestInputGPU[nIndex] = sTestInput[nIndex];
+		sTestOutputGPU[nIndex] = sTestOutput[nIndex];
+	}
+
+	Optimizer::SGD_GPU sOptimizer{sNetwork, 32, .001f};
 	//Optimizer::Supervised::SGD sOptimizer{sNetwork, 32u, .1f};
 	//Optimizer::Supervised::Momentum sOptimizer{sNetwork, 32, .9f, .005f};
 	//Optimizer::Supervised::NAG sOptimizer{sNetwork, .9f, .001f};
@@ -159,7 +164,7 @@ int32_t main()
 	//Optimizer::Supervised::RMSProp sOptimizer{sNetwork, 32, .9f, .001f};
 	//Optimizer::Supervised::Adam sOptimizer{sNetwork, 32, .001f, .9f, .999f};
 
-	sOptimizer.addTrainingSet(60000u, sTrainInput.data(), sTrainOutput.data());
+	TinNet::Dot::Dot::createWindow();
 
 	Visualizer::CSVLossExporter sExporter;
 
@@ -167,25 +172,19 @@ int32_t main()
 	//sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
 	//std::cout << " saved." << std::endl;
 
-	float vOutput[10];
-
 	for (;;)
 	{
-		sNetwork.forward(sTestInput[0].data(), vOutput);
+		float nLoss{sNetwork.classificationLoss(10000u, sTestInputGPU.data(), sTestOutputGPU.data())};
+		printf("Validation data classification accuracy : %0.2f%%\n", (1.f - nLoss) * 100.f);
 
-		printf("%.2lf %.2lf %.2lf %.2lf %.2lf %.2lf %.2lf %.2lf %.2lf %.2lf\n",
-			   vOutput[0], vOutput[1], vOutput[2], vOutput[3], vOutput[4],
-			   vOutput[5], vOutput[6], vOutput[7], vOutput[8], vOutput[9]);
+		TinNet::Dot::Dot::display().push(nLoss);
 
-		//float nLoss{sNetwork.classificationLoss(10000u, sTestInput.data(), sTestOutput.data())};
-		//printf("Validation data classification accuracy : %0.2f%%\n", (1.f - nLoss) * 100.f);
-
-		sExporter.accrueLoss(.0f);
+		sExporter.accrueLoss(nLoss);
 		sExporter.exportCSV(std::ofstream{"losses.csv", std::ofstream::out});
 
-		sOptimizer.train<Loss::MulticlassCE_GPU>(1);
-		printf("trained!\n");
+		sOptimizer.train<Loss::MulticlassCE_GPU>(1, 60000, sTrainInputGPU, sTrainOutputGPU);
 
+		puts("trained!");
 		//std::cout << "Serializing network...";
 		//sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
 		//std::cout << " saved." << std::endl;

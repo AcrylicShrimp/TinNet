@@ -44,6 +44,8 @@ namespace TinNet::Layer
 								 std::size_t nNewOutputWidth,
 								 std::size_t nNewOutputHeight) :
 		Layer_GPU(nNewWidth * nNewHeight * nNewChannel, nNewOutputWidth * nNewOutputHeight * nNewFilter),
+		sBias{0},
+		sWeight{0},
 		nWidth{nNewWidth},
 		nHeight{nNewHeight},
 		nChannel{nNewChannel},
@@ -61,17 +63,8 @@ namespace TinNet::Layer
 		if ((this->nZeroPaddingVerticalNegative = this->nZeroPaddingVerticalPositive = ((this->nOutputHeight - 1u) * this->nStrideVertical + this->nFilterHeight - this->nHeight) / 2u) & 1u)
 			++this->nZeroPaddingVerticalPositive;
 
-		cuMemAlloc(&this->pBias, sizeof(float) * nNewFilter);
-		cuMemAlloc(&this->pWeight, sizeof(float) * nNewFilter * nNewChannel * nNewFilterWidth * nNewFilterHeight);
-	}
-
-	ConvLayer_GPU::~ConvLayer_GPU()
-	{
-		cuMemFree(this->pBias);
-		cuMemFree(this->pWeight);
-
-		this->pBias = 0;
-		this->pWeight = 0;
+		this->sBias.resize(nNewFilter);
+		this->sWeight.resize(nNewFilter * nNewChannel * nNewFilterWidth * nNewFilterHeight);
 	}
 
 	const char *ConvLayer_GPU::name() const
@@ -86,7 +79,7 @@ namespace TinNet::Layer
 		for (auto &nBias : sBias)
 			nBias = sGenerator();
 
-		cuMemcpyHtoD(this->pBias, sBias.data(), sizeof(float) * this->nFilter);
+		this->sBias = sBias;
 	}
 
 	void ConvLayer_GPU::initWeight(std::function<float()> sGenerator)
@@ -96,7 +89,7 @@ namespace TinNet::Layer
 		for (auto &nWeight : sWeight)
 			nWeight = sGenerator();
 
-		cuMemcpyHtoD(this->pWeight, sWeight.data(), sizeof(float) * this->nFilter * this->nChannel * this->nFilterWidth * this->nFilterHeight);
+		this->sWeight = sWeight;
 	}
 
 	void ConvLayer_GPU::specifySize(std::size_t &nBiasDeltaSize, std::size_t &nWeightDeltaSize) const
@@ -104,7 +97,7 @@ namespace TinNet::Layer
 		nWeightDeltaSize = (nBiasDeltaSize = this->nFilter) * this->nChannel * this->nFilterWidth * this->nFilterHeight * this->nOutputWidth * this->nOutputHeight * 2;
 	}
 
-	void ConvLayer_GPU::forward(CUdeviceptr pInput, CUdeviceptr pOutput) const
+	void ConvLayer_GPU::forward(const GPUVector &sInput, GPUVector &sOutput) const
 	{
 		::ConvLayer_GPU_forward(
 			this->nWidth,
@@ -119,12 +112,13 @@ namespace TinNet::Layer
 			this->nOutputHeight,
 			this->nZeroPaddingHorizontalNegative,
 			this->nZeroPaddingVerticalNegative,
-			pInput, pOutput, this->pBias, this->pWeight);
+			sInput, sOutput, this->sBias, this->sWeight);
 	}
 
-	void ConvLayer_GPU::forward(std::size_t nBatchSize, CUdeviceptr pInput, CUdeviceptr pOutput, bool bTrainingPhase) const
+	void ConvLayer_GPU::forward(std::size_t nIndex, std::size_t nBatchSize, const GPUVector &sInput, GPUVector &sOutput, bool bTrainingPhase) const
 	{
 		::ConvLayer_GPU_forwardBatch(
+			nIndex,
 			nBatchSize,
 			this->nWidth,
 			this->nHeight,
@@ -138,12 +132,13 @@ namespace TinNet::Layer
 			this->nOutputHeight,
 			this->nZeroPaddingHorizontalNegative,
 			this->nZeroPaddingVerticalNegative,
-			pInput, pOutput, this->pBias, this->pWeight);
+			sInput, sOutput, this->sBias, this->sWeight);
 	}
 
-	void ConvLayer_GPU::backward(std::size_t nBatchSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta) const
+	void ConvLayer_GPU::backward(std::size_t nIndex, std::size_t nBatchSize, const GPUVector &sForwardInput, const GPUVector &sBackwardInput, GPUVector &sBackwardOutput, GPUVector &sBiasDelta, GPUVector &sWeightDelta) const
 	{
 		::ConvLayer_GPU_backwardBatch(
+			nIndex,
 			nBatchSize,
 			this->nWidth,
 			this->nHeight,
@@ -157,16 +152,16 @@ namespace TinNet::Layer
 			this->nOutputHeight,
 			this->nZeroPaddingHorizontalNegative,
 			this->nZeroPaddingVerticalNegative,
-			pForwardInput, pBackwardInput, pBackwardOutput, pBiasDelta, pWeightDelta, this->pWeight);
+			sForwardInput, sBackwardInput, sBackwardOutput, sBiasDelta, sWeightDelta, this->sWeight);
 	}
 
-	void ConvLayer_GPU::update(CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	void ConvLayer_GPU::update(const GPUVector &sBiasDelta, const GPUVector &sWeightDelta)
 	{
-		::updateParam(this->nFilter, this->nFilter * this->nChannel * this->nFilterWidth * this->nFilterHeight, this->pBias, this->pWeight, pBiasDelta, pWeightDelta);
+		::updateParam(this->nFilter, this->nFilter * this->nChannel * this->nFilterWidth * this->nFilterHeight, this->sBias, this->sWeight, sBiasDelta, sWeightDelta);
 	}
 
-	void ConvLayer_GPU::update(float nFactor, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	void ConvLayer_GPU::update(float nFactor, const GPUVector &sBiasDelta, const GPUVector &sWeightDelta)
 	{
-		::updateParamFactor(this->nFilter, this->nFilter * this->nChannel * this->nFilterWidth * this->nFilterHeight, this->pBias, this->pWeight, pBiasDelta, pWeightDelta, nFactor);
+		::updateParamFactor(this->nFilter, this->nFilter * this->nChannel * this->nFilterWidth * this->nFilterHeight, this->sBias, this->sWeight, sBiasDelta, sWeightDelta, nFactor);
 	}
 }

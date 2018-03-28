@@ -40,7 +40,7 @@ namespace TinNet::Dot
 		inline std::size_t length() const;
 		void clear();
 		void push(float nData);
-		std::tuple<std::size_t, const float *> obtainData(std::size_t nViewportWidth, std::size_t nIndex) const;
+		std::tuple<std::size_t, std::size_t, float, float, const float *> obtainData(std::size_t nViewportWidth, std::size_t nIndex) const;
 	};
 
 	inline float (Display::min)() const

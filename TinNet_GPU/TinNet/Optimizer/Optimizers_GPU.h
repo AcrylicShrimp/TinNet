@@ -8,6 +8,6 @@
 
 #define _TINNET_OPTIMIZERS_GPU_H
 
-#include "Supervised/SGD_GPU.h"
+#include "SGD_GPU.h"
 
 #endif

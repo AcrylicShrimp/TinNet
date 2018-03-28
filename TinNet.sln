@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+VisualStudioVersion = 15.0.26228.29
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinNet", "TinNet\TinNet.vcxproj", "{D09C5062-ECA6-4002-9EF5-E613F9183971}"
 EndProject
@@ -25,6 +25,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example_MNIST_GPU", "Exampl
 	ProjectSection(ProjectDependencies) = postProject
 		{ADAA6F21-1062-40B8-A259-818C6CC1CF1E} = {ADAA6F21-1062-40B8-A259-818C6CC1CF1E}
 		{D09C5062-ECA6-4002-9EF5-E613F9183971} = {D09C5062-ECA6-4002-9EF5-E613F9183971}
+		{D040687B-4173-406B-8D91-B93BB0A42F21} = {D040687B-4173-406B-8D91-B93BB0A42F21}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example_MCTS_Omoc", "Example_MCTS_Omoc\Example_MCTS_Omoc.vcxproj", "{61203BC2-CE06-4282-979F-A90A245E4B78}"

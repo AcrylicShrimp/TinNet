@@ -8,8 +8,8 @@
 
 namespace TinNet::Loss
 {
-	void CE_GPU::derivative(std::size_t nBatchSize, std::size_t nOutputSize, CUdeviceptr pOutput, CUdeviceptr pDesiredOutput, CUdeviceptr pResult)
+	void CE_GPU::derivative(std::size_t nIndex, std::size_t nBatchSize, std::size_t nOutputSize, const GPUVector &sOutput, const GPUVector &sDesiredOutput, GPUVector &sResult)
 	{
-		::CE_GPU_derivative(nBatchSize, nOutputSize, pOutput, pDesiredOutput, pResult);
+		::CE_GPU_derivative(nIndex, nBatchSize, nOutputSize, sOutput, sDesiredOutput, sResult);
 	}
 }

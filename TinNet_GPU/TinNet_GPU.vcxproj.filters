@@ -10,9 +10,6 @@
     <Filter Include="TinNet\Optimizer">
       <UniqueIdentifier>{bbc5bf85-45d7-43f9-8b4b-eda3c87d1c3b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TinNet\Optimizer\Supervised">
-      <UniqueIdentifier>{0171d58e-e59b-449e-813b-ccc09afeaae8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TinNet\Loss">
       <UniqueIdentifier>{6ba30423-77ed-4c15-a69c-32f0b2b562fa}</UniqueIdentifier>
     </Filter>
@@ -29,12 +26,6 @@
     </ClCompile>
     <ClCompile Include="TinNet\NN_GPU.cpp">
       <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\Supervised\SupervisedOptimizerBase_GPU.cpp">
-      <Filter>TinNet\Optimizer\Supervised</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\Supervised\SGD_GPU.cpp">
-      <Filter>TinNet\Optimizer\Supervised</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Loss\MSE_GPU.cpp">
       <Filter>TinNet\Loss</Filter>
@@ -69,6 +60,15 @@
     <ClCompile Include="TinNet\Layer\SwishLayer_GPU.cpp">
       <Filter>TinNet\Layer</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\GPUVector.cpp">
+      <Filter>TinNet</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Optimizer\SGD_GPU.cpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Optimizer\OptimizerBase_GPU.cpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Layer\FullLayer_GPU.h">
@@ -89,26 +89,11 @@
     <ClInclude Include="TinNet\NN_GPU.hpp">
       <Filter>TinNet</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Supervised\SupervisedOptimizerBase_GPU.h">
-      <Filter>TinNet\Optimizer\Supervised</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Supervised\SupervisedOptimizerBase_GPU.hpp">
-      <Filter>TinNet\Optimizer\Supervised</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Supervised\SGD_GPU.h">
-      <Filter>TinNet\Optimizer\Supervised</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Optimizers_GPU.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Loss\Losses_GPU.h">
       <Filter>TinNet\Loss</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Loss\MSE_GPU.h">
       <Filter>TinNet\Loss</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\TinNet_GPU_Backend.h">
-      <Filter>TinNet</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Layer\SigmoidLayer_GPU.h">
       <Filter>TinNet\Layer</Filter>
@@ -139,6 +124,24 @@
     </ClInclude>
     <ClInclude Include="TinNet\Layer\SwishLayer_GPU.h">
       <Filter>TinNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GPUVector.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\Optimizers_GPU.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\SGD_GPU.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\OptimizerBase_GPU.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\OptimizerBase_GPU.hpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\TinNet_GPU_Backend.h">
+      <Filter>TinNet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

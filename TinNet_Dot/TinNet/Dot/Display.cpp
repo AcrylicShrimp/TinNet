@@ -41,11 +41,17 @@ namespace TinNet::Dot
 		Dot::repaintWindow();
 	}
 
-	std::tuple<std::size_t, const float *> Display::obtainData(std::size_t nViewportWidth, std::size_t nIndex) const
+	std::tuple<std::size_t, std::size_t, float, float, const float *> Display::obtainData(std::size_t nViewportWidth, std::size_t nIndex) const
 	{
 		if (this->sData.size() < nIndex + nViewportWidth)
 			nIndex = this->sData.size() < nViewportWidth ? 0 : this->sData.size() - nViewportWidth;
 
-		return std::make_tuple((std::min)(this->sData.size(), nViewportWidth), this->sData.data() + nIndex);
+		if (this->sData.empty())
+			return std::make_tuple((std::min)(this->sData.size(), nViewportWidth), nIndex, .0f, .0f, this->sData.data() + nIndex);
+
+		auto nCount{(std::min)(this->sData.size(), nViewportWidth)};
+		auto sMinMax{std::minmax_element(this->sData.cbegin() + nIndex, this->sData.cbegin() + nIndex + nCount)};
+
+		return std::make_tuple((std::min)(this->sData.size(), nViewportWidth), nIndex, *sMinMax.first, *sMinMax.second, this->sData.data() + nIndex);
 	}
 }

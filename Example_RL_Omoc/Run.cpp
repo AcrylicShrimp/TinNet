@@ -13,6 +13,7 @@
 #include "LearningAIOmocAgent.h"
 
 #include <cstdlib>
+#include <cfloat>
 #include <thread>
 
 int main()
@@ -33,22 +34,34 @@ int main()
 	sWhite.addLayer<TinNet::Layer::FullLayer>(81, 81);
 	sWhite.addLayer<TinNet::Layer::SoftmaxLayer>(81);
 
+	TinNet::NN sWhiteValue;
+	sWhiteValue.addLayer<TinNet::Layer::FullLayer>(81, 81);
+	sWhiteValue.addLayer<TinNet::Layer::ReLULayer>(81);
+	sWhiteValue.addLayer<TinNet::Layer::FullLayer>(81, 81);
+	sWhiteValue.addLayer<TinNet::Layer::ReLULayer>(81);
+	sWhiteValue.addLayer<TinNet::Layer::FullLayer>(81, 1);
+
 	sBlack.initBias<TinNet::Initializer::Constant>(.0f);
 	sBlack.initWeight<TinNet::Initializer::He>();
 	sWhite.initBias<TinNet::Initializer::Constant>(.0f);
 	sWhite.initWeight<TinNet::Initializer::He>();
+	sWhiteValue.initBias<TinNet::Initializer::Constant>(.0f);
+	sWhiteValue.initWeight<TinNet::Initializer::He>();
 
-	//TinNet::Optimizer::SGD sOptimizer{sWhite, 2048, .001f};
-	TinNet::Optimizer::Adam sOptimizer{sWhite, 2048, .001f, .9f, .999f};
-	TinNet::Optimizer::MonteCarloPolicyGradient sMCPL{sOptimizer};
+	TinNet::Optimizer::Adam sPolicyOptimizer{sWhite, 2048, .001f, .9f, .999f};
+	TinNet::Optimizer::Adam sValueOptimizer{sWhiteValue, 2048, .001f, .9f, .999f};
+	TinNet::Optimizer::PGBaseline sBaseline{sValueOptimizer, sPolicyOptimizer};
 
 	Omoc sOmoc{9, 9};
 	ConsoleOmocObserver sConsoleObserver;
 	AIOmocAgent sAIBlack{&sBlack};
-	LearningAIOmocAgent sAIWhite{&sWhite, sMCPL};
+	LearningAIOmocAgent sAIWhite{&sWhite, sBaseline};
 
 	sOmoc.registerObserver(&sConsoleObserver);
 	sOmoc.registerAgent(&sAIBlack, &sAIWhite);
+
+	unsigned int current;
+	_controlfp_s(&current, ~(_EM_DENORMAL | _EM_ZERODIVIDE | _EM_INVALID) & (_EM_INEXACT | _EM_UNDERFLOW | _EM_OVERFLOW), _MCW_EM);
 
 	for (int nTemp = 0;; ++nTemp)
 		sOmoc.playNewGame();

@@ -60,28 +60,26 @@ namespace TinNet_Example
 				   this->nWhiteWinCount);
 
 		TinNet::Dot::Dot::display().push(static_cast<float>(this->nWhiteWinCount) / this->nNondrawGameCount * 100.f);
-
 		printf("게임당 평균 에러 : %0.4llf번 vs %0.4llf번\n", this->nBlackErrorCount / 100., this->nWhiteErrorCount / 100.);
-		//printf("게임당 에러 : %llu번 vs %llu번\n", this->nBlackErrorCount, this->nWhiteErrorCount);
 
 		this->nBlackErrorCount = 0;
 		this->nWhiteErrorCount = 0;
 
-		//printf("기보 :\n");
-		//
-		//for (int h = 0; h < 3; ++h)
-		//{
-		//	printf("\t");
-		//
-		//	for (int w = 0; w < 3; ++w)
-		//	{
-		//		if (h * 3 + w == nFinalPlace)
-		//			printf("%c", pPlace[h * 3 + w] == 0 ? '`' : pPlace[h * 3 + w] < 0 ? 'X' : 'O');
-		//		else
-		//			printf("%c", pPlace[h * 3 + w] == 0 ? '`' : pPlace[h * 3 + w] < 0 ? 'b' : 'w');
-		//	}
-		//
-		//	printf("\n");
-		//}
+		printf("기보 :\n");
+		
+		for (int h = 0; h < 9; ++h)
+		{
+			printf("\t");
+		
+			for (int w = 0; w < 9; ++w)
+			{
+				if (h * 9 + w == nFinalPlace)
+					printf("%c", pPlace[h * 9 + w] == 0 ? '`' : pPlace[h * 9 + w] < 0 ? 'X' : 'O');
+				else
+					printf("%c", pPlace[h * 9 + w] == 0 ? '`' : pPlace[h * 9 + w] < 0 ? 'b' : 'w');
+			}
+		
+			printf("\n");
+		}
 	}
 }

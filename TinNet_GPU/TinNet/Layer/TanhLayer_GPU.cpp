@@ -34,27 +34,27 @@ namespace TinNet::Layer
 		nBiasDeltaSize = nWeightDeltaSize = 0;
 	}
 
-	void TanhLayer_GPU::forward(CUdeviceptr pInput, CUdeviceptr pOutput) const
+	void TanhLayer_GPU::forward(const GPUVector &sInput, GPUVector &sOutput) const
 	{
-		::TanhLayer_GPU_forward(this->nFanIn, pInput, pOutput);
+		::TanhLayer_GPU_forward(this->nFanIn, sInput, sOutput);
 	}
 
-	void TanhLayer_GPU::forward(std::size_t nBatchSize, CUdeviceptr pInput, CUdeviceptr pOutput, bool bTrainingPhase) const
+	void TanhLayer_GPU::forward(std::size_t nIndex, std::size_t nBatchSize, const GPUVector &sInput, GPUVector &sOutput, bool bTrainingPhase) const
 	{
-		::TanhLayer_GPU_forwardBatch(nBatchSize, this->nFanIn, pInput, pOutput);
+		::TanhLayer_GPU_forwardBatch(nIndex, nBatchSize, this->nFanIn, sInput, sOutput);
 	}
 
-	void TanhLayer_GPU::backward(std::size_t nBatchSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta) const
+	void TanhLayer_GPU::backward(std::size_t nIndex, std::size_t nBatchSize, const GPUVector &sForwardInput, const GPUVector &sBackwardInput, GPUVector &sBackwardOutput, GPUVector &sBiasDelta, GPUVector &sWeightDelta) const
 	{
-		::TanhLayer_GPU_backwardBatch(nBatchSize, this->nFanIn, pForwardInput, pBackwardInput, pBackwardOutput);
+		::TanhLayer_GPU_backwardBatch(nIndex, nBatchSize, this->nFanIn, sForwardInput, sBackwardInput, sBackwardOutput);
 	}
 
-	void TanhLayer_GPU::update(CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	void TanhLayer_GPU::update(const GPUVector &sBiasDelta, const GPUVector &sWeightDelta)
 	{
 		//Empty.
 	}
 
-	void TanhLayer_GPU::update(float nFactor, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	void TanhLayer_GPU::update(float nFactor, const GPUVector &sBiasDelta, const GPUVector &sWeightDelta)
 	{
 		//Empty.
 	}

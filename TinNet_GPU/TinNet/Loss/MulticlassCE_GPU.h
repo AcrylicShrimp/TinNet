@@ -12,7 +12,7 @@
 
 #include "../TinNet_GPU_Backend.h"
 
-#include "cuda.h"
+#include "../GPUVector.h"
 
 #include <cstddef>
 
@@ -29,7 +29,7 @@ namespace TinNet::Loss
 		MulticlassCE_GPU &operator=(const MulticlassCE_GPU &sSrc) = delete;
 		
 	public:
-		static void derivative(std::size_t nBatchSize, std::size_t nOutputSize, CUdeviceptr pOutput, CUdeviceptr pDesiredOutput, CUdeviceptr pResult);
+		static void derivative(std::size_t nIndex, std::size_t nBatchSize, std::size_t nOutputSize, const GPUVector &sOutput, const GPUVector &sDesiredOutput, GPUVector &sResult);
 	};
 }
 

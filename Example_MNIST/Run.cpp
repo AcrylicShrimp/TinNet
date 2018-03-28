@@ -55,7 +55,11 @@ int32_t main()
 		}
 		else if (sCommand == "new")
 		{
-			sNetwork.addLayer<Layer::FullLayer>(784, 10);
+			sNetwork.addLayer<Layer::FullLayer>(784, 300);
+			sNetwork.addLayer<Layer::ReLULayer>(300);
+			sNetwork.addLayer<Layer::FullLayer>(300, 100);
+			sNetwork.addLayer<Layer::ReLULayer>(100);
+			sNetwork.addLayer<Layer::FullLayer>(100, 10);
 			sNetwork.addLayer<Layer::SoftmaxLayer>(10);
 
 			std::cout << "Successfully created." << std::endl;
@@ -132,7 +136,7 @@ int32_t main()
 		}
 	}
 
-	Optimizer::SGD sOptimizer{sNetwork, 1u, .001f};
+	Optimizer::SGD sOptimizer{sNetwork, 32, .001f};
 	//Optimizer::Momentum sOptimizer{sNetwork, 32, .9f, .005f};
 	//Optimizer::NAG sOptimizer{sNetwork, .9f, .001f};
 	//Optimizer::Adagrad sOptimizer{sNetwork, 32, .005f};
@@ -159,6 +163,7 @@ int32_t main()
 
 		sOptimizer.train<Loss::MulticlassCE>(1, 60000, sTrainInput.data(), sTrainOutput.data());
 
+		puts("trained!");
 		//std::cout << "Serializing network...";
 		//sNetwork.serialize(std::ofstream{"network.cn", std::ofstream::binary | std::ofstream::out});
 		//std::cout << " saved." << std::endl;

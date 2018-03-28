@@ -29,7 +29,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ADAA6F21-1062-40B8-A259-818C6CC1CF1E}</ProjectGuid>
     <RootNamespace>TinNet_GPU</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -301,6 +301,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TinNet\GPUVector.cpp" />
     <ClCompile Include="TinNet\Layer\ConvLayer_GPU.cpp" />
     <ClCompile Include="TinNet\Layer\FullLayer_GPU.cpp">
       <FileType>Document</FileType>
@@ -317,14 +318,12 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClCompile Include="TinNet\Loss\MSE_GPU.cpp" />
     <ClCompile Include="TinNet\Loss\MulticlassCE_GPU.cpp" />
     <ClCompile Include="TinNet\NN_GPU.cpp" />
-    <ClCompile Include="TinNet\Optimizer\Supervised\SGD_GPU.cpp" />
-    <ClCompile Include="TinNet\Optimizer\Supervised\SupervisedOptimizerBase_GPU.cpp" />
+    <ClCompile Include="TinNet\Optimizer\SGD_GPU.cpp" />
+    <ClCompile Include="TinNet\Optimizer\OptimizerBase_GPU.cpp" />
     <ClCompile Include="TinNet\TinNet_GPU.cpp" />
-    <CudaCompile Include="TinNet\TinNet_GPU_Backend.cu">
-      <FileType>Document</FileType>
-    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TinNet\GPUVector.h" />
     <ClInclude Include="TinNet\Layer\ConvLayer_GPU.h" />
     <ClInclude Include="TinNet\Layer\FullLayer_GPU.h" />
     <ClInclude Include="TinNet\Layer\Layers_GPU.h" />
@@ -343,11 +342,14 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="TinNet\NN_GPU.h" />
     <ClInclude Include="TinNet\NN_GPU.hpp" />
     <ClInclude Include="TinNet\Optimizer\Optimizers_GPU.h" />
-    <ClInclude Include="TinNet\Optimizer\Supervised\SGD_GPU.h" />
-    <ClInclude Include="TinNet\Optimizer\Supervised\SupervisedOptimizerBase_GPU.h" />
-    <ClInclude Include="TinNet\Optimizer\Supervised\SupervisedOptimizerBase_GPU.hpp" />
+    <ClInclude Include="TinNet\Optimizer\SGD_GPU.h" />
+    <ClInclude Include="TinNet\Optimizer\OptimizerBase_GPU.h" />
+    <ClInclude Include="TinNet\Optimizer\OptimizerBase_GPU.hpp" />
     <ClInclude Include="TinNet\TinNet_GPU.h" />
     <ClInclude Include="TinNet\TinNet_GPU_Backend.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="TinNet\TinNet_GPU_Backend.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

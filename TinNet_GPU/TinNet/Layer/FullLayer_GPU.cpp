@@ -9,19 +9,11 @@
 namespace TinNet::Layer
 {
 	FullLayer_GPU::FullLayer_GPU(std::size_t nFanIn, std::size_t nFanOut) :
-		Layer_GPU(nFanIn, nFanOut)
+		Layer_GPU(nFanIn, nFanOut),
+		sBias{nFanOut},
+		sWeight{nFanIn * nFanOut}
 	{
-		cuMemAlloc(&this->pBias, sizeof(float) * nFanOut);
-		cuMemAlloc(&this->pWeight, sizeof(float) * nFanIn * nFanOut);
-	}
-
-	FullLayer_GPU::~FullLayer_GPU()
-	{
-		cuMemFree(this->pBias);
-		cuMemFree(this->pWeight);
-
-		this->pBias = 0;
-		this->pWeight = 0;
+		//Empty.
 	}
 
 	const char *FullLayer_GPU::name() const
@@ -36,7 +28,7 @@ namespace TinNet::Layer
 		for (auto &nBias : sBias)
 			nBias = sGenerator();
 
-		cuMemcpyHtoD(this->pBias, sBias.data(), sizeof(float) * this->nFanOut);
+		this->sBias = sBias;
 	}
 
 	void FullLayer_GPU::initWeight(std::function<float()> sGenerator)
@@ -46,7 +38,7 @@ namespace TinNet::Layer
 		for (auto &nWeight : sWeight)
 			nWeight = sGenerator();
 
-		cuMemcpyHtoD(this->pWeight, sWeight.data(), sizeof(float) * this->nFanIn * this->nFanOut);
+		this->sWeight = sWeight;
 	}
 
 	void FullLayer_GPU::specifySize(std::size_t &nBiasDeltaSize, std::size_t &nWeightDeltaSize) const
@@ -54,28 +46,28 @@ namespace TinNet::Layer
 		nWeightDeltaSize = this->nFanIn * (nBiasDeltaSize = this->nFanOut);
 	}
 
-	void FullLayer_GPU::forward(CUdeviceptr pInput, CUdeviceptr pOutput) const
+	void FullLayer_GPU::forward(const GPUVector &sInput, GPUVector &sOutput) const
 	{
-		::FullLayer_GPU_forward(this->nFanIn, this->nFanOut, pInput, pOutput, this->pBias, this->pWeight);
+		::FullLayer_GPU_forward(this->nFanIn, this->nFanOut, sInput, sOutput, this->sBias, this->sWeight);
 	}
 
-	void FullLayer_GPU::forward(std::size_t nBatchSize, CUdeviceptr pInput, CUdeviceptr pOutput, bool bTrainingPhase) const
+	void FullLayer_GPU::forward(std::size_t nIndex, std::size_t nBatchSize, const GPUVector &sInput, GPUVector &sOutput, bool bTrainingPhase) const
 	{
-		::FullLayer_GPU_forwardBatch(nBatchSize, this->nFanIn, this->nFanOut, pInput, pOutput, this->pBias, this->pWeight);
+		::FullLayer_GPU_forwardBatch(nIndex, nBatchSize, this->nFanIn, this->nFanOut, sInput, sOutput, this->sBias, this->sWeight);
 	}
 
-	void FullLayer_GPU::backward(std::size_t nBatchSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta) const
+	void FullLayer_GPU::backward(std::size_t nIndex, std::size_t nBatchSize, const GPUVector &sForwardInput, const GPUVector &sBackwardInput, GPUVector &sBackwardOutput, GPUVector &sBiasDelta, GPUVector &sWeightDelta) const
 	{
-		::FullLayer_GPU_backwardBatch(nBatchSize, this->nFanIn, this->nFanOut, pForwardInput, pBackwardInput, pBackwardOutput, pBiasDelta, pWeightDelta, this->pWeight);
+		::FullLayer_GPU_backwardBatch(nIndex, nBatchSize, this->nFanIn, this->nFanOut, sForwardInput, sBackwardInput, sBackwardOutput, sBiasDelta, sWeightDelta, this->sWeight);
 	}
 
-	void FullLayer_GPU::update(CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	void FullLayer_GPU::update(const GPUVector &sBiasDelta, const GPUVector &sWeightDelta)
 	{
-		::updateParam(this->nFanOut, this->nFanIn * this->nFanOut, this->pBias, this->pWeight, pBiasDelta, pWeightDelta);
+		::updateParam(this->nFanOut, this->nFanIn * this->nFanOut, this->sBias, this->sWeight, sBiasDelta, sWeightDelta);
 	}
 
-	void FullLayer_GPU::update(float nFactor, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	void FullLayer_GPU::update(float nFactor, const GPUVector &sBiasDelta, const GPUVector &sWeightDelta)
 	{
-		::updateParamFactor(this->nFanOut, this->nFanIn * this->nFanOut, this->pBias, this->pWeight, pBiasDelta, pWeightDelta, nFactor);
+		::updateParamFactor(this->nFanOut, this->nFanIn * this->nFanOut, this->sBias, this->sWeight, sBiasDelta, sWeightDelta, nFactor);
 	}
 }

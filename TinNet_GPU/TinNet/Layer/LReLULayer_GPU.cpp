@@ -34,27 +34,27 @@ namespace TinNet::Layer
 		nBiasDeltaSize = nWeightDeltaSize = 0;
 	}
 
-	void LReLULayer_GPU::forward(CUdeviceptr pInput, CUdeviceptr pOutput) const
+	void LReLULayer_GPU::forward(const GPUVector &sInput, GPUVector &sOutput) const
 	{
-		::LReLULayer_GPU_forward(this->nFanIn, pInput, pOutput);
+		::LReLULayer_GPU_forward(this->nFanIn, sInput, sOutput);
 	}
 
-	void LReLULayer_GPU::forward(std::size_t nBatchSize, CUdeviceptr pInput, CUdeviceptr pOutput, bool bTrainingPhase) const
+	void LReLULayer_GPU::forward(std::size_t nIndex, std::size_t nBatchSize, const GPUVector &sInput, GPUVector &sOutput, bool bTrainingPhase) const
 	{
-		::LReLULayer_GPU_forwardBatch(nBatchSize, this->nFanIn, pInput, pOutput);
+		::LReLULayer_GPU_forwardBatch(nIndex, nBatchSize, this->nFanIn, sInput, sOutput);
 	}
 
-	void LReLULayer_GPU::backward(std::size_t nBatchSize, CUdeviceptr pForwardInput, CUdeviceptr pBackwardInput, CUdeviceptr pBackwardOutput, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta) const
+	void LReLULayer_GPU::backward(std::size_t nIndex, std::size_t nBatchSize, const GPUVector &sForwardInput, const GPUVector &sBackwardInput, GPUVector &sBackwardOutput, GPUVector &sBiasDelta, GPUVector &sWeightDelta) const
 	{
-		::LReLULayer_GPU_backwardBatch(nBatchSize, this->nFanIn, pForwardInput, pBackwardInput, pBackwardOutput);
+		::LReLULayer_GPU_backwardBatch(nIndex, nBatchSize, this->nFanIn, sForwardInput, sBackwardInput, sBackwardOutput);
 	}
 
-	void LReLULayer_GPU::update(CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	void LReLULayer_GPU::update(const GPUVector &sBiasDelta, const GPUVector &sWeightDelta)
 	{
 		//Empty.
 	}
 
-	void LReLULayer_GPU::update(float nFactor, CUdeviceptr pBiasDelta, CUdeviceptr pWeightDelta)
+	void LReLULayer_GPU::update(float nFactor, const GPUVector &sBiasDelta, const GPUVector &sWeightDelta)
 	{
 		//Empty.
 	}

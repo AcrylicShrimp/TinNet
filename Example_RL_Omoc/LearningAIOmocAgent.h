@@ -34,11 +34,11 @@ namespace TinNet_Example
 		TinNet::NN *pNetwork;
 		EpList sEpList;
 		const float *pPlace;
-		TinNet::Optimizer::MonteCarloPolicyGradient &sUpdater;
+		TinNet::Optimizer::PGBaseline &sUpdater;
 		std::mt19937_64 sEngine;
 
 	public:
-		LearningAIOmocAgent(TinNet::NN *pNewNetwork, TinNet::Optimizer::MonteCarloPolicyGradient &sNewUpdater);
+		LearningAIOmocAgent(TinNet::NN *pNewNetwork, TinNet::Optimizer::PGBaseline &sNewUpdater);
 		LearningAIOmocAgent(const LearningAIOmocAgent &sSrc) = delete;
 		LearningAIOmocAgent(LearningAIOmocAgent &&sSrc) = delete;
 		~LearningAIOmocAgent() = default;

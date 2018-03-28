@@ -123,14 +123,20 @@
     <ClCompile Include="TinNet\Optimizer\SGD.cpp">
       <Filter>TinNet\Optimizer</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\MonteCarloPolicyGradient.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Optimizer\OptimizerBase.cpp">
       <Filter>TinNet\Optimizer</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Layer\SwishLayer.cpp">
       <Filter>TinNet\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Optimizer\PGBaseline.cpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Optimizer\PolicyGradient.cpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Optimizer\ActorCritic.cpp">
+      <Filter>TinNet\Optimizer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -257,9 +263,6 @@
     <ClInclude Include="TinNet\Optimizer\SGD.h">
       <Filter>TinNet\Optimizer</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\MonteCarloPolicyGradient.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Optimizer\OptimizerBase.h">
       <Filter>TinNet\Optimizer</Filter>
     </ClInclude>
@@ -268,6 +271,15 @@
     </ClInclude>
     <ClInclude Include="TinNet\Layer\SwishLayer.h">
       <Filter>TinNet\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\PGBaseline.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\PolicyGradient.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\ActorCritic.h">
+      <Filter>TinNet\Optimizer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

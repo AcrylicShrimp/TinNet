@@ -15,9 +15,11 @@
 #include "WindowMessageHandler.h"
 
 #include <cstddef>
+#include <cstdint>
 #include <thread>
 #include <tuple>
 #include <Windows.h>
+#include <WindowsX.h>
 #include <gl\GL.h>
 
 namespace TinNet::Dot
@@ -30,6 +32,10 @@ namespace TinNet::Dot
 		static Display sDisplay;
 		static Dot sMessageHandler;
 		static std::thread sMessageLoopThread;
+		static std::size_t nViewportIndex;
+		static std::size_t nViewportWidth;
+		static float nViewportSpacing;
+		static bool bScrollLock;
 
 	private:
 		Dot();

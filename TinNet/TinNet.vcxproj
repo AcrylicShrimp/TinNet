@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -30,7 +30,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D09C5062-ECA6-4002-9EF5-E613F9183971}</ProjectGuid>
     <RootNamespace>TinNet</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -164,7 +164,7 @@
       <OmitFramePointers>true</OmitFramePointers>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <StringPooling>true</StringPooling>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -242,11 +242,13 @@
     <ClCompile Include="TinNet\Loss\MSE.cpp" />
     <ClCompile Include="TinNet\Loss\MulticlassCE.cpp" />
     <ClCompile Include="TinNet\NN.cpp" />
+    <ClCompile Include="TinNet\Optimizer\ActorCritic.cpp" />
     <ClCompile Include="TinNet\Optimizer\Adagrad.cpp" />
     <ClCompile Include="TinNet\Optimizer\Adam.cpp" />
     <ClCompile Include="TinNet\Optimizer\Momentum.cpp" />
-    <ClCompile Include="TinNet\Optimizer\MonteCarloPolicyGradient.cpp" />
+    <ClCompile Include="TinNet\Optimizer\PolicyGradient.cpp" />
     <ClCompile Include="TinNet\Optimizer\OptimizerHelper.cpp" />
+    <ClCompile Include="TinNet\Optimizer\PGBaseline.cpp" />
     <ClCompile Include="TinNet\Optimizer\RMSProp.cpp" />
     <ClCompile Include="TinNet\Optimizer\SGD.cpp" />
     <ClCompile Include="TinNet\Optimizer\OptimizerBase.cpp" />
@@ -297,12 +299,14 @@
     <ClInclude Include="TinNet\Loss\MulticlassCE.h" />
     <ClInclude Include="TinNet\NN.h" />
     <ClInclude Include="TinNet\NN.hpp" />
+    <ClInclude Include="TinNet\Optimizer\ActorCritic.h" />
     <ClInclude Include="TinNet\Optimizer\Adagrad.h" />
     <ClInclude Include="TinNet\Optimizer\Adam.h" />
     <ClInclude Include="TinNet\Optimizer\Momentum.h" />
-    <ClInclude Include="TinNet\Optimizer\MonteCarloPolicyGradient.h" />
+    <ClInclude Include="TinNet\Optimizer\PolicyGradient.h" />
     <ClInclude Include="TinNet\Optimizer\OptimizerHelper.h" />
     <ClInclude Include="TinNet\Optimizer\Optimizers.h" />
+    <ClInclude Include="TinNet\Optimizer\PGBaseline.h" />
     <ClInclude Include="TinNet\Optimizer\RMSProp.h" />
     <ClInclude Include="TinNet\Optimizer\SGD.h" />
     <ClInclude Include="TinNet\Optimizer\OptimizerBase.h" />

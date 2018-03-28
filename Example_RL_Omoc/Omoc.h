@@ -64,6 +64,8 @@ namespace TinNet_Example
 		Omoc &operator=(Omoc &&sSrc) = delete;
 
 	public:
+		inline int width() const;
+		inline int height() const;
 		inline void registerAgent(OmocAgent *pNewBlack, OmocAgent *pNewWhite);
 		inline void registerObserver(OmocObserver *pNewObserver);
 
@@ -73,6 +75,16 @@ namespace TinNet_Example
 		bool nextStep(int *pWinner, int *nFinalPlace);
 		bool checkGameWinner(int nPlace, float nIdentifier);
 	};
+
+	inline int Omoc::width() const
+	{
+		return this->nPlaceWidth;
+	}
+
+	inline int Omoc::height() const
+	{
+		return this->nPlaceHeight;
+	}
 
 	inline void Omoc::registerAgent(OmocAgent *pNewBlack, OmocAgent *pNewWhite)
 	{
