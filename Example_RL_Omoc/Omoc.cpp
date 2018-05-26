@@ -8,161 +8,141 @@
 
 namespace TinNet_Example
 {
-	Omoc::Omoc(int nWidth, int nHeight) :
-		pPlace{new float[nWidth * nHeight]},
-		nPlaceCount{nWidth * nHeight},
-		nPlaceWidth{nWidth},
-		nPlaceHeight{nHeight}
+	Omoc::Omoc(uint32_t nWidth, uint32_t nHeight, uint32_t nMaxPlacement) :
+		sBoard{nWidth, nHeight, nMaxPlacement},
+		pBlack{nullptr},
+		pWhite{nullptr},
+		pObserver{nullptr}
 	{
-		//Empty.
+		this->sBoard.sBoard.resize(nWidth * nHeight, 0);
 	}
 
-	Omoc::~Omoc()
+	OmocGameResult Omoc::playNewGame()
 	{
-		delete[] this->pPlace;
+		if (!this->pBlack || !this->pWhite)
+			return {true, nullptr, nullptr, &this->sBoard, nullptr, 0};
+
+		std::fill(this->sBoard.sBoard.begin(), this->sBoard.sBoard.end(), 0);
+
+		if (this->pObserver)
+			this->pObserver->onGameBegin(&this->sBoard);
+
+		this->pBlack->identifier() = -1;
+		this->pWhite->identifier() = 1;
+
+		OmocGameResult sGameResult;
+
+		while (!this->nextStep(&sGameResult));
+
+		this->pObserver->onGameEnd(&sGameResult);
+		this->pBlack->onGameEnd(&sGameResult);
+		this->pWhite->onGameEnd(&sGameResult);
+
+		return sGameResult;
 	}
 
-	void Omoc::playNewGame()
+	bool Omoc::nextStep(OmocGameResult *pGameResult)
 	{
-		std::fill(this->pPlace, this->pPlace + this->nPlaceCount, .0f);
-		this->nErrorBlack = this->nErrorWhite = 0;
+		if (this->proceedPhase(this->pBlack, pGameResult))
+			return true;
 
-		this->pObserver->handleGameStart();
-		this->pBlack->handleStart(-1.f);
-		this->pWhite->handleStart(1.f);
+		if (this->proceedPhase(this->pWhite, pGameResult))
+			return true;
 
-		int nWinner;
-		int nFinalPlace;
-		while (!this->nextStep(&nWinner, &nFinalPlace));
-
-		this->pObserver->handleGameEnd(this->pPlace, nWinner, nFinalPlace, this->nErrorBlack, this->nErrorWhite);
-
-		if (nWinner == -1)
-		{
-			this->pBlack->handleWin();
-			this->pWhite->handleLose();
-			return;
-		}
-
-		if (nWinner == 1)
-		{
-			this->pBlack->handleLose();
-			this->pWhite->handleWin();
-			return;
-		}
-
-		this->pBlack->handleDraw();
-		this->pWhite->handleDraw();
+		return false;
 	}
 
-	bool Omoc::nextStep(int *pWinner, int *nFinalPlace)
+	bool Omoc::proceedPhase(OmocAgent *pAgent, OmocGameResult *pGameResult)
 	{
-		int nPlace;
+		auto nPlacement{pAgent->place(&this->sBoard)};
 
-		nPlace = this->pBlack->place(this->pPlace);
-
-		while (this->pPlace[nPlace] != .0f)
+		while (this->sBoard.sBoard[nPlacement])
 		{
-			++this->nErrorBlack;
-			this->pBlack->handlePlaceRejected(nPlace);
-			nPlace = this->pBlack->place(this->pPlace);
+			if (this->pObserver)
+				this->pObserver->onPlaceRejected(nPlacement, pAgent, &this->sBoard);
+
+			pAgent->onPlaceRejected(nPlacement, &this->sBoard);
+			nPlacement = pAgent->place(&this->sBoard);
 		}
 
-		this->pBlack->handlePlaceOK(nPlace);
-		this->pWhite->handlePlaceOtherOK(nPlace);
-		this->pPlace[nPlace] = -1.f;
+		if (this->pObserver)
+			this->pObserver->onPlaced(nPlacement, pAgent, &this->sBoard);
 
-		if (this->checkGameWinner(nPlace, -1.f))
+		pAgent->onPlaced(nPlacement, &this->sBoard);
+		this->sBoard.sBoard[nPlacement] = pAgent->identifier();
+
+		if (this->checkGameWinner(nPlacement, pAgent->identifier()))
 		{
-			*pWinner = -1;
-			*nFinalPlace = nPlace;
+			pGameResult->bDraw = false;
+			pGameResult->pWinner = pAgent;
+			pGameResult->pLoser = pAgent == this->pBlack ? this->pWhite : this->pBlack;
+			pGameResult->pBoard = &this->sBoard;
+			pGameResult->pLastAgent = pAgent;
+			pGameResult->nLastPlacement = nPlacement;
+
 			return true;
 		}
 
-		for (int i = 0; i < this->nPlaceCount; ++i)
-			if (this->pPlace[i] == .0f)
-				goto WHITE_PART;
-		
-		*pWinner = 0;
-		*nFinalPlace = -1;
-		return true;
-
-WHITE_PART:
-		nPlace = this->pWhite->place(this->pPlace);
-
-		while (this->pPlace[nPlace] != .0f)
-		{
-			++this->nErrorWhite;
-			this->pWhite->handlePlaceRejected(nPlace);
-			nPlace = this->pWhite->place(this->pPlace);
-		}
-
-		this->pBlack->handlePlaceOtherOK(nPlace);
-		this->pWhite->handlePlaceOK(nPlace);
-		this->pPlace[nPlace] = 1.f;
-
-		if (this->checkGameWinner(nPlace, 1.f))
-		{
-			*pWinner = 1;
-			*nFinalPlace = nPlace;
-			return true;
-		}
-
-		for (int i = 0; i < this->nPlaceCount; ++i)
-			if (this->pPlace[i] == .0f)
+		for (auto nStone : this->sBoard.sBoard)
+			if (!nStone)
 				return false;
 
-		*pWinner = 0;
-		*nFinalPlace = -1;
+		pGameResult->bDraw = true;
+		pGameResult->pWinner = nullptr;
+		pGameResult->pLoser = nullptr;
+		pGameResult->pBoard = &this->sBoard;
+		pGameResult->pLastAgent = pAgent;
+		pGameResult->nLastPlacement = nPlacement;
+
 		return true;
 	}
 
-	bool Omoc::checkGameWinner(int nPlace, float nIdentifier)
+	bool Omoc::checkGameWinner(uint32_t nPlacement, int32_t nIdentifier)
 	{
-		int nSum{1};
-		int nX{nPlace % this->nPlaceWidth};
-		int nY{nPlace / this->nPlaceWidth};
+		uint32_t nSum{1};
+		uint32_t nX{nPlacement % this->sBoard.nWidth};
+		uint32_t nY{nPlacement / this->sBoard.nWidth};
 
-		for (int x = nX - 1; x >= 0 && this->pPlace[nY * this->nPlaceWidth + x] == nIdentifier; --x)
+		for (int x = nX - 1; x >= 0 && this->sBoard.sBoard[nY * this->sBoard.nWidth + x] == nIdentifier; --x)
 			++nSum;
 
-		for (int x = nX + 1; x < this->nPlaceWidth && this->pPlace[nY * this->nPlaceWidth + x] == nIdentifier; ++x)
+		for (int x = nX + 1; x < this->sBoard.nWidth && this->sBoard.sBoard[nY * this->sBoard.nWidth + x] == nIdentifier; ++x)
 			++nSum;
 
-		if (nSum == 5)
+		if (nSum == this->sBoard.nMaxPlacement)
 			return true;
 
 		nSum = 1;
 
-		for (int y = nY - 1; y >= 0 && this->pPlace[y * this->nPlaceWidth + nX] == nIdentifier; --y)
+		for (int y = nY - 1; y >= 0 && this->sBoard.sBoard[y * this->sBoard.nWidth + nX] == nIdentifier; --y)
 			++nSum;
 
-		for (int y = nY + 1; y < this->nPlaceHeight && this->pPlace[y * this->nPlaceWidth + nX] == nIdentifier; ++y)
+		for (int y = nY + 1; y < this->sBoard.nHeight && this->sBoard.sBoard[y * this->sBoard.nWidth + nX] == nIdentifier; ++y)
 			++nSum;
 
-		if (nSum == 5)
+		if (nSum == this->sBoard.nMaxPlacement)
 			return true;
 
 		nSum = 1;
 
-		for (int x = nX - 1, y = nY - 1; x >= 0 && y >= 0 && this->pPlace[y * this->nPlaceWidth + x] == nIdentifier; --x, --y)
+		for (int x = nX - 1, y = nY - 1; x >= 0 && y >= 0 && this->sBoard.sBoard[y * this->sBoard.nWidth + x] == nIdentifier; --x, --y)
 			++nSum;
 
-		for (int x = nX + 1, y = nY + 1; x < this->nPlaceWidth && y < this->nPlaceHeight && this->pPlace[y * this->nPlaceWidth + x] == nIdentifier; ++x, ++y)
+		for (int x = nX + 1, y = nY + 1; x < this->sBoard.nWidth && y < this->sBoard.nHeight && this->sBoard.sBoard[y * this->sBoard.nWidth + x] == nIdentifier; ++x, ++y)
 			++nSum;
 
-		if (nSum == 5)
+		if (nSum == this->sBoard.nMaxPlacement)
 			return true;
 
 		nSum = 1;
 
-		for (int x = nX - 1, y = nY + 1; x >= 0 && y < this->nPlaceHeight && this->pPlace[y * this->nPlaceWidth + x] == nIdentifier; --x, ++y)
+		for (int x = nX - 1, y = nY + 1; x >= 0 && y < this->sBoard.nHeight && this->sBoard.sBoard[y * this->sBoard.nWidth + x] == nIdentifier; --x, ++y)
 			++nSum;
 
-		for (int x = nX + 1, y = nY - 1; x < this->nPlaceWidth && y >= 0 && this->pPlace[y * this->nPlaceWidth + x] == nIdentifier; ++x, --y)
+		for (int x = nX + 1, y = nY - 1; x < this->sBoard.nWidth && y >= 0 && this->sBoard.sBoard[y * this->sBoard.nWidth + x] == nIdentifier; ++x, --y)
 			++nSum;
 
-		if (nSum == 5)
+		if (nSum == this->sBoard.nMaxPlacement)
 			return true;
 
 		return false;

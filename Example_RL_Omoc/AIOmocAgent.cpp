@@ -8,74 +8,73 @@
 
 namespace TinNet_Example
 {
-	AIOmocAgent::AIOmocAgent(TinNet::NN *pNewNetwork) :
-		pNetwork{pNewNetwork},
+	AIOmocAgent::AIOmocAgent(TinNet::NN *pNetwork) :
+		pNetwork{pNetwork},
 		sEngine{static_cast<std::mt19937_64::result_type>(std::chrono::system_clock::now().time_since_epoch().count())}
 	{
 		//Empty.
 	}
 
-	int AIOmocAgent::place(const float *pPlace)
+	uint32_t AIOmocAgent::place(const OmocBoard *pOmocBoard)
 	{
-		this->pNetwork->forward(pPlace);
+		std::vector<float> sInput(pOmocBoard->nWidth * pOmocBoard->nHeight);
 
-		int nBufferSize = 0;
+		for (std::size_t nIndex{0}, nSize{sInput.size()}; nIndex < nSize; ++nIndex)
+			sInput[nIndex] = static_cast<float>(pOmocBoard->sBoard[nIndex]);
 
-		for (int i = 0; i < 81; ++i)
-			if (pPlace[i] == .0f)
-			{
-				this->vIndexBuffer[nBufferSize] = i;
-				this->vProbBuffer[nBufferSize] = this->pNetwork->output().back()[i];
-				++nBufferSize;
-			}
+		this->pNetwork->forward(sInput.data());
 
-		if (!nBufferSize)
+		std::size_t nActionSize{0};
+
+		for (auto nPlacement : pOmocBoard->sBoard)
+			if (!nPlacement)
+				++nActionSize;
+
+		if (!nActionSize)
 			return 0;
 
-		for (int i = 0; i < nBufferSize - 1; ++i)
-			this->vProbBuffer[i + 1] += this->vProbBuffer[i];
+		std::vector<std::uint32_t> sIndex;
+		std::vector<float> sProb;
 
-		std::uniform_real_distribution<float> sDist{0.f, this->vProbBuffer[nBufferSize - 1]};
+		sIndex.reserve(nActionSize);
+		sProb.reserve(nActionSize);
+
+		for (std::size_t nIndex{0}, nSize{sInput.size()}; nIndex < nSize; ++nIndex)
+			if (sInput[nIndex] == .0f)
+			{
+				sIndex.emplace_back(nIndex);
+				sProb.emplace_back(this->pNetwork->output().back()[nIndex]);
+			}
+
+		for (std::size_t nIndex{0}, nSize{nActionSize - 1}; nIndex < nSize; ++nIndex)
+			sProb[nIndex + 1] += sProb[nIndex];
+
+		std::uniform_real_distribution<float> sDist{0.f, sProb[nActionSize - 1]};
 		auto nValue{sDist(this->sEngine)};
 
-		for (int i = 0; i < nBufferSize; ++i)
-			if (this->vProbBuffer[i] >= nValue)
-				return this->vIndexBuffer[i];
+		for (std::size_t nIndex{0}, nSize{nActionSize}; nIndex < nSize; ++nIndex)
+			if (sProb[nIndex] >= nValue)
+				return sIndex[nIndex];
 
-		return this->vIndexBuffer[nBufferSize - 1];
+		return sIndex.back();
 	}
 
-	void AIOmocAgent::handleStart(float nIdentifier)
+	void AIOmocAgent::onGameBegin(const OmocBoard *pOmocBoard)
 	{
 		//Empty.
 	}
 
-	void AIOmocAgent::handlePlaceRejected(int nPlace)
+	void AIOmocAgent::onPlaced(uint32_t nPlacement, const OmocBoard *pOmocBoard)
 	{
 		//Empty.
 	}
 
-	void AIOmocAgent::handlePlaceOK(int nPlace)
+	void AIOmocAgent::onPlaceRejected(uint32_t nPlacement, const OmocBoard *pOmocBoard)
 	{
 		//Empty.
 	}
 
-	void AIOmocAgent::handlePlaceOtherOK(int nPlace)
-	{
-		//Empty.
-	}
-
-	void AIOmocAgent::handleWin()
-	{
-		//Empty.
-	}
-
-	void AIOmocAgent::handleLose()
-	{
-		//Empty.
-	}
-
-	void AIOmocAgent::handleDraw()
+	void AIOmocAgent::onGameEnd(const OmocGameResult *pOmocGameResult)
 	{
 		//Empty.
 	}

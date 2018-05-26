@@ -8,17 +8,21 @@
 
 namespace TinNet_Example
 {
-	LearningAIOmocAgent::LearningAIOmocAgent(TinNet::NN *pNewNetwork, TinNet::Optimizer::PGBaseline &sNewUpdater) :
-		pNetwork{pNewNetwork},
-		sUpdater{sNewUpdater},
-		sEngine{static_cast<std::mt19937_64::result_type>(std::chrono::system_clock::now().time_since_epoch().count())}
+	LearningAIOmocAgent::LearningAIOmocAgent(TinNet::NN *pNetwork, TinNet::Optimizer::PGBaseline &sUpdater) :
+		AIOmocAgent(pNetwork),
+		sUpdater{sUpdater}
 	{
 		//Empty.
 	}
 
-	int LearningAIOmocAgent::place(const float *pPlace)
+	uint32_t LearningAIOmocAgent::place(const OmocBoard *pOmocBoard)
 	{
-		this->pNetwork->forward(this->pPlace = pPlace);
+		std::vector<float> sInput(pOmocBoard->nWidth * pOmocBoard->nHeight);
+
+		for (std::size_t nIndex{0}, nSize{sInput.size()}; nIndex < nSize; ++nIndex)
+			sInput[nIndex] = static_cast<float>(pOmocBoard->sBoard[nIndex]);
+
+		this->pNetwork->forward(sInput.data());
 
 		for (int i = 0; i < 80; ++i)
 			this->pNetwork->output().back()[i + 1] += this->pNetwork->output().back()[i];
@@ -33,48 +37,36 @@ namespace TinNet_Example
 		return 80;
 	}
 
-	void LearningAIOmocAgent::handleStart(float nIdentifier)
+	void LearningAIOmocAgent::onGameBegin(const OmocBoard *pOmocBoard)
 	{
 		//Empty.
 	}
 
-	void LearningAIOmocAgent::handlePlaceRejected(int nPlace)
+	void LearningAIOmocAgent::onPlaced(uint32_t nPlacement, const OmocBoard *pOmocBoard)
 	{
-		this->sEpList.sState.emplace_back(this->pPlace, this->pPlace + 81);
-		this->sEpList.sAction.emplace_back(81u, .0f);
+		this->sEpList.sState.emplace_back(pOmocBoard->sBoard.begin(), pOmocBoard->sBoard.end());
+		this->sEpList.sAction.emplace_back(pOmocBoard->nWidth * pOmocBoard->nHeight, .0f);
+		this->sEpList.sReward.emplace_back(.05f);
+
+		this->sEpList.sAction.back()[nPlacement] = 1.f;
+	}
+
+	void LearningAIOmocAgent::onPlaceRejected(uint32_t nPlacement, const OmocBoard *pOmocBoard)
+	{
+		this->sEpList.sState.emplace_back(pOmocBoard->sBoard.begin(), pOmocBoard->sBoard.end());
+		this->sEpList.sAction.emplace_back(pOmocBoard->nWidth * pOmocBoard->nHeight, .0f);
 		this->sEpList.sReward.emplace_back(-100.f);
 
-		this->sEpList.sAction.back()[nPlace] = 1.f;
+		this->sEpList.sAction.back()[nPlacement] = 1.f;
 	}
 
-	void LearningAIOmocAgent::handlePlaceOK(int nPlace)
+	void LearningAIOmocAgent::onGameEnd(const OmocGameResult *pOmocGameResult)
 	{
-		this->sEpList.sState.emplace_back(this->pPlace, this->pPlace + 81);
-		this->sEpList.sAction.emplace_back(81u, .0f);
-		this->sEpList.sReward.emplace_back(1.f);
+		if (pOmocGameResult->pWinner == this)
+			this->sEpList.sReward.back() = 1.f;
+		else if (pOmocGameResult->pLoser == this)
+			this->sEpList.sReward.back() = -1.f;
 
-		this->sEpList.sAction.back()[nPlace] = 1.f;
-	}
-
-	void LearningAIOmocAgent::handlePlaceOtherOK(int nPlace)
-	{
-		//Empty.
-	}
-
-	void LearningAIOmocAgent::handleWin()
-	{
-		this->sEpList.sReward.back() = 50.f;
-		this->update();
-	}
-
-	void LearningAIOmocAgent::handleLose()
-	{
-		this->sEpList.sReward.back() = -1.f;
-		this->update();
-	}
-
-	void LearningAIOmocAgent::handleDraw()
-	{
 		this->update();
 	}
 

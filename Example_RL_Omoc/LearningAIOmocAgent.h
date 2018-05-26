@@ -10,7 +10,7 @@
 
 #include "../TinNet/TinNet/TinNet.h"
 
-#include "Omoc.h"
+#include "AIOmocAgent.h"
 
 #include <algorithm>
 #include <chrono>
@@ -28,36 +28,28 @@ namespace TinNet_Example
 		std::vector<float> sReward;
 	};
 
-	class LearningAIOmocAgent : public OmocAgent
+	class LearningAIOmocAgent : public AIOmocAgent
 	{
-	private:
-		TinNet::NN *pNetwork;
+	protected:
 		EpList sEpList;
-		const float *pPlace;
 		TinNet::Optimizer::PGBaseline &sUpdater;
-		std::mt19937_64 sEngine;
 
 	public:
-		LearningAIOmocAgent(TinNet::NN *pNewNetwork, TinNet::Optimizer::PGBaseline &sNewUpdater);
+		LearningAIOmocAgent(TinNet::NN *pNetwork, TinNet::Optimizer::PGBaseline &sUpdater);
 		LearningAIOmocAgent(const LearningAIOmocAgent &sSrc) = delete;
-		LearningAIOmocAgent(LearningAIOmocAgent &&sSrc) = delete;
 		~LearningAIOmocAgent() = default;
 
 	public:
 		LearningAIOmocAgent &operator=(const LearningAIOmocAgent &sSrc) = delete;
-		LearningAIOmocAgent &operator=(LearningAIOmocAgent &&sSrc) = delete;
 
 	public:
-		virtual int place(const float *pPlace) override;
-		virtual void handleStart(float nIdentifier) override;
-		virtual void handlePlaceRejected(int nPlace) override;
-		virtual void handlePlaceOK(int nPlace) override;
-		virtual void handlePlaceOtherOK(int nPlace) override;
-		virtual void handleWin() override;
-		virtual void handleLose() override;
-		virtual void handleDraw() override;
+		virtual uint32_t place(const OmocBoard *pOmocBoard) override;
+		virtual void onGameBegin(const OmocBoard *pOmocBoard) override;
+		virtual void onPlaced(uint32_t nPlacement, const OmocBoard *pOmocBoard) override;
+		virtual void onPlaceRejected(uint32_t nPlacement, const OmocBoard *pOmocBoard) override;
+		virtual void onGameEnd(const OmocGameResult *pOmocGameResult) override;
 
-	private:
+	protected:
 		void update();
 	};
 }

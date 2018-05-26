@@ -205,6 +205,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TinNet\Cache.cpp" />
+    <ClCompile Include="TinNet\Graph\BackwardCachedGraphNode.cpp" />
+    <ClCompile Include="TinNet\Graph\CacheContainer.cpp" />
+    <ClCompile Include="TinNet\Graph\FullCachedGraphNode.cpp" />
+    <ClCompile Include="TinNet\Graph\Graph.cpp" />
+    <ClCompile Include="TinNet\Graph\GraphNode.cpp" />
+    <ClCompile Include="TinNet\Graph\GraphNodeBP.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\Add.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\AddBP.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\Broadcast.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\BroadcastBP.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\Divide.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\DivideBP.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\Input.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\InputBP.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\Multiply.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\MultiplyBP.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\Subtract.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\SubtractBP.cpp" />
     <ClCompile Include="TinNet\Initializer\Constant.cpp" />
     <ClCompile Include="TinNet\Initializer\Glorot.cpp" />
     <ClCompile Include="TinNet\Initializer\He.cpp" />
@@ -238,9 +257,13 @@
     <ClCompile Include="TinNet\Layer\SoftmaxLayer.cpp" />
     <ClCompile Include="TinNet\Layer\SwishLayer.cpp" />
     <ClCompile Include="TinNet\Layer\TanhLayer.cpp" />
+    <ClCompile Include="TinNet\Loss\AddLossGraph.cpp" />
     <ClCompile Include="TinNet\Loss\CE.cpp" />
+    <ClCompile Include="TinNet\Loss\LossGraph.cpp" />
     <ClCompile Include="TinNet\Loss\MSE.cpp" />
     <ClCompile Include="TinNet\Loss\MulticlassCE.cpp" />
+    <ClCompile Include="TinNet\Loss\Operand1LossGraph.cpp" />
+    <ClCompile Include="TinNet\Loss\Operand2LossGraph.cpp" />
     <ClCompile Include="TinNet\NN.cpp" />
     <ClCompile Include="TinNet\Optimizer\ActorCritic.cpp" />
     <ClCompile Include="TinNet\Optimizer\Adagrad.cpp" />
@@ -257,6 +280,27 @@
     <ClCompile Include="TinNet\Visualizer\CSVLossExporter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TinNet\Cache.h" />
+    <ClInclude Include="TinNet\Graph\BackwardCachedGraphNode.h" />
+    <ClInclude Include="TinNet\Graph\CacheContainer.h" />
+    <ClInclude Include="TinNet\Graph\FullCachedGraphNode.h" />
+    <ClInclude Include="TinNet\Graph\Graph.h" />
+    <ClInclude Include="TinNet\Graph\GraphBP.h" />
+    <ClInclude Include="TinNet\Graph\GraphNode.h" />
+    <ClInclude Include="TinNet\Graph\GraphNodeBP.h" />
+    <ClInclude Include="TinNet\Graph\Node\Add.h" />
+    <ClInclude Include="TinNet\Graph\Node\AddBP.h" />
+    <ClInclude Include="TinNet\Graph\Node\Broadcast.h" />
+    <ClInclude Include="TinNet\Graph\Node\BroadcastBP.h" />
+    <ClInclude Include="TinNet\Graph\Node\Divide.h" />
+    <ClInclude Include="TinNet\Graph\Node\DivideBP.h" />
+    <ClInclude Include="TinNet\Graph\Node\Input.h" />
+    <ClInclude Include="TinNet\Graph\Node\InputBP.h" />
+    <ClInclude Include="TinNet\Graph\Node\Multiply.h" />
+    <ClInclude Include="TinNet\Graph\Node\MultiplyBP.h" />
+    <ClInclude Include="TinNet\Graph\Node\BPs.h" />
+    <ClInclude Include="TinNet\Graph\Node\Subtract.h" />
+    <ClInclude Include="TinNet\Graph\Node\SubtractBP.h" />
     <ClInclude Include="TinNet\Initializer\Constant.h" />
     <ClInclude Include="TinNet\Initializer\Glorot.h" />
     <ClInclude Include="TinNet\Initializer\He.h" />
@@ -293,10 +337,14 @@
     <ClInclude Include="TinNet\Layer\SoftmaxLayer.h" />
     <ClInclude Include="TinNet\Layer\SwishLayer.h" />
     <ClInclude Include="TinNet\Layer\TanhLayer.h" />
+    <ClInclude Include="TinNet\Loss\AddLossGraph.h" />
     <ClInclude Include="TinNet\Loss\CE.h" />
     <ClInclude Include="TinNet\Loss\Losses.h" />
+    <ClInclude Include="TinNet\Loss\LossGraph.h" />
     <ClInclude Include="TinNet\Loss\MSE.h" />
     <ClInclude Include="TinNet\Loss\MulticlassCE.h" />
+    <ClInclude Include="TinNet\Loss\Operand1LossGraph.h" />
+    <ClInclude Include="TinNet\Loss\Operand2LossGraph.h" />
     <ClInclude Include="TinNet\NN.h" />
     <ClInclude Include="TinNet\NN.hpp" />
     <ClInclude Include="TinNet\Optimizer\ActorCritic.h" />

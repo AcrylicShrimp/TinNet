@@ -8,44 +8,45 @@
 
 #define _CLASS_TINNET_EXAMPLE_OMOCAGENT_H
 
-/*
-	TODO : Place the include directives here.
-*/
-
-
-#include <utility>
+#include <cstdint>
 
 namespace TinNet_Example
 {
+	struct OmocBoard;
+	struct OmocGameResult;
+
 	class OmocAgent
 	{
-	private:
-
+	protected:
+		int32_t nIdentifier;
 		
 	public:
 		OmocAgent();
 		OmocAgent(const OmocAgent &sSrc);
-		OmocAgent(OmocAgent &&sSrc);
-		~OmocAgent();
-		/*
-			TODO : Place the declarations of other constructors here.
-		*/
-		
+		virtual ~OmocAgent() = default;
 		
 	public:
 		OmocAgent &operator=(const OmocAgent &sSrc);
-		OmocAgent &operator=(OmocAgent &&sSrc);
-		/*
-			TODO : Place other operator overloadings here.
-		*/
-		
-		
+
 	public:
-		/*
-			TODO : Place the member function declarations here.
-		*/
-		
+		inline int32_t &identifier();
+		inline int32_t identifier() const;
+		virtual uint32_t place(const OmocBoard *pOmocBoard) = 0;
+		virtual void onGameBegin(const OmocBoard *pOmocBoard) = 0;
+		virtual void onPlaced(uint32_t nPlacement, const OmocBoard *pOmocBoard) = 0;
+		virtual void onPlaceRejected(uint32_t nPlacement, const OmocBoard *pOmocBoard) = 0;
+		virtual void onGameEnd(const OmocGameResult *pOmocGameResult) = 0;
 	};
+
+	inline int32_t &OmocAgent::identifier()
+	{
+		return this->nIdentifier;
+	}
+
+	inline int32_t OmocAgent::identifier() const
+	{
+		return this->nIdentifier;
+	}
 }
 
 #endif

@@ -10,6 +10,7 @@
 
 #include "../TinNet_Dot/TinNet/TinNet_Dot.h"
 
+#include "OmocObserver.h"
 #include "Omoc.h"
 
 #include <cstdint>
@@ -19,7 +20,7 @@ namespace TinNet_Example
 {
 	class ConsoleOmocObserver : public OmocObserver
 	{
-	private:
+	protected:
 		uint64_t nGameCount;
 		uint64_t nNondrawGameCount;
 		uint64_t nBlackWinCount;
@@ -30,16 +31,17 @@ namespace TinNet_Example
 	public:
 		ConsoleOmocObserver();
 		ConsoleOmocObserver(const ConsoleOmocObserver &sSrc) = delete;
-		ConsoleOmocObserver(ConsoleOmocObserver &&sSrc) = delete;
 		~ConsoleOmocObserver() = default;
 
 	public:
 		ConsoleOmocObserver &operator=(const ConsoleOmocObserver &sSrc) = delete;
-		ConsoleOmocObserver &operator=(ConsoleOmocObserver &&sSrc) = delete;
 
 	public:
-		virtual void handleGameStart() override;
-		virtual void handleGameEnd(const float *pPlace, int nWinner, int nFinalPlace, int nErrorBlack, int nErrorWhite) override;
+		virtual void onGameBegin(const OmocBoard *pOmocBoard) override;
+		virtual void onPlaced(uint32_t nPlacement, const OmocAgent *pOmocAgent, const OmocBoard *pOmocBoard) override;
+		virtual void onPlaceRejected(uint32_t nPlacement, const OmocAgent *pOmocAgent, const OmocBoard *pOmocBoard) override;
+		virtual void onGameEnd(const OmocGameResult *pOmocGameResult) override;
+		void renderBoard(uint32_t nLastPlacement, const OmocBoard *pOmocBoard) const;
 	};
 }
 

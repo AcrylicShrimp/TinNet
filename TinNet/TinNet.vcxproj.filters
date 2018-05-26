@@ -25,6 +25,12 @@
     <Filter Include="TinNet\Initializer">
       <UniqueIdentifier>{dad43e90-25a1-4d2b-9b7d-f2f6db341203}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TinNet\Graph">
+      <UniqueIdentifier>{90e696c8-ac33-4d1e-894d-8097cf558d71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TinNet\Graph\Node">
+      <UniqueIdentifier>{05803adc-ebb9-4f3d-b015-40dc7e79e51b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TinNet\NN.cpp">
@@ -137,6 +143,75 @@
     </ClCompile>
     <ClCompile Include="TinNet\Optimizer\ActorCritic.cpp">
       <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Loss\LossGraph.cpp">
+      <Filter>TinNet\Loss</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Loss\Operand1LossGraph.cpp">
+      <Filter>TinNet\Loss</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Loss\Operand2LossGraph.cpp">
+      <Filter>TinNet\Loss</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Loss\AddLossGraph.cpp">
+      <Filter>TinNet\Loss</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\GraphNode.cpp">
+      <Filter>TinNet\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Cache.cpp">
+      <Filter>TinNet</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\CacheContainer.cpp">
+      <Filter>TinNet\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Graph.cpp">
+      <Filter>TinNet\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\GraphNodeBP.cpp">
+      <Filter>TinNet\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\BackwardCachedGraphNode.cpp">
+      <Filter>TinNet\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\FullCachedGraphNode.cpp">
+      <Filter>TinNet\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Input.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\InputBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Add.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\AddBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Subtract.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\SubtractBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Broadcast.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\BroadcastBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Divide.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\DivideBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Multiply.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\MultiplyBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +355,81 @@
     </ClInclude>
     <ClInclude Include="TinNet\Optimizer\ActorCritic.h">
       <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Loss\LossGraph.h">
+      <Filter>TinNet\Loss</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Loss\Operand1LossGraph.h">
+      <Filter>TinNet\Loss</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Loss\Operand2LossGraph.h">
+      <Filter>TinNet\Loss</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Loss\AddLossGraph.h">
+      <Filter>TinNet\Loss</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\GraphNode.h">
+      <Filter>TinNet\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Cache.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\CacheContainer.h">
+      <Filter>TinNet\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Graph.h">
+      <Filter>TinNet\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\GraphBP.h">
+      <Filter>TinNet\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\GraphNodeBP.h">
+      <Filter>TinNet\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\BackwardCachedGraphNode.h">
+      <Filter>TinNet\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\FullCachedGraphNode.h">
+      <Filter>TinNet\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Input.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\InputBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Add.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\AddBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Subtract.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\SubtractBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Broadcast.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\BroadcastBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Divide.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\DivideBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Multiply.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\MultiplyBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\BPs.h">
+      <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

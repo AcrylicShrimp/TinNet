@@ -52,7 +52,7 @@ int main()
 	TinNet::Optimizer::Adam sValueOptimizer{sWhiteValue, 2048, .001f, .9f, .999f};
 	TinNet::Optimizer::PGBaseline sBaseline{sValueOptimizer, sPolicyOptimizer};
 
-	Omoc sOmoc{9, 9};
+	Omoc sOmoc{9, 9, 5};
 	ConsoleOmocObserver sConsoleObserver;
 	AIOmocAgent sAIBlack{&sBlack};
 	LearningAIOmocAgent sAIWhite{&sWhite, sBaseline};

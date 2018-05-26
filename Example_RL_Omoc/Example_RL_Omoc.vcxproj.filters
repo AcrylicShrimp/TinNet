@@ -14,5 +14,6 @@
     <ClInclude Include="AIOmocAgent.h" />
     <ClInclude Include="LearningAIOmocAgent.h" />
     <ClInclude Include="OmocAgent.h" />
+    <ClInclude Include="OmocObserver.h" />
   </ItemGroup>
 </Project>

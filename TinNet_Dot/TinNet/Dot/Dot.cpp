@@ -6,8 +6,8 @@
 
 #include "Dot.h"
 
-#undef min;
-#undef max;
+#undef min
+#undef max
 
 namespace TinNet::Dot
 {

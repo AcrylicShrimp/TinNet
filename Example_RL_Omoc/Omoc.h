@@ -8,82 +8,69 @@
 
 #define _CLASS_TINNET_EXAMPLE_OMOC_H
 
-#include <algorithm>
+#include "OmocAgent.h"
+#include "OmocObserver.h"
+
 #include <cstdint>
-#include <memory>
+#include <vector>
 
 namespace TinNet_Example
 {
-	class OmocAgent
+	struct OmocBoard
 	{
-	public:
-		virtual ~OmocAgent() = default;
-
-	public:
-		virtual int place(const float *pPlace) = 0;
-		virtual void handleStart(float nIdentifier) = 0;
-		virtual void handlePlaceRejected(int nPlace) = 0;
-		virtual void handlePlaceOK(int nPlace) = 0;
-		virtual void handlePlaceOtherOK(int nPlace) = 0;
-		virtual void handleWin() = 0;
-		virtual void handleLose() = 0;
-		virtual void handleDraw() = 0;
+		uint32_t nWidth;
+		uint32_t nHeight;
+		uint32_t nMaxPlacement;
+		std::vector<int32_t> sBoard;
 	};
 
-	class OmocObserver
+	struct OmocGameResult
 	{
-	public:
-		virtual ~OmocObserver() = default;
-
-	public:
-		virtual void handleGameStart() = 0;
-		virtual void handleGameEnd(const float *pPlace, int nWinner, int nFinalPlace, int nErrorBlack, int nErrorWhite) = 0;
+		bool bDraw;
+		OmocAgent *pWinner;
+		OmocAgent *pLoser;
+		OmocBoard *pBoard;
+		OmocAgent *pLastAgent;
+		uint32_t nLastPlacement;
 	};
 
 	class Omoc
 	{
 	private:
-		float *pPlace;
-		int nPlaceCount;
-		int nPlaceWidth;
-		int nPlaceHeight;
+		OmocBoard sBoard;
 		OmocAgent *pBlack;
 		OmocAgent *pWhite;
 		OmocObserver *pObserver;
-		int nErrorBlack;
-		int nErrorWhite;
 
 	public:
-		Omoc(int nWidth, int nHeight);
+		Omoc(uint32_t nWidth, uint32_t nHeight, uint32_t nMaxPlacement);
 		Omoc(const Omoc &sSrc) = delete;
-		Omoc(Omoc &&sSrc) = delete;
-		~Omoc();
+		~Omoc() = default;
 
 	public:
 		Omoc &operator=(const Omoc &sSrc) = delete;
-		Omoc &operator=(Omoc &&sSrc) = delete;
 
 	public:
-		inline int width() const;
-		inline int height() const;
+		inline OmocBoard *board();
+		inline const OmocBoard *board() const;
 		inline void registerAgent(OmocAgent *pNewBlack, OmocAgent *pNewWhite);
 		inline void registerObserver(OmocObserver *pNewObserver);
-
-		void playNewGame();
+		OmocGameResult playNewGame();
 
 	private:
-		bool nextStep(int *pWinner, int *nFinalPlace);
-		bool checkGameWinner(int nPlace, float nIdentifier);
+		bool nextStep(OmocGameResult *pGameResult);
+		bool proceedPhase(OmocAgent *pAgent, OmocGameResult *pGameResult);
+		bool checkGameWinner(uint32_t nPlacement, int32_t nIdentifier);
 	};
 
-	inline int Omoc::width() const
+	inline OmocBoard *Omoc::board()
 	{
-		return this->nPlaceWidth;
+		return &this->sBoard;
 	}
 
-	inline int Omoc::height() const
+	inline const OmocBoard *Omoc::board() const
 	{
-		return this->nPlaceHeight;
+		return &this->sBoard;
 	}
 
 	inline void Omoc::registerAgent(OmocAgent *pNewBlack, OmocAgent *pNewWhite)

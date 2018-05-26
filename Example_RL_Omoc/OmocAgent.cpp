@@ -8,81 +8,25 @@
 
 namespace TinNet_Example
 {
-	/*
-		TODO : Place the static class member variable definitions here.
-	*/
-	
-	
-	OmocAgent::OmocAgent()
+	OmocAgent::OmocAgent() :
+		nIdentifier{0}
 	{
-		/*
-			TODO : Place the default constructor here.
-		*/
-		
+		//Empty.
 	}
-	
-	OmocAgent::OmocAgent(const OmocAgent &sSrc)
+
+	OmocAgent::OmocAgent(const OmocAgent &sSrc) :
+		nIdentifier{sSrc.nIdentifier}
 	{
-		/*
-			TODO : Place the implementation of the copy constructor here.
-		*/
-		
+		//Empty.
 	}
-	
-	OmocAgent::OmocAgent(OmocAgent &&sSrc)
-	{
-		/*
-			TODO : Place the implementation of the move constructor here.
-		*/
-		
-	}
-	
-	OmocAgent::~OmocAgent()
-	{
-		/*
-			TODO : Place the implementation of the destructor here.
-		*/
-		
-	}
-	
-	/*
-		TODO : Place the implementations of other constructors here.
-	*/
-	
-	
+
 	OmocAgent &OmocAgent::operator=(const OmocAgent &sSrc)
 	{
 		if (&sSrc == this)
 			return *this;
-		
-		/*
-			TODO : Place the implementation of the copy assignment operator here.
-		*/
-		
-		
+
+		this->nIdentifier = sSrc.nIdentifier;
+
 		return *this;
 	}
-	
-	OmocAgent &OmocAgent::operator=(OmocAgent &&sSrc)
-	{
-		if (&sSrc == this)
-			return *this;
-		
-		/*
-			TODO : Place the implementation of the move assignment operator here.
-		*/
-		
-		
-		return *this;
-	}
-	
-	/*
-		TODO : Implement other operator overloadings here.
-	*/
-	
-	
-	/*
-		TODO : Place the member function implementations here.
-	*/
-	
 }
