@@ -5,7 +5,6 @@
 */
 
 #include "../TinNet/TinNet/TinNet.h"
-#include "../TinNet/TinNet/Accessor.h"
 #include "../TinNet/TinNet/Cache.h"
 #include "../TinNet/TinNet/Shape.h"
 #include "../TinNet/TinNet/Graph/Graph.h"
