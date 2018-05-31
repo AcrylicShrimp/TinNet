@@ -205,6 +205,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TinNet\Accessor.cpp" />
     <ClCompile Include="TinNet\Cache.cpp" />
     <ClCompile Include="TinNet\Graph\BackwardCachedGraphNode.cpp" />
     <ClCompile Include="TinNet\Graph\CacheContainer.cpp" />
@@ -214,8 +215,6 @@
     <ClCompile Include="TinNet\Graph\GraphNodeBP.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Add.cpp" />
     <ClCompile Include="TinNet\Graph\Node\AddBP.cpp" />
-    <ClCompile Include="TinNet\Graph\Node\Broadcast.cpp" />
-    <ClCompile Include="TinNet\Graph\Node\BroadcastBP.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Divide.cpp" />
     <ClCompile Include="TinNet\Graph\Node\DivideBP.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Input.cpp" />
@@ -276,10 +275,12 @@
     <ClCompile Include="TinNet\Optimizer\SGD.cpp" />
     <ClCompile Include="TinNet\Optimizer\OptimizerBase.cpp" />
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
+    <ClCompile Include="TinNet\Shape.cpp" />
     <ClCompile Include="TinNet\Visualizer\ConsoleVisualizer.cpp" />
     <ClCompile Include="TinNet\Visualizer\CSVLossExporter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TinNet\Accessor.h" />
     <ClInclude Include="TinNet\Cache.h" />
     <ClInclude Include="TinNet\Graph\BackwardCachedGraphNode.h" />
     <ClInclude Include="TinNet\Graph\CacheContainer.h" />
@@ -290,15 +291,13 @@
     <ClInclude Include="TinNet\Graph\GraphNodeBP.h" />
     <ClInclude Include="TinNet\Graph\Node\Add.h" />
     <ClInclude Include="TinNet\Graph\Node\AddBP.h" />
-    <ClInclude Include="TinNet\Graph\Node\Broadcast.h" />
-    <ClInclude Include="TinNet\Graph\Node\BroadcastBP.h" />
     <ClInclude Include="TinNet\Graph\Node\Divide.h" />
     <ClInclude Include="TinNet\Graph\Node\DivideBP.h" />
     <ClInclude Include="TinNet\Graph\Node\Input.h" />
     <ClInclude Include="TinNet\Graph\Node\InputBP.h" />
+    <ClInclude Include="TinNet\Graph\Node\BPs.h" />
     <ClInclude Include="TinNet\Graph\Node\Multiply.h" />
     <ClInclude Include="TinNet\Graph\Node\MultiplyBP.h" />
-    <ClInclude Include="TinNet\Graph\Node\BPs.h" />
     <ClInclude Include="TinNet\Graph\Node\Subtract.h" />
     <ClInclude Include="TinNet\Graph\Node\SubtractBP.h" />
     <ClInclude Include="TinNet\Initializer\Constant.h" />
@@ -309,6 +308,8 @@
     <ClInclude Include="TinNet\Initializer\Uniform.h" />
     <ClInclude Include="TinNet\Initializer\Xavier.h" />
     <ClInclude Include="TinNet\IO\Serializable.h" />
+    <ClInclude Include="TinNet\Iterator.h" />
+    <ClInclude Include="TinNet\Iterator.hpp" />
     <ClInclude Include="TinNet\Layer\BatchNormLayer.h" />
     <ClInclude Include="TinNet\Layer\ConvLayer.h" />
     <ClInclude Include="TinNet\Layer\FullLayer.h" />
@@ -361,6 +362,7 @@
     <ClInclude Include="TinNet\Optimizer\OptimizerBase.hpp" />
     <ClInclude Include="TinNet\Reinforcement\Game.h" />
     <ClInclude Include="TinNet\Reinforcement\MCTS.h" />
+    <ClInclude Include="TinNet\Shape.h" />
     <ClInclude Include="TinNet\TinNet.h" />
     <ClInclude Include="TinNet\TinNetDLL.h" />
     <ClInclude Include="TinNet\Visualizer\ConsoleVisualizer.h" />

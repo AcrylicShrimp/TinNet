@@ -23,12 +23,12 @@ namespace TinNet::Graph
 		this->pForwardCacheInfo = nullptr;
 	}
 
-	void FullCachedGraphNode::init()
+	void FullCachedGraphNode::initGraph()
 	{
 		if (this->pForwardCacheInfo)
 			return;
 
-		this->pForwardCacheInfo = this->pGraph->cacheContainer().request(this->fanOut());
+		this->pForwardCacheInfo = this->pGraph->cacheContainer().request(this->shape().element());
 	}
 
 	const Cache &FullCachedGraphNode::forward()

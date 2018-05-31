@@ -9,14 +9,15 @@
 namespace TinNet::Graph::Node
 {
 	Multiply::Multiply(const std::string &sName, Graph *pGraph) :
-		FullCachedGraphNode(sName, pGraph)
+		FullCachedGraphNode(sName, pGraph),
+		sShape{}
 	{
 		//Empty.
 	}
 
-	std::size_t Multiply::fanOut() const
+	const Shape &Multiply::shape() const
 	{
-		return this->sBackwardList.front()->fanOut();
+		return this->sShape;
 	}
 
 	std::size_t Multiply::maxBackwardNodeCount() const
@@ -24,21 +25,40 @@ namespace TinNet::Graph::Node
 		return 2;
 	}
 
+	void Multiply::initNode()
+	{
+		this->sShape = Shape::broadcast(this->sBackwardList.front()->shape(), this->sBackwardList.back()->shape());
+		this->sIterator.init(this->sShape, Accessor{this->sShape}, Accessor{this->sBackwardList.front()->shape()}, Accessor{this->sBackwardList.back()->shape()});
+	}
+
 	void Multiply::forwardPass(Cache sDestination)
 	{
-		auto sLeft{this->sBackwardList.front()->forward()};
-		auto sRight{this->sBackwardList.back()->forward()};
+		const auto &sLeft{this->sBackwardList.front()->forward()};
+		const auto &sRight{this->sBackwardList.back()->forward()};
 
-		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
-			sDestination[nIndex] = sLeft[nIndex] * sRight[nIndex];
+		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] * sRight[this->sIterator.index<2>()];
 	}
 
 	void Multiply::backwardPass(GraphNode *pBackward, Cache sDestination)
 	{
-		auto sBackward{this->backward()};
-		auto sForward{pBackward == this->sBackwardList.front() ? this->sBackwardList.back()->forward() : this->sBackwardList.front()->forward()};
+		sDestination.zero();
 
-		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
-			sDestination[nIndex] = sBackward[nIndex] * sForward[nIndex];
+		const auto &sBackward{this->backward()};
+
+		if (pBackward == this->sBackwardList.front())
+		{
+			const auto &sForward{this->sBackwardList.back()->forward()};
+
+			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+				sDestination[this->sIterator.index<1>()] = sBackward[this->sIterator.index<0>()] * sForward[this->sIterator.index<2>()];
+		}
+		else
+		{
+			const auto &sForward{this->sBackwardList.front()->forward()};
+
+			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+				sDestination[this->sIterator.index<2>()] = sBackward[this->sIterator.index<0>()] * sForward[this->sIterator.index<1>()];
+		}
 	}
 }

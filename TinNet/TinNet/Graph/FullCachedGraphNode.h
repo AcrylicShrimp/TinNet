@@ -33,7 +33,7 @@ namespace TinNet::Graph
 		FullCachedGraphNode &operator=(const FullCachedGraphNode &sSrc) = delete;
 
 	public:
-		virtual void init() override;
+		virtual void initGraph() override;
 		virtual const Cache &forward() override;
 	};
 }

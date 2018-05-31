@@ -8,46 +8,30 @@
 
 #define _CLASS_TINNET_GRAPH_NODE_DIVIDEBP_H
 
-/*
-	TODO : Place the include directives here.
-*/
+#include "../../TinNetDLL.h"
 
+#include "../GraphNodeBP.h"
+#include "Divide.h"
 
-#include <utility>
+#include <memory>
+#include <string>
 
 namespace TinNet::Graph::Node
 {
-	class DivideBP
+	class TINNET_DLL DivideBP final : public GraphNodeBP
 	{
-	private:
-		/*
-			TODO : Place the class member variable declarations here.
-		*/
-		
+	public:
+		DivideBP(const std::string &sName, const GraphNodeBP *pLeftNodeBP, const GraphNodeBP *pRightNodeBP);
+		DivideBP(const DivideBP &sSrc) = default;
+		DivideBP(DivideBP &&sSrc) = default;
+		~DivideBP() = default;
+
+	public:
+		DivideBP &operator=(const DivideBP &sSrc) = default;
+		DivideBP &operator=(DivideBP &&sSrc) = default;
 		
 	public:
-		DivideBP();
-		DivideBP(const DivideBP &sSrc);
-		DivideBP(DivideBP &&sSrc);
-		~DivideBP();
-		/*
-			TODO : Place the declarations of other constructors here.
-		*/
-		
-		
-	public:
-		DivideBP &operator=(const DivideBP &sSrc);
-		DivideBP &operator=(DivideBP &&sSrc);
-		/*
-			TODO : Place other operator overloadings here.
-		*/
-		
-		
-	public:
-		/*
-			TODO : Place the member function declarations here.
-		*/
-		
+		virtual std::unique_ptr<GraphNode> make(class Graph *pGraph) const;
 	};
 }
 

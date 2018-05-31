@@ -11,6 +11,7 @@
 #include "../TinNetDLL.h"
 
 #include "../Cache.h"
+#include "../Shape.h"
 #include "CacheContainer.h"
 
 #include <algorithm>
@@ -39,9 +40,10 @@ namespace TinNet::Graph
 		GraphNode &operator=(const GraphNode &sSrc) = delete;
 		
 	public:
-		virtual std::size_t fanOut() const = 0;
+		virtual const Shape &shape() const = 0;
 		virtual std::size_t maxBackwardNodeCount() const;
-		virtual void init() = 0;
+		virtual void initNode() = 0;
+		virtual void initGraph() = 0;
 		virtual void enableBackward() = 0;
 		virtual void disableBackward() = 0;
 		virtual const Cache &forward() = 0;

@@ -8,46 +8,30 @@
 
 #define _CLASS_TINNET_GRAPH_NODE_SUBTRACTBP_H
 
-/*
-	TODO : Place the include directives here.
-*/
+#include "../../TinNetDLL.h"
 
+#include "../GraphNodeBP.h"
+#include "Subtract.h"
 
-#include <utility>
+#include <memory>
+#include <string>
 
 namespace TinNet::Graph::Node
 {
-	class SubtractBP
+	class TINNET_DLL SubtractBP final : public GraphNodeBP
 	{
-	private:
-		/*
-			TODO : Place the class member variable declarations here.
-		*/
-		
+	public:
+		SubtractBP(const std::string &sName, const GraphNodeBP *pLeftNodeBP, const GraphNodeBP *pRightNodeBP);
+		SubtractBP(const SubtractBP &sSrc) = default;
+		SubtractBP(SubtractBP &&sSrc) = default;
+		~SubtractBP() = default;
 		
 	public:
-		SubtractBP();
-		SubtractBP(const SubtractBP &sSrc);
-		SubtractBP(SubtractBP &&sSrc);
-		~SubtractBP();
-		/*
-			TODO : Place the declarations of other constructors here.
-		*/
-		
+		SubtractBP &operator=(const SubtractBP &sSrc) = default;
+		SubtractBP &operator=(SubtractBP &&sSrc) = default;
 		
 	public:
-		SubtractBP &operator=(const SubtractBP &sSrc);
-		SubtractBP &operator=(SubtractBP &&sSrc);
-		/*
-			TODO : Place other operator overloadings here.
-		*/
-		
-		
-	public:
-		/*
-			TODO : Place the member function declarations here.
-		*/
-		
+		virtual std::unique_ptr<GraphNode> make(class Graph *pGraph) const;
 	};
 }
 

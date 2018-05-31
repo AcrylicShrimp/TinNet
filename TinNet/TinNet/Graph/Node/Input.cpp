@@ -8,16 +8,16 @@
 
 namespace TinNet::Graph::Node
 {
-	Input::Input(const std::string &sName, Graph *pGraph, std::size_t nFanOut) :
+	Input::Input(const std::string &sName, Graph *pGraph, const Shape &sShape) :
 		BackwardCachedGraphNode(sName, pGraph),
-		nFanOut{nFanOut}
+		sShape{sShape}
 	{
 		//Empty.
 	}
 
-	std::size_t Input::fanOut() const
+	const Shape &Input::shape() const
 	{
-		return this->nFanOut;
+		return this->sShape;
 	}
 
 	std::size_t Input::maxBackwardNodeCount() const
@@ -25,7 +25,12 @@ namespace TinNet::Graph::Node
 		return 0;
 	}
 
-	void Input::init()
+	void Input::initNode()
+	{
+		//Empty.
+	}
+	
+	void Input::initGraph()
 	{
 		//Empty.
 	}

@@ -9,14 +9,15 @@
 namespace TinNet::Graph::Node
 {
 	Add::Add(const std::string &sName, Graph *pGraph) :
-		FullCachedGraphNode(sName, pGraph)
+		FullCachedGraphNode(sName, pGraph),
+		sShape{}
 	{
 		//Empty.
 	}
 
-	std::size_t Add::fanOut() const
+	const Shape &Add::shape() const
 	{
-		return this->sBackwardList.front()->fanOut();
+		return this->sShape;
 	}
 
 	std::size_t Add::maxBackwardNodeCount() const
@@ -24,17 +25,32 @@ namespace TinNet::Graph::Node
 		return 2;
 	}
 
+	void Add::initNode()
+	{
+		this->sShape = Shape::broadcast(this->sBackwardList.front()->shape(), this->sBackwardList.back()->shape());
+		this->sIterator.init(this->sShape, Accessor{this->sShape}, Accessor{this->sBackwardList.front()->shape()}, Accessor{this->sBackwardList.back()->shape()});
+	}
+
 	void Add::forwardPass(Cache sDestination)
 	{
-		auto sLeft{this->sBackwardList.front()->forward()};
-		auto sRight{this->sBackwardList.back()->forward()};
+		const auto &sLeft{this->sBackwardList.front()->forward()};
+		const auto &sRight{this->sBackwardList.back()->forward()};
 
-		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
-			sDestination[nIndex] = sLeft[nIndex] + sRight[nIndex];
+		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] + sRight[this->sIterator.index<2>()];
 	}
 
 	void Add::backwardPass(GraphNode *pBackward, Cache sDestination)
 	{
-		sDestination.copy(this->backward());
+		sDestination.zero();
+
+		const auto &sBackward{this->backward()};
+
+		if (pBackward == this->sBackwardList.front())
+			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+				sDestination[this->sIterator.index<1>()] += sBackward[this->sIterator.index<0>()];
+		else
+			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+				sDestination[this->sIterator.index<2>()] += sBackward[this->sIterator.index<0>()];
 	}
 }

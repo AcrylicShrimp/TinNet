@@ -8,46 +8,30 @@
 
 #define _CLASS_TINNET_GRAPH_NODE_MULTIPLYBP_H
 
-/*
-	TODO : Place the include directives here.
-*/
+#include "../../TinNetDLL.h"
 
+#include "../GraphNodeBP.h"
+#include "Multiply.h"
 
-#include <utility>
+#include <memory>
+#include <string>
 
 namespace TinNet::Graph::Node
 {
-	class MultiplyBP
+	class TINNET_DLL MultiplyBP final : public GraphNodeBP
 	{
-	private:
-		/*
-			TODO : Place the class member variable declarations here.
-		*/
-		
+	public:
+		MultiplyBP(const std::string &sName, const GraphNodeBP *pLeftNodeBP, const GraphNodeBP *pRightNodeBP);
+		MultiplyBP(const MultiplyBP &sSrc) = default;
+		MultiplyBP(MultiplyBP &&sSrc) = default;
+		~MultiplyBP() = default;
 		
 	public:
-		MultiplyBP();
-		MultiplyBP(const MultiplyBP &sSrc);
-		MultiplyBP(MultiplyBP &&sSrc);
-		~MultiplyBP();
-		/*
-			TODO : Place the declarations of other constructors here.
-		*/
-		
+		MultiplyBP &operator=(const MultiplyBP &sSrc) = default;
+		MultiplyBP &operator=(MultiplyBP &&sSrc) = default;
 		
 	public:
-		MultiplyBP &operator=(const MultiplyBP &sSrc);
-		MultiplyBP &operator=(MultiplyBP &&sSrc);
-		/*
-			TODO : Place other operator overloadings here.
-		*/
-		
-		
-	public:
-		/*
-			TODO : Place the member function declarations here.
-		*/
-		
+		virtual std::unique_ptr<GraphNode> make(class Graph *pGraph) const;
 	};
 }
 

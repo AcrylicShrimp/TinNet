@@ -30,6 +30,8 @@ namespace TinNet::Graph
 			GraphNode::link(pBackwardNode, pNode.get());
 		}
 
+		pNode->initNode();
+
 		return pNode;
 	}
 }

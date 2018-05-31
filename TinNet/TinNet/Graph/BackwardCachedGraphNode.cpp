@@ -19,8 +19,8 @@ namespace TinNet::Graph
 	void BackwardCachedGraphNode::enableBackward()
 	{
 		this->disableBackward();
-		this->pBackwardCacheInfo = this->pGraph->cacheContainer().request(this->fanOut());
-		this->pBackwardTempCacheInfo = this->pGraph->cacheContainer().request(this->fanOut());
+		this->pBackwardCacheInfo = this->pGraph->cacheContainer().request(this->shape().element());
+		this->pBackwardTempCacheInfo = this->pGraph->cacheContainer().request(this->shape().element());
 	}
 
 	void BackwardCachedGraphNode::disableBackward()

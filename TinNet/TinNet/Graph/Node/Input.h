@@ -10,8 +10,9 @@
 
 #include "../../TinNetDLL.h"
 
-#include "../BackwardCachedGraphNode.h"
 #include "../../Cache.h"
+#include "../../Shape.h"
+#include "../BackwardCachedGraphNode.h"
 #include "../Graph.h"
 
 #include <cstddef>
@@ -23,10 +24,10 @@ namespace TinNet::Graph::Node
 	{
 	protected:
 		Cache sCache;
-		std::size_t nFanOut;
+		Shape sShape;
 		
 	public:
-		Input(const std::string &sName, Graph *pGraph, std::size_t nFanOut);
+		Input(const std::string &sName, Graph *pGraph, const Shape &sShape);
 		Input(const Input &sSrc) = delete;
 		~Input() = default;
 		
@@ -36,9 +37,10 @@ namespace TinNet::Graph::Node
 	public:
 		inline Cache &cache();
 		inline const Cache &cache() const;
-		virtual std::size_t fanOut() const override;
+		virtual const Shape &shape() const override;
 		virtual std::size_t maxBackwardNodeCount() const override;
-		virtual void init() override;
+		virtual void initNode() override;
+		virtual void initGraph() override;
 		virtual const Cache &forward() override;
 		virtual void forwardPass(Cache sDestination) override;
 		virtual void backwardPass(GraphNode *pBackward, Cache sDestination) override;

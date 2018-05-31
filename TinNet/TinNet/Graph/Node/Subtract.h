@@ -10,6 +10,9 @@
 
 #include "../../TinNetDLL.h"
 
+#include "../../Accessor.h"
+#include "../../Iterator.h"
+#include "../../Shape.h"
 #include "../Graph.h"
 #include "../FullCachedGraphNode.h"
 
@@ -20,6 +23,10 @@ namespace TinNet::Graph::Node
 {
 	class TINNET_DLL Subtract final : public FullCachedGraphNode
 	{
+	private:
+		Shape sShape;
+		Iterator<Accessor, Accessor, Accessor> sIterator;
+
 	public:
 		Subtract(const std::string &sName, Graph *pGraph);
 		Subtract(const Subtract &sSrc) = delete;
@@ -29,8 +36,9 @@ namespace TinNet::Graph::Node
 		Subtract &operator=(const Subtract &sSrc) = delete;
 		
 	public:
-		virtual std::size_t fanOut() const override;
+		virtual const Shape &shape() const override;
 		virtual std::size_t maxBackwardNodeCount() const override;
+		virtual void initNode() override;
 		virtual void forwardPass(Cache sDestination) override;
 		virtual void backwardPass(GraphNode *pBackward, Cache sDestination) override;
 	};

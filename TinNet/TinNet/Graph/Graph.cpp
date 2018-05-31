@@ -21,7 +21,7 @@ namespace TinNet::Graph
 		}
 
 		for (auto &sPair : this->sGraphNodeMap)
-			sPair.second->init();
+			sPair.second->initGraph();
 	}
 
 	Graph::~Graph()

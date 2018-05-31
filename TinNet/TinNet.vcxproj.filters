@@ -189,28 +189,28 @@
     <ClCompile Include="TinNet\Graph\Node\AddBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Shape.cpp">
+      <Filter>TinNet</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Accessor.cpp">
+      <Filter>TinNet</Filter>
+    </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\Subtract.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\SubtractBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\Broadcast.cpp">
+    <ClCompile Include="TinNet\Graph\Node\Multiply.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\BroadcastBP.cpp">
+    <ClCompile Include="TinNet\Graph\Node\MultiplyBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\Divide.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\DivideBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\Multiply.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\MultiplyBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
   </ItemGroup>
@@ -404,22 +404,25 @@
     <ClInclude Include="TinNet\Graph\Node\AddBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\BPs.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Shape.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Accessor.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Iterator.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Iterator.hpp">
+      <Filter>TinNet</Filter>
+    </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\Subtract.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\SubtractBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\Broadcast.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\BroadcastBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\Divide.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\DivideBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\Multiply.h">
@@ -428,7 +431,10 @@
     <ClInclude Include="TinNet\Graph\Node\MultiplyBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\BPs.h">
+    <ClInclude Include="TinNet\Graph\Node\Divide.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\DivideBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
   </ItemGroup>

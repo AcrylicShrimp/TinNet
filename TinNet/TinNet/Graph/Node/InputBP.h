@@ -10,6 +10,7 @@
 
 #include "../../TinNetDLL.h"
 
+#include "../../Shape.h"
 #include "../GraphNodeBP.h"
 #include "Input.h"
 
@@ -22,10 +23,10 @@ namespace TinNet::Graph::Node
 	class TINNET_DLL InputBP final : public GraphNodeBP
 	{
 	protected:
-		std::size_t nFanOut;
+		Shape sShape;
 		
 	public:
-		InputBP(const std::string &sName, std::size_t nFanOut);
+		InputBP(const std::string &sName, const Shape &sShape);
 		InputBP(const InputBP &sSrc) = default;
 		InputBP(InputBP &&sSrc) = default;
 		~InputBP() = default;

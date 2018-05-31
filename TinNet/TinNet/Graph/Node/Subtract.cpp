@@ -9,14 +9,15 @@
 namespace TinNet::Graph::Node
 {
 	Subtract::Subtract(const std::string &sName, Graph *pGraph) :
-		FullCachedGraphNode(sName, pGraph)
+		FullCachedGraphNode(sName, pGraph),
+		sShape{}
 	{
 		//Empty.
 	}
 
-	std::size_t Subtract::fanOut() const
+	const Shape &Subtract::shape() const
 	{
-		return this->sBackwardList.front()->fanOut();
+		return this->sShape;
 	}
 
 	std::size_t Subtract::maxBackwardNodeCount() const
@@ -24,20 +25,32 @@ namespace TinNet::Graph::Node
 		return 2;
 	}
 
+	void Subtract::initNode()
+	{
+		this->sShape = Shape::broadcast(this->sBackwardList.front()->shape(), this->sBackwardList.back()->shape());
+		this->sIterator.init(this->sShape, Accessor{this->sShape}, Accessor{this->sBackwardList.front()->shape()}, Accessor{this->sBackwardList.back()->shape()});
+	}
+
 	void Subtract::forwardPass(Cache sDestination)
 	{
-		auto sLeft{this->sBackwardList.front()->forward()};
-		auto sRight{this->sBackwardList.back()->forward()};
+		const auto &sLeft{this->sBackwardList.front()->forward()};
+		const auto &sRight{this->sBackwardList.back()->forward()};
 
-		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
-			sDestination[nIndex] = sLeft[nIndex] - sRight[nIndex];
+		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] - sRight[this->sIterator.index<2>()];
 	}
 
 	void Subtract::backwardPass(GraphNode *pBackward, Cache sDestination)
 	{
+		sDestination.zero();
+
+		const auto &sBackward{this->backward()};
+
 		if (pBackward == this->sBackwardList.front())
-			sDestination.copy(this->backward());
+			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+				sDestination[this->sIterator.index<1>()] += sBackward[this->sIterator.index<0>()];
 		else
-			sDestination.copyNegative(this->backward());
+			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+				sDestination[this->sIterator.index<2>()] -= sBackward[this->sIterator.index<0>()];
 	}
 }

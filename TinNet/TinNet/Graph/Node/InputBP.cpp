@@ -8,15 +8,15 @@
 
 namespace TinNet::Graph::Node
 {
-	InputBP::InputBP(const std::string &sName, std::size_t nFanOut) :
+	InputBP::InputBP(const std::string &sName, const Shape &sShape) :
 		GraphNodeBP(sName),
-		nFanOut{nFanOut}
+		sShape{sShape}
 	{
 		//Empty.
 	}
 
 	std::unique_ptr<GraphNode> InputBP::make(class Graph *pGraph) const
 	{
-		return std::make_unique<Input>(this->sName, pGraph, this->nFanOut);
+		return std::make_unique<Input>(this->sName, pGraph, this->sShape);
 	}
 }

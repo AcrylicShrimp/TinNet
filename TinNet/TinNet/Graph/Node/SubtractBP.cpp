@@ -8,81 +8,15 @@
 
 namespace TinNet::Graph::Node
 {
-	/*
-		TODO : Place the static class member variable definitions here.
-	*/
-	
-	
-	SubtractBP::SubtractBP()
+	SubtractBP::SubtractBP(const std::string &sName, const GraphNodeBP *pLeftNodeBP, const GraphNodeBP *pRightNodeBP) :
+		GraphNodeBP(sName)
 	{
-		/*
-			TODO : Place the default constructor here.
-		*/
-		
+		this->asBackwardNode(pLeftNodeBP);
+		this->asBackwardNode(pRightNodeBP);
 	}
-	
-	SubtractBP::SubtractBP(const SubtractBP &sSrc)
+
+	std::unique_ptr<GraphNode> SubtractBP::make(class Graph *pGraph) const
 	{
-		/*
-			TODO : Place the implementation of the copy constructor here.
-		*/
-		
+		return std::make_unique<Subtract>(this->sName, pGraph);
 	}
-	
-	SubtractBP::SubtractBP(SubtractBP &&sSrc)
-	{
-		/*
-			TODO : Place the implementation of the move constructor here.
-		*/
-		
-	}
-	
-	SubtractBP::~SubtractBP()
-	{
-		/*
-			TODO : Place the implementation of the destructor here.
-		*/
-		
-	}
-	
-	/*
-		TODO : Place the implementations of other constructors here.
-	*/
-	
-	
-	SubtractBP &SubtractBP::operator=(const SubtractBP &sSrc)
-	{
-		if (&sSrc == this)
-			return *this;
-		
-		/*
-			TODO : Place the implementation of the copy assignment operator here.
-		*/
-		
-		
-		return *this;
-	}
-	
-	SubtractBP &SubtractBP::operator=(SubtractBP &&sSrc)
-	{
-		if (&sSrc == this)
-			return *this;
-		
-		/*
-			TODO : Place the implementation of the move assignment operator here.
-		*/
-		
-		
-		return *this;
-	}
-	
-	/*
-		TODO : Implement other operator overloadings here.
-	*/
-	
-	
-	/*
-		TODO : Place the member function implementations here.
-	*/
-	
 }

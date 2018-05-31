@@ -8,81 +8,15 @@
 
 namespace TinNet::Graph::Node
 {
-	/*
-		TODO : Place the static class member variable definitions here.
-	*/
-	
-	
-	DivideBP::DivideBP()
+	DivideBP::DivideBP(const std::string &sName, const GraphNodeBP *pLeftNodeBP, const GraphNodeBP *pRightNodeBP) :
+		GraphNodeBP(sName)
 	{
-		/*
-			TODO : Place the default constructor here.
-		*/
-		
+		this->asBackwardNode(pLeftNodeBP);
+		this->asBackwardNode(pRightNodeBP);
 	}
-	
-	DivideBP::DivideBP(const DivideBP &sSrc)
+
+	std::unique_ptr<GraphNode> DivideBP::make(class Graph *pGraph) const
 	{
-		/*
-			TODO : Place the implementation of the copy constructor here.
-		*/
-		
+		return std::make_unique<Divide>(this->sName, pGraph);
 	}
-	
-	DivideBP::DivideBP(DivideBP &&sSrc)
-	{
-		/*
-			TODO : Place the implementation of the move constructor here.
-		*/
-		
-	}
-	
-	DivideBP::~DivideBP()
-	{
-		/*
-			TODO : Place the implementation of the destructor here.
-		*/
-		
-	}
-	
-	/*
-		TODO : Place the implementations of other constructors here.
-	*/
-	
-	
-	DivideBP &DivideBP::operator=(const DivideBP &sSrc)
-	{
-		if (&sSrc == this)
-			return *this;
-		
-		/*
-			TODO : Place the implementation of the copy assignment operator here.
-		*/
-		
-		
-		return *this;
-	}
-	
-	DivideBP &DivideBP::operator=(DivideBP &&sSrc)
-	{
-		if (&sSrc == this)
-			return *this;
-		
-		/*
-			TODO : Place the implementation of the move assignment operator here.
-		*/
-		
-		
-		return *this;
-	}
-	
-	/*
-		TODO : Implement other operator overloadings here.
-	*/
-	
-	
-	/*
-		TODO : Place the member function implementations here.
-	*/
-	
 }
