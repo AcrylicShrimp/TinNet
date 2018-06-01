@@ -1,12 +1,12 @@
 
 /*
-	2018.05.27
+	2018.06.01
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPH_NODE_DIVIDE_H
+#ifndef _CLASS_TINNET_GRAPH_NODE_DENSE_H
 
-#define _CLASS_TINNET_GRAPH_NODE_DIVIDE_H
+#define _CLASS_TINNET_GRAPH_NODE_DENSE_H
 
 #include "../../TinNetDLL.h"
 
@@ -21,19 +21,20 @@
 
 namespace TinNet::Graph::Node
 {
-	class TINNET_DLL Divide final : public FullCachedGraphNode
+	class TINNET_DLL Dense final : public FullCachedGraphNode
 	{
-	protected:
+	private:
+		std::size_t nFanOut;
 		Shape sShape;
-		Iterator<Accessor, Accessor, Accessor> sIterator;
-
-	public:
-		Divide(const std::string &sName, Graph *pGraph);
-		Divide(const Divide &sSrc) = delete;
-		~Divide() = default;
+		Iterator<Accessor, Accessor> sIterator;
 		
 	public:
-		Divide &operator=(const Divide &sSrc) = delete;
+		Dense(const std::string &sName, Graph *pGraph, std::size_t nFanOut);
+		Dense(const Dense &sSrc) = delete;
+		~Dense() = default;
+		
+	public:
+		Dense &operator=(const Dense &sSrc) = delete;
 		
 	public:
 		virtual const Shape &shape() const override;

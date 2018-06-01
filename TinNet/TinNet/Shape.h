@@ -43,6 +43,7 @@ namespace TinNet
 		bool operator!=(std::initializer_list<std::size_t> sShape) const;
 		bool operator!=(const std::vector<std::size_t> &sShape) const;
 		bool operator!=(const Shape &sShape) const;
+		inline std::size_t &operator[](std::size_t nAxis);
 		inline std::size_t operator[](std::size_t nAxis) const;
 
 	public:
@@ -54,6 +55,11 @@ namespace TinNet
 		Shape expand(std::size_t nRank) const;
 		static Shape broadcast(const Shape &sLeft, const Shape &sRight);
 	};
+
+	inline std::size_t &Shape::operator[](std::size_t nAxis)
+	{
+		return this->sShape[nAxis];
+	}
 
 	inline std::size_t Shape::operator[](std::size_t nAxis) const
 	{

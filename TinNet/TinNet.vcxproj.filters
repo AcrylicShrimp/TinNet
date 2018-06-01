@@ -144,18 +144,6 @@
     <ClCompile Include="TinNet\Optimizer\ActorCritic.cpp">
       <Filter>TinNet\Optimizer</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Loss\LossGraph.cpp">
-      <Filter>TinNet\Loss</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Loss\Operand1LossGraph.cpp">
-      <Filter>TinNet\Loss</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Loss\Operand2LossGraph.cpp">
-      <Filter>TinNet\Loss</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Loss\AddLossGraph.cpp">
-      <Filter>TinNet\Loss</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Graph\GraphNode.cpp">
       <Filter>TinNet\Graph</Filter>
     </ClCompile>
@@ -212,6 +200,18 @@
     </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\DivideBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Dense.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Reshape.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\ReshapeBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\GraphOp.cpp">
+      <Filter>TinNet\Graph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -356,18 +356,6 @@
     <ClInclude Include="TinNet\Optimizer\ActorCritic.h">
       <Filter>TinNet\Optimizer</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Loss\LossGraph.h">
-      <Filter>TinNet\Loss</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Loss\Operand1LossGraph.h">
-      <Filter>TinNet\Loss</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Loss\Operand2LossGraph.h">
-      <Filter>TinNet\Loss</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Loss\AddLossGraph.h">
-      <Filter>TinNet\Loss</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Graph\GraphNode.h">
       <Filter>TinNet\Graph</Filter>
     </ClInclude>
@@ -436,6 +424,18 @@
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\DivideBP.h">
       <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Dense.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Reshape.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\ReshapeBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\GraphOp.h">
+      <Filter>TinNet\Graph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

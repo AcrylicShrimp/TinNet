@@ -44,6 +44,7 @@ namespace TinNet
 	public:
 		void init(const Shape &sShape, const P &...sAccessor);
 		void prepare();
+		void prepare(std::size_t nBeginAxis);
 		void prepare(std::size_t nBeginAxis, std::size_t nEndAxis);
 		template<std::size_t I> inline std::size_t index() const;
 		template<std::size_t I> inline const Accessor &accessor() const;

@@ -23,7 +23,7 @@ namespace TinNet::Graph::Node
 {
 	class TINNET_DLL Multiply final : public FullCachedGraphNode
 	{
-	private:
+	protected:
 		Shape sShape;
 		Iterator<Accessor, Accessor, Accessor> sIterator;
 

@@ -47,6 +47,6 @@ namespace TinNet::Graph::Node
 
 	void Input::backwardPass(GraphNode *pBackward, Cache sDestination)
 	{
-		//Empty.
+		sDestination.zero();
 	}
 }
