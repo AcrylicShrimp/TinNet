@@ -30,7 +30,9 @@ namespace TinNet::Graph
 		GraphOp &operator=(const GraphOp &sSrc) = delete;
 		
 	public:
-		static void matmul(Cache &sLeft, Cache &sRight, Cache &sDestination, Shape &sLeftShape, Shape &sRightShape, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept;
+		static void matmul(const Shape &sLeftShape, const Shape &sRightShape, const Cache sLeft, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept;
+		static void dMatmulLeft(const Shape &sLeftShape, const Shape &sRightShape, const Cache sBackward, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept;
+		static void dMatmulRight(const Shape &sLeftShape, const Shape &sRightShape, const Cache sBackward, const Cache sLeft, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept;
 	};
 }
 

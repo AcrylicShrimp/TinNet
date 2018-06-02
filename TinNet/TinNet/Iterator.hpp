@@ -62,7 +62,7 @@ namespace TinNet
 
 	template<class ...P> void Iterator<P...>::prepare(std::size_t nBeginAxis)
 	{
-		this->prepare(0, this->sShape.rank() - 1);
+		this->prepare(nBeginAxis, this->sShape.rank() - 1);
 	}
 
 	template<class ...P> void Iterator<P...>::prepare(std::size_t nBeginAxis, std::size_t nEndAxis)

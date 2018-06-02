@@ -10,9 +10,13 @@
 
 #include "InputBP.h"
 
+#include "ReshapeBP.h"
+
 #include "AddBP.h"
 #include "SubtractBP.h"
 #include "MultiplyBP.h"
 #include "DivideBP.h"
+
+#include "MatMulBP.h"
 
 #endif

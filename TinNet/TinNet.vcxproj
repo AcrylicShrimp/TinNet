@@ -221,6 +221,8 @@
     <ClCompile Include="TinNet\Graph\Node\DivideBP.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Input.cpp" />
     <ClCompile Include="TinNet\Graph\Node\InputBP.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\MatMul.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\MatMulBP.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Multiply.cpp" />
     <ClCompile Include="TinNet\Graph\Node\MultiplyBP.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Reshape.cpp" />
@@ -298,6 +300,8 @@
     <ClInclude Include="TinNet\Graph\Node\Input.h" />
     <ClInclude Include="TinNet\Graph\Node\InputBP.h" />
     <ClInclude Include="TinNet\Graph\Node\BPs.h" />
+    <ClInclude Include="TinNet\Graph\Node\MatMul.h" />
+    <ClInclude Include="TinNet\Graph\Node\MatMulBP.h" />
     <ClInclude Include="TinNet\Graph\Node\Multiply.h" />
     <ClInclude Include="TinNet\Graph\Node\MultiplyBP.h" />
     <ClInclude Include="TinNet\Graph\Node\Reshape.h" />
