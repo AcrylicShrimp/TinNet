@@ -43,10 +43,15 @@ namespace TinNet
 
 	template<class ...P> void Iterator<P...>::init(const Shape &sShape, const P &...sAccessor)
 	{
+		this->init(false, sShape, std::forward<const P &>(sAccessor)...);
+	}
+
+	template<class ...P> void Iterator<P...>::init(bool bShrink, const Shape &sShape, const P &...sAccessor)
+	{
 		if (!sShape.element())
 			throw std::invalid_argument("element cannot be zero");
 
-		this->sShape = sShape.shrink();
+		this->sShape = bShrink ? sShape.shrink() : sShape;
 		this->sAccessor = {sAccessor...};
 
 		if (!this->sShape.rank())

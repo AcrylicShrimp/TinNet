@@ -53,6 +53,7 @@ namespace TinNet
 		Shape shrink() const;
 		Shape expand() const;
 		Shape expand(std::size_t nRank) const;
+		Shape squeeze() const;
 		static Shape broadcast(const Shape &sLeft, const Shape &sRight);
 	};
 

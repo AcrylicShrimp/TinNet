@@ -166,6 +166,21 @@ namespace TinNet
 		return sResult;
 	}
 
+	Shape Shape::squeeze() const
+	{
+		std::vector<std::size_t> sResult;
+
+		for (auto nSize : this->sShape)
+		{
+			if (nSize == 1)
+				continue;
+
+			sResult.emplace_back(nSize);
+		}
+
+		return Shape{sResult};
+	}
+
 	Shape Shape::broadcast(const Shape &sLeft, const Shape &sRight)
 	{
 		if (!sLeft.element() || !sRight.element())

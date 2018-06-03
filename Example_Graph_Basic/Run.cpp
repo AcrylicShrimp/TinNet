@@ -5,15 +5,15 @@
 */
 
 #include "../TinNet/TinNet/TinNet.h"
-#include "../TinNet/TinNet/Accessor.h"
 #include "../TinNet/TinNet/Cache.h"
-#include "../TinNet/TinNet/Iterator.h"
 #include "../TinNet/TinNet/Shape.h"
 #include "../TinNet/TinNet/Graph/Graph.h"
 #include "../TinNet/TinNet/Graph/GraphBP.h"
 #include "../TinNet/TinNet/Graph/Node/BPs.h"
 
+#include <algorithm>
 #include <iostream>
+#include <random>
 #include <vector>
 
 int32_t main()
@@ -22,39 +22,78 @@ int32_t main()
 	using namespace TinNet::Graph;
 	using namespace TinNet::Graph::Node;
 
-	//GraphBP sBP;
-	//{
-	//	auto pLeft{sBP.node<InputBP>("input_left", Shape{3})};
-	//	auto pRight{sBP.node<InputBP>("input_right", Shape{3, 1})};
-	//	auto pAdd{sBP.node<AddBP>("add", pLeft, pRight)};
-	//	auto pSubtract{sBP.node<SubtractBP>("sub", pLeft, pRight)};
-	//}
-	//
-	//TinNet::Graph::Graph sGraph{sBP};
-	//sGraph.enableBackward();
-	//
-	//auto &sLeftInput{sGraph.input("input_left")};
-	//auto &sRightInput{sGraph.input("input_right")};
-	//
-	//std::vector<float> sLeft{1.0f, 2.0f, 3.0f};
-	//std::vector<float> sRight{10.f, 20.f, 30.f};
-	//
-	//sLeftInput = sLeft;
-	//sRightInput = sRight;
-	//
-	//auto sResult1{sGraph.forward("add")};
-	//auto sResult2{sGraph.forward("sub")};
-	//auto sResult3{sGraph.backward("input_left")};
-	//auto sResult4{sGraph.backward("input_right")};
+	GraphBP sBP;
+	{
+		auto x{sBP.node<InputBP>("x", Shape{4, 2})};
+		auto y{sBP.node<InputBP>("y", Shape{4})};
+		auto w{sBP.node<InputBP>("w", Shape{2, 1})};
+		auto b{sBP.node<InputBP>("b", Shape{})};
 
-	Iterator<Accessor> sIterator;
+		auto mul{sBP.node<MatMulBP>("mul", x, w)};
+		auto output{sBP.node<AddBP>("output", mul, b)};
 
-	sIterator.init(Shape{1, 2, 2}, Accessor{Shape{1, 2, 2}});
+		auto output_squeeze{sBP.node<SqueezeBP>("output_squeeze", output)};
+		auto diff{sBP.node<SubtractBP>("diff", y, output_squeeze)};
+		auto diff_square{sBP.node<MultiplyBP>("diff_square", diff, diff)};
+		auto loss{sBP.node<ReduceMeanBP>("loss", diff_square)};
+	}
 
-	for (sIterator.prepare(2); sIterator; ++sIterator)
-		std::cout << sIterator.index<0>() << std::endl;
+	TinNet::Graph::Graph sGraph{sBP};
+	sGraph.enableBackward();
 
-	system("pause");
+	auto &x{sGraph.input("x")};
+	auto &y{sGraph.input("y")};
+	auto &w{sGraph.input("w")};
+	auto &b{sGraph.input("b")};
+
+	std::mt19937_64 sEngine{std::random_device{}()};
+	std::uniform_real<float> sDist{-1.f, 1.f};
+
+	std::vector<float> sX
+	{
+		.0f, .0f,
+		1.f, .0f,
+		.0f, 1.f,
+		1.f, 1.f
+	};
+	std::vector<float> sY
+	{
+		.0f,
+		1.f,
+		1.f,
+		1.f
+	};
+	std::vector<float> sW
+	{
+		sDist(sEngine),
+		sDist(sEngine)
+	};
+	std::vector<float> sB
+	{
+		.0f
+	};
+
+	x = sX;
+	y = sY;
+	w = sW;
+	b = sB;
+
+	for (;;)
+	{
+		auto output{sGraph.forward("output")};
+		std::cout << "output : " << (*output)[0] << ", " << (*output)[1] << ", " << (*output)[2] << ", " << (*output)[3] << std::endl;
+
+		std::cout << "loss : " << (*sGraph.forward("loss"))[0] << std::endl;
+
+		auto gradient_w{sGraph.backward("w")};
+		auto gradient_b{sGraph.backward("b")};
+
+		for (std::size_t nIndex{0}, nSize{gradient_w->size()}; nIndex < nSize; ++nIndex)
+			sW[nIndex] -= .01f * (*gradient_w)[nIndex];
+
+		for (std::size_t nIndex{0}, nSize{gradient_b->size()}; nIndex < nSize; ++nIndex)
+			sB[nIndex] -= .01f * (*gradient_b)[nIndex];
+	}
 
 	return 0;
 }

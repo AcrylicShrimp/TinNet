@@ -11,6 +11,7 @@
 #include "InputBP.h"
 
 #include "ReshapeBP.h"
+#include "SqueezeBP.h"
 
 #include "AddBP.h"
 #include "SubtractBP.h"
@@ -18,5 +19,8 @@
 #include "DivideBP.h"
 
 #include "MatMulBP.h"
+
+#include "ReduceMeanBP.h"
+#include "ReduceSumBP.h"
 
 #endif
