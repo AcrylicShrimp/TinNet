@@ -240,6 +240,9 @@
     <ClCompile Include="TinNet\Graph\Node\Square.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Sigmoid.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\NN.h">
@@ -489,6 +492,9 @@
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\Square.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Sigmoid.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
   </ItemGroup>

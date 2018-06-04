@@ -17,8 +17,13 @@
 #include "SubtractBP.h"
 #include "MultiplyBP.h"
 #include "DivideBP.h"
+#include "SquareBP.h"
 
 #include "MatMulBP.h"
+
+#include "ReLUBP.h"
+#include "SigmoidBP.h"
+#include "TanhBP.h"
 
 #include "ReduceMeanBP.h"
 #include "ReduceSumBP.h"
