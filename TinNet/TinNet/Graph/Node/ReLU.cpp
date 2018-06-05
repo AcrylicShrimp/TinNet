@@ -43,8 +43,8 @@ namespace TinNet::Graph::Node
 	{
 		const float vFactor[2]{.0f, 1.f};
 
-		const auto &sBackward{this->backward()};
 		const auto &sForward{this->sBackwardList.front()->forward()};
+		const auto &sBackward{this->backward()};
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
 			sDestination[this->sIterator.index<0>()] = vFactor[.0f < sForward[this->sIterator.index<0>()]] * sBackward[this->sIterator.index<0>()];

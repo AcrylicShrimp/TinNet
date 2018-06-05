@@ -39,8 +39,8 @@ namespace TinNet::Graph::Node
 
 	void Sigmoid::backwardPass(GraphNode *pBackward, Cache sDestination)
 	{
+		const auto &sForward{this->forward()};
 		const auto &sBackward{this->backward()};
-		const auto &sForward{this->sBackwardList.front()->forward()};
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
 			sDestination[this->sIterator.index<0>()] = sBackward[this->sIterator.index<0>()] * sForward[this->sIterator.index<0>()] * (1.f - sForward[this->sIterator.index<0>()]);
