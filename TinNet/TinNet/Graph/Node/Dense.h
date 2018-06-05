@@ -11,22 +11,27 @@
 #include "../../TinNetDLL.h"
 
 #include "../../Accessor.h"
+#include "../../Cache.h"
 #include "../../Iterator.h"
 #include "../../Shape.h"
+#include "../CacheContainer.h"
 #include "../Graph.h"
-#include "../FullCachedGraphNode.h"
+#include "../GraphOp.h"
+#include "../VariableGraphNode.h"
 
 #include <cstddef>
 #include <string>
 
 namespace TinNet::Graph::Node
 {
-	class TINNET_DLL Dense final : public FullCachedGraphNode
+	class TINNET_DLL Dense final : public VariableGraphNode
 	{
-	private:
-		std::size_t nFanOut;
-		Shape sShape;
-		Iterator<Accessor, Accessor> sIterator;
+	protected:
+		Shape sInputShape;
+		Shape sOutputShape;
+		Shape sWeightShape;
+		Iterator<Accessor, Accessor> sBiasIterator;
+		Iterator<Accessor, Accessor, Accessor> sWeightIterator;
 		
 	public:
 		Dense(const std::string &sName, Graph *pGraph, std::size_t nFanOut);
@@ -42,6 +47,9 @@ namespace TinNet::Graph::Node
 		virtual void initNode() override;
 		virtual void forwardPass(Cache sDestination) override;
 		virtual void backwardPass(GraphNode *pBackward, Cache sDestination) override;
+		virtual std::size_t fanIn() const override;
+		virtual std::size_t fanOut() const override;
+		virtual void backwardVariablePass() override;
 	};
 }
 

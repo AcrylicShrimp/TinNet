@@ -22,8 +22,8 @@ namespace TinNet::Graph
 	class TINNET_DLL BackwardCachedGraphNode : public GraphNode
 	{
 	protected:
-		CacheContainer::CacheInfo *pBackwardCacheInfo;
-		CacheContainer::CacheInfo *pBackwardTempCacheInfo;
+		CacheContainer::CacheInfo *pBackward;
+		CacheContainer::CacheInfo *pBackwardTemp;
 		
 	public:
 		BackwardCachedGraphNode(const std::string &sName, Graph *pGraph);

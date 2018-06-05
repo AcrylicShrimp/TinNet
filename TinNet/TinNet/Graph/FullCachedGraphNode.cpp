@@ -10,31 +10,31 @@ namespace TinNet::Graph
 {
 	FullCachedGraphNode::FullCachedGraphNode(const std::string &sName, Graph *pGraph) :
 		BackwardCachedGraphNode(sName, pGraph),
-		pForwardCacheInfo{nullptr}
+		pForward{nullptr}
 	{
 		//Empty.
 	}
 
 	FullCachedGraphNode::~FullCachedGraphNode()
 	{
-		if (this->pForwardCacheInfo)
-			this->pGraph->cacheContainer().release(this->pForwardCacheInfo);
+		if (this->pForward)
+			this->pGraph->cacheContainer().release(this->pForward);
 
-		this->pForwardCacheInfo = nullptr;
+		this->pForward = nullptr;
 	}
 
 	void FullCachedGraphNode::initGraph()
 	{
-		if (this->pForwardCacheInfo)
+		if (this->pForward)
 			return;
 
-		this->pForwardCacheInfo = this->pGraph->cacheContainer().request(this->shape().element());
+		this->pForward = this->pGraph->cacheContainer().request(this->shape().element());
 	}
 
 	const Cache &FullCachedGraphNode::forward()
 	{
-		this->computeForward(this->pForwardCacheInfo);
+		this->computeForward(this->pForward);
 
-		return this->pForwardCacheInfo->sCache;
+		return this->pForward->sCache;
 	}
 }

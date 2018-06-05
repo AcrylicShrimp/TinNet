@@ -10,35 +10,40 @@ namespace TinNet::Graph
 {
 	BackwardCachedGraphNode::BackwardCachedGraphNode(const std::string &sName, Graph *pGraph) :
 		GraphNode(sName, pGraph),
-		pBackwardCacheInfo{nullptr},
-		pBackwardTempCacheInfo{nullptr}
+		pBackward{nullptr},
+		pBackwardTemp{nullptr}
 	{
 		//Empty.
 	}
 
 	void BackwardCachedGraphNode::enableBackward()
 	{
-		this->disableBackward();
-		this->pBackwardCacheInfo = this->pGraph->cacheContainer().request(this->shape().element());
-		this->pBackwardTempCacheInfo = this->pGraph->cacheContainer().request(this->shape().element());
+		if (this->pBackward)
+			return;
+
+		if (this->pBackwardTemp)
+			return;
+
+		this->pBackward = this->pGraph->cacheContainer().request(this->shape().element());
+		this->pBackwardTemp = this->pGraph->cacheContainer().request(this->shape().element());
 	}
 
 	void BackwardCachedGraphNode::disableBackward()
 	{
-		if (this->pBackwardCacheInfo)
-			this->pGraph->cacheContainer().release(this->pBackwardCacheInfo);
+		if (this->pBackward)
+			this->pGraph->cacheContainer().release(this->pBackward);
 
-		if (this->pBackwardTempCacheInfo)
-			this->pGraph->cacheContainer().release(this->pBackwardTempCacheInfo);
+		if (this->pBackwardTemp)
+			this->pGraph->cacheContainer().release(this->pBackwardTemp);
 
-		this->pBackwardCacheInfo = nullptr;
-		this->pBackwardTempCacheInfo = nullptr;
+		this->pBackward = nullptr;
+		this->pBackwardTemp = nullptr;
 	}
 
 	const Cache &BackwardCachedGraphNode::backward()
 	{
-		this->computeBackward(this->pBackwardCacheInfo, this->pBackwardTempCacheInfo);
+		this->computeBackward(this->pBackward, this->pBackwardTemp);
 
-		return this->pBackwardCacheInfo->sCache;
+		return this->pBackward->sCache;
 	}
 }

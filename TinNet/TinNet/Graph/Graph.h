@@ -27,6 +27,7 @@ namespace TinNet::Graph
 	private:
 		CacheContainer sCacheContainer;
 		std::unordered_map<std::string, std::unique_ptr<GraphNode>> sGraphNodeMap;
+		std::vector<class VariableGraphNode *> sVariableList;
 
 	public:
 		Graph(const GraphBP &sGraphBP);
@@ -45,12 +46,15 @@ namespace TinNet::Graph
 		inline const GraphNode *node(const std::string &sNodeName) const;
 		template<class T> inline T *node(const std::string &sNodeName);
 		template<class T> inline const T *node(const std::string &sNodeName) const;
+		inline void asVariable(class VariableGraphNode *pVariable);
 		void enableBackward();
 		void disableBackward();
 		const Cache *forward(GraphNode *pNode);
 		const Cache *forward(const std::string &sNodeName);
 		const Cache *backward(GraphNode *pNode);
 		const Cache *backward(const std::string &sNodeName);
+		void backward();
+		void applyGradient(float nFactor);
 		Cache &input(const std::string &sInputName);
 		const Cache &input(const std::string &sInputName) const;
 	};
@@ -91,6 +95,11 @@ namespace TinNet::Graph
 		auto iIndex{this->sGraphNodeMap.find(sNodeName)};
 
 		return iIndex == this->sGraphNodeMap.cend() ? nullptr : static_cast<const T *>(iIndex->second.get());
+	}
+
+	inline void Graph::asVariable(class VariableGraphNode *pVariable)
+	{
+		this->sVariableList.emplace_back(pVariable);
 	}
 }
 

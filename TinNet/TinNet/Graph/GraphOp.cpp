@@ -36,6 +36,34 @@ namespace TinNet::Graph
 			fMatMul(sIterator.index<0>(), sIterator.index<1>(), sIterator.index<2>());
 	}
 
+	void GraphOp::matmulAccumulate(const Shape &sLeftShape, const Shape &sRightShape, const Cache sLeft, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
+	{
+		auto nRow{sLeftShape[sLeftShape.rank() - 2]};
+		auto nColumn{sRightShape[sRightShape.rank() - 1]};
+		auto nMaxIndex{sLeftShape[sLeftShape.rank() - 1]};
+
+		auto fMatMul = [nRow, nColumn, nMaxIndex, &sLeft, &sRight, &sDestination](std::size_t nIndex0, std::size_t nIndex1, std::size_t nIndex2)
+		{
+			for (std::size_t nR{0}; nR < nRow; ++nR)
+				for (std::size_t nC{0}; nC < nColumn; ++nC)
+				{
+					auto &nDestination{sDestination[nIndex0 + nR * nColumn + nC]};
+
+					for (std::size_t nIndex{0}; nIndex < nMaxIndex; ++nIndex)
+						nDestination += sLeft[nIndex1 + nR * nMaxIndex + nIndex] * sRight[nIndex2 + nIndex * nColumn + nC];
+				}
+		};
+
+		if (sLeftShape.rank() <= 2 || sLeftShape[sLeftShape.rank() - 3] == 1)
+		{
+			fMatMul(0, 0, 0);
+			return;
+		}
+
+		for (sIterator.prepare(2); sIterator; ++sIterator)
+			fMatMul(sIterator.index<0>(), sIterator.index<1>(), sIterator.index<2>());
+	}
+
 	void GraphOp::dMatmulLeft(const Shape &sLeftShape, const Shape &sRightShape, const Cache sBackward, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
 	{
 		auto nRow{sLeftShape[sLeftShape.rank() - 2]};

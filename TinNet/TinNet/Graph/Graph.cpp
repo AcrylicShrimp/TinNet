@@ -7,6 +7,7 @@
 #include "Graph.h"
 
 #include "Node/Input.h"
+#include "VariableGraphNode.h"
 
 namespace TinNet::Graph
 {
@@ -69,6 +70,20 @@ namespace TinNet::Graph
 	const Cache *Graph::backward(const std::string &sNodeName)
 	{
 		return this->backward(this->node(sNodeName));
+	}
+
+	void Graph::backward()
+	{
+		this->sCacheContainer.setDiryAll();
+
+		for (auto pVariable : this->sVariableList)
+			pVariable->backwardVariablePass();
+	}
+
+	void Graph::applyGradient(float nFactor)
+	{
+		for (auto pVariable : this->sVariableList)
+			pVariable->applyGradient(nFactor);
 	}
 
 	Cache &Graph::input(const std::string &sInputName)

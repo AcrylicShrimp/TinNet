@@ -28,4 +28,6 @@
 #include "ReduceMeanBP.h"
 #include "ReduceSumBP.h"
 
+#include "DenseBP.h"
+
 #endif

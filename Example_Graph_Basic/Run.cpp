@@ -13,7 +13,6 @@
 
 #include <algorithm>
 #include <iostream>
-#include <random>
 #include <vector>
 
 int32_t main()
@@ -26,11 +25,9 @@ int32_t main()
 	{
 		auto x{sBP.node<InputBP>("x", Shape{4, 2})};
 		auto y{sBP.node<InputBP>("y", Shape{4})};
-		auto w{sBP.node<InputBP>("w", Shape{2, 1})};
-		auto b{sBP.node<InputBP>("b", Shape{})};
 
-		auto mul{sBP.node<MatMulBP>("mul", x, w)};
-		auto output{sBP.node<AddBP>("output", mul, b)};
+		auto net{sBP.node<DenseBP>("net", x, 1)};
+		auto output{sBP.node<TanhBP>("output", net)};
 
 		auto output_squeeze{sBP.node<SqueezeBP>("output_squeeze", output)};
 		auto diff{sBP.node<SubtractBP>("diff", y, output_squeeze)};
@@ -43,11 +40,6 @@ int32_t main()
 
 	auto &x{sGraph.input("x")};
 	auto &y{sGraph.input("y")};
-	auto &w{sGraph.input("w")};
-	auto &b{sGraph.input("b")};
-
-	std::mt19937_64 sEngine{std::random_device{}()};
-	std::uniform_real<float> sDist{-1.f, 1.f};
 
 	std::vector<float> sX
 	{
@@ -63,20 +55,12 @@ int32_t main()
 		1.f,
 		1.f
 	};
-	std::vector<float> sW
-	{
-		sDist(sEngine),
-		sDist(sEngine)
-	};
-	std::vector<float> sB
-	{
-		.0f
-	};
-
+	
 	x = sX;
 	y = sY;
-	w = sW;
-	b = sB;
+
+	auto dense{sGraph.node<Dense>("net")};
+	dense->initialize();
 
 	for (;;)
 	{
@@ -85,14 +69,8 @@ int32_t main()
 
 		std::cout << "loss : " << (*sGraph.forward("loss"))[0] << std::endl;
 
-		auto gradient_w{sGraph.backward("w")};
-		auto gradient_b{sGraph.backward("b")};
-
-		for (std::size_t nIndex{0}, nSize{gradient_w->size()}; nIndex < nSize; ++nIndex)
-			sW[nIndex] -= .01f * (*gradient_w)[nIndex];
-
-		for (std::size_t nIndex{0}, nSize{gradient_b->size()}; nIndex < nSize; ++nIndex)
-			sB[nIndex] -= .01f * (*gradient_b)[nIndex];
+		sGraph.backward();
+		sGraph.applyGradient(.01f);
 	}
 
 	return 0;

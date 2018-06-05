@@ -22,7 +22,7 @@ namespace TinNet::Graph
 	class TINNET_DLL FullCachedGraphNode : public BackwardCachedGraphNode
 	{
 	protected:
-		CacheContainer::CacheInfo *pForwardCacheInfo;
+		CacheContainer::CacheInfo *pForward;
 
 	public:
 		FullCachedGraphNode(const std::string &sName, Graph *pGraph);

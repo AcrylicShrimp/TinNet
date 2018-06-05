@@ -243,6 +243,30 @@
     <ClCompile Include="TinNet\Graph\Node\Sigmoid.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Tanh.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\ReLU.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\ReLUBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\SigmoidBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\SquareBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\TanhBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\VariableGraphNode.cpp">
+      <Filter>TinNet\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\DenseBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\NN.h">
@@ -495,6 +519,30 @@
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\Sigmoid.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Tanh.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\ReLU.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\ReLUBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\SigmoidBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\SquareBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\TanhBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\VariableGraphNode.h">
+      <Filter>TinNet\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\DenseBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
   </ItemGroup>
