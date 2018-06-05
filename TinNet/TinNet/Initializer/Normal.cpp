@@ -96,23 +96,23 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void Normal::initializeBias(Layer::LayerBase &sLayer)
-	{
-		std::normal_distribution<double> sDist{this->nMean, this->nStdDev};
-
-		sLayer.initBias([this, &sDist]()
-		{
-			return static_cast<float>(sDist(this->sEngine));
-		});
-	}
-
-	void Normal::initializeWeight(Layer::LayerBase &sLayer)
-	{
-		std::normal_distribution<double> sDist{this->nMean, this->nStdDev};
-
-		sLayer.initWeight([this, &sDist]()
-		{
-			return static_cast<float>(sDist(this->sEngine));
-		});
-	}
+	//void Normal::initializeBias(Layer::LayerBase &sLayer)
+	//{
+	//	std::normal_distribution<double> sDist{this->nMean, this->nStdDev};
+	//
+	//	sLayer.initBias([this, &sDist]()
+	//	{
+	//		return static_cast<float>(sDist(this->sEngine));
+	//	});
+	//}
+	//
+	//void Normal::initializeWeight(Layer::LayerBase &sLayer)
+	//{
+	//	std::normal_distribution<double> sDist{this->nMean, this->nStdDev};
+	//
+	//	sLayer.initWeight([this, &sDist]()
+	//	{
+	//		return static_cast<float>(sDist(this->sEngine));
+	//	});
+	//}
 }

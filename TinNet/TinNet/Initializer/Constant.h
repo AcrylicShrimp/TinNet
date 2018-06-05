@@ -10,8 +10,6 @@
 
 #include "../TinNetDLL.h"
 
-#include "../Layer/LayerBase.h"
-
 namespace TinNet::Initializer
 {
 	class TINNET_DLL Constant final
@@ -28,8 +26,8 @@ namespace TinNet::Initializer
 		Constant &operator=(const Constant &sSrc);
 
 	public:
-		void initializeBias(Layer::LayerBase &sLayer) const;
-		void initializeWeight(Layer::LayerBase &sLayer) const;
+		//void initializeBias(Layer::LayerBase &sLayer) const;
+		//void initializeWeight(Layer::LayerBase &sLayer) const;
 	};
 }
 

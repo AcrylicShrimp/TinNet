@@ -74,23 +74,23 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void Uniform::initializeBias(Layer::LayerBase &sLayer)
-	{
-		std::uniform_real_distribution<double> sDist{this->nMin, this->nMax};
-
-		sLayer.initBias([this, &sDist]()
-		{
-			return static_cast<float>(sDist(this->sEngine));
-		});
-	}
-
-	void Uniform::initializeWeight(Layer::LayerBase &sLayer)
-	{
-		std::uniform_real_distribution<double> sDist{this->nMin, this->nMax};
-
-		sLayer.initWeight([this, &sDist]()
-		{
-			return static_cast<float>(sDist(this->sEngine));
-		});
-	}
+	//oid Uniform::initializeBias(Layer::LayerBase &sLayer)
+	//
+	//std::uniform_real_distribution<double> sDist{this->nMin, this->nMax};
+	//
+	//sLayer.initBias([this, &sDist]()
+	//{
+	//	return static_cast<float>(sDist(this->sEngine));
+	//});
+	//
+	//
+	//oid Uniform::initializeWeight(Layer::LayerBase &sLayer)
+	//
+	//std::uniform_real_distribution<double> sDist{this->nMin, this->nMax};
+	//
+	//sLayer.initWeight([this, &sDist]()
+	//{
+	//	return static_cast<float>(sDist(this->sEngine));
+	//});
+	//
 }

@@ -52,23 +52,23 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void Glorot::initializeBias(Layer::LayerBase &sLayer)
-	{
-		std::normal_distribution<double> sDist{.0, std::sqrt(2. / (sLayer.fanIn() + sLayer.fanOut()))};
-
-		sLayer.initBias([this, &sDist]()
-		{
-			return static_cast<float>(sDist(this->sEngine));
-		});
-	}
-
-	void Glorot::initializeWeight(Layer::LayerBase &sLayer)
-	{
-		std::normal_distribution<double> sDist{.0, std::sqrt(2. / (sLayer.fanIn() + sLayer.fanOut()))};
-
-		sLayer.initWeight([this, &sDist]()
-		{
-			return static_cast<float>(sDist(this->sEngine));
-		});
-	}
+	//void Glorot::initializeBias(Layer::LayerBase &sLayer)
+	//{
+	//	std::normal_distribution<double> sDist{.0, std::sqrt(2. / (sLayer.fanIn() + sLayer.fanOut()))};
+	//
+	//	sLayer.initBias([this, &sDist]()
+	//	{
+	//		return static_cast<float>(sDist(this->sEngine));
+	//	});
+	//}
+	//
+	//void Glorot::initializeWeight(Layer::LayerBase &sLayer)
+	//{
+	//	std::normal_distribution<double> sDist{.0, std::sqrt(2. / (sLayer.fanIn() + sLayer.fanOut()))};
+	//
+	//	sLayer.initWeight([this, &sDist]()
+	//	{
+	//		return static_cast<float>(sDist(this->sEngine));
+	//	});
+	//}
 }

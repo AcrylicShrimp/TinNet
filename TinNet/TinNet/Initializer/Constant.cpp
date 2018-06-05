@@ -30,19 +30,19 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void Constant::initializeBias(Layer::LayerBase &sLayer) const
-	{
-		sLayer.initBias([this]()
-		{
-			return this->nConstant;
-		});
-	}
-
-	void Constant::initializeWeight(Layer::LayerBase &sLayer) const
-	{
-		sLayer.initWeight([this]()
-		{
-			return this->nConstant;
-		});
-	}
+	//void Constant::initializeBias(Layer::LayerBase &sLayer) const
+	//{
+	//	sLayer.initBias([this]()
+	//	{
+	//		return this->nConstant;
+	//	});
+	//}
+	//
+	//void Constant::initializeWeight(Layer::LayerBase &sLayer) const
+	//{
+	//	sLayer.initWeight([this]()
+	//	{
+	//		return this->nConstant;
+	//	});
+	//}
 }

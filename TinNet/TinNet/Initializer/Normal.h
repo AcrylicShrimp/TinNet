@@ -10,8 +10,6 @@
 
 #include "../TinNetDLL.h"
 
-#include "../Layer/Layer.h"
-
 #include <chrono>
 #include <cmath>
 #include <cstdint>
@@ -43,8 +41,8 @@ namespace TinNet::Initializer
 		Normal &operator=(Normal &&sSrc);
 
 	public:
-		void initializeBias(Layer::LayerBase &sLayer);
-		void initializeWeight(Layer::LayerBase &sLayer);
+		//void initializeBias(Layer::LayerBase &sLayer);
+		//void initializeWeight(Layer::LayerBase &sLayer);
 	};
 }
 

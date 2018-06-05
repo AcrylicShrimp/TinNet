@@ -7,18 +7,6 @@
     <Filter Include="TinNet\IO">
       <UniqueIdentifier>{d71184a6-6092-4fd6-b7ca-e527fe39a1ce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TinNet\Layer">
-      <UniqueIdentifier>{636deb3a-7471-45d0-85c6-c1be52af29c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TinNet\Loss">
-      <UniqueIdentifier>{d2f66010-53ca-4d7e-85c7-37057ff44688}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TinNet\Optimizer">
-      <UniqueIdentifier>{0c1b3bab-71b7-47a6-97ee-367d888fd9c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TinNet\Visualizer">
-      <UniqueIdentifier>{d57434df-82e9-404f-815f-cea4e4ad3577}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TinNet\Reinforcement">
       <UniqueIdentifier>{f90ccafc-f83b-4d25-b325-871d4701aa87}</UniqueIdentifier>
     </Filter>
@@ -33,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TinNet\NN.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Initializer\Constant.cpp">
       <Filter>TinNet\Initializer</Filter>
     </ClCompile>
@@ -57,92 +42,8 @@
     <ClCompile Include="TinNet\IO\Serializable.cpp">
       <Filter>TinNet\IO</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Layer\BatchNormLayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\FullLayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\Layer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\LayerIO.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\LReLULayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\PReLULayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\ReLULayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\SigmoidLayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\SoftmaxLayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\TanhLayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Loss\CE.cpp">
-      <Filter>TinNet\Loss</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Loss\MSE.cpp">
-      <Filter>TinNet\Loss</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Loss\MulticlassCE.cpp">
-      <Filter>TinNet\Loss</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Visualizer\ConsoleVisualizer.cpp">
-      <Filter>TinNet\Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Visualizer\CSVLossExporter.cpp">
-      <Filter>TinNet\Visualizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\OptimizerHelper.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\ConvLayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\MaxPoolingLayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp">
       <Filter>TinNet\Reinforcement</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\Adagrad.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\Adam.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\Momentum.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\RMSProp.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\SGD.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\OptimizerBase.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\SwishLayer.cpp">
-      <Filter>TinNet\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\PGBaseline.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\PolicyGradient.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\ActorCritic.cpp">
-      <Filter>TinNet\Optimizer</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\GraphNode.cpp">
       <Filter>TinNet\Graph</Filter>
@@ -269,15 +170,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TinNet\NN.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\NN.hpp">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\TinNet.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\TinNetDLL.h">
       <Filter>TinNet</Filter>
     </ClInclude>
@@ -305,110 +197,11 @@
     <ClInclude Include="TinNet\IO\Serializable.h">
       <Filter>TinNet\IO</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Layer\BatchNormLayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\FullLayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\Layer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\LayerIO.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\Layers.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\LReLULayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\PReLULayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\ReLULayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\SigmoidLayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\SoftmaxLayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\TanhLayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Loss\CE.h">
-      <Filter>TinNet\Loss</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Loss\Losses.h">
-      <Filter>TinNet\Loss</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Loss\MSE.h">
-      <Filter>TinNet\Loss</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Loss\MulticlassCE.h">
-      <Filter>TinNet\Loss</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Visualizer\ConsoleVisualizer.h">
-      <Filter>TinNet\Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Visualizer\CSVLossExporter.h">
-      <Filter>TinNet\Visualizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\OptimizerHelper.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Optimizers.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\ConvLayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\MaxPoolingLayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\LayerBase.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Reinforcement\MCTS.h">
       <Filter>TinNet\Reinforcement</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Reinforcement\Game.h">
       <Filter>TinNet\Reinforcement</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Adagrad.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Adam.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Momentum.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\RMSProp.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\SGD.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\OptimizerBase.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\OptimizerBase.hpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\SwishLayer.h">
-      <Filter>TinNet\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\PGBaseline.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\PolicyGradient.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\ActorCritic.h">
-      <Filter>TinNet\Optimizer</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\GraphNode.h">
       <Filter>TinNet\Graph</Filter>

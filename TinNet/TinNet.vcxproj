@@ -252,50 +252,8 @@
     <ClCompile Include="TinNet\Initializer\Uniform.cpp" />
     <ClCompile Include="TinNet\Initializer\Xavier.cpp" />
     <ClCompile Include="TinNet\IO\Serializable.cpp" />
-    <ClCompile Include="TinNet\Layer\BatchNormLayer.cpp" />
-    <ClCompile Include="TinNet\Layer\ConvLayer.cpp" />
-    <ClCompile Include="TinNet\Layer\FullLayer.cpp" />
-    <ClCompile Include="TinNet\Layer\Layer.cpp" />
-    <ClCompile Include="TinNet\Layer\LayerIO.cpp" />
-    <ClCompile Include="TinNet\Layer\LReLULayer.cpp" />
-    <ClCompile Include="TinNet\Layer\MaxPoolingLayer.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="TinNet\Layer\PReLULayer.cpp" />
-    <ClCompile Include="TinNet\Layer\ReLULayer.cpp" />
-    <ClCompile Include="TinNet\Layer\SigmoidLayer.cpp" />
-    <ClCompile Include="TinNet\Layer\SoftmaxLayer.cpp" />
-    <ClCompile Include="TinNet\Layer\SwishLayer.cpp" />
-    <ClCompile Include="TinNet\Layer\TanhLayer.cpp" />
-    <ClCompile Include="TinNet\Loss\CE.cpp" />
-    <ClCompile Include="TinNet\Loss\MSE.cpp" />
-    <ClCompile Include="TinNet\Loss\MulticlassCE.cpp" />
-    <ClCompile Include="TinNet\NN.cpp" />
-    <ClCompile Include="TinNet\Optimizer\ActorCritic.cpp" />
-    <ClCompile Include="TinNet\Optimizer\Adagrad.cpp" />
-    <ClCompile Include="TinNet\Optimizer\Adam.cpp" />
-    <ClCompile Include="TinNet\Optimizer\Momentum.cpp" />
-    <ClCompile Include="TinNet\Optimizer\PolicyGradient.cpp" />
-    <ClCompile Include="TinNet\Optimizer\OptimizerHelper.cpp" />
-    <ClCompile Include="TinNet\Optimizer\PGBaseline.cpp" />
-    <ClCompile Include="TinNet\Optimizer\RMSProp.cpp" />
-    <ClCompile Include="TinNet\Optimizer\SGD.cpp" />
-    <ClCompile Include="TinNet\Optimizer\OptimizerBase.cpp" />
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
     <ClCompile Include="TinNet\Shape.cpp" />
-    <ClCompile Include="TinNet\Visualizer\ConsoleVisualizer.cpp" />
-    <ClCompile Include="TinNet\Visualizer\CSVLossExporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Accessor.h" />
@@ -350,59 +308,10 @@
     <ClInclude Include="TinNet\IO\Serializable.h" />
     <ClInclude Include="TinNet\Iterator.h" />
     <ClInclude Include="TinNet\Iterator.hpp" />
-    <ClInclude Include="TinNet\Layer\BatchNormLayer.h" />
-    <ClInclude Include="TinNet\Layer\ConvLayer.h" />
-    <ClInclude Include="TinNet\Layer\FullLayer.h" />
-    <ClInclude Include="TinNet\Layer\Layer.h" />
-    <ClInclude Include="TinNet\Layer\LayerBase.h" />
-    <ClInclude Include="TinNet\Layer\LayerIO.h" />
-    <ClInclude Include="TinNet\Layer\Layers.h" />
-    <ClInclude Include="TinNet\Layer\LReLULayer.h" />
-    <ClInclude Include="TinNet\Layer\MaxPoolingLayer.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="TinNet\Layer\PReLULayer.h" />
-    <ClInclude Include="TinNet\Layer\ReLULayer.h" />
-    <ClInclude Include="TinNet\Layer\SigmoidLayer.h" />
-    <ClInclude Include="TinNet\Layer\SoftmaxLayer.h" />
-    <ClInclude Include="TinNet\Layer\SwishLayer.h" />
-    <ClInclude Include="TinNet\Layer\TanhLayer.h" />
-    <ClInclude Include="TinNet\Loss\CE.h" />
-    <ClInclude Include="TinNet\Loss\Losses.h" />
-    <ClInclude Include="TinNet\Loss\MSE.h" />
-    <ClInclude Include="TinNet\Loss\MulticlassCE.h" />
-    <ClInclude Include="TinNet\NN.h" />
-    <ClInclude Include="TinNet\NN.hpp" />
-    <ClInclude Include="TinNet\Optimizer\ActorCritic.h" />
-    <ClInclude Include="TinNet\Optimizer\Adagrad.h" />
-    <ClInclude Include="TinNet\Optimizer\Adam.h" />
-    <ClInclude Include="TinNet\Optimizer\Momentum.h" />
-    <ClInclude Include="TinNet\Optimizer\PolicyGradient.h" />
-    <ClInclude Include="TinNet\Optimizer\OptimizerHelper.h" />
-    <ClInclude Include="TinNet\Optimizer\Optimizers.h" />
-    <ClInclude Include="TinNet\Optimizer\PGBaseline.h" />
-    <ClInclude Include="TinNet\Optimizer\RMSProp.h" />
-    <ClInclude Include="TinNet\Optimizer\SGD.h" />
-    <ClInclude Include="TinNet\Optimizer\OptimizerBase.h" />
-    <ClInclude Include="TinNet\Optimizer\OptimizerBase.hpp" />
     <ClInclude Include="TinNet\Reinforcement\Game.h" />
     <ClInclude Include="TinNet\Reinforcement\MCTS.h" />
     <ClInclude Include="TinNet\Shape.h" />
-    <ClInclude Include="TinNet\TinNet.h" />
     <ClInclude Include="TinNet\TinNetDLL.h" />
-    <ClInclude Include="TinNet\Visualizer\ConsoleVisualizer.h" />
-    <ClInclude Include="TinNet\Visualizer\CSVLossExporter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

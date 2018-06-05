@@ -52,23 +52,23 @@ namespace TinNet::Initializer
 		return *this;
 	}
 
-	void Xavier::initializeBias(Layer::LayerBase &sLayer)
-	{
-		std::normal_distribution<double> sDist{.0, std::sqrt(1. / sLayer.fanIn())};
-
-		sLayer.initBias([this, &sDist]()
-		{
-			return static_cast<float>(sDist(this->sEngine));
-		});
-	}
-
-	void Xavier::initializeWeight(Layer::LayerBase &sLayer)
-	{
-		std::normal_distribution<double> sDist{.0, std::sqrt(1. / sLayer.fanIn())};
-
-		sLayer.initWeight([this, &sDist]()
-		{
-			return static_cast<float>(sDist(this->sEngine));
-		});
-	}
+	//void Xavier::initializeBias(Layer::LayerBase &sLayer)
+	//{
+	//	std::normal_distribution<double> sDist{.0, std::sqrt(1. / sLayer.fanIn())};
+	//
+	//	sLayer.initBias([this, &sDist]()
+	//	{
+	//		return static_cast<float>(sDist(this->sEngine));
+	//	});
+	//}
+	//
+	//void Xavier::initializeWeight(Layer::LayerBase &sLayer)
+	//{
+	//	std::normal_distribution<double> sDist{.0, std::sqrt(1. / sLayer.fanIn())};
+	//
+	//	sLayer.initWeight([this, &sDist]()
+	//	{
+	//		return static_cast<float>(sDist(this->sEngine));
+	//	});
+	//}
 }
