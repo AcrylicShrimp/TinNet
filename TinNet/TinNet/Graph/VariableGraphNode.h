@@ -20,6 +20,7 @@
 #include <vector>
 
 //DELETEME : For testing purpose.
+#include <cmath>
 #include <random>
 
 namespace TinNet::Graph

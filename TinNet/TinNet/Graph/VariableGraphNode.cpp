@@ -65,7 +65,7 @@ namespace TinNet::Graph
 			return;
 
 		std::mt19937_64 sEngine{std::random_device{}()};
-		std::uniform_real_distribution<float> sDist{-1.f, 1.f};
+		std::normal_distribution<float> sDist{.0f, std::sqrt(2.f / this->fanIn())};
 
 		for (auto pVariable : this->sVariableList)
 			for (std::size_t nIndex{0}, nSize{pVariable->sCache.size()}; nIndex < nSize; ++nIndex)

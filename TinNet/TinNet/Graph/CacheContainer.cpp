@@ -10,9 +10,9 @@ namespace TinNet::Graph
 {
 	CacheContainer::CacheInfo *CacheContainer::request(std::size_t nSize)
 	{
-		auto pPointer{std::make_unique<float[]>(nSize)};
-		auto pCacheState{std::make_unique<CacheState>(CacheState{CacheInfo{true, Cache{pPointer.get(), nSize}}, std::move(pPointer)})};
-
+		auto pPointer{reinterpret_cast<float *>(_aligned_malloc(nSize * sizeof(float), sizeof(float) * 4))};
+		auto pCacheState{std::make_unique<CacheState>(pPointer, nSize)};
+		
 		return this->sCacheStateMap.emplace(&pCacheState->sCacheInfo, std::move(pCacheState)).first->first;
 	}
 

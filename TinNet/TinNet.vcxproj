@@ -110,6 +110,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_TINNET_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
     </ClCompile>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
@@ -133,6 +134,7 @@
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -145,6 +147,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_TINNET_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
     </ClCompile>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
@@ -168,6 +171,7 @@
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -182,6 +186,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_TINNET_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -197,6 +202,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_TINNET_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

@@ -12,6 +12,7 @@
 
 #include "../Cache.h"
 
+#include <cstdlib>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -30,7 +31,19 @@ namespace TinNet::Graph
 		struct CacheState
 		{
 			CacheInfo sCacheInfo;
-			std::unique_ptr<float[]> pPointer;
+			float *pPointer;
+
+			inline CacheState(float *pPointer, std::size_t nSize) :
+				pPointer{pPointer}
+			{
+				sCacheInfo.bDirty = true;
+				sCacheInfo.sCache = Cache{pPointer, nSize};
+			}
+
+			inline ~CacheState()
+			{
+				_aligned_free(pPointer);
+			}
 		};
 
 	private:
