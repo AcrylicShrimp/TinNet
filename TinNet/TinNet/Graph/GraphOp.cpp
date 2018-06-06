@@ -220,21 +220,21 @@ namespace TinNet::Graph
 
 	void GraphOp::dMatmulRightTransposed(const Shape &sLeftShape, const Shape &sRightShape, const Cache sBackward, const Cache sLeft, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
 	{
-		auto nRow{sLeftShape[sLeftShape.rank() - 2]};
+		auto nRow{sRightShape[sRightShape.rank() - 2]};
 		auto nColumn{sRightShape[sRightShape.rank() - 1]};
-		auto nMaxIndex{sLeftShape[sLeftShape.rank() - 1]};
-
-		sDestination.zero();
+		auto nMaxIndex{sLeftShape[sLeftShape.rank() - 2]};
 
 		auto fDMatMul = [nRow, nColumn, nMaxIndex, &sBackward, &sLeft, &sDestination](std::size_t nIndex0, std::size_t nIndex1, std::size_t nIndex2)
 		{
-			for (std::size_t nR{0}; nR < nRow; ++nR)
-				for (std::size_t nC{0}; nC < nColumn; ++nC)
+			for (std::size_t nC{0}; nC < nColumn; ++nC)
+				for (std::size_t nR{0}; nR < nRow; ++nR)
 				{
-					auto nBackward{sBackward[nIndex0 + nR * nColumn + nC]};
+					auto nValue{.0f};
 
 					for (std::size_t nIndex{0}; nIndex < nMaxIndex; ++nIndex)
-						sDestination[nIndex2 + nC * nMaxIndex + nIndex] += sLeft[nIndex1 + nR * nMaxIndex + nIndex] * nBackward;
+						nValue += sLeft[nIndex1 + nIndex * nRow + nR] * sBackward[nIndex0 + nIndex * nColumn + nC];
+
+					sDestination[nIndex2 + nC * nRow + nR] = nValue;
 				}
 		};
 

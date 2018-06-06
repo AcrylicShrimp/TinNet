@@ -59,6 +59,8 @@ namespace TinNet::Graph
 			return;
 
 		this->forwardPass(pDestination->sCache);
+
+		pDestination->bDirty = false;
 	}
 
 	void GraphNode::computeBackward(CacheContainer::CacheInfo *pDestination, CacheContainer::CacheInfo *pTemporary)
