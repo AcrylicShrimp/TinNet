@@ -13,7 +13,7 @@
 #include "ReshapeBP.h"
 #include "SqueezeBP.h"
 
-#include "Negative.h"
+#include "NegativeBP.h"
 #include "AddBP.h"
 #include "SubtractBP.h"
 #include "MultiplyBP.h"
