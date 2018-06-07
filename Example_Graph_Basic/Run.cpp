@@ -24,7 +24,6 @@ int32_t main()
 
 	std::vector<float> sTrainInput(32u * 784u);
 	std::vector<float> sTrainOutput(32u * 10u);
-	std::vector<float> sOne{1, 1.f};
 
 	{
 		std::ifstream sInput{L"D:/Develop/Dataset/MNIST/MNIST_train_in.dat", std::ifstream::binary | std::ifstream::in};
@@ -60,23 +59,12 @@ int32_t main()
 		auto output6{sBP.node<ReLUBP>("output6", net6)};
 
 		auto net7{sBP.node<DenseBP>("net7", output6, 10)};
+		auto output7{sBP.node<SigmoidBP>("output7", net7)};
 
-		auto exp{sBP.node<ExpBP>("exp", net7)};
-		auto sum_exp{sBP.node<ReduceSumBP>("sum_exp", exp, std::vector<bool>{false, true}, false)};
-		auto output7{sBP.node<DivideBP>("output7", exp, sum_exp)};
-
-		auto y_hat{sBP.node<SqueezeBP>("output_squeeze", output7)};
-		auto log_y_hat{sBP.node<LogBP>("log_y_hat", y_hat)};
-		auto one{sBP.node<InputBP>("one", Shape{})};
-		auto one_minus_y{sBP.node<SubtractBP>("one_minus_y", one, y)};
-		auto one_minus_y_hat{sBP.node<SubtractBP>("one_minus_y_hat", one, y_hat)};
-		auto log_one_minus_y_hat{sBP.node<LogBP>("log_one_minus_y_hat", one_minus_y_hat)};
-		auto y_log_y_hat{sBP.node<MultiplyBP>("y_log_y_hat", y, log_y_hat)};
-		auto one_minus_y_log_one_minus_y_hat{sBP.node<MultiplyBP>("one_minus_y_log_one_minus_y_hat", one_minus_y, log_one_minus_y_hat)};
-		auto loss_add{sBP.node<AddBP>("loss_add", y_log_y_hat, one_minus_y_log_one_minus_y_hat)};
-		auto loss_sum{sBP.node<ReduceSumBP>("loss_sum", loss_add, std::vector<bool>{false, true})};
-		auto loss_mean{sBP.node<ReduceMeanBP>("loss_mean", loss_sum)};
-		auto loss{sBP.node<NegativeBP>("loss", loss_mean)};
+		auto output_squeeze{sBP.node<SqueezeBP>("output_squeeze", output7)};
+		auto diff{sBP.node<SubtractBP>("diff", y, output_squeeze)};
+		auto diff_square{sBP.node<MultiplyBP>("diff_square", diff, diff)};
+		auto loss{sBP.node<ReduceMeanBP>("loss", diff_square)};
 	}
 
 	TinNet::Graph::Graph sGraph{sBP};
@@ -84,11 +72,9 @@ int32_t main()
 
 	auto &x{sGraph.input("x")};
 	auto &y{sGraph.input("y")};
-	auto &one{sGraph.input("one")};
 
 	x = sTrainInput;
 	y = sTrainOutput;
-	one = sOne;
 
 	auto dense1{sGraph.node<Dense>("net1")};
 	auto dense2{sGraph.node<Dense>("net2")};
@@ -125,34 +111,16 @@ int32_t main()
 
 		std::cout << "loss : " << (*sGraph.forward("loss"))[0] << std::endl;
 
-		sGraph.backward();
-		sGraph.applyGradient(.001f);
+		for (int i = 0; i < 60000; i += 32)
+		{
+			sGraph.backward();
+			sGraph.applyGradient(.001f);
+		}
 
 		auto sEnd{std::chrono::system_clock::now()};
 
 		std::cout << "==== Time took : " << std::chrono::duration_cast<std::chrono::milliseconds>(sEnd - sBegin).count() << "ms ====" << std::endl << std::endl;
 	}
-
-	//Shape shapeA{1000, 1000};
-	//Shape shapeB{1000, 1000};
-	//Shape shapeR{shapeA[0], shapeB[1]};
-	//
-	//std::vector<float> sA(shapeA.element(), .0f);
-	//std::vector<float> sB(shapeB.element(), .0f);
-	//std::vector<float> sR(shapeR.element(), .0f);
-	//
-	//Iterator<Accessor, Accessor, Accessor> iterator;
-	//iterator.init(shapeR, Accessor{shapeR}, Accessor{shapeA}, Accessor{shapeB});
-	//
-	//auto sBegin{std::chrono::system_clock::now()};
-	//
-	//for (int i = 0; i < 10; ++i)
-	//	GraphOp::matmulTransposedSIMD(shapeA, shapeB, Cache{sA}, Cache{sB}, Cache{sR}, iterator);
-	//
-	//auto sEnd{std::chrono::system_clock::now()};
-	//std::cout << "Time took : " << std::chrono::duration_cast<std::chrono::milliseconds>(sEnd - sBegin).count() << "ms" << std::endl;
-	//
-	//system("pause");
 
 	return 0;
 }

@@ -67,7 +67,7 @@ namespace TinNet::Graph::Node
 
 	void Dense::backwardPass(GraphNode *pBackward, Cache sDestination)
 	{
-		GraphOp::dMatmulLeftTransposed(
+		GraphOp::dMatmulLeftTransposedSIMD(
 			this->sInputShape,
 			this->sWeightShape,
 			this->backward(),
@@ -95,7 +95,7 @@ namespace TinNet::Graph::Node
 		for (this->sBiasIterator.prepare(); this->sBiasIterator; ++this->sBiasIterator)
 			this->sVariableBackwardList.front()->sCache[this->sBiasIterator.index<1>()] += sBackward[this->sBiasIterator.index<0>()];
 
-		GraphOp::dMatmulRightTransposed(
+		GraphOp::dMatmulRightTransposedSIMD(
 			this->sInputShape,
 			this->sWeightShape,
 			sBackward,

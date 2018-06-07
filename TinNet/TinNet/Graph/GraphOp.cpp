@@ -329,4 +329,82 @@ namespace TinNet::Graph
 		for (sIterator.prepare(2); sIterator; ++sIterator)
 			fMatMul(sIterator.index<0>(), sIterator.index<1>(), sIterator.index<2>());
 	}
+
+	void GraphOp::dMatmulLeftTransposedSIMD(const Shape &sLeftShape, const Shape &sRightShape, const Cache sBackward, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
+	{
+		auto nRow{sLeftShape[sLeftShape.rank() - 2]};
+		auto nColumn{sRightShape[sRightShape.rank() - 1]};
+		auto nMaxIndex{sLeftShape[sLeftShape.rank() - 1]};
+
+		sDestination.zero();
+
+		auto fDMatMul = [nRow, nColumn, nMaxIndex, &sBackward, &sRight, &sDestination](std::size_t nIndex0, std::size_t nIndex1, std::size_t nIndex2)
+		{
+			std::size_t nIndex;
+
+			for (std::size_t nR{0}; nR < nRow; ++nR)
+				for (std::size_t nC{0}; nC < nColumn; ++nC)
+				{
+					const float nBackward{sBackward[nIndex0 + nR * nColumn + nC]};
+					const auto nBackwardM128{_mm_set1_ps(nBackward)};
+
+					for (nIndex = 0; nIndex + 4 < nMaxIndex; nIndex += 4)
+					{
+						float *__restrict pDestination{&sDestination[nIndex1 + nR * nMaxIndex + nIndex]};
+						_mm_store_ps(pDestination, _mm_add_ps(_mm_loadu_ps(pDestination), _mm_mul_ps(nBackwardM128, _mm_loadu_ps(&sRight[nIndex2 + nC * nMaxIndex + nIndex]))));
+					}
+
+					for (; nIndex < nMaxIndex; ++nIndex)
+						sDestination[nIndex1 + nR * nMaxIndex + nIndex] += sRight[nIndex2 + nC * nMaxIndex + nIndex] * nBackward;
+				}
+		};
+
+		if (sLeftShape.rank() <= 2 || sLeftShape[sLeftShape.rank() - 3] == 1)
+		{
+			fDMatMul(0, 0, 0);
+			return;
+		}
+
+		for (sIterator.prepare(2); sIterator; ++sIterator)
+			fDMatMul(sIterator.index<0>(), sIterator.index<1>(), sIterator.index<2>());
+	}
+
+	void GraphOp::dMatmulRightTransposedSIMD(const Shape &sLeftShape, const Shape &sRightShape, const Cache sBackward, const Cache sLeft, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
+	{
+		auto nRow{sLeftShape[sLeftShape.rank() - 2]};
+		auto nColumn{sRightShape[sRightShape.rank() - 1]};
+		auto nMaxIndex{sLeftShape[sLeftShape.rank() - 1]};
+
+		sDestination.zero();
+
+		auto fDMatMul = [nRow, nColumn, nMaxIndex, &sBackward, &sLeft, &sDestination](std::size_t nIndex0, std::size_t nIndex1, std::size_t nIndex2)
+		{
+			std::size_t nIndex;
+
+			for (std::size_t nR{0}; nR < nRow; ++nR)
+				for (std::size_t nC{0}; nC < nColumn; ++nC)
+				{
+					const float nBackward{sBackward[nIndex0 + nR * nColumn + nC]};
+					const auto nBackwardM128{_mm_set1_ps(nBackward)};
+
+					for (nIndex = 0; nIndex + 4 < nMaxIndex; nIndex += 4)
+					{
+						float *__restrict pDestination{&sDestination[nIndex2 + nC * nMaxIndex + nIndex]};
+						_mm_store_ps(pDestination, _mm_add_ps(_mm_loadu_ps(pDestination), _mm_mul_ps(nBackwardM128, _mm_loadu_ps(&sLeft[nIndex1 + nR * nMaxIndex + nIndex]))));
+					}
+
+					for (; nIndex < nMaxIndex; ++nIndex)
+						sDestination[nIndex2 + nC * nMaxIndex + nIndex] += sLeft[nIndex1 + nR * nMaxIndex + nIndex] * nBackward;
+				}
+		};
+
+		if (sLeftShape.rank() <= 2 || sLeftShape[sLeftShape.rank() - 3] == 1)
+		{
+			fDMatMul(0, 0, 0);
+			return;
+		}
+
+		for (sIterator.prepare(2); sIterator; ++sIterator)
+			fDMatMul(sIterator.index<0>(), sIterator.index<1>(), sIterator.index<2>());
+	}
 }
