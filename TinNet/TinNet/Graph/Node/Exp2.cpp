@@ -1,52 +1,48 @@
 
 /*
-	2018.06.04
+	2018.06.07
 	Created by AcrylicShrimp.
 */
 
-#include "ReLU.h"
+#include "Exp2.h"
 
 namespace TinNet::Graph::Node
 {
-	ReLU::ReLU(const std::string &sName, Graph *pGraph) :
+	Exp2::Exp2(const std::string &sName, Graph *pGraph) :
 		FullCachedGraphNode(sName, pGraph)
 	{
 		//Empty.
 	}
 
-	const Shape &ReLU::shape() const
+	const Shape &Exp2::shape() const
 	{
 		return this->sBackwardList.front()->shape();
 	}
 
-	std::size_t ReLU::maxBackwardNodeCount() const
+	std::size_t Exp2::maxBackwardNodeCount() const
 	{
 		return 1;
 	}
 
-	void ReLU::initNode()
+	void Exp2::initNode()
 	{
 		//Empty.
 	}
 
-	void ReLU::forwardPass(Cache sDestination)
+	void Exp2::forwardPass(Cache sDestination)
 	{
-		const float vFactor[2]{.0f, 1.f};
-
 		const auto &sLeft{this->sBackwardList.front()->forward()};
 
 		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
-			sDestination[nIndex] = vFactor[.0f < sLeft[nIndex]] * sLeft[nIndex];
+			sDestination[nIndex] = std::exp2(sLeft[nIndex]);
 	}
 
-	void ReLU::backwardPass(GraphNode *pBackward, Cache sDestination)
+	void Exp2::backwardPass(GraphNode *pBackward, Cache sDestination)
 	{
-		const float vFactor[2]{.0f, 1.f};
-
 		const auto &sForward{this->sBackwardList.front()->forward()};
 		const auto &sBackward{this->backward()};
 
 		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
-			sDestination[nIndex] = vFactor[.0f < sForward[nIndex]] * sBackward[nIndex];
+			sDestination[nIndex] = 0.6931472f * std::exp2(sForward[nIndex]) * sBackward[nIndex];
 	}
 }

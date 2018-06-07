@@ -1,12 +1,12 @@
 
 /*
-	2018.06.04
+	2018.06.07
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPH_NODE_SIGMOID_H
+#ifndef _CLASS_TINNET_GRAPH_NODE_EXP2_H
 
-#define _CLASS_TINNET_GRAPH_NODE_SIGMOID_H
+#define _CLASS_TINNET_GRAPH_NODE_EXP2_H
 
 #include "../../TinNetDLL.h"
 
@@ -20,16 +20,16 @@
 
 namespace TinNet::Graph::Node
 {
-	class TINNET_DLL Sigmoid final : public FullCachedGraphNode
+	class TINNET_DLL Exp2 final : public FullCachedGraphNode
 	{
 	public:
-		Sigmoid(const std::string &sName, Graph *pGraph);
-		Sigmoid(const Sigmoid &sSrc) = delete;
-		~Sigmoid() = default;
-		
+		Exp2(const std::string &sName, Graph *pGraph);
+		Exp2(const Exp2 &sSrc) = delete;
+		~Exp2() = default;
+
 	public:
-		Sigmoid &operator=(const Sigmoid &sSrc) = delete;
-		
+		Exp2 &operator=(const Exp2 &sSrc) = delete;
+
 	public:
 		virtual const Shape &shape() const override;
 		virtual std::size_t maxBackwardNodeCount() const override;

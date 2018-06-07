@@ -1,48 +1,48 @@
 
 /*
-	2018.06.04
+	2018.06.07
 	Created by AcrylicShrimp.
 */
 
-#include "Tanh.h"
+#include "Exp.h"
 
 namespace TinNet::Graph::Node
 {
-	Tanh::Tanh(const std::string &sName, Graph *pGraph) :
+	Exp::Exp(const std::string &sName, Graph *pGraph) :
 		FullCachedGraphNode(sName, pGraph)
 	{
 		//Empty.
 	}
 
-	const Shape &Tanh::shape() const
+	const Shape &Exp::shape() const
 	{
 		return this->sBackwardList.front()->shape();
 	}
 
-	std::size_t Tanh::maxBackwardNodeCount() const
+	std::size_t Exp::maxBackwardNodeCount() const
 	{
 		return 1;
 	}
 
-	void Tanh::initNode()
+	void Exp::initNode()
 	{
 		//Empty.
 	}
 
-	void Tanh::forwardPass(Cache sDestination)
+	void Exp::forwardPass(Cache sDestination)
 	{
 		const auto &sLeft{this->sBackwardList.front()->forward()};
 
 		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
-			sDestination[nIndex] = std::tanh(sLeft[nIndex]);
+			sDestination[nIndex] = std::exp(sLeft[nIndex]);
 	}
 
-	void Tanh::backwardPass(GraphNode *pBackward, Cache sDestination)
+	void Exp::backwardPass(GraphNode *pBackward, Cache sDestination)
 	{
-		const auto &sForward{this->forward()};
+		const auto &sForward{this->sBackwardList.front()->forward()};
 		const auto &sBackward{this->backward()};
 
 		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
-			sDestination[nIndex] = sBackward[nIndex] * (1.f - sForward[nIndex] * sForward[nIndex]);
+			sDestination[nIndex] = std::exp(sForward[nIndex]) * sBackward[nIndex];
 	}
 }

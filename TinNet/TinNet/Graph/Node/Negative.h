@@ -1,12 +1,12 @@
 
 /*
-	2018.06.04
+	2018.06.07
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPH_NODE_SIGMOID_H
+#ifndef _CLASS_TINNET_GRAPH_NODE_NEGATIVE_H
 
-#define _CLASS_TINNET_GRAPH_NODE_SIGMOID_H
+#define _CLASS_TINNET_GRAPH_NODE_NEGATIVE_H
 
 #include "../../TinNetDLL.h"
 
@@ -14,21 +14,20 @@
 #include "../Graph.h"
 #include "../FullCachedGraphNode.h"
 
-#include <cmath>
 #include <cstddef>
 #include <string>
 
 namespace TinNet::Graph::Node
 {
-	class TINNET_DLL Sigmoid final : public FullCachedGraphNode
+	class TINNET_DLL Negative final : public FullCachedGraphNode
 	{
 	public:
-		Sigmoid(const std::string &sName, Graph *pGraph);
-		Sigmoid(const Sigmoid &sSrc) = delete;
-		~Sigmoid() = default;
+		Negative(const std::string &sName, Graph *pGraph);
+		Negative(const Negative &sSrc) = delete;
+		~Negative() = default;
 		
 	public:
-		Sigmoid &operator=(const Sigmoid &sSrc) = delete;
+		Negative &operator=(const Negative &sSrc) = delete;
 		
 	public:
 		virtual const Shape &shape() const override;

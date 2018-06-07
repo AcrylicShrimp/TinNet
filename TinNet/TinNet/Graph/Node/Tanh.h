@@ -10,8 +10,6 @@
 
 #include "../../TinNetDLL.h"
 
-#include "../../Accessor.h"
-#include "../../Iterator.h"
 #include "../../Shape.h"
 #include "../Graph.h"
 #include "../FullCachedGraphNode.h"
@@ -24,9 +22,6 @@ namespace TinNet::Graph::Node
 {
 	class TINNET_DLL Tanh final : public FullCachedGraphNode
 	{
-	protected:
-		Iterator<Accessor> sIterator;
-		
 	public:
 		Tanh(const std::string &sName, Graph *pGraph);
 		Tanh(const Tanh &sSrc) = delete;

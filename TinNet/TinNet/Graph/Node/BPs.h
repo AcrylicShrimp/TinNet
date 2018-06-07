@@ -13,11 +13,19 @@
 #include "ReshapeBP.h"
 #include "SqueezeBP.h"
 
+#include "Negative.h"
 #include "AddBP.h"
 #include "SubtractBP.h"
 #include "MultiplyBP.h"
 #include "DivideBP.h"
 #include "SquareBP.h"
+
+#include "LogBP.h"
+#include "Log2BP.h"
+#include "Log10BP.h"
+#include "LogNBP.h"
+#include "ExpBP.h"
+#include "Exp2BP.h"
 
 #include "MatMulBP.h"
 

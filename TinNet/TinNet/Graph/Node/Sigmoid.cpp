@@ -26,15 +26,15 @@ namespace TinNet::Graph::Node
 
 	void Sigmoid::initNode()
 	{
-		this->sIterator.init(this->sBackwardList.front()->shape(), Accessor{this->sBackwardList.front()->shape()});
+		//Empty.
 	}
 
 	void Sigmoid::forwardPass(Cache sDestination)
 	{
 		const auto &sLeft{this->sBackwardList.front()->forward()};
 
-		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			sDestination[this->sIterator.index<0>()] = 1.f / (std::exp(-sLeft[this->sIterator.index<0>()]) + 1.f);
+		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
+			sDestination[nIndex] = 1.f / (std::exp(-sLeft[nIndex]) + 1.f);
 	}
 
 	void Sigmoid::backwardPass(GraphNode *pBackward, Cache sDestination)
@@ -42,7 +42,7 @@ namespace TinNet::Graph::Node
 		const auto &sForward{this->forward()};
 		const auto &sBackward{this->backward()};
 
-		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			sDestination[this->sIterator.index<0>()] = sBackward[this->sIterator.index<0>()] * sForward[this->sIterator.index<0>()] * (1.f - sForward[this->sIterator.index<0>()]);
+		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
+			sDestination[nIndex] = sBackward[nIndex] * sForward[nIndex] * (1.f - sForward[nIndex]);
 	}
 }

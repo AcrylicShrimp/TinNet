@@ -1,12 +1,12 @@
 
 /*
-	2018.06.04
+	2018.06.07
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPH_NODE_SIGMOID_H
+#ifndef _CLASS_TINNET_GRAPH_NODE_LOG2_H
 
-#define _CLASS_TINNET_GRAPH_NODE_SIGMOID_H
+#define _CLASS_TINNET_GRAPH_NODE_LOG2_H
 
 #include "../../TinNetDLL.h"
 
@@ -20,15 +20,15 @@
 
 namespace TinNet::Graph::Node
 {
-	class TINNET_DLL Sigmoid final : public FullCachedGraphNode
+	class TINNET_DLL Log2 final : public FullCachedGraphNode
 	{
 	public:
-		Sigmoid(const std::string &sName, Graph *pGraph);
-		Sigmoid(const Sigmoid &sSrc) = delete;
-		~Sigmoid() = default;
+		Log2(const std::string &sName, Graph *pGraph);
+		Log2(const Log2 &sSrc) = delete;
+		~Log2() = default;
 		
 	public:
-		Sigmoid &operator=(const Sigmoid &sSrc) = delete;
+		Log2 &operator=(const Log2 &sSrc) = delete;
 		
 	public:
 		virtual const Shape &shape() const override;
