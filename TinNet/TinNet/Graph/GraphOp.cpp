@@ -248,7 +248,7 @@ namespace TinNet::Graph
 			fDMatMul(sIterator.index<0>(), sIterator.index<1>(), sIterator.index<2>());
 	}
 
-	void GraphOp::matmulTransposedSIMD(const Shape &sLeftShape, const Shape &sRightShape, const Cache sLeft, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
+	void GraphOp::matmulTransposedSSE(const Shape &sLeftShape, const Shape &sRightShape, const Cache sLeft, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
 	{
 		auto nRow{sLeftShape[sLeftShape.rank() - 2]};
 		auto nColumn{sRightShape[sRightShape.rank() - 1]};
@@ -289,7 +289,7 @@ namespace TinNet::Graph
 			fMatMul(sIterator.index<0>(), sIterator.index<1>(), sIterator.index<2>());
 	}
 
-	void GraphOp::matmulAccumulateTransposedSIMD(const Shape &sLeftShape, const Shape &sRightShape, const Cache sLeft, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
+	void GraphOp::matmulAccumulateTransposedSSE(const Shape &sLeftShape, const Shape &sRightShape, const Cache sLeft, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
 	{
 		auto nRow{sLeftShape[sLeftShape.rank() - 2]};
 		auto nColumn{sRightShape[sRightShape.rank() - 1]};
@@ -330,7 +330,7 @@ namespace TinNet::Graph
 			fMatMul(sIterator.index<0>(), sIterator.index<1>(), sIterator.index<2>());
 	}
 
-	void GraphOp::dMatmulLeftTransposedSIMD(const Shape &sLeftShape, const Shape &sRightShape, const Cache sBackward, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
+	void GraphOp::dMatmulLeftTransposedSSE(const Shape &sLeftShape, const Shape &sRightShape, const Cache sBackward, const Cache sRight, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
 	{
 		auto nRow{sLeftShape[sLeftShape.rank() - 2]};
 		auto nColumn{sRightShape[sRightShape.rank() - 1]};
@@ -369,7 +369,7 @@ namespace TinNet::Graph
 			fDMatMul(sIterator.index<0>(), sIterator.index<1>(), sIterator.index<2>());
 	}
 
-	void GraphOp::dMatmulRightTransposedSIMD(const Shape &sLeftShape, const Shape &sRightShape, const Cache sBackward, const Cache sLeft, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
+	void GraphOp::dMatmulRightTransposedSSE(const Shape &sLeftShape, const Shape &sRightShape, const Cache sBackward, const Cache sLeft, Cache sDestination, Iterator<Accessor, Accessor, Accessor> &sIterator) noexcept
 	{
 		auto nRow{sLeftShape[sLeftShape.rank() - 2]};
 		auto nColumn{sRightShape[sRightShape.rank() - 1]};
