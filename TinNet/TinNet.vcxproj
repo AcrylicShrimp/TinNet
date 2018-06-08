@@ -111,7 +111,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_TINNET_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
@@ -131,11 +132,12 @@
       <OmitFramePointers>true</OmitFramePointers>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <StringPooling>true</StringPooling>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -150,6 +152,7 @@
       <PreprocessorDefinitions>_TINNET_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
@@ -174,6 +177,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -189,7 +193,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_TINNET_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -207,6 +212,7 @@
       <PreprocessorDefinitions>_TINNET_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
