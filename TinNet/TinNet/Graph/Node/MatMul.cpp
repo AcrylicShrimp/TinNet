@@ -47,8 +47,8 @@ namespace TinNet::Graph::Node
 				throw std::invalid_argument("dimension must be equal");
 
 		this->sShape = sLeft;
-		this->sShape[this->sShape.rank() - 2] = sLeft[sLeft.rank() - 2];
-		this->sShape[this->sShape.rank() - 1] = sRight[sRight.rank() - 1];
+		this->sShape.set(this->sShape.rank() - 2, sLeft[sLeft.rank() - 2]);
+		this->sShape.set(this->sShape.rank() - 1, sRight[sRight.rank() - 1]);
 
 		this->sIterator.init(this->sShape, Accessor{this->sShape}, Accessor{sLeft}, Accessor{sRight});
 	}

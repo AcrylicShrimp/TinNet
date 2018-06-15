@@ -210,6 +210,12 @@
     <ClCompile Include="TinNet\Graph\Node\NegativeBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\Convolution.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\ConvolutionBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -420,6 +426,12 @@
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\NegativeBP.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\Convolution.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\ConvolutionBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
   </ItemGroup>

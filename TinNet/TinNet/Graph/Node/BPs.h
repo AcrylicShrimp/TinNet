@@ -37,5 +37,6 @@
 #include "ReduceSumBP.h"
 
 #include "DenseBP.h"
+#include "ConvolutionBP.h"
 
 #endif

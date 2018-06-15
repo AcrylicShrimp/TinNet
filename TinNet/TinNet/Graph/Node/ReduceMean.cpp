@@ -45,7 +45,7 @@ namespace TinNet::Graph::Node
 				if (this->sAxis[nAxis])
 				{
 					nFactor *= this->sUnsqueezedShape[nAxis];
-					this->sUnsqueezedShape[nAxis] = 1;
+					this->sUnsqueezedShape.set(nAxis, 1);
 				}
 
 			this->sShape = this->bSqueeze ? this->sUnsqueezedShape.squeeze() : this->sUnsqueezedShape;

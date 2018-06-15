@@ -54,6 +54,9 @@ namespace TinNet
 		void accumulate(Cache sCache);
 	};
 
+	inline Cache operator+(Cache &sLeft, std::size_t nRight);
+	inline Cache operator+(std::size_t nLeft, Cache &sRight);
+
 	inline Cache::operator float *()
 	{
 		return this->pBegin;
@@ -97,6 +100,16 @@ namespace TinNet
 	inline std::size_t Cache::size() const
 	{
 		return this->nSize;
+	}
+
+	inline Cache operator+(Cache &sLeft, std::size_t nRight)
+	{
+		return Cache{sLeft.begin() + nRight, sLeft.size() < nRight ? 0 : sLeft.size() - nRight};
+	}
+
+	inline Cache operator+(std::size_t nLeft, Cache &sRight)
+	{
+		return Cache{sRight.begin() + nLeft, sRight.size() < nLeft ? 0 : sRight.size() - nLeft};
 	}
 }
 

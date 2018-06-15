@@ -232,6 +232,8 @@
     <ClCompile Include="TinNet\Graph\GraphOp.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Add.cpp" />
     <ClCompile Include="TinNet\Graph\Node\AddBP.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\Convolution.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\ConvolutionBP.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Dense.cpp" />
     <ClCompile Include="TinNet\Graph\Node\DenseBP.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Divide.cpp" />
@@ -298,6 +300,8 @@
     <ClInclude Include="TinNet\Graph\GraphOp.h" />
     <ClInclude Include="TinNet\Graph\Node\Add.h" />
     <ClInclude Include="TinNet\Graph\Node\AddBP.h" />
+    <ClInclude Include="TinNet\Graph\Node\Convolution.h" />
+    <ClInclude Include="TinNet\Graph\Node\ConvolutionBP.h" />
     <ClInclude Include="TinNet\Graph\Node\Dense.h" />
     <ClInclude Include="TinNet\Graph\Node\DenseBP.h" />
     <ClInclude Include="TinNet\Graph\Node\Divide.h" />

@@ -41,7 +41,7 @@ namespace TinNet::Graph::Node
 
 			for (std::size_t nIndex{0}, nRank{this->sUnsqueezedShape.rank()}; nIndex < nRank; ++nIndex)
 				if (this->sAxis[nIndex])
-					this->sUnsqueezedShape[nIndex] = 1;
+					this->sUnsqueezedShape.set(nIndex, 1);
 
 			this->sShape = this->bSqueeze ? this->sUnsqueezedShape.squeeze() : this->sUnsqueezedShape;
 		}

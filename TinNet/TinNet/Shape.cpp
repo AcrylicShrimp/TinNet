@@ -181,6 +181,18 @@ namespace TinNet
 		return Shape{sResult};
 	}
 
+	void Shape::set(std::size_t nAxis, std::size_t nSize)
+	{
+		if (nAxis >= this->sShape.size())
+			return;
+
+		this->sShape[nAxis] = nSize;
+		this->nElement = 1;
+
+		for (auto nSize : this->sShape)
+			nElement *= nSize;
+	}
+
 	Shape Shape::broadcast(const Shape &sLeft, const Shape &sRight)
 	{
 		if (!sLeft.element() || !sRight.element())
