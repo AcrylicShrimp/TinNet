@@ -35,23 +35,20 @@ namespace TinNet::Graph::Node
 
 		if (this->sAxis.size() != this->sBackwardList.front()->shape().rank())
 			throw std::invalid_argument("length of axis list must be equal to rank of shape");
-		else
-		{
-			std::size_t nFactor{1};
 
-			this->sUnsqueezedShape = this->sBackwardList.front()->shape();
+		std::size_t nFactor{1};
 
-			for (std::size_t nAxis{0}, nRank{this->sUnsqueezedShape.rank()}; nAxis < nRank; ++nAxis)
-				if (this->sAxis[nAxis])
-				{
-					nFactor *= this->sUnsqueezedShape[nAxis];
-					this->sUnsqueezedShape.set(nAxis, 1);
-				}
+		this->sUnsqueezedShape = this->sBackwardList.front()->shape();
 
-			this->sShape = this->bSqueeze ? this->sUnsqueezedShape.squeeze() : this->sUnsqueezedShape;
-			this->nFactor = 1.f / nFactor;
-		}
+		for (std::size_t nAxis{0}, nRank{this->sUnsqueezedShape.rank()}; nAxis < nRank; ++nAxis)
+			if (this->sAxis[nAxis])
+			{
+				nFactor *= this->sUnsqueezedShape[nAxis];
+				this->sUnsqueezedShape.set(nAxis, 1);
+			}
 
+		this->nFactor = 1.f / nFactor;
+		this->sShape = this->bSqueeze ? this->sUnsqueezedShape.squeeze() : this->sUnsqueezedShape;
 		this->sIterator.init(this->sBackwardList.front()->shape(), Accessor{this->sBackwardList.front()->shape()}, Accessor{this->sUnsqueezedShape});
 	}
 

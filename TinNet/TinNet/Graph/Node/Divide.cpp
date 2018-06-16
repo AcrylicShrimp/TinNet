@@ -37,7 +37,7 @@ namespace TinNet::Graph::Node
 		const auto &sRight{this->sBackwardList.back()->forward()};
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] / sRight[this->sIterator.index<2>()];
+			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] / (sRight[this->sIterator.index<2>()] + .0001f);
 	}
 
 	void Divide::backwardPass(GraphNode *pBackward, Cache sDestination)
@@ -55,10 +55,11 @@ namespace TinNet::Graph::Node
 		}
 		else
 		{
-			const auto &sForward{this->sBackwardList.front()->forward()};
+			const auto &sForwardLeft{this->sBackwardList.front()->forward()};
+			const auto &sForwardRight{this->sBackwardList.back()->forward()};
 
 			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-				sDestination[this->sIterator.index<2>()] = sBackward[this->sIterator.index<0>()] * sForward[this->sIterator.index<1>()];
+				sDestination[this->sIterator.index<2>()] = sBackward[this->sIterator.index<0>()] * -sForwardLeft[this->sIterator.index<1>()] / (sForwardRight[this->sIterator.index<2>()] * sForwardRight[this->sIterator.index<2>()]);
 		}
 	}
 }

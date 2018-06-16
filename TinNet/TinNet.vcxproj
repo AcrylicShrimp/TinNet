@@ -268,6 +268,7 @@
     <ClCompile Include="TinNet\Graph\Node\ReshapeBP.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Sigmoid.cpp" />
     <ClCompile Include="TinNet\Graph\Node\SigmoidBP.cpp" />
+    <ClCompile Include="TinNet\Graph\Node\Softmax.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Square.cpp" />
     <ClCompile Include="TinNet\Graph\Node\SquareBP.cpp" />
     <ClCompile Include="TinNet\Graph\Node\Squeeze.cpp" />
@@ -337,6 +338,7 @@
     <ClInclude Include="TinNet\Graph\Node\ReshapeBP.h" />
     <ClInclude Include="TinNet\Graph\Node\Sigmoid.h" />
     <ClInclude Include="TinNet\Graph\Node\SigmoidBP.h" />
+    <ClInclude Include="TinNet\Graph\Node\Softmax.h" />
     <ClInclude Include="TinNet\Graph\Node\Square.h" />
     <ClInclude Include="TinNet\Graph\Node\SquareBP.h" />
     <ClInclude Include="TinNet\Graph\Node\Squeeze.h" />

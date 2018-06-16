@@ -42,7 +42,6 @@ int32_t main()
 		auto x{sBP.node<InputBP>("x", Shape{32, 784})};
 		auto y{sBP.node<InputBP>("y", Shape{32, 10})};
 
-		//Convolution
 		auto reshape_x{sBP.node<ReshapeBP>("reshape_x", x, Shape{32, 1, 28, 28})};
 
 		auto net1{sBP.node<ConvolutionBP>("net1", reshape_x, 3, 3, 28, 28, 32, 1, 1)};
@@ -53,15 +52,8 @@ int32_t main()
 
 		auto reshape_output2{sBP.node<ReshapeBP>("reshape_output2", output2, Shape{32, 12544})};
 
-		//Dense
-		//auto net1{sBP.node<DenseBP>("net1", x, 300)};
-		//auto output1{sBP.node<ReLUBP>("output1", net1)};
-		//
-		//auto net2{sBP.node<DenseBP>("net2", output1, 100)};
-		//auto output2{sBP.node<ReLUBP>("output2", net2)};
-
 		auto net3{sBP.node<DenseBP>("net3", reshape_output2, 10)};
-		auto output3{sBP.node<SigmoidBP>("output3", net3)};
+		auto output3{sBP.node<TanhBP>("output3", net3)};
 
 		auto output_squeeze{sBP.node<SqueezeBP>("output_squeeze", output3)};
 		auto diff{sBP.node<SubtractBP>("diff", y, output_squeeze)};
@@ -105,7 +97,7 @@ int32_t main()
 
 		std::cout << "loss : " << (*sGraph.forward("loss"))[0] << std::endl;
 
-		for (int i = 0; i < 60000; i += 32)
+		//for (int i = 0; i < 60000; i += 32)
 		{
 			sGraph.backward();
 			sGraph.applyGradient(.001f);

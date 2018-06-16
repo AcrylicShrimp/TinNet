@@ -1,12 +1,12 @@
 
 /*
-	2018.06.03
+	2018.06.15
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPH_NODE_REDUCEMEAN_H
+#ifndef _CLASS_TINNET_GRAPH_NODE_SOFTMAX_H
 
-#define _CLASS_TINNET_GRAPH_NODE_REDUCEMEAN_H
+#define _CLASS_TINNET_GRAPH_NODE_SOFTMAX_H
 
 #include "../../TinNetDLL.h"
 
@@ -23,23 +23,21 @@
 
 namespace TinNet::Graph::Node
 {
-	class TINNET_DLL ReduceMean final : public FullCachedGraphNode
+	class TINNET_DLL Softmax final : public FullCachedGraphNode
 	{
 	protected:
-		float nFactor;
-		Shape sShape;
-		Shape sUnsqueezedShape;
 		Iterator<Accessor, Accessor> sIterator;
 		std::vector<bool> sAxis;
-		bool bSqueeze;
+		std::vector<float> sMaxBuffer;
+		Cache sMaxCache;
 		
 	public:
-		ReduceMean(const std::string &sName, Graph *pGraph, const std::vector<bool> &sAxis, bool bSqueeze);
-		ReduceMean(const ReduceMean &sSrc) = default;
-		~ReduceMean() = default;
+		Softmax(const std::string &sName, Graph *pGraph, const std::vector<bool> &sAxis);
+		Softmax(const Softmax &sSrc) = delete;
+		~Softmax() = default;
 		
 	public:
-		ReduceMean &operator=(const ReduceMean &sSrc) = default;
+		Softmax &operator=(const Softmax &sSrc) = delete;
 		
 	public:
 		virtual const Shape &shape() const override;
