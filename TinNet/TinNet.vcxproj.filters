@@ -219,6 +219,9 @@
     <ClCompile Include="TinNet\Graph\Node\Softmax.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Graph\Node\SoftmaxBP.cpp">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -438,6 +441,9 @@
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\Softmax.h">
+      <Filter>TinNet\Graph\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Graph\Node\SoftmaxBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
   </ItemGroup>

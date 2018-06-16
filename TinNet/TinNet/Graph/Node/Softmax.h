@@ -28,8 +28,10 @@ namespace TinNet::Graph::Node
 	protected:
 		Iterator<Accessor, Accessor> sIterator;
 		std::vector<bool> sAxis;
-		std::vector<float> sMaxBuffer;
-		Cache sMaxCache;
+		std::vector<float> sSum;
+		std::vector<float> sSumBackward;
+		Cache sSumCache;
+		Cache sSumBackwardCache;
 		
 	public:
 		Softmax(const std::string &sName, Graph *pGraph, const std::vector<bool> &sAxis);

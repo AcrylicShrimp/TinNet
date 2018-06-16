@@ -40,39 +40,52 @@ namespace TinNet::Graph::Node
 				sShape.set(nIndex, 1);
 
 		this->sIterator.init(this->sBackwardList.front()->shape(), Accessor{this->sBackwardList.front()->shape()}, Accessor{sShape});
-		this->sMaxBuffer.resize(sShape.element());
-		this->sMaxCache = this->sMaxBuffer;
+		this->sSum.resize(sShape.element());
+		this->sSumBackward.resize(sShape.element());
+		this->sSumCache = this->sSum;
+		this->sSumBackwardCache = this->sSumBackward;
 	}
 
 	void Softmax::forwardPass(Cache sDestination)
 	{
 		const auto &sLeft{this->sBackwardList.front()->forward()};
 
-		float nMaxValue = .0f;
+		auto nMax{.0f};
 
 		for (auto nValue : sLeft)
-			if (nMaxValue < nValue)
-				nMaxValue = nValue;
+			if (nMax < nValue)
+				nMax = nValue;
 
-		this->sMaxCache.zero();
-
-		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			this->sMaxCache[this->sIterator.index<1>()] += sLeft[this->sIterator.index<0>()];
-
-		for (auto &nMax : this->sMaxCache)
-			nMax = 1.f / (std::exp(nMax - nMaxValue) + .0001f);
+		this->sSumCache.zero();
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			sDestination[this->sIterator.index<0>()] = std::exp(sLeft[this->sIterator.index<0>()] - nMaxValue) * this->sMaxCache[this->sIterator.index<1>()];
+			this->sSumCache[this->sIterator.index<1>()] += std::exp(sLeft[this->sIterator.index<0>()] - nMax);
+
+		for (auto &nSum : this->sSumCache)
+			nSum = 1.f / (nSum + .0001f);
+
+		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+			sDestination[this->sIterator.index<0>()] = std::exp(sLeft[this->sIterator.index<0>()] - nMax) * this->sSumCache[this->sIterator.index<1>()];
 	}
 
 	void Softmax::backwardPass(GraphNode *pBackward, Cache sDestination)
 	{
-		sDestination.zero();
-
+		const auto &sLeft{this->sBackwardList.front()->forward()};
+		const auto &sForward{this->forward()};
 		const auto &sBackward{this->backward()};
 
+		auto nMax{.0f};
+
+		for (auto nValue : sLeft)
+			if (nMax < nValue)
+				nMax = nValue;
+
+		this->sSumBackwardCache.zero();
+
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			sDestination[this->sIterator.index<0>()] += sBackward[this->sIterator.index<1>()];
+			this->sSumBackwardCache[this->sIterator.index<1>()] -= sBackward[this->sIterator.index<0>()] * std::exp(sLeft[this->sIterator.index<0>()] - nMax) / (this->sSumCache[this->sIterator.index<1>()] * this->sSumCache[this->sIterator.index<1>()]);
+
+		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
+			sDestination[this->sIterator.index<0>()] = std::exp(sLeft[this->sIterator.index<0>()] - nMax) * (this->sSumBackwardCache[this->sIterator.index<1>()] + sBackward[this->sIterator.index<0>()] / this->sSumCache[this->sIterator.index<1>()]);
 	}
 }

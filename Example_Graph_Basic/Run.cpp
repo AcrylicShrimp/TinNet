@@ -53,10 +53,9 @@ int32_t main()
 		auto reshape_output2{sBP.node<ReshapeBP>("reshape_output2", output2, Shape{32, 12544})};
 
 		auto net3{sBP.node<DenseBP>("net3", reshape_output2, 10)};
-		auto output3{sBP.node<TanhBP>("output3", net3)};
+		auto output3{sBP.node<SoftmaxBP>("output3", net3, std::vector<bool>{false, true})};
 
-		auto output_squeeze{sBP.node<SqueezeBP>("output_squeeze", output3)};
-		auto diff{sBP.node<SubtractBP>("diff", y, output_squeeze)};
+		auto diff{sBP.node<SubtractBP>("diff", y, output3)};
 		auto diff_square{sBP.node<MultiplyBP>("diff_square", diff, diff)};
 		auto loss{sBP.node<ReduceMeanBP>("loss", diff_square)};
 	}

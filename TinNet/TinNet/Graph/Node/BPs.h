@@ -30,6 +30,7 @@
 #include "MatMulBP.h"
 
 #include "ReLUBP.h"
+#include "SoftmaxBP.h"
 #include "SigmoidBP.h"
 #include "TanhBP.h"
 
