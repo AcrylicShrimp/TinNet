@@ -51,7 +51,7 @@ namespace TinNet::Graph::Node
 			const auto &sForward{this->sBackwardList.back()->forward()};
 
 			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-				sDestination[this->sIterator.index<1>()] = sBackward[this->sIterator.index<0>()] / sForward[this->sIterator.index<2>()];
+				sDestination[this->sIterator.index<1>()] = sBackward[this->sIterator.index<0>()] / (sForward[this->sIterator.index<2>()] + .0001f);
 		}
 		else
 		{
@@ -59,7 +59,7 @@ namespace TinNet::Graph::Node
 			const auto &sForwardRight{this->sBackwardList.back()->forward()};
 
 			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-				sDestination[this->sIterator.index<2>()] = sBackward[this->sIterator.index<0>()] * -sForwardLeft[this->sIterator.index<1>()] / (sForwardRight[this->sIterator.index<2>()] * sForwardRight[this->sIterator.index<2>()]);
+				sDestination[this->sIterator.index<2>()] = sBackward[this->sIterator.index<0>()] * -sForwardLeft[this->sIterator.index<1>()] / (sForwardRight[this->sIterator.index<2>()] * sForwardRight[this->sIterator.index<2>()] + .0001f);
 		}
 	}
 }
