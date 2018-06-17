@@ -116,43 +116,39 @@ namespace TinNet
 
 	template<class T, class ...P> inline T *Graph::addNode(const std::string &sName, P &&...sParam)
 	{
-		//auto pNode{std::make_unique<T>(sName, std::forward<P>(sParam)...)};
-		//
-		//auto sTrimmedName{sName};
-		//
-		//sTrimmedName.erase(sTrimmedName.cbegin(), std::find_if(sTrimmedName.cbegin(), sTrimmedName.cend(), [](int nCharacter)
-		//{
-		//	return !std::isspace(nCharacter);
-		//}));
-		//sTrimmedName.erase(std::find_if(sTrimmedName.cbegin(), sTrimmedName.cend(), [](int nCharacter)
-		//{
-		//	return !std::isspace(nCharacter);
-		//}), sTrimmedName.cend());
-		//
-		//if (sTrimmedName.empty())
-		//{
-		//	std::size_t nIndex{0};
-		//
-		//	do
-		//	{
-		//		sTrimmedName = pNode->type();
-		//		sTrimmedName += std::to_string(nIndex++);
-		//	} while (this->sNodeMap.find(sTrimmedName) != this->sNodeMap.cend());
-		//}
-		//else if (this->sNodeMap.find(sTrimmedName) != this->sNodeMap.cend())
-		//{
-		//	auto s
-		//
-		//	for (std::size_t nIndex{1}; this->sNodeMap.find(sTrimmedName) != this->sNodeMap.cend(); ++nIndex)
-		//	{
-		//
-		//	}
-		//}
-		//
-		//pNode->notifyShapeUpdated();
-		//this->sOrderedNodeList.emplace_back(this->sNodeMap.emplace(std::move(sTrimmedName), std::move(pNode)).first->second.get());
-		//
-		//return static_cast<T *>(this->sOrderedNodeList.back());
+		auto sTrimmedName{sName};
+
+		sTrimmedName.erase(sTrimmedName.cbegin(), std::find_if(sTrimmedName.cbegin(), sTrimmedName.cend(), [](int nCharacter)
+		{
+			return !std::isspace(nCharacter);
+		}));
+		sTrimmedName.erase(std::find_if(sTrimmedName.crbegin(), sTrimmedName.crend(), [](int nCharacter)
+		{
+			return !std::isspace(nCharacter);
+		}).base(), sTrimmedName.cend());
+
+		if (sTrimmedName.empty())
+		{
+			std::size_t nIndex{0};
+
+			do
+			{
+				sTrimmedName = T::typeName();
+				sTrimmedName += std::to_string(nIndex++);
+			} while (this->sNodeMap.find(sTrimmedName) != this->sNodeMap.cend());
+		}
+		else if (this->sNodeMap.find(sTrimmedName) != this->sNodeMap.cend())
+		{
+			std::size_t nIndex{0};
+
+			while (this->sNodeMap.find(sTrimmedName + std::to_string(++nIndex)) != this->sNodeMap.cend());
+
+			sTrimmedName += std::to_string(nIndex);
+		}
+
+		this->sOrderedNodeList.emplace_back(this->sNodeMap.emplace(std::move(sTrimmedName), std::make_unique<T>(this, sTrimmedName, std::forward<P>(sParam)...)).first->second.get());
+
+		return static_cast<T *>(this->sOrderedNodeList.back());
 	}
 }
 

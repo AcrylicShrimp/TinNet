@@ -4,9 +4,9 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPHNODE_ADD_H
+#ifndef _CLASS_TINNET_GRAPHNODE_DIVIDE_H
 
-#define _CLASS_TINNET_GRAPHNODE_ADD_H
+#define _CLASS_TINNET_GRAPHNODE_DIVIDE_H
 
 #include "../TinNetDLL.h"
 
@@ -22,19 +22,19 @@
 
 namespace TinNet::GraphNode
 {
-	class TINNET_DLL Add final : public FullNode
+	class TINNET_DLL Divide final : public FullNode
 	{
 	protected:
 		Shape sShape;
 		Iterator<Accessor, Accessor, Accessor> sIterator;
 		
 	public:
-		Add(Graph *pGraph, const std::string &sName);
-		Add(const Add &sSrc) = delete;
-		~Add() = default;
+		Divide(Graph *pGraph, const std::string &sName);
+		Divide(const Divide &sSrc) = delete;
+		~Divide() = default;
 		
 	public:
-		Add &operator=(const Add &sSrc) = delete;
+		Divide &operator=(const Divide &sSrc) = delete;
 		
 	public:
 		virtual const Shape &shape() const override;
@@ -47,9 +47,9 @@ namespace TinNet::GraphNode
 		virtual void backwardPass(Cache sDestination, NodePtr pInput) override;
 	};
 
-	inline std::string Add::typeName()
+	inline std::string Divide::typeName()
 	{
-		return "add";
+		return "divide";
 	}
 }
 

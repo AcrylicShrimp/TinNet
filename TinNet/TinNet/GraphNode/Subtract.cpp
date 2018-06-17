@@ -4,27 +4,27 @@
 	Created by AcrylicShrimp.
 */
 
-#include "Add.h"
+#include "Subtract.h"
 
 namespace TinNet::GraphNode
 {
-	Add::Add(Graph *pGraph, const std::string &sName) :
+	Subtract::Subtract(Graph *pGraph, const std::string &sName) :
 		FullNode(pGraph, sName)
 	{
 		//Empty.
 	}
 
-	const Shape &Add::shape() const
+	const Shape &Subtract::shape() const
 	{
 		return this->sShape;
 	}
 
-	std::string Add::type() const
+	std::string Subtract::type() const
 	{
-		return Add::typeName();
+		return Subtract::typeName();
 	}
 
-	void Add::notifyShapeUpdated()
+	void Subtract::notifyShapeUpdated()
 	{
 		this->sShape = Shape::broadcast(this->sInputList.front()->shape(), this->sInputList.back()->shape());
 		this->sIterator.init(this->sShape, Accessor{this->sShape}, Accessor{this->sInputList.front()->shape()}, Accessor{this->sInputList.back()->shape()});
@@ -32,16 +32,16 @@ namespace TinNet::GraphNode
 		this->FullNode::notifyShapeUpdated();
 	}
 
-	void Add::forwardPass(Cache sDestination)
+	void Subtract::forwardPass(Cache sDestination)
 	{
 		auto sLeft{this->sInputList.front()->forward()};
 		auto sRight{this->sInputList.back()->forward()};
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] + sRight[this->sIterator.index<2>()];
+			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] - sRight[this->sIterator.index<2>()];
 	}
 
-	void Add::backwardPass(Cache sDestination, NodePtr pInput)
+	void Subtract::backwardPass(Cache sDestination, NodePtr pInput)
 	{
 		auto sGradient{this->backward()};
 
@@ -50,6 +50,6 @@ namespace TinNet::GraphNode
 				sDestination[this->sIterator.index<1>()] += sGradient[this->sIterator.index<0>()];
 		else
 			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-				sDestination[this->sIterator.index<2>()] += sGradient[this->sIterator.index<0>()];
+				sDestination[this->sIterator.index<2>()] -= sGradient[this->sIterator.index<0>()];
 	}
 }

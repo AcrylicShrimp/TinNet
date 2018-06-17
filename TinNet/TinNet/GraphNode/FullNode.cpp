@@ -23,6 +23,11 @@ namespace TinNet::GraphNode
 		this->pOutput = nullptr;
 	}
 
+	std::string FullNode::type() const
+	{
+		return "full";
+	}
+
 	void FullNode::notifyShapeUpdated()
 	{
 		if (!this->pOutput)

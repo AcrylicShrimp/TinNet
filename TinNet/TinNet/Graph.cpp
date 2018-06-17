@@ -11,6 +11,12 @@ namespace TinNet
 	Graph::~Graph()
 	{
 		this->disableBackward();
+
+		this->sOrderedNodeList.clear();
+		this->sFeedableList.clear();
+		this->sInitializableList.clear();
+
+		this->sNodeMap.clear();
 	}
 
 	void Graph::initialize()

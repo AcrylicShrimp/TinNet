@@ -41,12 +41,14 @@ namespace TinNet
 		
 	public:
 		virtual const Shape &shape() const = 0;
-		virtual const std::string &type() const = 0;
+		virtual std::string type() const = 0;
 		virtual void notifyShapeUpdated() = 0;
 		virtual void notifyBackwardEnabled() = 0;
 		virtual void notifyBackwardDisabled() = 0;
 		virtual Cache forward() = 0;
 		virtual Cache backward() = 0;
+		inline class Graph *graph();
+		inline const class Graph *graph() const;
 		inline const std::string &name() const;
 		inline std::size_t inputCount() const;
 		inline std::size_t outputCount() const;
@@ -59,8 +61,18 @@ namespace TinNet
 		virtual void forwardPass(Cache sDestination) = 0;
 		virtual void backwardPass(Cache sDestination, NodePtr pInput) = 0;
 		void computeForward(CachePtr pDestination);
-		void computeBackward(CachePtr pDestination, CachePtr pTemporary);
+		void computeBackward(CachePtr pDestination);
 	};
+
+	inline class Graph *Node::graph()
+	{
+		return this->pGraph;
+	}
+
+	inline const class Graph *Node::graph() const
+	{
+		return this->pGraph;
+	}
 
 	inline const std::string &Node::name() const
 	{

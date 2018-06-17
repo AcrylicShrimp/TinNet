@@ -33,6 +33,7 @@ namespace TinNet::GraphNode
 		FullNode &operator=(const FullNode &sSrc) = delete;
 		
 	public:
+		virtual std::string type() const override;
 		virtual void notifyShapeUpdated() override;
 		virtual Cache forward() override;
 	};

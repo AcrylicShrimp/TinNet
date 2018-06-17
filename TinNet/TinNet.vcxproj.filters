@@ -261,6 +261,21 @@
     <ClCompile Include="TinNet\ShapedCache.cpp">
       <Filter>TinNet</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Subtract.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Multiply.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Divide.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphBPOp.cpp">
+      <Filter>TinNet</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Constant.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -520,6 +535,24 @@
     </ClInclude>
     <ClInclude Include="TinNet\ShapedCache.h">
       <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Subtract.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Multiply.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Divide.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\GraphNode.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphBPOp.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Constant.h">
+      <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@
 
 namespace TinNet
 {
-	class ShapedCache
+	class TINNET_DLL ShapedCache final
 	{
 	private:
 		Shape sShape;

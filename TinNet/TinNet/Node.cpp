@@ -45,7 +45,7 @@ namespace TinNet
 		pDestination->bDirty = false;
 	}
 
-	void Node::computeBackward(CachePtr pDestination, CachePtr pTemporary)
+	void Node::computeBackward(CachePtr pDestination)
 	{
 		if (!pDestination->bDirty)
 			return;
@@ -53,9 +53,7 @@ namespace TinNet
 		if (this->isLeafOutput())
 		{
 			pDestination->sCache.one();
-
 			pDestination->bDirty = false;
-			pTemporary->bDirty = false;
 
 			return;
 		}
@@ -63,12 +61,8 @@ namespace TinNet
 		pDestination->sCache.zero();
 
 		for (auto pOutput : this->sOutputList)
-		{
-			pOutput->backwardPass(pTemporary->sCache, this);
-			pDestination->sCache.accumulate(pTemporary->sCache);
-		}
+			pOutput->backwardPass(pDestination->sCache, this);
 
 		pDestination->bDirty = false;
-		pTemporary->bDirty = false;
 	}
 }

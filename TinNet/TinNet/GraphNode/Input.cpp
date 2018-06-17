@@ -21,9 +21,9 @@ namespace TinNet::GraphNode
 		return this->sShapedCache.shape();
 	}
 
-	const std::string &Input::type() const
+	std::string Input::type() const
 	{
-		return "input";
+		return Input::typeName();
 	}
 
 	Cache Input::forward()
@@ -43,6 +43,6 @@ namespace TinNet::GraphNode
 
 	void Input::backwardPass(Cache sDestination, NodePtr pInput)
 	{
-		sDestination.zero();
+		//Empty.
 	}
 }

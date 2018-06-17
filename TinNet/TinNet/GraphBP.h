@@ -11,6 +11,12 @@
 #include "TinNetDLL.h"
 
 #include "Graph.h"
+#include "Node.h"
+#include "Shape.h"
+#include "GraphNode/GraphNode.h"
+
+#include <string>
+#include <vector>
 
 namespace TinNet
 {
@@ -28,7 +34,12 @@ namespace TinNet
 		GraphBP &operator=(const GraphBP &sSrc) = default;
 		
 	public:
-		
+		Node &input(Shape sShape, const std::string &sName = "");
+		Node &constant(Shape sShape, const std::vector<float> &sValue, const std::string &sName = "");
+		Node &add(Node &sLeft, Node &sRight, const std::string &sName = "");
+		Node &subtract(Node &sLeft, Node &sRight, const std::string &sName = "");
+		Node &multiply(Node &sLeft, Node &sRight, const std::string &sName = "");
+		Node &divide(Node &sLeft, Node &sRight, const std::string &sName = "");
 	};
 }
 

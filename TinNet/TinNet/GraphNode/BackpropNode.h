@@ -23,7 +23,6 @@ namespace TinNet::GraphNode
 	{
 	protected:
 		CachePtr pGradient;
-		CachePtr pGradientTemp;
 		
 	public:
 		BackpropNode(Graph *pGraph, const std::string &sName);
@@ -34,7 +33,7 @@ namespace TinNet::GraphNode
 		BackpropNode &operator=(const BackpropNode &sSrc) = delete;
 		
 	public:
-		virtual const std::string &type() const override;
+		virtual std::string type() const override;
 		virtual void notifyShapeUpdated() override;
 		virtual void notifyBackwardEnabled() override;
 		virtual void notifyBackwardDisabled() override;

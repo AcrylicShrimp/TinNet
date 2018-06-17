@@ -4,27 +4,27 @@
 	Created by AcrylicShrimp.
 */
 
-#include "Add.h"
+#include "Multiply.h"
 
 namespace TinNet::GraphNode
 {
-	Add::Add(Graph *pGraph, const std::string &sName) :
+	Multiply::Multiply(Graph *pGraph, const std::string &sName) :
 		FullNode(pGraph, sName)
 	{
 		//Empty.
 	}
-
-	const Shape &Add::shape() const
+	
+	const Shape &Multiply::shape() const
 	{
 		return this->sShape;
 	}
 
-	std::string Add::type() const
+	std::string Multiply::type() const
 	{
-		return Add::typeName();
+		return Multiply::typeName();
 	}
 
-	void Add::notifyShapeUpdated()
+	void Multiply::notifyShapeUpdated()
 	{
 		this->sShape = Shape::broadcast(this->sInputList.front()->shape(), this->sInputList.back()->shape());
 		this->sIterator.init(this->sShape, Accessor{this->sShape}, Accessor{this->sInputList.front()->shape()}, Accessor{this->sInputList.back()->shape()});
@@ -32,24 +32,32 @@ namespace TinNet::GraphNode
 		this->FullNode::notifyShapeUpdated();
 	}
 
-	void Add::forwardPass(Cache sDestination)
+	void Multiply::forwardPass(Cache sDestination)
 	{
 		auto sLeft{this->sInputList.front()->forward()};
 		auto sRight{this->sInputList.back()->forward()};
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] + sRight[this->sIterator.index<2>()];
+			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] * sRight[this->sIterator.index<2>()];
 	}
 
-	void Add::backwardPass(Cache sDestination, NodePtr pInput)
+	void Multiply::backwardPass(Cache sDestination, NodePtr pInput)
 	{
 		auto sGradient{this->backward()};
 
 		if (pInput == this->sInputList.front())
+		{
+			auto sForward{this->sInputList.back()->forward()};
+
 			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-				sDestination[this->sIterator.index<1>()] += sGradient[this->sIterator.index<0>()];
+				sDestination[this->sIterator.index<1>()] += sGradient[this->sIterator.index<0>()] * sForward[this->sIterator.index<2>()];
+		}
 		else
+		{
+			auto sForward{this->sInputList.front()->forward()};
+
 			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-				sDestination[this->sIterator.index<2>()] += sGradient[this->sIterator.index<0>()];
+				sDestination[this->sIterator.index<2>()] += sGradient[this->sIterator.index<0>()] * sForward[this->sIterator.index<1>()];
+		}
 	}
 }
