@@ -223,6 +223,15 @@
   <ItemGroup>
     <ClCompile Include="TinNet\Accessor.cpp" />
     <ClCompile Include="TinNet\Cache.cpp" />
+    <ClCompile Include="TinNet\CacheContainer.cpp" />
+    <ClCompile Include="TinNet\Feedable.cpp" />
+    <ClCompile Include="TinNet\Graph.cpp" />
+    <ClCompile Include="TinNet\GraphBP.cpp" />
+    <ClCompile Include="TinNet\GraphNode\Add.cpp" />
+    <ClCompile Include="TinNet\GraphNode\BackpropNode.cpp" />
+    <ClCompile Include="TinNet\GraphNode\FullNode.cpp" />
+    <ClCompile Include="TinNet\GraphNode\Input.cpp" />
+    <ClCompile Include="TinNet\GraphNode\VariableNode.cpp" />
     <ClCompile Include="TinNet\Graph\BackwardCachedGraphNode.cpp" />
     <ClCompile Include="TinNet\Graph\CacheContainer.cpp" />
     <ClCompile Include="TinNet\Graph\FullCachedGraphNode.cpp" />
@@ -279,6 +288,7 @@
     <ClCompile Include="TinNet\Graph\Node\Tanh.cpp" />
     <ClCompile Include="TinNet\Graph\Node\TanhBP.cpp" />
     <ClCompile Include="TinNet\Graph\VariableGraphNode.cpp" />
+    <ClCompile Include="TinNet\Initializable.cpp" />
     <ClCompile Include="TinNet\Initializer\Constant.cpp" />
     <ClCompile Include="TinNet\Initializer\Glorot.cpp" />
     <ClCompile Include="TinNet\Initializer\He.cpp" />
@@ -286,12 +296,23 @@
     <ClCompile Include="TinNet\Initializer\Uniform.cpp" />
     <ClCompile Include="TinNet\Initializer\Xavier.cpp" />
     <ClCompile Include="TinNet\IO\Serializable.cpp" />
+    <ClCompile Include="TinNet\Node.cpp" />
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
     <ClCompile Include="TinNet\Shape.cpp" />
+    <ClCompile Include="TinNet\ShapedCache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Accessor.h" />
     <ClInclude Include="TinNet\Cache.h" />
+    <ClInclude Include="TinNet\CacheContainer.h" />
+    <ClInclude Include="TinNet\Feedable.h" />
+    <ClInclude Include="TinNet\Graph.h" />
+    <ClInclude Include="TinNet\GraphBP.h" />
+    <ClInclude Include="TinNet\GraphNode\Add.h" />
+    <ClInclude Include="TinNet\GraphNode\BackpropNode.h" />
+    <ClInclude Include="TinNet\GraphNode\FullNode.h" />
+    <ClInclude Include="TinNet\GraphNode\Input.h" />
+    <ClInclude Include="TinNet\GraphNode\VariableNode.h" />
     <ClInclude Include="TinNet\Graph\BackwardCachedGraphNode.h" />
     <ClInclude Include="TinNet\Graph\CacheContainer.h" />
     <ClInclude Include="TinNet\Graph\FullCachedGraphNode.h" />
@@ -350,6 +371,7 @@
     <ClInclude Include="TinNet\Graph\Node\Tanh.h" />
     <ClInclude Include="TinNet\Graph\Node\TanhBP.h" />
     <ClInclude Include="TinNet\Graph\VariableGraphNode.h" />
+    <ClInclude Include="TinNet\Initializable.h" />
     <ClInclude Include="TinNet\Initializer\Constant.h" />
     <ClInclude Include="TinNet\Initializer\Glorot.h" />
     <ClInclude Include="TinNet\Initializer\He.h" />
@@ -360,9 +382,11 @@
     <ClInclude Include="TinNet\IO\Serializable.h" />
     <ClInclude Include="TinNet\Iterator.h" />
     <ClInclude Include="TinNet\Iterator.hpp" />
+    <ClInclude Include="TinNet\Node.h" />
     <ClInclude Include="TinNet\Reinforcement\Game.h" />
     <ClInclude Include="TinNet\Reinforcement\MCTS.h" />
     <ClInclude Include="TinNet\Shape.h" />
+    <ClInclude Include="TinNet\ShapedCache.h" />
     <ClInclude Include="TinNet\TinNetDLL.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

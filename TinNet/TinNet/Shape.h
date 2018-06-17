@@ -25,6 +25,7 @@ namespace TinNet
 		std::vector<std::size_t> sShape;
 
 	public:
+		Shape();
 		Shape(std::initializer_list<std::size_t> sShape);
 		Shape(const std::vector<std::size_t> &sShape);
 		Shape(std::vector<std::size_t> &&sShape);

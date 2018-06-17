@@ -8,6 +8,12 @@
 
 namespace TinNet
 {
+	Shape::Shape() :
+		nElement{1}
+	{
+		//Empty.
+	}
+
 	Shape::Shape(std::initializer_list<std::size_t> sShape) :
 		nElement{1},
 		sShape(sShape)
