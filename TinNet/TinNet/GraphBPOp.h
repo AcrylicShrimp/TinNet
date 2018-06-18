@@ -31,5 +31,8 @@ TINNET_DLL TinNet::Node &operator*(TinNet::Node &sLeft, TinNet::Node &sRight);
 TINNET_DLL TinNet::Node &operator/(TinNet::Node &sLeft, float nRight);
 TINNET_DLL TinNet::Node &operator/(float nLeft, TinNet::Node &sRight);
 TINNET_DLL TinNet::Node &operator/(TinNet::Node &sLeft, TinNet::Node &sRight);
+TINNET_DLL TinNet::Node &operator^(TinNet::Node &sLeft, float nRight);
+TINNET_DLL TinNet::Node &operator^(float nLeft, TinNet::Node &sRight);
+TINNET_DLL TinNet::Node &operator^(TinNet::Node &sLeft, TinNet::Node &sRight);
 
 #endif

@@ -11,9 +11,22 @@
 #include "Input.h"
 #include "Constant.h"
 
+#include "Abs.h"
+#include "Neg.h"
+#include "Sign.h"
 #include "Add.h"
 #include "Subtract.h"
 #include "Multiply.h"
 #include "Divide.h"
+#include "Pow.h"
+#include "Exp.h"
+#include "Exp2.h"
+#include "Log.h"
+#include "Log2.h"
+#include "Log10.h"
+#include "LogN.h"
+#include "Sin.h"
+#include "Cos.h"
+#include "Tan.h"
 
 #endif

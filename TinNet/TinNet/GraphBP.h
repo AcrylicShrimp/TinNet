@@ -35,11 +35,25 @@ namespace TinNet
 		
 	public:
 		Node &input(Shape sShape, const std::string &sName = "");
+		Node &constant(float nValue, const std::string &sName = "");
 		Node &constant(Shape sShape, const std::vector<float> &sValue, const std::string &sName = "");
+		Node &abs(Node &sLeft, const std::string &sName = "");
+		Node &neg(Node &sLeft, const std::string &sName = "");
+		Node &sign(Node &sLeft, const std::string &sName = "");
 		Node &add(Node &sLeft, Node &sRight, const std::string &sName = "");
 		Node &subtract(Node &sLeft, Node &sRight, const std::string &sName = "");
 		Node &multiply(Node &sLeft, Node &sRight, const std::string &sName = "");
 		Node &divide(Node &sLeft, Node &sRight, const std::string &sName = "");
+		Node &pow(Node &sLeft, Node &sRight, const std::string &sName = "");
+		Node &exp(Node &sLeft, const std::string &sName = "");
+		Node &exp2(Node &sLeft, const std::string &sName = "");
+		Node &log(Node &sLeft, const std::string &sName = "");
+		Node &log2(Node &sLeft, const std::string &sName = "");
+		Node &log10(Node &sLeft, const std::string &sName = "");
+		Node &logn(Node &sLeft, float nBase, const std::string &sName = "");
+		Node &sin(Node &sLeft, const std::string &sName = "");
+		Node &cos(Node &sLeft, const std::string &sName = "");
+		Node &tan(Node &sLeft, const std::string &sName = "");
 	};
 }
 

@@ -38,7 +38,7 @@ namespace TinNet::GraphNode
 		auto sRight{this->sInputList.back()->forward()};
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] / (sRight[this->sIterator.index<2>()] + .0001f);
+			sDestination[this->sIterator.index<0>()] = sLeft[this->sIterator.index<1>()] / (sRight[this->sIterator.index<2>()]);
 	}
 
 	void Divide::backwardPass(Cache sDestination, NodePtr pInput)
@@ -50,15 +50,15 @@ namespace TinNet::GraphNode
 			auto sForward{this->sInputList.back()->forward()};
 
 			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-				sDestination[this->sIterator.index<1>()] += sGradient[this->sIterator.index<0>()] / (sForward[this->sIterator.index<2>()] + .0001f);
+				sDestination[this->sIterator.index<1>()] += sGradient[this->sIterator.index<0>()] / (sForward[this->sIterator.index<2>()]);
 		}
 		else
 		{
-			auto sForwardLeft{this->sInputList.front()->forward()};
-			auto sForwardRight{this->sInputList.back()->forward()};
+			auto sLeft{this->sInputList.front()->forward()};
+			auto sRight{this->sInputList.back()->forward()};
 
 			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-				sDestination[this->sIterator.index<2>()] -= sGradient[this->sIterator.index<0>()] * sForwardLeft[this->sIterator.index<1>()] / (sForwardRight[this->sIterator.index<2>()] * sForwardRight[this->sIterator.index<2>()] + .0001f);
+				sDestination[this->sIterator.index<2>()] -= sGradient[this->sIterator.index<0>()] * sLeft[this->sIterator.index<1>()] / (sRight[this->sIterator.index<2>()] * sRight[this->sIterator.index<2>()]);
 		}
 	}
 }

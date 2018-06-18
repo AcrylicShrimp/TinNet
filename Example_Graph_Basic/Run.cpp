@@ -25,7 +25,7 @@ int32_t main()
 	Graph graph;
 	GraphBP bp{graph};
 
-	auto &op = bp.constant({}, {1.f}) * 10.f;
+	auto &op = bp.constant(Shape{2}, {2.f, 4.f}) ^ bp.constant(Shape{2}, {4.f, 2.f});
 
 	graph.initialize();
 	graph.enableBackward();
