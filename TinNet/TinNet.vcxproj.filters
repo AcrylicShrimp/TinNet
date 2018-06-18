@@ -84,12 +84,6 @@
     <ClCompile Include="TinNet\Graph\Node\MatMulBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\ReduceSum.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\ReduceSumBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\ReduceMean.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
@@ -321,12 +315,6 @@
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\MatMulBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\ReduceSum.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\ReduceSumBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\ReduceMean.h">
