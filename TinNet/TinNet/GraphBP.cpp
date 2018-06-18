@@ -14,10 +14,20 @@ namespace TinNet
 		//Empty.
 	}
 
-	Node &GraphBP::input(Shape sShape, const std::string &sName)
+	Node &GraphBP::input(const Shape &sShape, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Input>(sName, sShape)};
 
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::input(const Shape &sShape, std::vector<float> &sValue, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Input>(sName, sShape)};
+
+		pNode->feed({sShape, sValue});
 		pNode->notifyShapeUpdated();
 
 		return *pNode;
@@ -32,10 +42,40 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::constant(Shape sShape, const std::vector<float> &sValue, const std::string &sName)
+	Node &GraphBP::constant(const Shape &sShape, const std::vector<float> &sValue, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Constant>(sName, sShape, sValue)};
 
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::reshape(Node &sLeft, const Shape &sShape, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Reshape>(sName, sShape)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::squeeze(Node &sLeft, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Squeeze>(sName)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::reduceSum(Node &sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::ReduceSum>(sName, sAxis, bSqueeze)};
+
+		Node::link(&sLeft, pNode);
 		pNode->notifyShapeUpdated();
 
 		return *pNode;

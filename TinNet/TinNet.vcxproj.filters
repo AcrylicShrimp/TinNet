@@ -78,12 +78,6 @@
     <ClCompile Include="TinNet\Graph\Node\Dense.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\Reshape.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\ReshapeBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\MatMul.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
@@ -91,12 +85,6 @@
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\ReduceSum.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\Squeeze.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\SqueezeBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\ReduceSumBP.cpp">
@@ -246,6 +234,15 @@
     <ClCompile Include="TinNet\GraphNode\Neg.cpp">
       <Filter>TinNet\GraphNode</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Reshape.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Squeeze.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\ReduceSum.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -320,12 +317,6 @@
     <ClInclude Include="TinNet\Graph\Node\Dense.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\Reshape.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\ReshapeBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\MatMul.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
@@ -333,12 +324,6 @@
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\ReduceSum.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\Squeeze.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\SqueezeBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\ReduceSumBP.h">
@@ -489,6 +474,15 @@
       <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\GraphNode\Neg.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Reshape.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Squeeze.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\ReduceSum.h">
       <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
   </ItemGroup>

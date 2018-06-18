@@ -11,6 +11,11 @@
 #include "Input.h"
 #include "Constant.h"
 
+#include "Reshape.h"
+#include "Squeeze.h"
+
+#include "ReduceSum.h"
+
 #include "Abs.h"
 #include "Neg.h"
 #include "Sign.h"

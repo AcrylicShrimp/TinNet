@@ -25,7 +25,7 @@ int32_t main()
 	Graph graph;
 	GraphBP bp{graph};
 
-	auto &op = bp.constant(Shape{2}, {2.f, 4.f}) ^ bp.constant(Shape{2}, {4.f, 2.f});
+	auto &op = bp.reduceSum(bp.constant(Shape{10, 1}, {1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f}));
 
 	graph.initialize();
 	graph.enableBackward();

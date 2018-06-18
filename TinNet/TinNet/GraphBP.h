@@ -34,9 +34,13 @@ namespace TinNet
 		GraphBP &operator=(const GraphBP &sSrc) = default;
 		
 	public:
-		Node &input(Shape sShape, const std::string &sName = "");
+		Node &input(const Shape &sShape, const std::string &sName = "");
+		Node &input(const Shape &sShape, std::vector<float> &sValue, const std::string &sName = "");
 		Node &constant(float nValue, const std::string &sName = "");
-		Node &constant(Shape sShape, const std::vector<float> &sValue, const std::string &sName = "");
+		Node &constant(const Shape &sShape, const std::vector<float> &sValue, const std::string &sName = "");
+		Node &reshape(Node &sLeft, const Shape &sShape, const std::string &sName = "");
+		Node &squeeze(Node &sLeft, const std::string &sName = "");
+		Node &reduceSum(Node &sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
 		Node &abs(Node &sLeft, const std::string &sName = "");
 		Node &neg(Node &sLeft, const std::string &sName = "");
 		Node &sign(Node &sLeft, const std::string &sName = "");
