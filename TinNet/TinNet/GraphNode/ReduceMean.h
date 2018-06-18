@@ -1,12 +1,12 @@
 
 /*
-	2018.06.18
+	2018.06.19
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPHNODE_REDUCESUM_H
+#ifndef _CLASS_TINNET_GRAPHNODE_REDUCEMEAN_H
 
-#define _CLASS_TINNET_GRAPHNODE_REDUCESUM_H
+#define _CLASS_TINNET_GRAPHNODE_REDUCEMEAN_H
 
 #include "../TinNetDLL.h"
 
@@ -22,9 +22,10 @@
 
 namespace TinNet::GraphNode
 {
-	class TINNET_DLL ReduceSum final : public FullNode
+	class TINNET_DLL ReduceMean final : public FullNode
 	{
 	protected:
+		float nFactor;
 		Shape sShape;
 		Shape sUnsqueezedShape;
 		Iterator<Accessor, Accessor> sIterator;
@@ -32,12 +33,12 @@ namespace TinNet::GraphNode
 		bool bSqueeze;
 		
 	public:
-		ReduceSum(Graph *pGraph, const std::string &sName, const std::vector<bool> &sAxis, bool bSqueeze);
-		ReduceSum(const ReduceSum &sSrc) = delete;
-		~ReduceSum() = default;
+		ReduceMean(Graph *pGraph, const std::string &sName, const std::vector<bool> &sAxis, bool bSqueeze);
+		ReduceMean(const ReduceMean &sSrc) = delete;
+		~ReduceMean() = default;
 		
 	public:
-		ReduceSum &operator=(const ReduceSum &sSrc) = delete;
+		ReduceMean &operator=(const ReduceMean &sSrc) = delete;
 		
 	public:
 		virtual const Shape &shape() const override;
@@ -50,9 +51,9 @@ namespace TinNet::GraphNode
 		virtual void backwardPass(Cache sDestination, NodePtr pInput) override;
 	};
 
-	inline std::string ReduceSum::typeName()
+	inline std::string ReduceMean::typeName()
 	{
-		return "reduceSum";
+		return "reduceMean";
 	}
 }
 

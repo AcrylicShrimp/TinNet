@@ -40,7 +40,10 @@ namespace TinNet
 		Node &constant(const Shape &sShape, const std::vector<float> &sValue, const std::string &sName = "");
 		Node &reshape(Node &sLeft, const Shape &sShape, const std::string &sName = "");
 		Node &squeeze(Node &sLeft, const std::string &sName = "");
+		Node &reduceMin(Node &sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
+		Node &reduceMax(Node &sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
 		Node &reduceSum(Node &sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
+		Node &reduceMean(Node &sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
 		Node &abs(Node &sLeft, const std::string &sName = "");
 		Node &neg(Node &sLeft, const std::string &sName = "");
 		Node &sign(Node &sLeft, const std::string &sName = "");
@@ -58,6 +61,12 @@ namespace TinNet
 		Node &sin(Node &sLeft, const std::string &sName = "");
 		Node &cos(Node &sLeft, const std::string &sName = "");
 		Node &tan(Node &sLeft, const std::string &sName = "");
+		Node &sinh(Node &sLeft, const std::string &sName = "");
+		Node &cosh(Node &sLeft, const std::string &sName = "");
+		Node &tanh(Node &sLeft, const std::string &sName = "");
+		Node &relu(Node &sLeft, float nAlpha = .0f, const std::string &sName = "");
+		Node &softPlus(Node &sLeft, const std::string &sName = "");
+		Node &sigmoid(Node &sLeft, const std::string &sName = "");
 	};
 }
 

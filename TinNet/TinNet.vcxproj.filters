@@ -84,34 +84,16 @@
     <ClCompile Include="TinNet\Graph\Node\MatMulBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\ReduceMean.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\ReduceMeanBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\Square.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\Sigmoid.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\Tanh.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\ReLU.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\ReLUBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\SigmoidBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\SquareBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\TanhBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\VariableGraphNode.cpp">
@@ -237,6 +219,33 @@
     <ClCompile Include="TinNet\GraphNode\ReduceSum.cpp">
       <Filter>TinNet\GraphNode</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\ReduceMean.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\ReduceMin.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\ReduceMax.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Tanh.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Cosh.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Sinh.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\ReLU.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Sigmoid.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\SoftPlus.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -317,34 +326,16 @@
     <ClInclude Include="TinNet\Graph\Node\MatMulBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\ReduceMean.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\ReduceMeanBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\Square.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\Sigmoid.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\Tanh.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\ReLU.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\ReLUBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\SigmoidBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\SquareBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\TanhBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\VariableGraphNode.h">
@@ -471,6 +462,33 @@
       <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\GraphNode\ReduceSum.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\ReduceMean.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\ReduceMin.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\ReduceMax.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Tanh.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Cosh.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Sinh.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\ReLU.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Sigmoid.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\SoftPlus.h">
       <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
   </ItemGroup>

@@ -71,9 +71,39 @@ namespace TinNet
 		return *pNode;
 	}
 
+	Node &GraphBP::reduceMin(Node &sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::ReduceMin>(sName, sAxis, bSqueeze)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::reduceMax(Node &sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::ReduceMax>(sName, sAxis, bSqueeze)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
 	Node &GraphBP::reduceSum(Node &sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::ReduceSum>(sName, sAxis, bSqueeze)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::reduceMean(Node &sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::ReduceMean>(sName, sAxis, bSqueeze)};
 
 		Node::link(&sLeft, pNode);
 		pNode->notifyShapeUpdated();
@@ -249,6 +279,66 @@ namespace TinNet
 	Node &GraphBP::tan(Node &sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Tan>(sName)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::sinh(Node &sLeft, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Sinh>(sName)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::cosh(Node &sLeft, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Cosh>(sName)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::tanh(Node &sLeft, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Tanh>(sName)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::relu(Node &sLeft, float nAlpha, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::ReLU>(sName, nAlpha)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::softPlus(Node &sLeft, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::SoftPlus>(sName)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::sigmoid(Node &sLeft, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Sigmoid>(sName)};
 
 		Node::link(&sLeft, pNode);
 		pNode->notifyShapeUpdated();

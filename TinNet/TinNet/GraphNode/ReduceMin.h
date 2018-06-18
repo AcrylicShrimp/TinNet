@@ -1,12 +1,12 @@
 
 /*
-	2018.06.18
+	2018.06.19
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPHNODE_REDUCESUM_H
+#ifndef _CLASS_TINNET_GRAPHNODE_REDUCEMIN_H
 
-#define _CLASS_TINNET_GRAPHNODE_REDUCESUM_H
+#define _CLASS_TINNET_GRAPHNODE_REDUCEMIN_H
 
 #include "../TinNetDLL.h"
 
@@ -18,13 +18,15 @@
 #include "FullNode.h"
 
 #include <cstddef>
+#include <limits>
 #include <string>
 
 namespace TinNet::GraphNode
 {
-	class TINNET_DLL ReduceSum final : public FullNode
+	class TINNET_DLL ReduceMin final : public FullNode
 	{
 	protected:
+		std::vector<std::size_t> sIndex;
 		Shape sShape;
 		Shape sUnsqueezedShape;
 		Iterator<Accessor, Accessor> sIterator;
@@ -32,12 +34,12 @@ namespace TinNet::GraphNode
 		bool bSqueeze;
 		
 	public:
-		ReduceSum(Graph *pGraph, const std::string &sName, const std::vector<bool> &sAxis, bool bSqueeze);
-		ReduceSum(const ReduceSum &sSrc) = delete;
-		~ReduceSum() = default;
+		ReduceMin(Graph *pGraph, const std::string &sName, const std::vector<bool> &sAxis, bool bSqueeze);
+		ReduceMin(const ReduceMin &sSrc) = delete;
+		~ReduceMin() = default;
 		
 	public:
-		ReduceSum &operator=(const ReduceSum &sSrc) = delete;
+		ReduceMin &operator=(const ReduceMin &sSrc) = delete;
 		
 	public:
 		virtual const Shape &shape() const override;
@@ -50,9 +52,9 @@ namespace TinNet::GraphNode
 		virtual void backwardPass(Cache sDestination, NodePtr pInput) override;
 	};
 
-	inline std::string ReduceSum::typeName()
+	inline std::string ReduceMin::typeName()
 	{
-		return "reduceSum";
+		return "reduceMin";
 	}
 }
 

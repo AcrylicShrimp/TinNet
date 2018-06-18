@@ -14,7 +14,10 @@
 #include "Reshape.h"
 #include "Squeeze.h"
 
+#include "ReduceMin.h"
+#include "ReduceMax.h"
 #include "ReduceSum.h"
+#include "ReduceMean.h"
 
 #include "Abs.h"
 #include "Neg.h"
@@ -33,5 +36,12 @@
 #include "Sin.h"
 #include "Cos.h"
 #include "Tan.h"
+#include "Sinh.h"
+#include "Cosh.h"
+#include "Tanh.h"
+
+#include "ReLU.h"
+#include "SoftPlus.h"
+#include "Sigmoid.h"
 
 #endif

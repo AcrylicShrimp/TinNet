@@ -1,12 +1,12 @@
 
 /*
-	2018.06.18
+	2018.06.19
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPHNODE_REDUCESUM_H
+#ifndef _CLASS_TINNET_GRAPHNODE_REDUCEMAX_H
 
-#define _CLASS_TINNET_GRAPHNODE_REDUCESUM_H
+#define _CLASS_TINNET_GRAPHNODE_REDUCEMAX_H
 
 #include "../TinNetDLL.h"
 
@@ -18,27 +18,29 @@
 #include "FullNode.h"
 
 #include <cstddef>
+#include <limits>
 #include <string>
 
 namespace TinNet::GraphNode
 {
-	class TINNET_DLL ReduceSum final : public FullNode
+	class TINNET_DLL ReduceMax final : public FullNode
 	{
 	protected:
+		std::vector<std::size_t> sIndex;
 		Shape sShape;
 		Shape sUnsqueezedShape;
 		Iterator<Accessor, Accessor> sIterator;
 		std::vector<bool> sAxis;
 		bool bSqueeze;
-		
+
 	public:
-		ReduceSum(Graph *pGraph, const std::string &sName, const std::vector<bool> &sAxis, bool bSqueeze);
-		ReduceSum(const ReduceSum &sSrc) = delete;
-		~ReduceSum() = default;
-		
+		ReduceMax(Graph *pGraph, const std::string &sName, const std::vector<bool> &sAxis, bool bSqueeze);
+		ReduceMax(const ReduceMax &sSrc) = delete;
+		~ReduceMax() = default;
+
 	public:
-		ReduceSum &operator=(const ReduceSum &sSrc) = delete;
-		
+		ReduceMax &operator=(const ReduceMax &sSrc) = delete;
+
 	public:
 		virtual const Shape &shape() const override;
 		virtual std::string type() const override;
@@ -50,9 +52,9 @@ namespace TinNet::GraphNode
 		virtual void backwardPass(Cache sDestination, NodePtr pInput) override;
 	};
 
-	inline std::string ReduceSum::typeName()
+	inline std::string ReduceMax::typeName()
 	{
-		return "reduceSum";
+		return "reduceMax";
 	}
 }
 
