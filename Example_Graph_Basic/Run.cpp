@@ -4,12 +4,7 @@
 	Created by AcrylicShrimp.
 */
 
-#include "../TinNet/TinNet/Cache.h"
-#include "../TinNet/TinNet/Shape.h"
-#include "../TinNet/TinNet/ShapedCache.h"
-#include "../TinNet/TinNet/Graph.h"
-#include "../TinNet/TinNet/GraphBP.h"
-#include "../TinNet/TinNet/GraphBPOp.h"
+#include "../TinNet/TinNet/TinNet.h"
 
 #include <algorithm>
 #include <chrono>
