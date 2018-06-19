@@ -78,18 +78,6 @@
     <ClCompile Include="TinNet\Graph\Node\Dense.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\MatMul.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\MatMulBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\Square.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\SquareBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Graph\VariableGraphNode.cpp">
       <Filter>TinNet\Graph</Filter>
     </ClCompile>
@@ -100,12 +88,6 @@
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\ConvolutionBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\Softmax.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\SoftmaxBP.cpp">
       <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Node.cpp">
@@ -234,7 +216,16 @@
     <ClCompile Include="TinNet\GraphNode\Sigmoid.cpp">
       <Filter>TinNet\GraphNode</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\SoftPlus.cpp">
+    <ClCompile Include="TinNet\GraphNode\Square.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Softmax.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Softplus.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Dense.cpp">
       <Filter>TinNet\GraphNode</Filter>
     </ClCompile>
   </ItemGroup>
@@ -311,18 +302,6 @@
     <ClInclude Include="TinNet\Graph\Node\Dense.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\MatMul.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\MatMulBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\Square.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\SquareBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Graph\VariableGraphNode.h">
       <Filter>TinNet\Graph</Filter>
     </ClInclude>
@@ -333,12 +312,6 @@
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\ConvolutionBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\Softmax.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\SoftmaxBP.h">
       <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Node.h">
@@ -470,11 +443,20 @@
     <ClInclude Include="TinNet\GraphNode\Sigmoid.h">
       <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\SoftPlus.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\TinNet.h">
       <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Square.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Softmax.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Softplus.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Dense.h">
+      <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,7 +12,6 @@
 
 #include "../Cache.h"
 #include "../Graph.h"
-#include "../Feedable.h"
 #include "../Shape.h"
 #include "../ShapedCache.h"
 #include "BackpropNode.h"
@@ -22,7 +21,7 @@
 
 namespace TinNet::GraphNode
 {
-	class TINNET_DLL Constant final : public BackpropNode, public Feedable
+	class TINNET_DLL Constant final : public BackpropNode
 	{
 	protected:
 		ShapedCache sShapedCache;
@@ -40,7 +39,6 @@ namespace TinNet::GraphNode
 		virtual const Shape &shape() const override;
 		virtual std::string type() const override;
 		virtual Cache forward() override;
-		virtual void feed(ShapedCache sShapedCache) override;
 		inline static std::string typeName();
 
 	protected:

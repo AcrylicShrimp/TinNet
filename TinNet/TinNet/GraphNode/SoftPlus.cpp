@@ -4,27 +4,27 @@
 	Created by AcrylicShrimp.
 */
 
-#include "SoftPlus.h"
+#include "Softplus.h"
 
 namespace TinNet::GraphNode
 {
-	SoftPlus::SoftPlus(Graph *pGraph, const std::string &sName) :
+	Softplus::Softplus(Graph *pGraph, const std::string &sName) :
 		FullNode(pGraph, sName)
 	{
 		//Empty.
 	}
 
-	const Shape &SoftPlus::shape() const
+	const Shape &Softplus::shape() const
 	{
 		return this->sInputList.front()->shape();
 	}
 
-	std::string SoftPlus::type() const
+	std::string Softplus::type() const
 	{
-		return SoftPlus::typeName();
+		return Softplus::typeName();
 	}
 
-	void SoftPlus::forwardPass(Cache sDestination)
+	void Softplus::forwardPass(Cache sDestination)
 	{
 		auto sLeft{this->sInputList.front()->forward()};
 
@@ -32,7 +32,7 @@ namespace TinNet::GraphNode
 			sDestination[nIndex] = std::log(std::exp(sLeft[nIndex]) + 1.f);
 	}
 
-	void SoftPlus::backwardPass(Cache sDestination, NodePtr pInput)
+	void Softplus::backwardPass(Cache sDestination, NodePtr pInput)
 	{
 		auto sGradient{this->backward()};
 		auto sLeft{this->sInputList.front()->forward()};

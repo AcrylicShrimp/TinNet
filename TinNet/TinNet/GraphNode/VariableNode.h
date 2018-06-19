@@ -38,7 +38,6 @@ namespace TinNet::GraphNode
 		VariableNode &operator=(const VariableNode &sSrc) = delete;
 		
 	public:
-		virtual void variablePass() = 0;
 		virtual void notifyShapeUpdated() override;
 		virtual void notifyBackwardEnabled() override;
 		virtual void notifyBackwardDisabled() override;

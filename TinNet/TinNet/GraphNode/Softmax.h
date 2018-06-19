@@ -4,9 +4,9 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPHNODE_REDUCEMEAN_H
+#ifndef _CLASS_TINNET_GRAPHNODE_SOFTMAX_H
 
-#define _CLASS_TINNET_GRAPHNODE_REDUCEMEAN_H
+#define _CLASS_TINNET_GRAPHNODE_SOFTMAX_H
 
 #include "../TinNetDLL.h"
 
@@ -17,29 +17,30 @@
 #include "../Shape.h"
 #include "FullNode.h"
 
+#include <cmath>
 #include <cstddef>
 #include <string>
 #include <vector>
 
 namespace TinNet::GraphNode
 {
-	class TINNET_DLL ReduceMean final : public FullNode
+	class TINNET_DLL Softmax final : public FullNode
 	{
 	protected:
-		float nFactor;
-		Shape sShape;
-		Shape sUnsqueezedShape;
 		Iterator<Accessor, Accessor> sIterator;
 		std::vector<bool> sAxis;
-		bool bSqueeze;
+		std::vector<float> sSum;
+		std::vector<float> sSumBackward;
+		Cache sSumCache;
+		Cache sSumBackwardCache;
 		
 	public:
-		ReduceMean(Graph *pGraph, const std::string &sName, const std::vector<bool> &sAxis, bool bSqueeze);
-		ReduceMean(const ReduceMean &sSrc) = delete;
-		~ReduceMean() = default;
+		Softmax(Graph *pGraph, const std::string &sName, const std::vector<bool> &sAxis);
+		Softmax(const Softmax &sSrc) = delete;
+		~Softmax() = default;
 		
 	public:
-		ReduceMean &operator=(const ReduceMean &sSrc) = delete;
+		Softmax &operator=(const Softmax &sSrc) = delete;
 		
 	public:
 		virtual const Shape &shape() const override;
@@ -52,9 +53,9 @@ namespace TinNet::GraphNode
 		virtual void backwardPass(Cache sDestination, NodePtr pInput) override;
 	};
 
-	inline std::string ReduceMean::typeName()
+	inline std::string Softmax::typeName()
 	{
-		return "reduceMean";
+		return "softmax";
 	}
 }
 

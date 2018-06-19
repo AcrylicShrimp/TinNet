@@ -71,4 +71,16 @@ namespace TinNet
 
 		this->sCacheContainer.setDirtyAll();
 	}
+
+	void Graph::computeGradient()
+	{
+		for (auto pInitializable : this->sInitializableList)
+			pInitializable->variablePass();
+	}
+
+	void Graph::applyGradient(float nFactor)
+	{
+		for (auto pInitializable : this->sInitializableList)
+			pInitializable->applyGradient(nFactor);
+	}
 }

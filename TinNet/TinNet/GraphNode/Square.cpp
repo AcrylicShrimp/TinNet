@@ -1,43 +1,43 @@
 
 /*
-	2018.06.18
+	2018.06.19
 	Created by AcrylicShrimp.
 */
 
-#include "Log10.h"
+#include "Square.h"
 
 namespace TinNet::GraphNode
 {
-	Log10::Log10(Graph *pGraph, const std::string &sName) :
+	Square::Square(Graph *pGraph, const std::string &sName) :
 		FullNode(pGraph, sName)
 	{
 		//Empty.
 	}
 
-	const Shape &Log10::shape() const
+	const Shape &Square::shape() const
 	{
 		return this->sInputList.front()->shape();
 	}
 
-	std::string Log10::type() const
+	std::string Square::type() const
 	{
-		return Log10::typeName();
+		return Square::typeName();
 	}
 
-	void Log10::forwardPass(Cache sDestination)
+	void Square::forwardPass(Cache sDestination)
 	{
 		auto sLeft{this->sInputList.front()->forward()};
 
 		for (std::size_t nIndex{0}, nMaxIndex{sDestination.size()}; nIndex < nMaxIndex; ++nIndex)
-			sDestination[nIndex] = std::log10(sLeft[nIndex] + .0001f);
+			sDestination[nIndex] = sLeft[nIndex] * sLeft[nIndex];
 	}
 
-	void Log10::backwardPass(Cache sDestination, NodePtr pInput)
+	void Square::backwardPass(Cache sDestination, NodePtr pInput)
 	{
 		auto sGradient{this->backward()};
 		auto sLeft{this->sInputList.front()->forward()};
 
 		for (std::size_t nIndex{0}, nMaxIndex{sDestination.size()}; nIndex < nMaxIndex; ++nIndex)
-			sDestination[nIndex] += sGradient[nIndex] / (2.302585f * sLeft[nIndex]);
+			sDestination[nIndex] += sGradient[nIndex] * 2.f * sLeft[nIndex];
 	}
 }

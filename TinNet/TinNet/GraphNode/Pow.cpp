@@ -58,7 +58,7 @@ namespace TinNet::GraphNode
 			auto sForward{this->forward()};
 
 			for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-				sDestination[this->sIterator.index<2>()] += sGradient[this->sIterator.index<0>()] * sForward[this->sIterator.index<0>()] * std::log(sLeft[this->sIterator.index<1>()]);
+				sDestination[this->sIterator.index<2>()] += sGradient[this->sIterator.index<0>()] * sForward[this->sIterator.index<0>()] * std::log(sLeft[this->sIterator.index<1>()] + .0001f);
 		}
 	}
 }

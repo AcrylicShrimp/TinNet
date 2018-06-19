@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <cstddef>
 #include <numeric>
+#include <sstream>
+#include <string>
 #include <vector>
 
 namespace TinNet
@@ -52,6 +54,7 @@ namespace TinNet
 		void copyNegative(Cache sCache);
 		float accumulate() const;
 		void accumulate(Cache sCache);
+		std::string toString() const;
 	};
 
 	inline Cache operator+(Cache &sLeft, std::size_t nRight);

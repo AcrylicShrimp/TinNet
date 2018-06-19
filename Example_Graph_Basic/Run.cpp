@@ -20,13 +20,25 @@ int32_t main()
 	Graph graph;
 	GraphBP bp{graph};
 
-	auto &op = bp.softPlus(bp.constant(Shape{10, 1}, {-1.f, 2.f, -3.f, 4.f, -5.f, 6.f, -7.f, 8.f, -9.f, 10.f}));
+
 
 	graph.initialize();
 	graph.enableBackward();
 
-	auto forward = op.forward();
-	auto backward = graph.node("constant0")->backward();
+	for (;;)
+	{
+		graph.feed(
+		{
+			{Shape{4, 2}, in_x},
+			{Shape{4, 1}, in_y}
+		});
+
+		std::cout << "Output : " << y_hat.forward().toString() << std::endl;
+		std::cout << "Loss : " << loss.forward().toString() << std::endl;
+
+		graph.computeGradient();
+		graph.applyGradient(-.001f);
+	}
 
 	return 0;
 }

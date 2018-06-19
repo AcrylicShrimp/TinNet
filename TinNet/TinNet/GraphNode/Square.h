@@ -4,9 +4,9 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPHNODE_SOFTPLUS_H
+#ifndef _CLASS_TINNET_GRAPHNODE_SQUARE_H
 
-#define _CLASS_TINNET_GRAPHNODE_SOFTPLUS_H
+#define _CLASS_TINNET_GRAPHNODE_SQUARE_H
 
 #include "../TinNetDLL.h"
 
@@ -15,21 +15,20 @@
 #include "../Shape.h"
 #include "FullNode.h"
 
-#include <cmath>
 #include <cstddef>
 #include <string>
 
 namespace TinNet::GraphNode
 {
-	class TINNET_DLL Softplus final : public FullNode
+	class TINNET_DLL Square final : public FullNode
 	{
 	public:
-		Softplus(Graph *pGraph, const std::string &sName);
-		Softplus(const Softplus &sSrc) = delete;
-		~Softplus() = default;
+		Square(Graph *pGraph, const std::string &sName);
+		Square(const Square &sSrc) = delete;
+		~Square() = default;
 		
 	public:
-		Softplus &operator=(const Softplus &sSrc) = delete;
+		Square &operator=(const Square &sSrc) = delete;
 		
 	public:
 		virtual const Shape &shape() const override;
@@ -41,9 +40,9 @@ namespace TinNet::GraphNode
 		virtual void backwardPass(Cache sDestination, NodePtr pInput) override;
 	};
 
-	inline std::string Softplus::typeName()
+	inline std::string Square::typeName()
 	{
-		return "softplus";
+		return "square";
 	}
 }
 

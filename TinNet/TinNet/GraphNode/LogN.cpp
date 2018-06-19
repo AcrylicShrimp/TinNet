@@ -30,7 +30,7 @@ namespace TinNet::GraphNode
 		auto sLeft{this->sInputList.front()->forward()};
 
 		for (std::size_t nIndex{0}, nMaxIndex{sDestination.size()}; nIndex < nMaxIndex; ++nIndex)
-			sDestination[nIndex] = std::log(sLeft[nIndex]) / this->nLogBase;
+			sDestination[nIndex] = std::log(sLeft[nIndex] + .0001f) / this->nLogBase;
 	}
 
 	void LogN::backwardPass(Cache sDestination, NodePtr pInput)

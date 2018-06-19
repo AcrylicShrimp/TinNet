@@ -64,6 +64,8 @@ namespace TinNet
 		void disableBackward();
 		void feed(const std::vector<ShapedCache> &sFeedList);
 		void feed(std::initializer_list<ShapedCache> sFeedList);
+		void computeGradient();
+		void applyGradient(float nFactor);
 	};
 
 	inline CacheContainer &Graph::cacheContainer()

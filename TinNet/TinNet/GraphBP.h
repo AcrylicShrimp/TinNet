@@ -15,6 +15,7 @@
 #include "Shape.h"
 #include "GraphNode/GraphNode.h"
 
+#include <cstddef>
 #include <string>
 #include <vector>
 
@@ -52,6 +53,7 @@ namespace TinNet
 		Node &multiply(Node &sLeft, Node &sRight, const std::string &sName = "");
 		Node &divide(Node &sLeft, Node &sRight, const std::string &sName = "");
 		Node &pow(Node &sLeft, Node &sRight, const std::string &sName = "");
+		Node &square(Node &sLeft, const std::string &sName = "");
 		Node &exp(Node &sLeft, const std::string &sName = "");
 		Node &exp2(Node &sLeft, const std::string &sName = "");
 		Node &log(Node &sLeft, const std::string &sName = "");
@@ -65,8 +67,10 @@ namespace TinNet
 		Node &cosh(Node &sLeft, const std::string &sName = "");
 		Node &tanh(Node &sLeft, const std::string &sName = "");
 		Node &relu(Node &sLeft, float nAlpha = .0f, const std::string &sName = "");
-		Node &softPlus(Node &sLeft, const std::string &sName = "");
+		Node &softplus(Node &sLeft, const std::string &sName = "");
+		Node &softmax(Node &sLeft, const std::vector<bool> &sAxis = {}, const std::string &sName = "");
 		Node &sigmoid(Node &sLeft, const std::string &sName = "");
+		Node &dense(Node &sLeft, std::size_t nFanOut, const std::string &sName = "");
 	};
 }
 

@@ -31,6 +31,8 @@ namespace TinNet
 		virtual std::size_t fanIn() const = 0;
 		virtual std::size_t fanOut() const = 0;
 		virtual void initialize(std::function<float()> fInitializer) = 0;
+		virtual void variablePass() = 0;
+		virtual void applyGradient(float nFactor) = 0;
 	};
 }
 

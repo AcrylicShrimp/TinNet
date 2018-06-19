@@ -196,6 +196,16 @@ namespace TinNet
 		return *pNode;
 	}
 
+	Node &GraphBP::square(Node &sLeft, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Square>(sName)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
 	Node &GraphBP::exp(Node &sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Exp>(sName)};
@@ -326,9 +336,19 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::softPlus(Node &sLeft, const std::string &sName)
+	Node &GraphBP::softplus(Node &sLeft, const std::string &sName)
 	{
-		auto pNode{this->sGraph.addNode<GraphNode::SoftPlus>(sName)};
+		auto pNode{this->sGraph.addNode<GraphNode::Softplus>(sName)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::softmax(Node &sLeft, const std::vector<bool> &sAxis, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Softmax>(sName, sAxis)};
 
 		Node::link(&sLeft, pNode);
 		pNode->notifyShapeUpdated();
@@ -339,6 +359,16 @@ namespace TinNet
 	Node &GraphBP::sigmoid(Node &sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Sigmoid>(sName)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	Node &GraphBP::dense(Node &sLeft, std::size_t nFanOut, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Dense>(sName, nFanOut)};
 
 		Node::link(&sLeft, pNode);
 		pNode->notifyShapeUpdated();

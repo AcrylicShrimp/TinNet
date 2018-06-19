@@ -27,6 +27,7 @@
 #include "Multiply.h"
 #include "Divide.h"
 #include "Pow.h"
+#include "Square.h"
 #include "Exp.h"
 #include "Exp2.h"
 #include "Log.h"
@@ -41,7 +42,10 @@
 #include "Tanh.h"
 
 #include "ReLU.h"
-#include "SoftPlus.h"
+#include "Softplus.h"
+#include "Softmax.h"
 #include "Sigmoid.h"
+
+#include "Dense.h"
 
 #endif

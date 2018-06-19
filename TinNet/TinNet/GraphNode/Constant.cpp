@@ -10,7 +10,6 @@ namespace TinNet::GraphNode
 {
 	Constant::Constant(Graph *pGraph, const std::string &sName, const Shape &sShape, const std::vector<float> &sValue) :
 		BackpropNode(pGraph, sName),
-		Feedable(pGraph),
 		sShapedCache{sShape},
 		sValue{sValue}
 	{
@@ -30,11 +29,6 @@ namespace TinNet::GraphNode
 	Cache Constant::forward()
 	{
 		return this->sShapedCache.cache();
-	}
-
-	void Constant::feed(ShapedCache sShapedCache)
-	{
-		this->sShapedCache = sShapedCache;
 	}
 
 	void Constant::forwardPass(Cache sDestination)
