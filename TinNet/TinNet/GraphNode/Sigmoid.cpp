@@ -28,7 +28,7 @@ namespace TinNet::GraphNode
 	{
 		auto sLeft{this->sInputList.front()->forward()};
 
-		for (std::size_t nIndex{0}, nMaxIndex{sDestination.size()}; nIndex < nMaxIndex; ++nIndex)
+		for (std::size_t nIndex{0}, nMaxIndex{this->shape().element()}; nIndex < nMaxIndex; ++nIndex)
 			sDestination[nIndex] = 1.f / (std::exp(-sLeft[nIndex]) + 1.f);
 	}
 
@@ -37,7 +37,7 @@ namespace TinNet::GraphNode
 		auto sGradient{this->backward()};
 		auto sForward{this->forward()};
 
-		for (std::size_t nIndex{0}, nMaxIndex{sDestination.size()}; nIndex < nMaxIndex; ++nIndex)
+		for (std::size_t nIndex{0}, nMaxIndex{this->shape().element()}; nIndex < nMaxIndex; ++nIndex)
 			sDestination[nIndex] += sGradient[nIndex] * sForward[nIndex] * (1.f - sForward[nIndex]);
 	}
 }

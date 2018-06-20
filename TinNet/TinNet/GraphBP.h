@@ -71,6 +71,15 @@ namespace TinNet
 		Node &softmax(Node &sLeft, const std::vector<bool> &sAxis = {}, const std::string &sName = "");
 		Node &sigmoid(Node &sLeft, const std::string &sName = "");
 		Node &dense(Node &sLeft, std::size_t nFanOut, const std::string &sName = "");
+		Node &convolution(Node &sLeft,
+			std::size_t nKernelWidth,
+			std::size_t nKernelHeight,
+			std::size_t nOutputWidth ,
+			std::size_t nOutputHeight,
+			std::size_t nOutputChannel,
+			std::size_t nHStride = 1,
+			std::size_t nVStride = 1,
+			const std::string &sName = "");
 	};
 }
 

@@ -47,5 +47,6 @@
 #include "Sigmoid.h"
 
 #include "Dense.h"
+#include "Convolution.h"
 
 #endif

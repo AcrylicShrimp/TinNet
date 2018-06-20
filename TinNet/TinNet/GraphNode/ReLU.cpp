@@ -31,7 +31,7 @@ namespace TinNet::GraphNode
 
 		float vTemp[2]{this->nAlpha, 1.f};
 
-		for (std::size_t nIndex{0}, nMaxIndex{sDestination.size()}; nIndex < nMaxIndex; ++nIndex)
+		for (std::size_t nIndex{0}, nMaxIndex{this->shape().element()}; nIndex < nMaxIndex; ++nIndex)
 			sDestination[nIndex] = sLeft[nIndex] * vTemp[sLeft[nIndex] > .0f];
 	}
 
@@ -42,7 +42,7 @@ namespace TinNet::GraphNode
 
 		float vTemp[2]{this->nAlpha, 1.f};
 
-		for (std::size_t nIndex{0}, nMaxIndex{sDestination.size()}; nIndex < nMaxIndex; ++nIndex)
+		for (std::size_t nIndex{0}, nMaxIndex{this->shape().element()}; nIndex < nMaxIndex; ++nIndex)
 			sDestination[nIndex] += sGradient[nIndex] * vTemp[sLeft[nIndex] > .0f];
 	}
 }

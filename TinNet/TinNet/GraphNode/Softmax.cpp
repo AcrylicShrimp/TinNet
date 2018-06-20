@@ -37,10 +37,10 @@ namespace TinNet::GraphNode
 				sShape.set(nIndex, 1);
 
 		this->sIterator.init(this->sInputList.front()->shape(), Accessor{this->sInputList.front()->shape()}, Accessor{sShape});
-		this->sSum.resize(sShape.element());
-		this->sSumBackward.resize(sShape.element());
-		this->sSumCache = this->sSum;
-		this->sSumBackwardCache = this->sSumBackward;
+		this->sSumReversed.resize(sShape.element());
+		this->sSumGradient.resize(sShape.element());
+		this->sSumReveredCache = this->sSumReversed;
+		this->sSumGradientCache = this->sSumGradient;
 
 		this->FullNode::notifyShapeUpdated();
 	}
@@ -55,23 +55,24 @@ namespace TinNet::GraphNode
 			if (nMax < nValue)
 				nMax = nValue;
 
-		this->sSumCache.zero();
+		this->sSumReveredCache.zero();
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			this->sSumCache[this->sIterator.index<1>()] += std::exp(sLeft[this->sIterator.index<0>()] - nMax);
+			this->sSumReveredCache[this->sIterator.index<1>()] += std::exp(sLeft[this->sIterator.index<0>()] - nMax);
 
-		for (auto &nSum : this->sSumCache)
+		for (auto &nSum : this->sSumReveredCache)
 			nSum = 1.f / (nSum + .0001f);
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			sDestination[this->sIterator.index<0>()] = std::exp(sLeft[this->sIterator.index<0>()] - nMax) * this->sSumCache[this->sIterator.index<1>()];
+			sDestination[this->sIterator.index<0>()] = std::exp(sLeft[this->sIterator.index<0>()] - nMax) * this->sSumReveredCache[this->sIterator.index<1>()];
 	}
 
 	void Softmax::backwardPass(Cache sDestination, NodePtr pInput)
 	{
 		auto sGradient{this->backward()};
-		auto sForward{this->forward()};
 		auto sLeft{this->sInputList.front()->forward()};
+
+		this->forward();
 
 		auto nMax{.0f};
 
@@ -79,12 +80,12 @@ namespace TinNet::GraphNode
 			if (nMax < nValue)
 				nMax = nValue;
 
-		this->sSumBackwardCache.zero();
+		this->sSumGradientCache.zero();
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			this->sSumBackwardCache[this->sIterator.index<1>()] -= sGradient[this->sIterator.index<0>()] * std::exp(sLeft[this->sIterator.index<0>()] - nMax) / (this->sSumCache[this->sIterator.index<1>()] * this->sSumCache[this->sIterator.index<1>()]);
+			this->sSumGradientCache[this->sIterator.index<1>()] -= sGradient[this->sIterator.index<0>()] * std::exp(sLeft[this->sIterator.index<0>()] - nMax) * this->sSumReveredCache[this->sIterator.index<1>()] * this->sSumReveredCache[this->sIterator.index<1>()];
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
-			sDestination[this->sIterator.index<0>()] = std::exp(sLeft[this->sIterator.index<0>()] - nMax) * (this->sSumBackwardCache[this->sIterator.index<1>()] + sGradient[this->sIterator.index<0>()] / this->sSumCache[this->sIterator.index<1>()]);
+			sDestination[this->sIterator.index<0>()] += std::exp(sLeft[this->sIterator.index<0>()] - nMax) * (this->sSumGradientCache[this->sIterator.index<1>()] + sGradient[this->sIterator.index<0>()] * this->sSumReveredCache[this->sIterator.index<1>()]);
 	}
 }

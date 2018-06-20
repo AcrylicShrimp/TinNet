@@ -55,6 +55,7 @@ namespace TinNet
 		float accumulate() const;
 		void accumulate(Cache sCache);
 		std::string toString() const;
+		std::string toString(std::size_t nMaxIndex) const;
 	};
 
 	inline Cache operator+(Cache &sLeft, std::size_t nRight);

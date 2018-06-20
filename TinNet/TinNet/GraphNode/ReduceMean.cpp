@@ -58,7 +58,7 @@ namespace TinNet::GraphNode
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
 			sDestination[this->sIterator.index<1>()] += sLeft[this->sIterator.index<0>()];
 
-		for (std::size_t nIndex{0}, nSize{sDestination.size()}; nIndex < nSize; ++nIndex)
+		for (std::size_t nIndex{0}, nSize{this->shape().element()}; nIndex < nSize; ++nIndex)
 			sDestination[nIndex] *= this->nFactor;
 	}
 

@@ -29,10 +29,10 @@ namespace TinNet::GraphNode
 	protected:
 		Iterator<Accessor, Accessor> sIterator;
 		std::vector<bool> sAxis;
-		std::vector<float> sSum;
-		std::vector<float> sSumBackward;
-		Cache sSumCache;
-		Cache sSumBackwardCache;
+		std::vector<float> sSumReversed;
+		std::vector<float> sSumGradient;
+		Cache sSumReveredCache;
+		Cache sSumGradientCache;
 		
 	public:
 		Softmax(Graph *pGraph, const std::string &sName, const std::vector<bool> &sAxis);

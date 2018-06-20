@@ -27,26 +27,24 @@ namespace TinNet::GraphNode
 
 	void Dense::notifyShapeUpdated()
 	{
-		if (!this->sVariableSizeList.empty())
-		{
-			this->VariableNode::notifyShapeUpdated();
-			return;
-		}
-
 		this->sInputShape = this->sInputList.front()->shape();
 
 		if (this->sInputShape.rank() < 2)
 			this->sInputShape = this->sInputShape.expand(2);
 
 		Shape sBias{this->nFanOut};
-		this->sOutputShape = {this->sInputShape[0], sBias[0]};
-		this->sWeightShape = {this->sInputShape[1], sBias[0]};
+		this->sOutputShape = {this->sInputShape[0], this->nFanOut};
+
+		if (this->sVariableSizeList.empty())
+		{
+			this->sWeightShape = {this->sInputShape[1], this->nFanOut};
+
+			this->registerVariable(sBias.element());
+			this->registerVariable(this->sWeightShape.element());
+		}
 
 		this->sBiasIterator.init(this->sOutputShape, Accessor{this->sOutputShape}, Accessor{sBias});
 		this->sWeightIterator.init(this->sOutputShape, Accessor{this->sOutputShape}, Accessor{this->sInputShape}, Accessor{this->sWeightShape});
-
-		this->registerVariable(sBias.element());
-		this->registerVariable(this->sWeightShape.element());
 
 		this->VariableNode::notifyShapeUpdated();
 	}
@@ -64,9 +62,7 @@ namespace TinNet::GraphNode
 	void Dense::initialize(std::function<float()> fInitializer)
 	{
 		this->sVariableList.front()->sCache.zero();
-		//for (std::size_t nIndex{0}, nMaxIndex{this->sVariableSizeList.front()}; nIndex < nMaxIndex; ++nIndex)
-		//	this->sVariableList.front()->sCache[nIndex] = fInitializer();
-
+		
 		for (std::size_t nIndex{0}, nMaxIndex{this->sVariableSizeList.back()}; nIndex < nMaxIndex; ++nIndex)
 			this->sVariableList.back()->sCache[nIndex] = fInitializer();
 	}
@@ -74,12 +70,12 @@ namespace TinNet::GraphNode
 	void Dense::variablePass()
 	{
 		auto sGradient{this->backward()};
-
+		
 		this->sVariableGradientList.front()->sCache.zero();
-
+		
 		for (this->sBiasIterator.prepare(); this->sBiasIterator; ++this->sBiasIterator)
 			this->sVariableGradientList.front()->sCache[this->sBiasIterator.index<1>()] += sGradient[this->sBiasIterator.index<0>()];
-
+		
 		GraphOp::dMatmulRightTransposedAVX(
 			this->sInputShape,
 			this->sWeightShape,
@@ -87,12 +83,12 @@ namespace TinNet::GraphNode
 			this->sInputList.front()->forward(),
 			this->sVariableGradientList.back()->sCache,
 			this->sWeightIterator);
-
+		
 		auto nFactor{1.f / this->sInputShape[0]};
-
+		
 		for (std::size_t nIndex{0}, nMaxIndex{this->sVariableSizeList.front()}; nIndex < nMaxIndex; ++nIndex)
 			this->sVariableGradientList.front()->sCache[nIndex] *= nFactor;
-
+		
 		for (std::size_t nIndex{0}, nMaxIndex{this->sVariableSizeList.back()}; nIndex < nMaxIndex; ++nIndex)
 			this->sVariableGradientList.back()->sCache[nIndex] *= nFactor;
 	}
@@ -101,7 +97,7 @@ namespace TinNet::GraphNode
 	{
 		for (std::size_t nIndex{0}, nMaxIndex{this->sVariableSizeList.front()}; nIndex < nMaxIndex; ++nIndex)
 			this->sVariableList.front()->sCache[nIndex] += nFactor * this->sVariableGradientList.front()->sCache[nIndex];
-
+		
 		for (std::size_t nIndex{0}, nMaxIndex{this->sVariableSizeList.back()}; nIndex < nMaxIndex; ++nIndex)
 			this->sVariableList.back()->sCache[nIndex] += nFactor * this->sVariableGradientList.back()->sCache[nIndex];
 	}

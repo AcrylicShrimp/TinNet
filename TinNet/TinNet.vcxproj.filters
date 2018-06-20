@@ -75,14 +75,8 @@
     <ClCompile Include="TinNet\Accessor.cpp">
       <Filter>TinNet</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\Dense.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Graph\VariableGraphNode.cpp">
       <Filter>TinNet\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\DenseBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph\Node\Convolution.cpp">
       <Filter>TinNet\Graph\Node</Filter>
@@ -228,6 +222,9 @@
     <ClCompile Include="TinNet\GraphNode\Dense.cpp">
       <Filter>TinNet\GraphNode</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Convolution.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -299,14 +296,8 @@
     <ClInclude Include="TinNet\Iterator.hpp">
       <Filter>TinNet</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\Dense.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Graph\VariableGraphNode.h">
       <Filter>TinNet\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\DenseBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph\Node\Convolution.h">
       <Filter>TinNet\Graph\Node</Filter>
@@ -456,6 +447,9 @@
       <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\GraphNode\Dense.h">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Convolution.h">
       <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
   </ItemGroup>

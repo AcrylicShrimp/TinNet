@@ -97,7 +97,7 @@ namespace TinNet
 		for (std::size_t nIndex{0}, nSize{std::min(this->nSize, sCache.nSize)}; nIndex < nSize; ++nIndex)
 			this->pBegin[nIndex] += sCache.pBegin[nIndex];
 	}
-
+	
 	std::string Cache::toString() const
 	{
 		std::ostringstream sStream;
@@ -108,6 +108,25 @@ namespace TinNet
 			sStream << this->pBegin[nIndex];
 
 			if (++nIndex != this->nSize)
+				sStream << ", ";
+		}
+
+		sStream << "]";
+		return sStream.str();
+	}
+
+	std::string Cache::toString(std::size_t nMaxIndex) const
+	{
+		nMaxIndex = std::min(nMaxIndex, this->nSize);
+
+		std::ostringstream sStream;
+		sStream << "[";
+
+		for (std::size_t nIndex{0}; nIndex < nMaxIndex; )
+		{
+			sStream << this->pBegin[nIndex];
+
+			if (++nIndex != nMaxIndex)
 				sStream << ", ";
 		}
 
