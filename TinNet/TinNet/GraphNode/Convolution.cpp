@@ -199,6 +199,8 @@ namespace TinNet::GraphNode
 	{
 		auto sBatchForward{this->sInputList.front()->forward()};
 
+		sDestination.zero();
+
 		for (std::size_t nBatch{0}, nMaxBatch{this->sInputShape[0]}; nBatch < nMaxBatch; ++nBatch)
 		{
 			auto sForward{sBatchForward + this->sInputAccessor(nBatch, 0, 0, 0)};
@@ -209,7 +211,7 @@ namespace TinNet::GraphNode
 				if (this->sInputIndexList[nIndex])
 					this->sInputCache[nIndex] = sForward[this->sInputIndexList[nIndex] - 1];
 
-			GraphOp::matmulTransposedAVX(
+			GraphOp::matmulAccumulateTransposedAVX(
 				this->sKernelShape,
 				this->sInputInternalShape,
 				this->sVariableList.back()->sCache,
@@ -220,24 +222,25 @@ namespace TinNet::GraphNode
 
 			for (std::size_t nFilter{0}, nMaxFilter{this->sOutputShape[1]}; nFilter < nMaxFilter; ++nFilter)
 			{
+				auto nBias{this->sVariableList.front()->sCache[nFilter]};
 				auto sFilterDest{sDestination + this->sResultAccessor(nBatch, nFilter, 0)};
 
 				for (std::size_t nIndex{0}, nMaxIndex{this->sInputInternalShape[1]}; nIndex < nMaxIndex; ++nIndex)
-					sFilterDest[nIndex] += this->sVariableList.front()->sCache[nFilter];
+					sFilterDest[nIndex] += nBias;
 			}
 		}
 	}
 
 	void Convolution::backwardPass(Cache sDestination, NodePtr pInput)
 	{
-		auto sBatchBackward{this->backward()};
+		auto sBatchGradient{this->backward()};
 
 		for (std::size_t nBatch{0}, nMaxBatch{this->sInputShape[0]}; nBatch < nMaxBatch; ++nBatch)
 		{
 			GraphOp::dMatmulRightTransposedAVX(
 				this->sKernelShape,
 				this->sInputInternalShape,
-				sBatchBackward + this->sResultAccessor(nBatch, 0, 0),
+				sBatchGradient + this->sResultAccessor(nBatch, 0, 0),
 				this->sVariableList.back()->sCache,
 				this->sInputCache,
 				this->sIterator
@@ -247,7 +250,7 @@ namespace TinNet::GraphNode
 
 			for (std::size_t nIndex{0}, nMaxIndex{this->sInputIndexList.size()}; nIndex < nMaxIndex; ++nIndex)
 				if (this->sInputIndexList[nIndex])
-					sDest[this->sInputIndexList[nIndex] - 1] += this->sVariableList[0]->sCache[nIndex];
+					sDest[this->sInputIndexList[nIndex] - 1] += this->sInputCache[nIndex];
 		}
 	}
 }

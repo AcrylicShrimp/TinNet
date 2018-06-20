@@ -72,10 +72,8 @@ int32_t main()
 	graph.initialize();
 	graph.enableBackward();
 
-	for (;;)
+	auto fAccuracyFunc = [&]()
 	{
-		auto sBegin{std::chrono::system_clock::now()};
-
 		std::size_t nCount{0};
 
 		for (std::size_t nIndex{0}; nIndex + 32 <= 10000; )
@@ -95,9 +93,16 @@ int32_t main()
 		}
 
 		std::cout << "Accuracy : " << nCount / 10000.f * 100.f << "%" << std::endl;
+	};
+
+	for (;;)
+	{
+		auto sBegin{std::chrono::system_clock::now()};
 
 		for (std::size_t nIndex{0}; nIndex + 32 <= 60000; nIndex += 32)
 		{
+			fAccuracyFunc();
+
 			graph.feed(
 			{
 				{Shape{32, 1, 28, 28}, Cache{train_x.data() + nIndex * 784, 784 * 32}},
