@@ -83,14 +83,6 @@ namespace TinNet::GraphNode
 			this->sInputList.front()->forward(),
 			this->sVariableGradientList.back()->sCache,
 			this->sWeightIterator);
-		
-		auto nFactor{1.f / this->sInputShape[0]};
-		
-		for (std::size_t nIndex{0}, nMaxIndex{this->sVariableSizeList.front()}; nIndex < nMaxIndex; ++nIndex)
-			this->sVariableGradientList.front()->sCache[nIndex] *= nFactor;
-		
-		for (std::size_t nIndex{0}, nMaxIndex{this->sVariableSizeList.back()}; nIndex < nMaxIndex; ++nIndex)
-			this->sVariableGradientList.back()->sCache[nIndex] *= nFactor;
 	}
 
 	void Dense::applyGradient(float nFactor)

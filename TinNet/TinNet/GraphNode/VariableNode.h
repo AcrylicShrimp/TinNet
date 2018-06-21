@@ -41,6 +41,8 @@ namespace TinNet::GraphNode
 		virtual void notifyShapeUpdated() override;
 		virtual void notifyBackwardEnabled() override;
 		virtual void notifyBackwardDisabled() override;
+		virtual std::vector<std::size_t> &gradientSizeList() override;
+		virtual std::vector<CachePtr> &gradientList() override;
 
 	protected:
 		inline void registerVariable(std::size_t nSize);

@@ -50,4 +50,14 @@ namespace TinNet::GraphNode
 
 		this->sVariableGradientList.clear();
 	}
+
+	std::vector<std::size_t> &VariableNode::gradientSizeList()
+	{
+		return this->sVariableSizeList;
+	}
+
+	std::vector<CachePtr> &VariableNode::gradientList()
+	{
+		return this->sVariableGradientList;
+	}
 }

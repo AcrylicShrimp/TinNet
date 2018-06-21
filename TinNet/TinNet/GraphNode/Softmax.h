@@ -17,6 +17,7 @@
 #include "../Shape.h"
 #include "FullNode.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <string>

@@ -13,14 +13,11 @@
     <Filter Include="TinNet\Initializer">
       <UniqueIdentifier>{dad43e90-25a1-4d2b-9b7d-f2f6db341203}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TinNet\Graph">
-      <UniqueIdentifier>{90e696c8-ac33-4d1e-894d-8097cf558d71}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TinNet\Graph\Node">
-      <UniqueIdentifier>{05803adc-ebb9-4f3d-b015-40dc7e79e51b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TinNet\GraphNode">
       <UniqueIdentifier>{06706e3e-679b-455e-b52e-0a593299aed7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TinNet\Optimizer">
+      <UniqueIdentifier>{dc30b3fa-398a-4052-9a0b-0e83f821ca58}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,41 +45,14 @@
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp">
       <Filter>TinNet\Reinforcement</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Graph\GraphNode.cpp">
-      <Filter>TinNet\Graph</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Cache.cpp">
       <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\CacheContainer.cpp">
-      <Filter>TinNet\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Graph.cpp">
-      <Filter>TinNet\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\GraphNodeBP.cpp">
-      <Filter>TinNet\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\BackwardCachedGraphNode.cpp">
-      <Filter>TinNet\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\FullCachedGraphNode.cpp">
-      <Filter>TinNet\Graph</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Shape.cpp">
       <Filter>TinNet</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Accessor.cpp">
       <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\VariableGraphNode.cpp">
-      <Filter>TinNet\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\Convolution.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph\Node\ConvolutionBP.cpp">
-      <Filter>TinNet\Graph\Node</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Node.cpp">
       <Filter>TinNet</Filter>
@@ -225,6 +195,18 @@
     <ClCompile Include="TinNet\GraphNode\Convolution.cpp">
       <Filter>TinNet\GraphNode</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Optimizer\OptimizerBase.cpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Optimizer\SGD.cpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Optimizer\Momentum.cpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Optimizer\Adam.cpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -260,29 +242,8 @@
     <ClInclude Include="TinNet\Reinforcement\Game.h">
       <Filter>TinNet\Reinforcement</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Graph\GraphNode.h">
-      <Filter>TinNet\Graph</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Cache.h">
       <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\CacheContainer.h">
-      <Filter>TinNet\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Graph.h">
-      <Filter>TinNet\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\GraphBP.h">
-      <Filter>TinNet\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\GraphNodeBP.h">
-      <Filter>TinNet\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\BackwardCachedGraphNode.h">
-      <Filter>TinNet\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\FullCachedGraphNode.h">
-      <Filter>TinNet\Graph</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Shape.h">
       <Filter>TinNet</Filter>
@@ -295,15 +256,6 @@
     </ClInclude>
     <ClInclude Include="TinNet\Iterator.hpp">
       <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\VariableGraphNode.h">
-      <Filter>TinNet\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\Convolution.h">
-      <Filter>TinNet\Graph\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph\Node\ConvolutionBP.h">
-      <Filter>TinNet\Graph\Node</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Node.h">
       <Filter>TinNet</Filter>
@@ -451,6 +403,18 @@
     </ClInclude>
     <ClInclude Include="TinNet\GraphNode\Convolution.h">
       <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\OptimizerBase.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\SGD.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\Momentum.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\Adam.h">
+      <Filter>TinNet\Optimizer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

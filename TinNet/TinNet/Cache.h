@@ -51,9 +51,11 @@ namespace TinNet
 		void one();
 		void fill(float nValue);
 		void copy(Cache sCache);
+		void copy(Cache sCache, float nFactor);
 		void copyNegative(Cache sCache);
 		float accumulate() const;
 		void accumulate(Cache sCache);
+		void accumulate(Cache sCache, float nFactor);
 		std::string toString() const;
 		std::string toString(std::size_t nMaxIndex) const;
 	};

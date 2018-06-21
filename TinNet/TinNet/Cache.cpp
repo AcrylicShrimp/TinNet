@@ -81,6 +81,12 @@ namespace TinNet
 			this->pBegin[nIndex] = sCache.pBegin[nIndex];
 	}
 
+	void Cache::copy(Cache sCache, float nFactor)
+	{
+		for (std::size_t nIndex{0}, nSize{std::min(this->nSize, sCache.nSize)}; nIndex < nSize; ++nIndex)
+			this->pBegin[nIndex] = nFactor * sCache.pBegin[nIndex];
+	}
+
 	void Cache::copyNegative(Cache sCache)
 	{
 		for (std::size_t nIndex{0}, nSize{std::min(this->nSize, sCache.nSize)}; nIndex < nSize; ++nIndex)
@@ -96,6 +102,12 @@ namespace TinNet
 	{
 		for (std::size_t nIndex{0}, nSize{std::min(this->nSize, sCache.nSize)}; nIndex < nSize; ++nIndex)
 			this->pBegin[nIndex] += sCache.pBegin[nIndex];
+	}
+
+	void Cache::accumulate(Cache sCache, float nFactor)
+	{
+		for (std::size_t nIndex{0}, nSize{std::min(this->nSize, sCache.nSize)}; nIndex < nSize; ++nIndex)
+			this->pBegin[nIndex] += nFactor * sCache.pBegin[nIndex];
 	}
 	
 	std::string Cache::toString() const

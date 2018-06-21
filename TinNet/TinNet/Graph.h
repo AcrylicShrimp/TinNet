@@ -54,6 +54,7 @@ namespace TinNet
 		inline const CacheContainer &cacheContainer() const;
 		inline void registerFeedable(FeedablePtr pFeedable);
 		inline void registerInitializable(InitializablePtr pInitialiable);
+		inline std::vector<InitializablePtr> &initializableList();
 		inline NodePtr node(const std::string &sName);
 		inline const NodePtr node(const std::string &sName) const;
 		template<class T> inline T *node(const std::string &sName);
@@ -86,6 +87,11 @@ namespace TinNet
 	inline void Graph::registerInitializable(InitializablePtr pInitialiable)
 	{
 		this->sInitializableList.emplace_back(pInitialiable);
+	}
+
+	inline std::vector<InitializablePtr> &Graph::initializableList()
+	{
+		return this->sInitializableList;
 	}
 
 	inline NodePtr Graph::node(const std::string &sName)

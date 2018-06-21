@@ -39,6 +39,6 @@ namespace TinNet::GraphNode
 		auto sLeft{this->sInputList.front()->forward()};
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->shape().element()}; nIndex < nMaxIndex; ++nIndex)
-			sDestination[nIndex] += sGradient[nIndex] / (this->nLogBase * sLeft[nIndex]);
+			sDestination[nIndex] += sGradient[nIndex] / (this->nLogBase * sLeft[nIndex] + .0001f);
 	}
 }

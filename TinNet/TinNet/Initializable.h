@@ -10,8 +10,12 @@
 
 #include "TinNetDLL.h"
 
+#include "Cache.h"
+#include "CacheContainer.h"
+
 #include <cstddef>
 #include <functional>
+#include <vector>
 
 namespace TinNet
 {
@@ -33,6 +37,8 @@ namespace TinNet
 		virtual void initialize(std::function<float()> fInitializer) = 0;
 		virtual void variablePass() = 0;
 		virtual void applyGradient(float nFactor) = 0;
+		virtual std::vector<std::size_t> &gradientSizeList() = 0;
+		virtual std::vector<CachePtr> &gradientList() = 0;
 	};
 }
 

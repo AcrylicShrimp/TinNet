@@ -48,12 +48,7 @@ namespace TinNet::GraphNode
 	void Softmax::forwardPass(Cache sDestination)
 	{
 		auto sLeft{this->sInputList.front()->forward()};
-
-		auto nMax{.0f};
-
-		for (auto nValue : sLeft)
-			if (nMax < nValue)
-				nMax = nValue;
+		auto nMax{*std::max_element(sLeft.cbegin(), sLeft.cend())};
 
 		this->sSumReveredCache.zero();
 
@@ -61,7 +56,7 @@ namespace TinNet::GraphNode
 			this->sSumReveredCache[this->sIterator.index<1>()] += std::exp(sLeft[this->sIterator.index<0>()] - nMax);
 
 		for (auto &nSum : this->sSumReveredCache)
-			nSum = 1.f / (nSum + .0001f);
+			nSum = 1.f / nSum;
 
 		for (this->sIterator.prepare(); this->sIterator; ++this->sIterator)
 			sDestination[this->sIterator.index<0>()] = std::exp(sLeft[this->sIterator.index<0>()] - nMax) * this->sSumReveredCache[this->sIterator.index<1>()];
@@ -71,14 +66,9 @@ namespace TinNet::GraphNode
 	{
 		auto sGradient{this->backward()};
 		auto sLeft{this->sInputList.front()->forward()};
+		auto nMax{*std::max_element(sLeft.cbegin(), sLeft.cend())};
 
 		this->forward();
-
-		auto nMax{.0f};
-
-		for (auto nValue : sLeft)
-			if (nMax < nValue)
-				nMax = nValue;
 
 		this->sSumGradientCache.zero();
 

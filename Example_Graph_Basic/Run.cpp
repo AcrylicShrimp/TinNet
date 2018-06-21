@@ -5,6 +5,9 @@
 */
 
 #include "../TinNet/TinNet/TinNet.h"
+#include "../TinNet/TinNet/Optimizer/SGD.h"
+#include "../TinNet/TinNet/Optimizer/Momentum.h"
+#include "../TinNet/TinNet/Optimizer/Adam.h"
 
 #include <algorithm>
 #include <chrono>
@@ -44,9 +47,10 @@ int32_t main()
 	Graph graph;
 	GraphBP bp{graph};
 
-	auto &x = bp.input(Shape{32, 1, 28, 28}, train_x);
-
-	auto &layer1 = bp.convolution(x, 3, 3, 28, 28, 32);
+	auto &x = bp.input(Shape{32, 784}, train_x);
+	
+	auto &reshaped_x = bp.reshape(x, {32, 1, 28, 28});
+	auto &layer1 = bp.convolution(reshaped_x, 3, 3, 28, 28, 32);
 	auto &output1 = bp.relu(layer1, .001f);
 	
 	auto &layer2 = bp.convolution(output1, 3, 3, 14, 14, 64, 2, 2);
@@ -60,17 +64,19 @@ int32_t main()
 	//auto &layer1 = bp.dense(x, 300);
 	//auto &output1 = bp.relu(layer1, .001f);
 	//
-	//auto &layer2 = bp.dense(output1, 100);
+	//auto &layer2 = bp.dense(output1, 10);
 	//auto &output2 = bp.relu(layer2, .001f);
-	//
-	//auto &layer3 = bp.dense(output2, 10);
-	//auto &y_hat = bp.softmax(layer3, {false, true});
+	//auto &y_hat = bp.softmax(output2, {false, true});
 	//auto &y = bp.input(Shape{32, 10}, train_y);
 
 	auto &loss = bp.reduceMean(-bp.reduceSum(y * bp.log(y_hat), {false, true}));
 
 	graph.initialize();
 	graph.enableBackward();
+
+	//Optimizer::SGD optimizer{graph};
+	//Optimizer::Momentum optimizer{graph, .9f};
+	Optimizer::Adam optimizer{graph, .9f, .999f};
 
 	auto fAccuracyFunc = [&]()
 	{
@@ -80,7 +86,7 @@ int32_t main()
 		{
 			graph.feed(
 			{
-				{Shape{32, 1, 28, 28}, Cache{test_x.data() + nIndex * 784, 784 * 32}},
+				{Shape{32, 784}, Cache{test_x.data() + nIndex * 784, 784 * 32}},
 				{Shape{32, 10}, Cache{test_y.data() + nIndex * 10, 10 * 32}}
 			});
 
@@ -99,18 +105,17 @@ int32_t main()
 	{
 		auto sBegin{std::chrono::system_clock::now()};
 
+		fAccuracyFunc();
+
 		for (std::size_t nIndex{0}; nIndex + 32 <= 60000; nIndex += 32)
 		{
-			fAccuracyFunc();
-
 			graph.feed(
 			{
-				{Shape{32, 1, 28, 28}, Cache{train_x.data() + nIndex * 784, 784 * 32}},
+				{Shape{32, 784}, Cache{train_x.data() + nIndex * 784, 784 * 32}},
 				{Shape{32, 10}, Cache{train_y.data() + nIndex * 10, 10 * 32}}
 			});
 
-			graph.computeGradient();
-			graph.applyGradient(-.001f);
+			optimizer.optimize(.001f);
 		}
 
 		auto sEnd{std::chrono::system_clock::now()};
