@@ -313,6 +313,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="TinNet\IO\JSON.cpp" />
+    <ClCompile Include="TinNet\IO\JSONObject.cpp" />
     <ClCompile Include="TinNet\IO\Serializable.cpp" />
     <ClCompile Include="TinNet\Node.cpp" />
     <ClCompile Include="TinNet\Optimizer\Adam.cpp" />
@@ -428,6 +430,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="TinNet\IO\JSON.h" />
+    <ClInclude Include="TinNet\IO\JSONObject.h" />
     <ClInclude Include="TinNet\IO\Serializable.h" />
     <ClInclude Include="TinNet\Iterator.h" />
     <ClInclude Include="TinNet\Iterator.hpp" />

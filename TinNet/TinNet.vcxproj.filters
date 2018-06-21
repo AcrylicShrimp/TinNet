@@ -207,6 +207,12 @@
     <ClCompile Include="TinNet\Optimizer\Adam.cpp">
       <Filter>TinNet\Optimizer</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\IO\JSONObject.cpp">
+      <Filter>TinNet\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\IO\JSON.cpp">
+      <Filter>TinNet\IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -415,6 +421,12 @@
     </ClInclude>
     <ClInclude Include="TinNet\Optimizer\Adam.h">
       <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\IO\JSONObject.h">
+      <Filter>TinNet\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\IO\JSON.h">
+      <Filter>TinNet\IO</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
