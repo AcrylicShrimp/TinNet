@@ -10,17 +10,17 @@ namespace TinNet::IO
 {
 	JSONObject JSON::parse(const std::string &sString)
 	{
-
+		return {};
 	}
 
-	std::string &JSON::stringify(const JSONObject &sObject)
+	std::string JSON::stringify(const JSONObject &sObject)
 	{
-
+		return "";
 	}
 
 	JSONObject JSON::parseNext(const std::string &sString, std::size_t &nIndex, std::size_t nEndIndex)
 	{
-
+		return {};
 	}
 
 	std::string JSON::parseString(const std::string &sString, std::size_t &nIndex, std::size_t nEndIndex)
@@ -32,7 +32,7 @@ namespace TinNet::IO
 
 		for (++nIndex; nIndex < nEndIndex && sString[nIndex] != '"'; ++nIndex)
 		{
-			if (sString[nIndex])
+			//if (sString[nIndex])
 		}
 
 		if (nIndex < nEndIndex && sString[nIndex] == '"')

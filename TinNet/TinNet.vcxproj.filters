@@ -213,6 +213,9 @@
     <ClCompile Include="TinNet\IO\JSON.cpp">
       <Filter>TinNet\IO</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\DilatedConvolution.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -427,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="TinNet\IO\JSON.h">
       <Filter>TinNet\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\DilatedConvolution.h">
+      <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

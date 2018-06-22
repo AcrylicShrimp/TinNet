@@ -48,18 +48,30 @@ int32_t main()
 	GraphBP bp{graph};
 
 	auto &x = bp.input(Shape{32, 784}, train_x);
-	
+
 	auto &reshaped_x = bp.reshape(x, {32, 1, 28, 28});
-	auto &layer1 = bp.convolution(reshaped_x, 3, 3, 28, 28, 32);
+	auto &layer1 = bp.dilatedConvolution(reshaped_x, 3, 3, 2, 2, 24, 24, 32);
 	auto &output1 = bp.relu(layer1, .001f);
-	
-	auto &layer2 = bp.convolution(output1, 3, 3, 14, 14, 64, 2, 2);
+
+	auto &layer2 = bp.dilatedConvolution(output1, 3, 3, 2, 2, 11, 11, 64, 2, 2);
 	auto &output2 = bp.relu(layer2, .001f);
-	auto &reshaped_output2 = bp.reshape(output2, {32, 12544});
-	
+	auto &reshaped_output2 = bp.reshape(output2, {32, 7744});
+
 	auto &layer3 = bp.dense(reshaped_output2, 10);
 	auto &y_hat = bp.softmax(layer3, {false, true});
 	auto &y = bp.input(Shape{32, 10}, train_y);
+	
+	//auto &reshaped_x = bp.reshape(x, {32, 1, 28, 28});
+	//auto &layer1 = bp.convolution(reshaped_x, 3, 3, 28, 28, 32);
+	//auto &output1 = bp.relu(layer1, .001f);
+	//
+	//auto &layer2 = bp.convolution(output1, 3, 3, 14, 14, 64, 2, 2);
+	//auto &output2 = bp.relu(layer2, .001f);
+	//auto &reshaped_output2 = bp.reshape(output2, {32, 12544});
+	//
+	//auto &layer3 = bp.dense(reshaped_output2, 10);
+	//auto &y_hat = bp.softmax(layer3, {false, true});
+	//auto &y = bp.input(Shape{32, 10}, train_y);
 
 	//auto &layer1 = bp.dense(x, 300);
 	//auto &output1 = bp.relu(layer1, .001f);

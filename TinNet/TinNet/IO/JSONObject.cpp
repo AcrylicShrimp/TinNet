@@ -163,7 +163,7 @@ namespace TinNet::IO
 	const JSONObject *JSONObject::obtain(const std::string &sKey) const
 	{
 		if (!this->isObject())
-			return;
+			return nullptr;
 
 		auto &sMap{std::get<std::map<std::string, JSONObject>>(this->sValue)};
 		auto iIndex{sMap.find(sKey)};

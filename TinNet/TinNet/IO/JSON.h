@@ -29,7 +29,7 @@ namespace TinNet::IO
 		
 	public:
 		static JSONObject parse(const std::string &sString);
-		static std::string &stringify(const JSONObject &sObject);
+		static std::string stringify(const JSONObject &sObject);
 
 	private:
 		static JSONObject parseNext(const std::string &sString, std::size_t &nIndex, std::size_t nEndIndex);

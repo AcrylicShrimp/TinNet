@@ -220,7 +220,7 @@ namespace TinNet::IO
 
 	inline std::size_t JSONObject::length() const
 	{
-		if (!this->isArray)
+		if (!this->isArray())
 			return 0;
 
 		return std::get<std::vector<JSONObject>>(this->sValue).size();

@@ -233,6 +233,7 @@
     <ClCompile Include="TinNet\GraphNode\Cos.cpp" />
     <ClCompile Include="TinNet\GraphNode\Cosh.cpp" />
     <ClCompile Include="TinNet\GraphNode\Dense.cpp" />
+    <ClCompile Include="TinNet\GraphNode\DilatedConvolution.cpp" />
     <ClCompile Include="TinNet\GraphNode\Divide.cpp" />
     <ClCompile Include="TinNet\GraphNode\Exp.cpp" />
     <ClCompile Include="TinNet\GraphNode\Exp2.cpp" />
@@ -341,6 +342,7 @@
     <ClInclude Include="TinNet\GraphNode\Cos.h" />
     <ClInclude Include="TinNet\GraphNode\Cosh.h" />
     <ClInclude Include="TinNet\GraphNode\Dense.h" />
+    <ClInclude Include="TinNet\GraphNode\DilatedConvolution.h" />
     <ClInclude Include="TinNet\GraphNode\Divide.h" />
     <ClInclude Include="TinNet\GraphNode\Exp.h" />
     <ClInclude Include="TinNet\GraphNode\Exp2.h" />
