@@ -264,6 +264,7 @@
     <ClCompile Include="TinNet\GraphNode\Subtract.cpp" />
     <ClCompile Include="TinNet\GraphNode\Tan.cpp" />
     <ClCompile Include="TinNet\GraphNode\Tanh.cpp" />
+    <ClCompile Include="TinNet\GraphNode\TransposedConvolution.cpp" />
     <ClCompile Include="TinNet\GraphNode\VariableNode.cpp" />
     <ClCompile Include="TinNet\Initializable.cpp" />
     <ClCompile Include="TinNet\Initializer\Constant.cpp">
@@ -374,6 +375,7 @@
     <ClInclude Include="TinNet\GraphNode\Subtract.h" />
     <ClInclude Include="TinNet\GraphNode\Tan.h" />
     <ClInclude Include="TinNet\GraphNode\Tanh.h" />
+    <ClInclude Include="TinNet\GraphNode\TransposedConvolution.h" />
     <ClInclude Include="TinNet\GraphNode\VariableNode.h" />
     <ClInclude Include="TinNet\Initializable.h" />
     <ClInclude Include="TinNet\Initializer\Constant.h">

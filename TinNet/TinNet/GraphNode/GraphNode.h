@@ -49,5 +49,6 @@
 #include "Dense.h"
 #include "Convolution.h"
 #include "DilatedConvolution.h"
+#include "TransposedConvolution.h"
 
 #endif

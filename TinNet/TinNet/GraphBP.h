@@ -91,6 +91,15 @@ namespace TinNet
 			std::size_t nHStride = 1,
 			std::size_t nVStride = 1,
 			const std::string &sName = "");
+		Node &transposedConvolution(Node &sLeft,
+			std::size_t nKernelWidth,
+			std::size_t nKernelHeight,
+			std::size_t nOutputWidth,
+			std::size_t nOutputHeight,
+			std::size_t nOutputChannel,
+			std::size_t nHStride = 1,
+			std::size_t nVStride = 1,
+			const std::string &sName = "");
 	};
 }
 

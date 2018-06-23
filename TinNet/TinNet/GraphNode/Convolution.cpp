@@ -197,8 +197,6 @@ namespace TinNet::GraphNode
 		{
 			auto sForward{sBatchForward + this->sInputAccessor(nBatch, 0, 0, 0)};
 
-			this->sInputCache.zero();
-
 			for (std::size_t nIndex{0}, nMaxIndex{this->sInputIndexList.size()}; nIndex < nMaxIndex; ++nIndex)
 				if (this->sInputIndexList[nIndex])
 					this->sInputCache[nIndex] = sForward[this->sInputIndexList[nIndex] - 1];

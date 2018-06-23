@@ -413,4 +413,22 @@ namespace TinNet
 
 		return *pNode;
 	}
+
+	Node &GraphBP::transposedConvolution(Node &sLeft,
+		std::size_t nKernelWidth,
+		std::size_t nKernelHeight,
+		std::size_t nOutputWidth,
+		std::size_t nOutputHeight,
+		std::size_t nOutputChannel,
+		std::size_t nHStride,
+		std::size_t nVStride,
+		const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::TransposedConvolution>(sName, nKernelWidth, nKernelHeight, nHStride, nVStride, nOutputWidth, nOutputHeight, nOutputChannel)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
 }
