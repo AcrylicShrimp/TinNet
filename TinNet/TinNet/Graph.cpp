@@ -36,22 +36,32 @@ namespace TinNet
 
 	void Graph::enableBackward()
 	{
+		if (this->bEnabledBackward)
+			return;
+
+		this->bEnabledBackward = true;
+
 		for (auto pNode : this->sOrderedNodeList)
 			pNode->notifyBackwardEnabled();
 	}
 
 	void Graph::disableBackward()
 	{
+		if (!this->bEnabledBackward)
+			return;
+
+		this->bEnabledBackward = false;
+
 		for (auto pNode : this->sOrderedNodeList)
 			pNode->notifyBackwardDisabled();
 	}
 
-	void Graph::feed(const std::vector<ShapedCache> &sFeedList)
+	void Graph::feed(const Batch &sBatch, const std::vector<ShapedCache> &sFeedList)
 	{
 		std::size_t nIndex{0};
 
 		for (auto pFeedable : this->sFeedableList)
-			pFeedable->feed(sFeedList[nIndex++]);
+			pFeedable->feed(sBatch, sFeedList[nIndex++]);
 
 		for (auto pNode : this->sOrderedNodeList)
 			pNode->notifyShapeUpdated();
@@ -59,12 +69,12 @@ namespace TinNet
 		this->sCacheContainer.setDirtyAll();
 	}
 
-	void Graph::feed(std::initializer_list<ShapedCache> sFeedList)
+	void Graph::feed(const Batch &sBatch, std::initializer_list<ShapedCache> sFeedList)
 	{
 		std::size_t nIndex{0};
 
 		for (auto pFeedable : this->sFeedableList)
-			pFeedable->feed(sFeedList.begin()[nIndex++]);
+			pFeedable->feed(sBatch, sFeedList.begin()[nIndex++]);
 
 		for (auto pNode : this->sOrderedNodeList)
 			pNode->notifyShapeUpdated();
@@ -72,8 +82,10 @@ namespace TinNet
 		this->sCacheContainer.setDirtyAll();
 	}
 
-	void Graph::computeGradient()
+	void Graph::computeGradient(Node &sGradientBeginNode)
 	{
+		sGradientBeginNode.beginGradient();
+
 		for (auto pInitializable : this->sInitializableList)
 			pInitializable->variablePass();
 	}

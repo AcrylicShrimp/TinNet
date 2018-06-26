@@ -219,6 +219,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TinNet\Accessor.cpp" />
+    <ClCompile Include="TinNet\Batch.cpp" />
     <ClCompile Include="TinNet\Cache.cpp" />
     <ClCompile Include="TinNet\CacheContainer.cpp" />
     <ClCompile Include="TinNet\Feedable.cpp" />
@@ -329,6 +330,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Accessor.h" />
+    <ClInclude Include="TinNet\Batch.h" />
     <ClInclude Include="TinNet\Cache.h" />
     <ClInclude Include="TinNet\CacheContainer.h" />
     <ClInclude Include="TinNet\Feedable.h" />
@@ -443,6 +445,7 @@
     <ClInclude Include="TinNet\Optimizer\Adam.h" />
     <ClInclude Include="TinNet\Optimizer\Momentum.h" />
     <ClInclude Include="TinNet\Optimizer\OptimizerBase.h" />
+    <ClInclude Include="TinNet\Optimizer\Optimizer.h" />
     <ClInclude Include="TinNet\Optimizer\SGD.h" />
     <ClInclude Include="TinNet\Reinforcement\Game.h" />
     <ClInclude Include="TinNet\Reinforcement\MCTS.h" />

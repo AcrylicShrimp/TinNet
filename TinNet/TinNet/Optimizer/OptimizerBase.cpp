@@ -16,9 +16,9 @@ namespace TinNet::Optimizer
 		//Empty.
 	}
 
-	void OptimizerBase::optimize(float nLearningRate)
+	void OptimizerBase::reduce(Node &sTargetNode, float nLearningRate)
 	{
-		this->sGraph.computeGradient();
+		this->sGraph.computeGradient(sTargetNode);
 		this->applyGradient(nLearningRate);
 	}
 

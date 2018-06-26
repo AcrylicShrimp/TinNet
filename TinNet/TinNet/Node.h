@@ -47,6 +47,7 @@ namespace TinNet
 		virtual void notifyBackwardDisabled() = 0;
 		virtual Cache forward() = 0;
 		virtual Cache backward() = 0;
+		virtual void beginGradient() = 0;
 		inline class Graph *graph();
 		inline const class Graph *graph() const;
 		inline const std::string &name() const;

@@ -10,6 +10,7 @@
 
 #include "TinNetDLL.h"
 
+#include "Batch.h"
 #include "CacheContainer.h"
 #include "Feedable.h"
 #include "Initializable.h"
@@ -35,6 +36,7 @@ namespace TinNet
 	class TINNET_DLL Graph final
 	{
 	private:
+		bool bEnabledBackward{false};
 		std::vector<NodePtr> sOrderedNodeList;
 		std::vector<FeedablePtr> sFeedableList;
 		std::vector<InitializablePtr> sInitializableList;
@@ -50,6 +52,7 @@ namespace TinNet
 		Graph &operator=(const Graph &sSrc) = delete;
 
 	public:
+		inline bool backwardEnabled() const;
 		inline CacheContainer &cacheContainer();
 		inline const CacheContainer &cacheContainer() const;
 		inline void registerFeedable(FeedablePtr pFeedable);
@@ -63,11 +66,16 @@ namespace TinNet
 		void initialize();
 		void enableBackward();
 		void disableBackward();
-		void feed(const std::vector<ShapedCache> &sFeedList);
-		void feed(std::initializer_list<ShapedCache> sFeedList);
-		void computeGradient();
+		void feed(const Batch &sBatch, const std::vector<ShapedCache> &sFeedList);
+		void feed(const Batch &sBatch, std::initializer_list<ShapedCache> sFeedList);
+		void computeGradient(Node &sGradientBeginNode);
 		void applyGradient(float nFactor);
 	};
+
+	inline bool Graph::backwardEnabled() const
+	{
+		return this->bEnabledBackward;
+	}
 
 	inline CacheContainer &Graph::cacheContainer()
 	{

@@ -31,9 +31,15 @@ namespace TinNet::GraphNode
 		return this->sShapedCache.cache();
 	}
 
-	void Input::feed(ShapedCache sShapedCache)
+	void Input::feed(const Batch &sBatch, const ShapedCache &sShapedCache)
 	{
-		this->sShapedCache = sShapedCache;
+		if (this->sValue.size() < sShapedCache.shape().element())
+			this->sValue.resize(sShapedCache.shape().element());
+
+		this->sShapedCache = sShapedCache.shape();
+		this->sShapedCache.set(this->sValue);
+
+		sBatch.copy(sShapedCache.shape().element() / sBatch.currentBatchSize(), sShapedCache.cache(), this->sValue);
 	}
 
 	void Input::forwardPass(Cache sDestination)

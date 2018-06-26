@@ -49,4 +49,10 @@ namespace TinNet::GraphNode
 
 		return this->pGradient->sCache;
 	}
+
+	void BackpropNode::beginGradient()
+	{
+		this->pGradient->sCache.one();
+		this->pGradient->bDirty = false;
+	}
 }

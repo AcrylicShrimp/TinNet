@@ -36,7 +36,6 @@ namespace TinNet
 		
 	public:
 		Node &input(const Shape &sShape, const std::string &sName = "");
-		Node &input(const Shape &sShape, std::vector<float> &sValue, const std::string &sName = "");
 		Node &constant(float nValue, const std::string &sName = "");
 		Node &constant(const Shape &sShape, const std::vector<float> &sValue, const std::string &sName = "");
 		Node &reshape(Node &sLeft, const Shape &sShape, const std::string &sName = "");

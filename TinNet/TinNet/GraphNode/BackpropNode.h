@@ -38,6 +38,7 @@ namespace TinNet::GraphNode
 		virtual void notifyBackwardEnabled() override;
 		virtual void notifyBackwardDisabled() override;
 		virtual Cache backward() override;
+		virtual void beginGradient() override;
 	};
 }
 

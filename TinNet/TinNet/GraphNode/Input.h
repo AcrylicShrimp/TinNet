@@ -19,6 +19,7 @@
 
 #include <cstddef>
 #include <string>
+#include <vector>
 
 namespace TinNet::GraphNode
 {
@@ -26,6 +27,7 @@ namespace TinNet::GraphNode
 	{
 	protected:
 		ShapedCache sShapedCache;
+		std::vector<float> sValue;
 		
 	public:
 		Input(Graph *pGraph, const std::string &sName, const Shape &sShape);
@@ -39,7 +41,7 @@ namespace TinNet::GraphNode
 		virtual const Shape &shape() const override;
 		virtual std::string type() const override;
 		virtual Cache forward() override;
-		virtual void feed(ShapedCache sShapedCache) override;
+		virtual void feed(const Batch &sBatch, const ShapedCache &sShapedCache) override;
 		inline static std::string typeName();
 
 	protected:

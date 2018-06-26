@@ -23,16 +23,6 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::input(const Shape &sShape, std::vector<float> &sValue, const std::string &sName)
-	{
-		auto pNode{this->sGraph.addNode<GraphNode::Input>(sName, sShape)};
-
-		pNode->feed({sShape, sValue});
-		pNode->notifyShapeUpdated();
-
-		return *pNode;
-	}
-
 	Node &GraphBP::constant(float nValue, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Constant>(sName, Shape{}, std::vector<float>{nValue})};

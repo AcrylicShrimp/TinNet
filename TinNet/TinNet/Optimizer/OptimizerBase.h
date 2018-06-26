@@ -12,6 +12,7 @@
 
 #include "../Graph.h"
 #include "../Initializable.h"
+#include "../Node.h"
 
 #include <cstddef>
 
@@ -37,7 +38,7 @@ namespace TinNet::Optimizer
 		OptimizerBase &operator=(OptimizerBase &&sSrc) = default;
 		
 	public:
-		void optimize(float nLearningRate);
+		void reduce(Node &sTargetNode, float nLearningRate);
 
 	protected:
 		void copyGradient(Gradient &sGradient, float nFactor = 1.f);

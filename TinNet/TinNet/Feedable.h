@@ -10,7 +10,10 @@
 
 #include "TinNetDLL.h"
 
+#include "Batch.h"
 #include "ShapedCache.h"
+
+#include <vector>
 
 namespace TinNet
 {
@@ -27,7 +30,7 @@ namespace TinNet
 		Feedable &operator=(const Feedable &sSrc) = delete;
 		
 	public:
-		virtual void feed(ShapedCache sShapedCache) = 0;
+		virtual void feed(const Batch &sBatch, const ShapedCache &sShapedCache) = 0;
 	};
 }
 

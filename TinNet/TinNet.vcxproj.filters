@@ -219,6 +219,9 @@
     <ClCompile Include="TinNet\GraphNode\TransposedConvolution.cpp">
       <Filter>TinNet\GraphNode</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Batch.cpp">
+      <Filter>TinNet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -439,6 +442,12 @@
     </ClInclude>
     <ClInclude Include="TinNet\GraphNode\TransposedConvolution.h">
       <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\Optimizer.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Batch.h">
+      <Filter>TinNet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

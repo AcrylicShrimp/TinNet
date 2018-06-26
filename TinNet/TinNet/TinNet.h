@@ -8,6 +8,7 @@
 
 #define _TINNET_H
 
+#include "Batch.h"
 #include "Cache.h"
 #include "Shape.h"
 #include "ShapedCache.h"
@@ -17,5 +18,7 @@
 
 #include "GraphBP.h"
 #include "GraphBPOp.h"
+
+#include "Optimizer/Optimizer.h"
 
 #endif
