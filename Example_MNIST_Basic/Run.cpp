@@ -57,7 +57,7 @@ int32_t main()
 		std::size_t nIndex{0};
 		std::size_t nCount{0};
 
-		batch.shuffle(10000, 32);
+		batch.sequential(10000, 32);
 
 		while (batch.hasNext())
 		{

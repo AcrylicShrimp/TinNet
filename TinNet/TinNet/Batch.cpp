@@ -13,7 +13,9 @@ namespace TinNet
 		this->nBatch = 0;
 		this->nMaxBatch = nBatchSize;
 		this->nMiniBatch = nMiniBatchSize;
-		this->sIndexList.resize(nBatchSize);
+
+		if (this->sIndexList.size() != this->nMaxBatch)
+			this->sIndexList.resize(this->nMaxBatch);
 
 		if (!this->nMaxBatch)
 			return;
@@ -32,7 +34,9 @@ namespace TinNet
 		this->nBatch = 0;
 		this->nMaxBatch = nBatchSize;
 		this->nMiniBatch = nMiniBatchSize;
-		this->sIndexList.resize(nBatchSize);
+
+		if (this->sIndexList.size() != this->nMaxBatch)
+			this->sIndexList.resize(this->nMaxBatch);
 
 		if (!this->nMaxBatch)
 			return;
@@ -43,14 +47,15 @@ namespace TinNet
 
 	void Batch::copy(std::size_t nElementCount, const Cache sSource, Cache sDestination) const
 	{
-		for (std::size_t nIndex{0}, nMaxIndex{this->currentBatchSize()}; nIndex < nMaxIndex; ++nIndex)
-			std::copy(sSource.cbegin() + nElementCount * this->sIndexList[this->nBatch + nIndex], sSource.cbegin() + nElementCount * (this->sIndexList[this->nBatch + nIndex] + 1), sDestination.begin());
+		for (std::size_t nBatch{0}, nMaxBatch{this->currentBatchSize()}; nBatch < nMaxBatch; ++nBatch)
+			for (std::size_t nIndex{0}; nIndex < nElementCount; ++nIndex)
+				sDestination[nElementCount * nBatch + nIndex] = sSource[nElementCount * this->sIndexList[this->nBatch + nBatch] + nIndex];
 	}
 
 	void Batch::copy(std::size_t nElementCount, const std::vector<float> &sSource, std::vector<float> &sDestination) const
 	{
-		for (std::size_t nIndex{0}, nMaxIndex{this->currentBatchSize()}; nIndex < nMaxIndex; ++nIndex)
-			std::copy(sSource.cbegin() + nElementCount * this->sIndexList[this->nBatch + nIndex], sSource.cbegin() + nElementCount * (this->sIndexList[this->nBatch + nIndex] + 1), sDestination.begin());
+		for (std::size_t nBatch{0}, nMaxBatch{this->currentBatchSize()}; nBatch < nMaxBatch; ++nBatch)
+			std::copy(sSource.cbegin() + nElementCount * this->sIndexList[this->nBatch + nBatch], sSource.cbegin() + nElementCount * (this->sIndexList[this->nBatch + nBatch] + 1), sDestination.begin() + nElementCount * nBatch);
 	}
 
 	Cache Batch::obtain(std::size_t nElementCount, Cache sSource, std::size_t nBatchIndex) const
@@ -62,7 +67,7 @@ namespace TinNet
 	{
 		std::size_t nCurrentBatchSize{this->currentBatchSize()};
 
-		this->nBatch += this->nMiniBatch;
+		this->nBatch += nCurrentBatchSize;
 
 		return nCurrentBatchSize;
 	}

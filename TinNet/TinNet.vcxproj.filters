@@ -19,6 +19,9 @@
     <Filter Include="TinNet\Optimizer">
       <UniqueIdentifier>{dc30b3fa-398a-4052-9a0b-0e83f821ca58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TinNet\Visual">
+      <UniqueIdentifier>{47498849-1c9c-4bc6-8542-fee0ee7a4a43}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TinNet\Initializer\Constant.cpp">

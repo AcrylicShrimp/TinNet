@@ -4,10 +4,9 @@
 	Created by AcrylicShrimp.
 */
 
-#include "Dot.h"
+#define NOMINMAX
 
-#undef min
-#undef max
+#include "Dot.h"
 
 namespace TinNet::Dot
 {
