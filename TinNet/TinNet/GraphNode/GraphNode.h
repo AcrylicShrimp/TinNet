@@ -9,6 +9,7 @@
 #define _TINNET_GRAPHNODE_H
 
 #include "Input.h"
+#include "Select.h"
 #include "Constant.h"
 
 #include "Reshape.h"

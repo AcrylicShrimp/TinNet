@@ -35,7 +35,7 @@ namespace TinNet::GraphNode
 		Iterator<Accessor, Accessor, Accessor> sWeightIterator;
 
 	public:
-		Dense(Graph *pGraph, const std::string &sName, std::size_t nFanOut);
+		Dense(Graph *pGraph, const std::string &sName, NodePtr pSharingNode, std::size_t nFanOut);
 		Dense(const Dense &sSrc) = delete;
 		~Dense() = default;
 

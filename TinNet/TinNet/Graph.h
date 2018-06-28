@@ -10,7 +10,6 @@
 
 #include "TinNetDLL.h"
 
-#include "Batch.h"
 #include "CacheContainer.h"
 #include "Feedable.h"
 #include "Initializable.h"
@@ -38,8 +37,8 @@ namespace TinNet
 	private:
 		bool bEnabledBackward{false};
 		std::vector<NodePtr> sOrderedNodeList;
-		std::vector<FeedablePtr> sFeedableList;
 		std::vector<InitializablePtr> sInitializableList;
+		std::unordered_map<NodePtr, FeedablePtr> sFeedableMap;
 		std::unordered_map<std::string, std::unique_ptr<Node>> sNodeMap;
 		CacheContainer sCacheContainer;
 
@@ -55,7 +54,7 @@ namespace TinNet
 		inline bool backwardEnabled() const;
 		inline CacheContainer &cacheContainer();
 		inline const CacheContainer &cacheContainer() const;
-		inline void registerFeedable(FeedablePtr pFeedable);
+		inline void registerFeedable(NodePtr pNode, FeedablePtr pFeedable);
 		inline void registerInitializable(InitializablePtr pInitialiable);
 		inline std::vector<InitializablePtr> &initializableList();
 		inline NodePtr node(const std::string &sName);
@@ -66,10 +65,8 @@ namespace TinNet
 		void initialize();
 		void enableBackward();
 		void disableBackward();
-		void feed(const Batch &sBatch, const std::vector<ShapedCache> &sFeedList);
-		void feed(const Batch &sBatch, std::initializer_list<ShapedCache> sFeedList);
-		void computeGradient(Node &sGradientBeginNode);
-		void applyGradient(float nFactor);
+		void feed(NodeRef sNode, const ShapedCache &sShapedCache);
+		void endFeed();
 	};
 
 	inline bool Graph::backwardEnabled() const
@@ -87,9 +84,9 @@ namespace TinNet
 		return this->sCacheContainer;
 	}
 
-	inline void Graph::registerFeedable(FeedablePtr pFeedable)
+	inline void Graph::registerFeedable(NodePtr pNode, FeedablePtr pFeedable)
 	{
-		this->sFeedableList.emplace_back(pFeedable);
+		this->sFeedableMap.emplace(pNode, pFeedable);
 	}
 
 	inline void Graph::registerInitializable(InitializablePtr pInitialiable)

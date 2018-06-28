@@ -16,6 +16,7 @@
 #include "FullNode.h"
 
 #include <cstddef>
+#include <immintrin.h>
 #include <string>
 
 namespace TinNet::GraphNode

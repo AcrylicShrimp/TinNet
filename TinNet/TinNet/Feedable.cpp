@@ -7,11 +7,12 @@
 #include "Feedable.h"
 
 #include "Graph.h"
+#include "Node.h"
 
 namespace TinNet
 {
-	Feedable::Feedable(Graph *pGraph)
+	Feedable::Feedable(Graph *pGraph, Node *pNode)
 	{
-		pGraph->registerFeedable(this);
+		pGraph->registerFeedable(pNode, this);
 	}
 }

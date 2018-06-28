@@ -13,9 +13,9 @@ namespace TinNet
 		this->disableBackward();
 
 		this->sOrderedNodeList.clear();
-		this->sFeedableList.clear();
 		this->sInitializableList.clear();
 
+		this->sFeedableMap.clear();
 		this->sNodeMap.clear();
 	}
 
@@ -56,43 +56,19 @@ namespace TinNet
 			pNode->notifyBackwardDisabled();
 	}
 
-	void Graph::feed(const Batch &sBatch, const std::vector<ShapedCache> &sFeedList)
+	void Graph::feed(NodeRef sNode, const ShapedCache &sShapedCache)
 	{
-		std::size_t nIndex{0};
+		auto iIndex{this->sFeedableMap.find(&sNode)};
 
-		for (auto pFeedable : this->sFeedableList)
-			pFeedable->feed(sBatch, sFeedList[nIndex++]);
+		if (iIndex != this->sFeedableMap.cend())
+			iIndex->second->feed(sShapedCache);
+	}
 
+	void Graph::endFeed()
+	{
 		for (auto pNode : this->sOrderedNodeList)
 			pNode->notifyShapeUpdated();
 
 		this->sCacheContainer.setDirtyAll();
-	}
-
-	void Graph::feed(const Batch &sBatch, std::initializer_list<ShapedCache> sFeedList)
-	{
-		std::size_t nIndex{0};
-
-		for (auto pFeedable : this->sFeedableList)
-			pFeedable->feed(sBatch, sFeedList.begin()[nIndex++]);
-
-		for (auto pNode : this->sOrderedNodeList)
-			pNode->notifyShapeUpdated();
-
-		this->sCacheContainer.setDirtyAll();
-	}
-
-	void Graph::computeGradient(Node &sGradientBeginNode)
-	{
-		sGradientBeginNode.beginGradient();
-
-		for (auto pInitializable : this->sInitializableList)
-			pInitializable->variablePass();
-	}
-
-	void Graph::applyGradient(float nFactor)
-	{
-		for (auto pInitializable : this->sInitializableList)
-			pInitializable->applyGradient(nFactor);
 	}
 }

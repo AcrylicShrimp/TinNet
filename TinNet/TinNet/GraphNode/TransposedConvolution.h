@@ -47,7 +47,7 @@ namespace TinNet::GraphNode
 		std::size_t nVPaddingP;
 		
 	public:
-		TransposedConvolution(Graph *pGraph, const std::string &sName,
+		TransposedConvolution(Graph *pGraph, const std::string &sName, NodePtr pSharingNode,
 			std::size_t nKernelWidth,
 			std::size_t nKernelHeight,
 			std::size_t nHStride,

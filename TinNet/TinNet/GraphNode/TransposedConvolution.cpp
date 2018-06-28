@@ -8,7 +8,7 @@
 
 namespace TinNet::GraphNode
 {
-	TransposedConvolution::TransposedConvolution(Graph *pGraph, const std::string &sName,
+	TransposedConvolution::TransposedConvolution(Graph *pGraph, const std::string &sName, NodePtr pSharingNode,
 		std::size_t nKernelWidth,
 		std::size_t nKernelHeight,
 		std::size_t nHStride,
@@ -16,7 +16,7 @@ namespace TinNet::GraphNode
 		std::size_t nOutputWidth,
 		std::size_t nOutputHeight,
 		std::size_t nOutputChannel) :
-		VariableNode(pGraph, sName),
+		VariableNode(pGraph, sName, pSharingNode),
 		sInputShape{},
 		sOutputShape{1, nOutputChannel, nOutputHeight, nOutputWidth},
 		sOutputInternalShape{},

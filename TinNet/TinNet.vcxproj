@@ -254,6 +254,7 @@
     <ClCompile Include="TinNet\GraphNode\ReduceSum.cpp" />
     <ClCompile Include="TinNet\GraphNode\ReLU.cpp" />
     <ClCompile Include="TinNet\GraphNode\Reshape.cpp" />
+    <ClCompile Include="TinNet\GraphNode\Select.cpp" />
     <ClCompile Include="TinNet\GraphNode\Sigmoid.cpp" />
     <ClCompile Include="TinNet\GraphNode\Sign.cpp" />
     <ClCompile Include="TinNet\GraphNode\Sin.cpp" />
@@ -366,6 +367,7 @@
     <ClInclude Include="TinNet\GraphNode\ReduceSum.h" />
     <ClInclude Include="TinNet\GraphNode\ReLU.h" />
     <ClInclude Include="TinNet\GraphNode\Reshape.h" />
+    <ClInclude Include="TinNet\GraphNode\Select.h" />
     <ClInclude Include="TinNet\GraphNode\Sigmoid.h" />
     <ClInclude Include="TinNet\GraphNode\Sign.h" />
     <ClInclude Include="TinNet\GraphNode\Sin.h" />

@@ -10,7 +10,6 @@
 
 #include "TinNetDLL.h"
 
-#include "Batch.h"
 #include "ShapedCache.h"
 
 #include <vector>
@@ -22,7 +21,7 @@ namespace TinNet
 	class TINNET_DLL Feedable
 	{
 	public:
-		Feedable(class Graph *pGraph);
+		Feedable(class Graph *pGraph, class Node *pNode);
 		Feedable(const Feedable &sSrc) = delete;
 		virtual ~Feedable() = default;
 		
@@ -30,7 +29,7 @@ namespace TinNet
 		Feedable &operator=(const Feedable &sSrc) = delete;
 		
 	public:
-		virtual void feed(const Batch &sBatch, const ShapedCache &sShapedCache) = 0;
+		virtual void feed(const ShapedCache &sShapedCache) = 0;
 	};
 }
 

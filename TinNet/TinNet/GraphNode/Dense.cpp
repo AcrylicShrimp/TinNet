@@ -8,8 +8,8 @@
 
 namespace TinNet::GraphNode
 {
-	Dense::Dense(Graph *pGraph, const std::string &sName, std::size_t nFanOut) :
-		VariableNode(pGraph, sName),
+	Dense::Dense(Graph *pGraph, const std::string &sName, NodePtr pSharingNode, std::size_t nFanOut) :
+		VariableNode(pGraph, sName, pSharingNode),
 		nFanOut{nFanOut}
 	{
 		//Empty.

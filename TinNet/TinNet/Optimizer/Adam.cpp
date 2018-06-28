@@ -18,6 +18,16 @@ namespace TinNet::Optimizer
 		//Empty.
 	}
 
+	Adam::Adam(Graph &sGraph, float nBeta1, float nBeta2, const std::vector<NodePtr> &sNodeList) :
+		OptimizerBase(sGraph, sNodeList),
+		nBeta1{nBeta1},
+		nBeta2{nBeta2},
+		sGradientBeta1{this->OptimizerBase::generateGradientBuffer()},
+		sGradientBeta2{this->OptimizerBase::generateGradientBuffer()}
+	{
+		//Empty.
+	}
+
 	void Adam::applyGradient(float nLearningRate)
 	{
 		this->OptimizerBase::copyGradient(this->sGradient);

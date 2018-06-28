@@ -14,7 +14,7 @@ namespace TinNet
 		//Empty.
 	}
 
-	Node &GraphBP::input(const Shape &sShape, const std::string &sName)
+	NodeRef GraphBP::input(const Shape &sShape, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Input>(sName, sShape)};
 
@@ -23,7 +23,18 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::constant(float nValue, const std::string &sName)
+	NodeRef GraphBP::select(NodeRef sLeft, NodeRef sRight, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Select>(sName)};
+
+		Node::link(&sLeft, pNode);
+		Node::link(&sRight, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	NodeRef GraphBP::constant(float nValue, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Constant>(sName, Shape{}, std::vector<float>{nValue})};
 
@@ -32,7 +43,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::constant(const Shape &sShape, const std::vector<float> &sValue, const std::string &sName)
+	NodeRef GraphBP::constant(const Shape &sShape, const std::vector<float> &sValue, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Constant>(sName, sShape, sValue)};
 
@@ -41,7 +52,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::reshape(Node &sLeft, const Shape &sShape, const std::string &sName)
+	NodeRef GraphBP::reshape(NodeRef sLeft, const Shape &sShape, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Reshape>(sName, sShape)};
 
@@ -51,7 +62,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::squeeze(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::squeeze(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Squeeze>(sName)};
 
@@ -61,7 +72,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::reduceMin(Node &sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
+	NodeRef GraphBP::reduceMin(NodeRef sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::ReduceMin>(sName, sAxis, bSqueeze)};
 
@@ -71,7 +82,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::reduceMax(Node &sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
+	NodeRef GraphBP::reduceMax(NodeRef sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::ReduceMax>(sName, sAxis, bSqueeze)};
 
@@ -81,7 +92,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::reduceSum(Node &sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
+	NodeRef GraphBP::reduceSum(NodeRef sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::ReduceSum>(sName, sAxis, bSqueeze)};
 
@@ -91,7 +102,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::reduceMean(Node &sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
+	NodeRef GraphBP::reduceMean(NodeRef sLeft, const std::vector<bool> &sAxis, bool bSqueeze, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::ReduceMean>(sName, sAxis, bSqueeze)};
 
@@ -101,7 +112,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::abs(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::abs(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Abs>(sName)};
 
@@ -111,7 +122,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::neg(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::neg(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Neg>(sName)};
 
@@ -121,7 +132,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::sign(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::sign(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Sign>(sName)};
 
@@ -131,7 +142,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::add(Node &sLeft, Node &sRight, const std::string &sName)
+	NodeRef GraphBP::add(NodeRef sLeft, NodeRef sRight, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Add>(sName)};
 
@@ -142,7 +153,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::subtract(Node &sLeft, Node &sRight, const std::string &sName)
+	NodeRef GraphBP::subtract(NodeRef sLeft, NodeRef sRight, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Subtract>(sName)};
 
@@ -153,7 +164,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::multiply(Node &sLeft, Node &sRight, const std::string &sName)
+	NodeRef GraphBP::multiply(NodeRef sLeft, NodeRef sRight, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Multiply>(sName)};
 
@@ -164,7 +175,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::divide(Node &sLeft, Node &sRight, const std::string &sName)
+	NodeRef GraphBP::divide(NodeRef sLeft, NodeRef sRight, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Divide>(sName)};
 
@@ -175,7 +186,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::pow(Node &sLeft, Node &sRight, const std::string &sName)
+	NodeRef GraphBP::pow(NodeRef sLeft, NodeRef sRight, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Pow>(sName)};
 
@@ -186,7 +197,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::square(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::square(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Square>(sName)};
 
@@ -196,7 +207,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::exp(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::exp(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Exp>(sName)};
 
@@ -206,7 +217,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::exp2(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::exp2(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Exp2>(sName)};
 
@@ -216,7 +227,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::log(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::log(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Log>(sName)};
 
@@ -226,7 +237,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::log2(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::log2(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Log2>(sName)};
 
@@ -236,7 +247,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::log10(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::log10(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Log10>(sName)};
 
@@ -246,7 +257,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::logn(Node &sLeft, float nBase, const std::string &sName)
+	NodeRef GraphBP::logn(NodeRef sLeft, float nBase, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::LogN>(sName, nBase)};
 
@@ -256,7 +267,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::sin(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::sin(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Sin>(sName)};
 
@@ -266,7 +277,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::cos(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::cos(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Cos>(sName)};
 
@@ -276,7 +287,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::tan(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::tan(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Tan>(sName)};
 
@@ -286,7 +297,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::sinh(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::sinh(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Sinh>(sName)};
 
@@ -296,7 +307,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::cosh(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::cosh(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Cosh>(sName)};
 
@@ -306,7 +317,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::tanh(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::tanh(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Tanh>(sName)};
 
@@ -316,7 +327,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::relu(Node &sLeft, float nAlpha, const std::string &sName)
+	NodeRef GraphBP::relu(NodeRef sLeft, float nAlpha, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::ReLU>(sName, nAlpha)};
 
@@ -326,7 +337,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::softplus(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::softplus(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Softplus>(sName)};
 
@@ -336,7 +347,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::softmax(Node &sLeft, const std::vector<bool> &sAxis, const std::string &sName)
+	NodeRef GraphBP::softmax(NodeRef sLeft, const std::vector<bool> &sAxis, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Softmax>(sName, sAxis)};
 
@@ -346,7 +357,7 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::sigmoid(Node &sLeft, const std::string &sName)
+	NodeRef GraphBP::sigmoid(NodeRef sLeft, const std::string &sName)
 	{
 		auto pNode{this->sGraph.addNode<GraphNode::Sigmoid>(sName)};
 
@@ -356,9 +367,9 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::dense(Node &sLeft, std::size_t nFanOut, const std::string &sName)
+	NodeRef GraphBP::dense(NodeRef sLeft, std::size_t nFanOut, const std::string &sName)
 	{
-		auto pNode{this->sGraph.addNode<GraphNode::Dense>(sName, nFanOut)};
+		auto pNode{this->sGraph.addNode<GraphNode::Dense>(sName, nullptr, nFanOut)};
 
 		Node::link(&sLeft, pNode);
 		pNode->notifyShapeUpdated();
@@ -366,7 +377,17 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::convolution(Node &sLeft,
+	NodeRef GraphBP::dense(NodeRef sSharing, NodeRef sLeft, std::size_t nFanOut, const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Dense>(sName, &sSharing, nFanOut)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	NodeRef GraphBP::convolution(NodeRef sLeft,
 		std::size_t nKernelWidth,
 		std::size_t nKernelHeight,
 		std::size_t nOutputWidth,
@@ -376,7 +397,7 @@ namespace TinNet
 		std::size_t nVStride,
 		const std::string &sName)
 	{
-		auto pNode{this->sGraph.addNode<GraphNode::Convolution>(sName, nKernelWidth, nKernelHeight, nHStride, nVStride, nOutputWidth, nOutputHeight, nOutputChannel)};
+		auto pNode{this->sGraph.addNode<GraphNode::Convolution>(sName, nullptr, nKernelWidth, nKernelHeight, nHStride, nVStride, nOutputWidth, nOutputHeight, nOutputChannel)};
 
 		Node::link(&sLeft, pNode);
 		pNode->notifyShapeUpdated();
@@ -384,7 +405,25 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::dilatedConvolution(Node &sLeft,
+	NodeRef GraphBP::convolution(NodeRef sSharing, NodeRef sLeft,
+		std::size_t nKernelWidth,
+		std::size_t nKernelHeight,
+		std::size_t nOutputWidth,
+		std::size_t nOutputHeight,
+		std::size_t nOutputChannel,
+		std::size_t nHStride,
+		std::size_t nVStride,
+		const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::Convolution>(sName, &sSharing, nKernelWidth, nKernelHeight, nHStride, nVStride, nOutputWidth, nOutputHeight, nOutputChannel)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	NodeRef GraphBP::dilatedConvolution(NodeRef sLeft,
 		std::size_t nKernelWidth,
 		std::size_t nKernelHeight,
 		std::size_t nHDilated,
@@ -396,7 +435,7 @@ namespace TinNet
 		std::size_t nVStride,
 		const std::string &sName)
 	{
-		auto pNode{this->sGraph.addNode<GraphNode::DilatedConvolution>(sName, nKernelWidth, nKernelHeight, nHDilated, nVDilated, nHStride, nVStride, nOutputWidth, nOutputHeight, nOutputChannel)};
+		auto pNode{this->sGraph.addNode<GraphNode::DilatedConvolution>(sName, nullptr, nKernelWidth, nKernelHeight, nHDilated, nVDilated, nHStride, nVStride, nOutputWidth, nOutputHeight, nOutputChannel)};
 
 		Node::link(&sLeft, pNode);
 		pNode->notifyShapeUpdated();
@@ -404,7 +443,27 @@ namespace TinNet
 		return *pNode;
 	}
 
-	Node &GraphBP::transposedConvolution(Node &sLeft,
+	NodeRef GraphBP::dilatedConvolution(NodeRef sSharing, NodeRef sLeft,
+		std::size_t nKernelWidth,
+		std::size_t nKernelHeight,
+		std::size_t nHDilated,
+		std::size_t nVDilated,
+		std::size_t nOutputWidth,
+		std::size_t nOutputHeight,
+		std::size_t nOutputChannel,
+		std::size_t nHStride,
+		std::size_t nVStride,
+		const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::DilatedConvolution>(sName, &sSharing, nKernelWidth, nKernelHeight, nHDilated, nVDilated, nHStride, nVStride, nOutputWidth, nOutputHeight, nOutputChannel)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	NodeRef GraphBP::transposedConvolution(NodeRef sLeft,
 		std::size_t nKernelWidth,
 		std::size_t nKernelHeight,
 		std::size_t nOutputWidth,
@@ -414,7 +473,25 @@ namespace TinNet
 		std::size_t nVStride,
 		const std::string &sName)
 	{
-		auto pNode{this->sGraph.addNode<GraphNode::TransposedConvolution>(sName, nKernelWidth, nKernelHeight, nHStride, nVStride, nOutputWidth, nOutputHeight, nOutputChannel)};
+		auto pNode{this->sGraph.addNode<GraphNode::TransposedConvolution>(sName, nullptr, nKernelWidth, nKernelHeight, nHStride, nVStride, nOutputWidth, nOutputHeight, nOutputChannel)};
+
+		Node::link(&sLeft, pNode);
+		pNode->notifyShapeUpdated();
+
+		return *pNode;
+	}
+
+	NodeRef GraphBP::transposedConvolution(NodeRef sSharing, NodeRef sLeft,
+		std::size_t nKernelWidth,
+		std::size_t nKernelHeight,
+		std::size_t nOutputWidth,
+		std::size_t nOutputHeight,
+		std::size_t nOutputChannel,
+		std::size_t nHStride,
+		std::size_t nVStride,
+		const std::string &sName)
+	{
+		auto pNode{this->sGraph.addNode<GraphNode::TransposedConvolution>(sName, &sSharing, nKernelWidth, nKernelHeight, nHStride, nVStride, nOutputWidth, nOutputHeight, nOutputChannel)};
 
 		Node::link(&sLeft, pNode);
 		pNode->notifyShapeUpdated();

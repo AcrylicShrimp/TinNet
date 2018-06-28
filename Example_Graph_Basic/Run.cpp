@@ -18,6 +18,8 @@
 #include <random>
 #include <vector>
 
+#include <Windows.h>
+
 int32_t main()
 {
 	using namespace TinNet;
@@ -47,7 +49,7 @@ int32_t main()
 	//	sInput.read(reinterpret_cast<char *>(test_y.data()), sizeof(float) * test_y.size());
 	//}
 
-	std::vector<float> train_x(2048);
+	std::vector<float> train_x(128);
 	std::vector<float> train_y(4 * 100 * 100);
 
 	{
@@ -59,27 +61,27 @@ int32_t main()
 	}
 
 	{
-		std::ifstream sInput{L"D:/Develop/Dataset/TestImage/r6.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"D:/Develop/Dataset/TestImage/john_delete.dat", std::ifstream::binary | std::ifstream::in};
 		sInput.read(reinterpret_cast<char *>(train_y.data()), sizeof(float) * train_y.size());
 	}
 
 	Graph graph;
 	GraphBP bp{graph};
 
-	//auto &x = bp.input(Shape{1, 2048, 1, 1});
-	//
-	//auto &layer1 = bp.transposedConvolution(x, 5, 5, 5, 5, 1024, 5, 5);
-	//auto &output1 = bp.relu(layer1, .01f);
-	//
-	//auto &layer2 = bp.transposedConvolution(output1, 5, 5, 25, 25, 512, 5, 5);
-	//auto &output2 = bp.relu(layer2, .01f);
-	//
-	//auto &layer3 = bp.transposedConvolution(output2, 5, 5, 100, 100, 4, 5, 5);
-	//auto &output3 = bp.sigmoid(layer3);
-	//
-	//auto &y = bp.input(Shape{1, 4, 100, 100}, train_y);
-	//
-	//auto &loss = bp.reduceMean(bp.square(y - output3));
+	auto &x = bp.input(Shape{1, 128, 1, 1});
+
+	auto &layer1 = bp.transposedConvolution(x, 5, 5, 5, 5, 1024, 5, 5);
+	auto &output1 = bp.relu(layer1, .01f);
+
+	auto &layer2 = bp.transposedConvolution(output1, 5, 5, 25, 25, 512, 5, 5);
+	auto &output2 = bp.relu(layer2, .01f);
+
+	auto &layer3 = bp.transposedConvolution(output2, 5, 5, 100, 100, 4, 5, 5);
+	auto &output3 = bp.sigmoid(layer3);
+
+	auto &y = bp.input(Shape{1, 4, 100, 100});
+
+	auto &loss = bp.reduceMean(bp.square(y - output3));
 
 	//auto &x = bp.input(Shape{32, 784}, train_x);
 	//auto &reshaped_x = bp.reshape(x, {32, 1, 28, 28});
@@ -94,14 +96,14 @@ int32_t main()
 	//auto &y_hat = bp.softmax(layer3, {false, true});
 	//auto &y = bp.input(Shape{32, 10}, train_y);
 
-	auto &layer1 = bp.dense(x, 300);
-	auto &output1 = bp.relu(layer1, .001f);
-	
-	auto &layer2 = bp.dense(output1, 10);
-	auto &output2 = bp.relu(layer2, .001f);
-	auto &y_hat = bp.softmax(output2, {false, true});
-	auto &y = bp.input(Shape{32, 10}, train_y);
-	auto &loss = bp.reduceMean(-bp.reduceSum(y * bp.log(y_hat), {false, true}));
+	//auto &layer1 = bp.dense(x, 300);
+	//auto &output1 = bp.relu(layer1, .001f);
+	//
+	//auto &layer2 = bp.dense(output1, 10);
+	//auto &output2 = bp.relu(layer2, .001f);
+	//auto &y_hat = bp.softmax(output2, {false, true});
+	//auto &y = bp.input(Shape{32, 10}, train_y);
+	//auto &loss = bp.reduceMean(-bp.reduceSum(y * bp.log(y_hat), {false, true}));
 
 	graph.initialize();
 	graph.enableBackward();
@@ -133,9 +135,11 @@ int32_t main()
 	//	std::cout << "Accuracy : " << nCount / 10000.f * 100.f << "%" << std::endl;
 	//};
 
+	std::int64_t count{0};
+
 	auto fSaveResult = [&]()
 	{
-		std::ofstream sOutput{"out.ppm", std::ofstream::out};
+		std::ofstream sOutput{"out" + std::to_string(count++) + ".ppm", std::ofstream::out};
 
 		sOutput << "P3\n";
 		sOutput << "100 100\n";
@@ -152,27 +156,26 @@ int32_t main()
 			}
 	};
 
+	Batch batch;
+
 	for (;;)
 	{
 		auto sBegin{std::chrono::system_clock::now()};
 
-		for (int i = 0; i < 1; ++i)
-		{
-			graph.feed(
+		batch.sequential(1, 1);
+
+		graph.feed(
+			batch,
 			{
-				{Shape{1, 2048, 1, 1}, train_x},
+				{Shape{1, 128, 1, 1}, train_x},
 				{Shape{1, 4, 100, 100}, train_y}
 			});
 
-			if (i == 0)
-			{
-				fSaveResult();
-				std::cout << "Saved." << std::endl;
-				std::cout << "Loss : " << loss.forward().toString() << std::endl;
-			}
+		fSaveResult();
+		std::cout << "Saved." << std::endl;
+		std::cout << "Loss : " << loss.forward().toString() << std::endl;
 
-			optimizer.optimize(.001f);
-		}
+		optimizer.reduce(loss, .001f);
 
 		//fAccuracyFunc();
 		//for (std::size_t nIndex{0}; nIndex + 32 <= 60000; nIndex += 32)

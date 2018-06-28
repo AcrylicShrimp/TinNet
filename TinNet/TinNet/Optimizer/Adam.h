@@ -15,6 +15,8 @@
 #include "OptimizerBase.h"
 
 #include <cmath>
+#include <initializer_list>
+#include <vector>
 
 namespace TinNet::Optimizer
 {
@@ -28,6 +30,7 @@ namespace TinNet::Optimizer
 		
 	public:
 		Adam(Graph &sGraph, float nBeta1, float nBeta2);
+		Adam(Graph &sGraph, float nBeta1, float nBeta2, const std::vector<NodePtr> &sNodeList);
 		Adam(const Adam &sSrc) = default;
 		Adam(Adam &&sSrc) = default;
 		~Adam() = default;

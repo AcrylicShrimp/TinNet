@@ -8,26 +8,39 @@
 
 namespace TinNet::GraphNode
 {
-	VariableNode::VariableNode(Graph *pGraph, const std::string &sName) :
+	VariableNode::VariableNode(Graph *pGraph, const std::string &sName, NodePtr pSharingNode) :
 		FullNode(pGraph, sName),
-		Initializable(pGraph)
+		Initializable(pGraph),
+		pSharingNode{static_cast<VariableNode *>(pSharingNode)}
 	{
 		//Empty.
 	}
 
 	VariableNode::~VariableNode()
 	{
-		for (auto sVariableList : this->sVariableGradientList)
-			this->pGraph->cacheContainer().release(sVariableList);
+		if (!this->pSharingNode)
+			for (auto sVariable : this->sVariableList)
+				this->pGraph->cacheContainer().release(sVariable);
 
+		for (auto sVariableGradient : this->sVariableGradientList)
+			this->pGraph->cacheContainer().release(sVariableGradient);
+
+		this->sVariableSizeList.clear();
+		this->sVariableList.clear();
 		this->sVariableGradientList.clear();
 	}
 
 	void VariableNode::notifyShapeUpdated()
 	{
 		if (this->sVariableList.empty())
-			for (auto nVariableSize : this->sVariableSizeList)
-				this->sVariableList.emplace_back(this->pGraph->cacheContainer().request(nVariableSize));
+			if (this->pSharingNode)
+			{
+				this->sVariableSizeList = this->pSharingNode->sVariableSizeList;
+				this->sVariableList = this->pSharingNode->sVariableList;
+			}
+			else
+				for (auto nVariableSize : this->sVariableSizeList)
+					this->sVariableList.emplace_back(this->pGraph->cacheContainer().request(nVariableSize));
 
 		this->FullNode::notifyShapeUpdated();
 	}

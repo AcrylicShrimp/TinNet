@@ -1,7 +1,7 @@
 
 /*
-2018.06.24
-Created by AcrylicShrimp.
+	2018.06.24
+	Created by AcrylicShrimp.
 */
 
 #include "../TinNet/TinNet/TinNet.h"
@@ -10,7 +10,6 @@ Created by AcrylicShrimp.
 #include <chrono>
 #include <fstream>
 #include <iostream>
-#include <random>
 #include <vector>
 
 void loadDataset(const std::string &sPath, std::vector<float> &sResult)
@@ -26,6 +25,8 @@ int32_t main()
 	std::vector<float> train_y(60000 * 10);
 	std::vector<float> test_x(10000 * 784);
 	std::vector<float> test_y(10000 * 10);
+	std::vector<float> batch_x(32 * 784);
+	std::vector<float> batch_y(32 * 10);
 
 	loadDataset("D:/Develop/Dataset/MNIST/MNIST_train_in.dat", train_x);
 	loadDataset("D:/Develop/Dataset/MNIST/MNIST_train_out.dat", train_y);
@@ -40,11 +41,11 @@ int32_t main()
 
 	auto &layer1 = bp.convolution(reshaped_x, 3, 3, 28, 28, 32);
 	auto &output1 = bp.relu(layer1, .001f);
-	
+
 	auto &layer2 = bp.convolution(output1, 3, 3, 14, 14, 64, 2, 2);
 	auto &output2 = bp.relu(layer2, .001f);
 	auto &reshaped_output2 = bp.reshape(output2, {32, 12544});
-	
+
 	auto &layer3 = bp.dense(reshaped_output2, 10);
 	auto &y_hat = bp.softmax(layer3, {false, true});
 	auto &y = bp.input(Shape{32, 10});
@@ -54,26 +55,37 @@ int32_t main()
 	graph.initialize();
 	graph.enableBackward();
 
+	Batch batch;
 	Optimizer::Adam optimizer{graph, .9f, .999f};
 
 	auto fAccuracyFunc = [&]()
 	{
+		std::size_t nIndex{0};
 		std::size_t nCount{0};
 
-		for (std::size_t nIndex{0}; nIndex + 32 <= 10000; )
+		batch.sequential(10000, 32);
+
+		while (batch.hasNext())
 		{
-			graph.feed(
-			{
-				{Shape{32, 784}, Cache{test_x.data() + nIndex * 784, 784 * 32}},
-				{Shape{32, 10}, Cache{test_y.data() + nIndex * 10, 10 * 32}}
-			});
+			batch.copy(784, test_x, batch_x);
+			batch.copy(10, test_y, batch_y);
+
+			graph.feed(x, {{batch.currentBatchSize(), 784}, batch_x});
+			graph.feed(y, {{batch.currentBatchSize(), 10}, batch_y});
+			graph.endFeed();
 
 			auto sYHat{y_hat.forward()};
 
-			for (int i = 0; i < 32; ++i, ++nIndex)
+			for (int i = 0; i < batch.currentBatchSize(); ++i, ++nIndex)
+			{
+				auto sY{batch.obtain(10, test_y, nIndex)};
+
 				if (std::distance(sYHat.cbegin() + i * 10, std::max_element(sYHat.cbegin() + i * 10, sYHat.cbegin() + (i + 1) * 10)) ==
-					std::distance(test_y.data() + nIndex * 10, std::max_element(test_y.data() + nIndex * 10, test_y.data() + (nIndex + 1) * 10)))
+					std::distance(sY.cbegin(), std::max_element(sY.cbegin(), sY.cend())))
 					++nCount;
+			}
+
+			batch.next();
 		}
 
 		std::cout << "Accuracy : " << nCount / 10000.f * 100.f << "%" << std::endl;
@@ -85,14 +97,18 @@ int32_t main()
 
 		fAccuracyFunc();
 
-		for (std::size_t nIndex{0}; nIndex + 32 <= 60000; nIndex += 32)
-		{
-			graph.feed(
-			{
-				{Shape{32, 784}, Cache{train_x.data() + nIndex * 784, 784 * 32}},
-				{Shape{32, 10}, Cache{train_y.data() + nIndex * 10, 10 * 32}}
-			});
+		batch.shuffle(60000, 32);
 
+		while (batch.hasNext())
+		{
+			batch.copy(784, train_x, batch_x);
+			batch.copy(10, train_y, batch_y);
+
+			graph.feed(x, {{batch.currentBatchSize(), 784}, batch_x});
+			graph.feed(y, {{batch.currentBatchSize(), 10}, batch_y});
+			graph.endFeed();
+
+			batch.next();
 			optimizer.reduce(loss, .001f);
 		}
 

@@ -225,6 +225,9 @@
     <ClCompile Include="TinNet\Batch.cpp">
       <Filter>TinNet</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\GraphNode\Select.cpp">
+      <Filter>TinNet\GraphNode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -451,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="TinNet\Batch.h">
       <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\GraphNode\Select.h">
+      <Filter>TinNet\GraphNode</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

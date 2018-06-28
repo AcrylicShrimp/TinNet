@@ -25,12 +25,13 @@ namespace TinNet::GraphNode
 	class TINNET_DLL VariableNode : public FullNode, public Initializable
 	{
 	protected:
+		VariableNode *pSharingNode;
 		std::vector<std::size_t> sVariableSizeList;
 		std::vector<CachePtr> sVariableList;
 		std::vector<CachePtr> sVariableGradientList;
 		
 	public:
-		VariableNode(Graph *pGraph, const std::string &sName);
+		VariableNode(Graph *pGraph, const std::string &sName, NodePtr pSharingNode);
 		VariableNode(const VariableNode &sSrc) = delete;
 		~VariableNode();
 		

@@ -16,9 +16,22 @@ namespace TinNet::Optimizer
 		//Empty.
 	}
 
+	OptimizerBase::OptimizerBase(Graph &sGraph, const std::vector<NodePtr> &sNodeList) :
+		sGraph{sGraph}
+	{
+		for (auto pNode : sNodeList)
+			this->sInitializableList.emplace_back(static_cast<InitializablePtr>(static_cast<GraphNode::VariableNode *>(pNode)));
+
+		this->sGradient = this->generateGradientBuffer();
+	}
+
 	void OptimizerBase::reduce(Node &sTargetNode, float nLearningRate)
 	{
-		this->sGraph.computeGradient(sTargetNode);
+		sTargetNode.beginGradient();
+
+		for (auto pInitializable : this->sInitializableList)
+			pInitializable->variablePass();
+
 		this->applyGradient(nLearningRate);
 	}
 

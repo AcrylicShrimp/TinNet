@@ -35,42 +35,44 @@ namespace TinNet
 		GraphBP &operator=(const GraphBP &sSrc) = default;
 		
 	public:
-		Node &input(const Shape &sShape, const std::string &sName = "");
-		Node &constant(float nValue, const std::string &sName = "");
-		Node &constant(const Shape &sShape, const std::vector<float> &sValue, const std::string &sName = "");
-		Node &reshape(Node &sLeft, const Shape &sShape, const std::string &sName = "");
-		Node &squeeze(Node &sLeft, const std::string &sName = "");
-		Node &reduceMin(Node &sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
-		Node &reduceMax(Node &sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
-		Node &reduceSum(Node &sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
-		Node &reduceMean(Node &sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
-		Node &abs(Node &sLeft, const std::string &sName = "");
-		Node &neg(Node &sLeft, const std::string &sName = "");
-		Node &sign(Node &sLeft, const std::string &sName = "");
-		Node &add(Node &sLeft, Node &sRight, const std::string &sName = "");
-		Node &subtract(Node &sLeft, Node &sRight, const std::string &sName = "");
-		Node &multiply(Node &sLeft, Node &sRight, const std::string &sName = "");
-		Node &divide(Node &sLeft, Node &sRight, const std::string &sName = "");
-		Node &pow(Node &sLeft, Node &sRight, const std::string &sName = "");
-		Node &square(Node &sLeft, const std::string &sName = "");
-		Node &exp(Node &sLeft, const std::string &sName = "");
-		Node &exp2(Node &sLeft, const std::string &sName = "");
-		Node &log(Node &sLeft, const std::string &sName = "");
-		Node &log2(Node &sLeft, const std::string &sName = "");
-		Node &log10(Node &sLeft, const std::string &sName = "");
-		Node &logn(Node &sLeft, float nBase, const std::string &sName = "");
-		Node &sin(Node &sLeft, const std::string &sName = "");
-		Node &cos(Node &sLeft, const std::string &sName = "");
-		Node &tan(Node &sLeft, const std::string &sName = "");
-		Node &sinh(Node &sLeft, const std::string &sName = "");
-		Node &cosh(Node &sLeft, const std::string &sName = "");
-		Node &tanh(Node &sLeft, const std::string &sName = "");
-		Node &relu(Node &sLeft, float nAlpha = .0f, const std::string &sName = "");
-		Node &softplus(Node &sLeft, const std::string &sName = "");
-		Node &softmax(Node &sLeft, const std::vector<bool> &sAxis = {}, const std::string &sName = "");
-		Node &sigmoid(Node &sLeft, const std::string &sName = "");
-		Node &dense(Node &sLeft, std::size_t nFanOut, const std::string &sName = "");
-		Node &convolution(Node &sLeft,
+		NodeRef input(const Shape &sShape, const std::string &sName = "");
+		NodeRef select(NodeRef sLeft, NodeRef sRight, const std::string &sName = "");
+		NodeRef constant(float nValue, const std::string &sName = "");
+		NodeRef constant(const Shape &sShape, const std::vector<float> &sValue, const std::string &sName = "");
+		NodeRef reshape(NodeRef sLeft, const Shape &sShape, const std::string &sName = "");
+		NodeRef squeeze(NodeRef sLeft, const std::string &sName = "");
+		NodeRef reduceMin(NodeRef sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
+		NodeRef reduceMax(NodeRef sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
+		NodeRef reduceSum(NodeRef sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
+		NodeRef reduceMean(NodeRef sLeft, const std::vector<bool> &sAxis = {}, bool bSqueeze = true, const std::string &sName = "");
+		NodeRef abs(NodeRef sLeft, const std::string &sName = "");
+		NodeRef neg(NodeRef sLeft, const std::string &sName = "");
+		NodeRef sign(NodeRef sLeft, const std::string &sName = "");
+		NodeRef add(NodeRef sLeft, NodeRef sRight, const std::string &sName = "");
+		NodeRef subtract(NodeRef sLeft, NodeRef sRight, const std::string &sName = "");
+		NodeRef multiply(NodeRef sLeft, NodeRef sRight, const std::string &sName = "");
+		NodeRef divide(NodeRef sLeft, NodeRef sRight, const std::string &sName = "");
+		NodeRef pow(NodeRef sLeft, NodeRef sRight, const std::string &sName = "");
+		NodeRef square(NodeRef sLeft, const std::string &sName = "");
+		NodeRef exp(NodeRef sLeft, const std::string &sName = "");
+		NodeRef exp2(NodeRef sLeft, const std::string &sName = "");
+		NodeRef log(NodeRef sLeft, const std::string &sName = "");
+		NodeRef log2(NodeRef sLeft, const std::string &sName = "");
+		NodeRef log10(NodeRef sLeft, const std::string &sName = "");
+		NodeRef logn(NodeRef sLeft, float nBase, const std::string &sName = "");
+		NodeRef sin(NodeRef sLeft, const std::string &sName = "");
+		NodeRef cos(NodeRef sLeft, const std::string &sName = "");
+		NodeRef tan(NodeRef sLeft, const std::string &sName = "");
+		NodeRef sinh(NodeRef sLeft, const std::string &sName = "");
+		NodeRef cosh(NodeRef sLeft, const std::string &sName = "");
+		NodeRef tanh(NodeRef sLeft, const std::string &sName = "");
+		NodeRef relu(NodeRef sLeft, float nAlpha = .0f, const std::string &sName = "");
+		NodeRef softplus(NodeRef sLeft, const std::string &sName = "");
+		NodeRef softmax(NodeRef sLeft, const std::vector<bool> &sAxis = {}, const std::string &sName = "");
+		NodeRef sigmoid(NodeRef sLeft, const std::string &sName = "");
+		NodeRef dense(NodeRef sLeft, std::size_t nFanOut, const std::string &sName = "");
+		NodeRef dense(NodeRef sSharing, NodeRef sLeft, std::size_t nFanOut, const std::string &sName = "");
+		NodeRef convolution(NodeRef sLeft,
 			std::size_t nKernelWidth,
 			std::size_t nKernelHeight,
 			std::size_t nOutputWidth ,
@@ -79,7 +81,16 @@ namespace TinNet
 			std::size_t nHStride = 1,
 			std::size_t nVStride = 1,
 			const std::string &sName = "");
-		Node &dilatedConvolution(Node &sLeft,
+		NodeRef convolution(NodeRef sSharing, NodeRef sLeft,
+			std::size_t nKernelWidth,
+			std::size_t nKernelHeight,
+			std::size_t nOutputWidth,
+			std::size_t nOutputHeight,
+			std::size_t nOutputChannel,
+			std::size_t nHStride = 1,
+			std::size_t nVStride = 1,
+			const std::string &sName = "");
+		NodeRef dilatedConvolution(NodeRef sLeft,
 			std::size_t nKernelWidth,
 			std::size_t nKernelHeight,
 			std::size_t nHDilated,
@@ -90,7 +101,27 @@ namespace TinNet
 			std::size_t nHStride = 1,
 			std::size_t nVStride = 1,
 			const std::string &sName = "");
-		Node &transposedConvolution(Node &sLeft,
+		NodeRef dilatedConvolution(NodeRef sSharing, NodeRef sLeft,
+			std::size_t nKernelWidth,
+			std::size_t nKernelHeight,
+			std::size_t nHDilated,
+			std::size_t nVDilated,
+			std::size_t nOutputWidth,
+			std::size_t nOutputHeight,
+			std::size_t nOutputChannel,
+			std::size_t nHStride = 1,
+			std::size_t nVStride = 1,
+			const std::string &sName = "");
+		NodeRef transposedConvolution(NodeRef sLeft,
+			std::size_t nKernelWidth,
+			std::size_t nKernelHeight,
+			std::size_t nOutputWidth,
+			std::size_t nOutputHeight,
+			std::size_t nOutputChannel,
+			std::size_t nHStride = 1,
+			std::size_t nVStride = 1,
+			const std::string &sName = "");
+		NodeRef transposedConvolution(NodeRef sSharing, NodeRef sLeft,
 			std::size_t nKernelWidth,
 			std::size_t nKernelHeight,
 			std::size_t nOutputWidth,

@@ -10,7 +10,6 @@
 #include <chrono>
 #include <fstream>
 #include <iostream>
-#include <random>
 #include <vector>
 
 void loadDataset(const std::string &sPath, std::vector<float> &sResult)
@@ -26,6 +25,8 @@ int32_t main()
 	std::vector<float> train_y(60000 * 10);
 	std::vector<float> test_x(10000 * 784);
 	std::vector<float> test_y(10000 * 10);
+	std::vector<float> batch_x(32 * 784);
+	std::vector<float> batch_y(32 * 10);
 
 	loadDataset("D:/Develop/Dataset/MNIST/MNIST_train_in.dat", train_x);
 	loadDataset("D:/Develop/Dataset/MNIST/MNIST_train_out.dat", train_y);
@@ -36,21 +37,28 @@ int32_t main()
 	GraphBP bp{graph};
 
 	auto &x = bp.input({32, 784});
+	auto &y = bp.input({32, 10});
 
 	auto &layer1 = bp.dense(x, 300);
 	auto &output1 = bp.relu(layer1, .001f);
 
 	auto &layer2 = bp.dense(output1, 10);
 	auto &y_hat = bp.softmax(layer2, {false, true});
-	auto &y = bp.input({32, 10});
+
+	auto &shared_layer1 = bp.dense(layer1, x, 300);
+	auto &shared_output1 = bp.relu(shared_layer1, .001f);
+
+	auto &shared_layer2 = bp.dense(layer2, shared_output1, 10);
+	auto &shared_y_hat = bp.softmax(shared_layer2, {false, true});
 
 	auto &loss = bp.reduceMean(-bp.reduceSum(y * bp.log(y_hat), {false, true}));
+	auto &shared_loss = bp.reduceMean(-bp.reduceSum(y * bp.log(shared_y_hat), {false, true}));
 
 	graph.initialize();
 	graph.enableBackward();
 
 	Batch batch;
-	Optimizer::Adam optimizer{graph, .9f, .999f};
+	Optimizer::Adam optimizer{graph, .9f, .999f, {&shared_layer1, &shared_layer2}};
 
 	auto fAccuracyFunc = [&]()
 	{
@@ -61,11 +69,12 @@ int32_t main()
 
 		while (batch.hasNext())
 		{
-			graph.feed(batch,
-			{
-				{{batch.currentBatchSize(), 784}, test_x},
-				{{batch.currentBatchSize(), 10}, test_y}
-			});
+			batch.copy(784, test_x, batch_x);
+			batch.copy(10, test_y, batch_y);
+
+			graph.feed(x, {{batch.currentBatchSize(), 784}, batch_x});
+			graph.feed(y, {{batch.currentBatchSize(), 10}, batch_y});
+			graph.endFeed();
 
 			auto sYHat{y_hat.forward()};
 
@@ -94,14 +103,15 @@ int32_t main()
 
 		while (batch.hasNext())
 		{
-			graph.feed(batch,
-			{
-				{{batch.currentBatchSize(), 784}, train_x},
-				{{batch.currentBatchSize(), 10}, train_y}
-			});
+			batch.copy(784, train_x, batch_x);
+			batch.copy(10, train_y, batch_y);
+
+			graph.feed(x, {{batch.currentBatchSize(), 784}, batch_x});
+			graph.feed(y, {{batch.currentBatchSize(), 10}, batch_y});
+			graph.endFeed();
 
 			batch.next();
-			optimizer.reduce(loss, .001f);
+			optimizer.reduce(shared_loss, .001f);
 		}
 
 		auto sEnd{std::chrono::system_clock::now()};

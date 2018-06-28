@@ -1,12 +1,12 @@
 
 /*
-	2018.06.17
+	2018.06.27
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_GRAPHNODE_INPUT_H
+#ifndef _CLASS_TINNET_GRAPHNODE_SELECT_H
 
-#define _CLASS_TINNET_GRAPHNODE_INPUT_H
+#define _CLASS_TINNET_GRAPHNODE_SELECT_H
 
 #include "../TinNetDLL.h"
 
@@ -23,19 +23,19 @@
 
 namespace TinNet::GraphNode
 {
-	class TINNET_DLL Input final : public BackpropNode, public Feedable
+	class TINNET_DLL Select final : public BackpropNode, public Feedable
 	{
 	protected:
-		ShapedCache sShapedCache;
-		
+		bool bCondition;
+
 	public:
-		Input(Graph *pGraph, const std::string &sName, const Shape &sShape);
-		Input(const Input &sSrc) = delete;
-		~Input() = default;
-		
+		Select(Graph *pGraph, const std::string &sName);
+		Select(const Select &sSrc) = delete;
+		~Select() = default;
+
 	public:
-		Input &operator=(const Input &sSrc) = delete;
-		
+		Select &operator=(const Select &sSrc) = delete;
+
 	public:
 		virtual const Shape &shape() const override;
 		virtual std::string type() const override;
@@ -48,9 +48,9 @@ namespace TinNet::GraphNode
 		virtual void backwardPass(Cache sDestination, NodePtr pInput) override;
 	};
 
-	inline std::string Input::typeName()
+	inline std::string Select::typeName()
 	{
-		return "input";
+		return "select";
 	}
 }
 

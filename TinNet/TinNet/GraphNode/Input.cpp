@@ -10,7 +10,7 @@ namespace TinNet::GraphNode
 {
 	Input::Input(Graph *pGraph, const std::string &sName, const Shape &sShape) :
 		BackpropNode(pGraph, sName),
-		Feedable(pGraph),
+		Feedable(pGraph, this),
 		sShapedCache{sShape}
 	{
 		//Empty.
@@ -31,15 +31,9 @@ namespace TinNet::GraphNode
 		return this->sShapedCache.cache();
 	}
 
-	void Input::feed(const Batch &sBatch, const ShapedCache &sShapedCache)
+	void Input::feed(const ShapedCache &sShapedCache)
 	{
-		if (this->sValue.size() < sShapedCache.shape().element())
-			this->sValue.resize(sShapedCache.shape().element());
-
-		this->sShapedCache = sShapedCache.shape();
-		this->sShapedCache.set(this->sValue);
-
-		sBatch.copy(sShapedCache.shape().element() / sBatch.currentBatchSize(), sShapedCache.cache(), this->sValue);
+		this->sShapedCache = sShapedCache;
 	}
 
 	void Input::forwardPass(Cache sDestination)

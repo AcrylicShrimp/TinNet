@@ -13,8 +13,11 @@
 #include "../Graph.h"
 #include "../Initializable.h"
 #include "../Node.h"
+#include "../GraphNode/VariableNode.h"
 
 #include <cstddef>
+#include <initializer_list>
+#include <vector>
 
 namespace TinNet::Optimizer
 {
@@ -29,6 +32,7 @@ namespace TinNet::Optimizer
 		
 	public:
 		OptimizerBase(Graph &sGraph);
+		OptimizerBase(Graph &sGraph, const std::vector<NodePtr> &sNodeList);
 		OptimizerBase(const OptimizerBase &sSrc) = default;
 		OptimizerBase(OptimizerBase &&sSrc) = default;
 		virtual ~OptimizerBase() = default;

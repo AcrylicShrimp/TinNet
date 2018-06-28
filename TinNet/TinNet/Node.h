@@ -22,6 +22,7 @@
 namespace TinNet
 {
 	using NodePtr = class Node *;
+	using NodeRef = class Node &;
 
 	class TINNET_DLL Node
 	{
