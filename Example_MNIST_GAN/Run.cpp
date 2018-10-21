@@ -92,7 +92,7 @@ int32_t main()
 
 	Batch batch;
 	Optimizer::Adam generatorOpt{graph, .9f, .999f, {&gen_hidden1, &gen_hidden3}};
-	Optimizer::Adam discriminatorOpt{graph, .9f, .999f, {&real_dis_hidden1, &real_dis_hidden3}};
+	Optimizer::Adam discriminatorOpt{graph, .9f, .999f, {&real_dis_hidden1, &real_dis_hidden3, &fake_dis_hidden1, &fake_dis_hidden3}};
 
 	graph.feed(z, {{32, 100}, batch_z});
 	graph.feed(x, {{32, 784}, batch_x});

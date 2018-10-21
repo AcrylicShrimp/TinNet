@@ -11,7 +11,7 @@
 #include "TinNetDLL.h"
 
 #include "Cache.h"
-#include "CacheContainer.h"
+#include "CacheAllocator.h"
 
 #include <cstddef>
 #include <functional>
@@ -34,11 +34,10 @@ namespace TinNet
 	public:
 		virtual std::size_t fanIn() const = 0;
 		virtual std::size_t fanOut() const = 0;
-		virtual void initialize(std::function<float()> fInitializer) = 0;
+		virtual void initialize() = 0;
 		virtual void variablePass() = 0;
 		virtual void applyGradient(float nFactor) = 0;
-		virtual std::vector<std::size_t> &gradientSizeList() = 0;
-		virtual std::vector<CachePtr> &gradientList() = 0;
+		virtual std::vector<Variable> &gradientList() = 0;
 	};
 }
 

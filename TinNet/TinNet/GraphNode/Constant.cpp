@@ -16,7 +16,7 @@ namespace TinNet::GraphNode
 		this->sShapedCache.set(this->sValue);
 	}
 
-	const Shape &Constant::shape() const
+	Shape Constant::shape() const
 	{
 		return this->sShapedCache.shape();
 	}

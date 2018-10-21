@@ -10,8 +10,6 @@
 
 #include "TinNetDLL.h"
 
-#include "Cache.h"
-#include "CacheContainer.h"
 #include "Shape.h"
 
 #include <algorithm>
@@ -31,7 +29,7 @@ namespace TinNet
 		std::string sName;
 		std::vector<NodePtr> sInputList;
 		std::vector<NodePtr> sOutputList;
-		
+
 	public:
 		Node(Graph *pGraph, const std::string &sName);
 		Node(const Node &sSrc) = delete;
@@ -41,7 +39,7 @@ namespace TinNet
 		Node &operator=(const Node &sSrc) = delete;
 		
 	public:
-		virtual const Shape &shape() const = 0;
+		virtual Shape shape() const = 0;
 		virtual std::string type() const = 0;
 		virtual void notifyShapeUpdated() = 0;
 		virtual void notifyBackwardEnabled() = 0;

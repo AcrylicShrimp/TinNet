@@ -14,7 +14,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 	
-	const Shape &Divide::shape() const
+	Shape Divide::shape() const
 	{
 		return this->sShape;
 	}

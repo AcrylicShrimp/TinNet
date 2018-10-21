@@ -15,7 +15,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 
-	const Shape &Squeeze::shape() const
+	Shape Squeeze::shape() const
 	{
 		return this->sShape;
 	}

@@ -15,7 +15,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 	
-	const Shape &ReLU::shape() const
+	Shape ReLU::shape() const
 	{
 		return this->sInputList.front()->shape();
 	}

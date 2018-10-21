@@ -30,7 +30,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D09C5062-ECA6-4002-9EF5-E613F9183971}</ProjectGuid>
     <RootNamespace>TinNet</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -221,7 +221,11 @@
     <ClCompile Include="TinNet\Accessor.cpp" />
     <ClCompile Include="TinNet\Batch.cpp" />
     <ClCompile Include="TinNet\Cache.cpp" />
-    <ClCompile Include="TinNet\CacheContainer.cpp" />
+    <ClCompile Include="TinNet\CacheAllocator.cpp" />
+    <ClCompile Include="TinNet\Compute\GEMM.cpp" />
+    <ClCompile Include="TinNet\Core\Node.cpp" />
+    <ClCompile Include="TinNet\Core\Shape.cpp" />
+    <ClCompile Include="TinNet\Core\Span.cpp" />
     <ClCompile Include="TinNet\Feedable.cpp" />
     <ClCompile Include="TinNet\Graph.cpp" />
     <ClCompile Include="TinNet\GraphBP.cpp" />
@@ -293,6 +297,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="TinNet\Initializer\Initializer.cpp" />
     <ClCompile Include="TinNet\Initializer\Normal.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
@@ -328,12 +333,20 @@
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
     <ClCompile Include="TinNet\Shape.cpp" />
     <ClCompile Include="TinNet\ShapedCache.cpp" />
+    <ClCompile Include="TinNet\Variable.cpp" />
+    <ClCompile Include="TinNet\VariableAllocator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Accessor.h" />
     <ClInclude Include="TinNet\Batch.h" />
     <ClInclude Include="TinNet\Cache.h" />
-    <ClInclude Include="TinNet\CacheContainer.h" />
+    <ClInclude Include="TinNet\CacheAllocator.h" />
+    <ClInclude Include="TinNet\Compute\GEMM.h" />
+    <ClInclude Include="TinNet\Core\FeedableNode.h" />
+    <ClInclude Include="TinNet\Core\FeedableNode.hpp" />
+    <ClInclude Include="TinNet\Core\Node.h" />
+    <ClInclude Include="TinNet\Core\Shape.h" />
+    <ClInclude Include="TinNet\Core\Span.h" />
     <ClInclude Include="TinNet\Feedable.h" />
     <ClInclude Include="TinNet\Graph.h" />
     <ClInclude Include="TinNet\GraphBP.h" />
@@ -406,6 +419,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="TinNet\Initializer\Initializer.h" />
     <ClInclude Include="TinNet\Initializer\Initializers.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
@@ -453,8 +467,12 @@
     <ClInclude Include="TinNet\Reinforcement\MCTS.h" />
     <ClInclude Include="TinNet\Shape.h" />
     <ClInclude Include="TinNet\ShapedCache.h" />
+    <ClInclude Include="TinNet\Span.h" />
+    <ClInclude Include="TinNet\Span.hpp" />
     <ClInclude Include="TinNet\TinNet.h" />
     <ClInclude Include="TinNet\TinNetDLL.h" />
+    <ClInclude Include="TinNet\Variable.h" />
+    <ClInclude Include="TinNet\VariableAllocator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

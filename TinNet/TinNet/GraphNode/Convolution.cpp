@@ -31,7 +31,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 
-	const Shape &Convolution::shape() const
+	Shape Convolution::shape() const
 	{
 		return this->sOutputShape;
 	}

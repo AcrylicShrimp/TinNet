@@ -14,7 +14,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 
-	const Shape &Sigmoid::shape() const
+	Shape Sigmoid::shape() const
 	{
 		return this->sInputList.front()->shape();
 	}

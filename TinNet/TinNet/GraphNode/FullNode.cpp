@@ -18,7 +18,7 @@ namespace TinNet::GraphNode
 	FullNode::~FullNode()
 	{
 		if (this->pOutput)
-			this->pGraph->cacheContainer().release(this->pOutput);
+			this->pGraph->cacheAllocator().deallocate(this->pOutput);
 
 		this->pOutput = nullptr;
 	}
@@ -31,11 +31,11 @@ namespace TinNet::GraphNode
 	void FullNode::notifyShapeUpdated()
 	{
 		if (!this->pOutput)
-			this->pOutput = this->pGraph->cacheContainer().request(this->shape().element());
+			this->pOutput = this->pGraph->cacheAllocator().allocate(this->shape().element());
 		else if (this->pOutput && this->pOutput->sCache.size() < this->shape().element())
 		{
-			this->pGraph->cacheContainer().release(this->pOutput);
-			this->pOutput = this->pGraph->cacheContainer().request(this->shape().element());
+			this->pGraph->cacheAllocator().deallocate(this->pOutput);
+			this->pOutput = this->pGraph->cacheAllocator().allocate(this->shape().element());
 		}
 
 		this->BackpropNode::notifyShapeUpdated();

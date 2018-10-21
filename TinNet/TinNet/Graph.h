@@ -10,11 +10,12 @@
 
 #include "TinNetDLL.h"
 
-#include "CacheContainer.h"
+#include "CacheAllocator.h"
 #include "Feedable.h"
 #include "Initializable.h"
 #include "Node.h"
 #include "ShapedCache.h"
+#include "VariableAllocator.h"
 
 #include <algorithm>
 #include <cstddef>
@@ -40,7 +41,8 @@ namespace TinNet
 		std::vector<InitializablePtr> sInitializableList;
 		std::unordered_map<NodePtr, FeedablePtr> sFeedableMap;
 		std::unordered_map<std::string, std::unique_ptr<Node>> sNodeMap;
-		CacheContainer sCacheContainer;
+		CacheAllocator sCacheAllocator;
+		VariableAllocator sVariableAllocator;
 
 	public:
 		Graph() = default;
@@ -52,8 +54,10 @@ namespace TinNet
 
 	public:
 		inline bool backwardEnabled() const;
-		inline CacheContainer &cacheContainer();
-		inline const CacheContainer &cacheContainer() const;
+		inline CacheAllocator &cacheAllocator();
+		inline const CacheAllocator &cacheAllocator() const;
+		inline VariableAllocator &variableAllocator();
+		inline const VariableAllocator &variableAllocator() const;
 		inline void registerFeedable(NodePtr pNode, FeedablePtr pFeedable);
 		inline void registerInitializable(InitializablePtr pInitialiable);
 		inline std::vector<InitializablePtr> &initializableList();
@@ -65,8 +69,7 @@ namespace TinNet
 		void initialize();
 		void enableBackward();
 		void disableBackward();
-		void feed(NodeRef sNode, const ShapedCache &sShapedCache);
-		void endFeed();
+		void feed(const std::vector<std::pair<NodeRef, ShapedCache>> &sFeedList);
 	};
 
 	inline bool Graph::backwardEnabled() const
@@ -74,14 +77,24 @@ namespace TinNet
 		return this->bEnabledBackward;
 	}
 
-	inline CacheContainer &Graph::cacheContainer()
+	inline CacheAllocator &Graph::cacheAllocator()
 	{
-		return this->sCacheContainer;
+		return this->sCacheAllocator;
 	}
 
-	inline const CacheContainer &Graph::cacheContainer() const
+	inline const CacheAllocator &Graph::cacheAllocator() const
 	{
-		return this->sCacheContainer;
+		return this->sCacheAllocator;
+	}
+
+	inline VariableAllocator &Graph::variableAllocator()
+	{
+		return this->sVariableAllocator;
+	}
+
+	inline const VariableAllocator &Graph::variableAllocator() const
+	{
+		return this->sVariableAllocator;
 	}
 
 	inline void Graph::registerFeedable(NodePtr pNode, FeedablePtr pFeedable)

@@ -14,7 +14,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 
-	const Shape &Subtract::shape() const
+	Shape Subtract::shape() const
 	{
 		return this->sShape;
 	}

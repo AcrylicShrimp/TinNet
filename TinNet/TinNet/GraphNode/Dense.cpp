@@ -15,7 +15,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 	
-	const Shape &Dense::shape() const
+	Shape Dense::shape() const
 	{
 		return this->sOutputShape;
 	}

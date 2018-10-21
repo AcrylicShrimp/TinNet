@@ -62,7 +62,7 @@ namespace TinNet::GraphNode
 		Convolution &operator=(const Convolution &sSrc) = delete;
 		
 	public:
-		virtual const Shape &shape() const override;
+		virtual Shape shape() const override;
 		virtual std::string type() const override;
 		virtual void notifyShapeUpdated() override;
 		virtual std::size_t fanIn() const override;

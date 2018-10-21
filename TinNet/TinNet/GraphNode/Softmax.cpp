@@ -15,7 +15,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 	
-	const Shape &Softmax::shape() const
+	Shape Softmax::shape() const
 	{
 		return this->sInputList.front()->shape();
 	}

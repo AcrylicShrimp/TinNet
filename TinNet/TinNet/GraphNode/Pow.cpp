@@ -14,7 +14,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 
-	const Shape &Pow::shape() const
+	Shape Pow::shape() const
 	{
 		return this->sShape;
 	}

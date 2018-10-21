@@ -66,7 +66,7 @@ namespace TinNet::GraphNode
 		DilatedConvolution &operator=(const DilatedConvolution &sSrc) = delete;
 
 	public:
-		virtual const Shape &shape() const override;
+		virtual Shape shape() const override;
 		virtual std::string type() const override;
 		virtual void notifyShapeUpdated() override;
 		virtual std::size_t fanIn() const override;

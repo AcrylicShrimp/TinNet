@@ -21,6 +21,8 @@ int32_t main()
 {
 	using namespace TinNet;
 
+	std::vector<float>::const_reference;
+
 	std::vector<float> train_x(60000 * 784);
 	std::vector<float> train_y(60000 * 10);
 	std::vector<float> test_x(10000 * 784);
@@ -28,10 +30,10 @@ int32_t main()
 	std::vector<float> batch_x(32 * 784);
 	std::vector<float> batch_y(32 * 10);
 
-	loadDataset("D:/Develop/Dataset/MNIST/MNIST_train_in.dat", train_x);
-	loadDataset("D:/Develop/Dataset/MNIST/MNIST_train_out.dat", train_y);
-	loadDataset("D:/Develop/Dataset/MNIST/MNIST_test_in.dat", test_x);
-	loadDataset("D:/Develop/Dataset/MNIST/MNIST_test_out.dat", test_y);
+	loadDataset("D:/Develop/Dataset/MNIST/training_input.dat", train_x);
+	loadDataset("D:/Develop/Dataset/MNIST/training_label.dat", train_y);
+	loadDataset("D:/Develop/Dataset/MNIST/testing_input.dat", test_x);
+	loadDataset("D:/Develop/Dataset/MNIST/testing_label.dat", test_y);
 
 	Graph graph;
 	GraphBP bp{graph};
@@ -45,20 +47,13 @@ int32_t main()
 	auto &layer2 = bp.dense(output1, 10);
 	auto &y_hat = bp.softmax(layer2, {false, true});
 
-	auto &shared_layer1 = bp.dense(layer1, x, 300);
-	auto &shared_output1 = bp.relu(shared_layer1, .001f);
-
-	auto &shared_layer2 = bp.dense(layer2, shared_output1, 10);
-	auto &shared_y_hat = bp.softmax(shared_layer2, {false, true});
-
 	auto &loss = bp.reduceMean(-bp.reduceSum(y * bp.log(y_hat), {false, true}));
-	auto &shared_loss = bp.reduceMean(-bp.reduceSum(y * bp.log(shared_y_hat), {false, true}));
 
 	graph.initialize();
 	graph.enableBackward();
 
 	Batch batch;
-	Optimizer::Adam optimizer{graph, .9f, .999f, {&shared_layer1, &shared_layer2}};
+	Optimizer::Adam optimizer{graph, .9f, .999f, {&layer1, &layer2}};
 
 	auto fAccuracyFunc = [&]()
 	{
@@ -72,9 +67,11 @@ int32_t main()
 			batch.copy(784, test_x, batch_x);
 			batch.copy(10, test_y, batch_y);
 
-			graph.feed(x, {{batch.currentBatchSize(), 784}, batch_x});
-			graph.feed(y, {{batch.currentBatchSize(), 10}, batch_y});
-			graph.endFeed();
+			graph.feed(
+				{
+					{x, ShapedCache{{batch.currentBatchSize(), 784}, batch_x}},
+					{y, ShapedCache{{batch.currentBatchSize(), 10}, batch_y}},
+				});
 
 			auto sYHat{y_hat.forward()};
 
@@ -106,12 +103,14 @@ int32_t main()
 			batch.copy(784, train_x, batch_x);
 			batch.copy(10, train_y, batch_y);
 
-			graph.feed(x, {{batch.currentBatchSize(), 784}, batch_x});
-			graph.feed(y, {{batch.currentBatchSize(), 10}, batch_y});
-			graph.endFeed();
+			graph.feed(
+				{
+					{x, ShapedCache{{batch.currentBatchSize(), 784}, batch_x}},
+					{y, ShapedCache{{batch.currentBatchSize(), 10}, batch_y}},
+				});
 
 			batch.next();
-			optimizer.reduce(shared_loss, .001f);
+			optimizer.reduce(loss, .001f);
 		}
 
 		auto sEnd{std::chrono::system_clock::now()};

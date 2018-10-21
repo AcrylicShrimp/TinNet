@@ -16,7 +16,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 
-	const Shape &ReduceMin::shape() const
+	Shape ReduceMin::shape() const
 	{
 		return this->sShape;
 	}

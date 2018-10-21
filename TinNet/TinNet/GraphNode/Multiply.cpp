@@ -14,7 +14,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 	
-	const Shape &Multiply::shape() const
+	Shape Multiply::shape() const
 	{
 		return this->sShape;
 	}

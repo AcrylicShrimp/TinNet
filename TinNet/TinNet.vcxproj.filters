@@ -19,8 +19,11 @@
     <Filter Include="TinNet\Optimizer">
       <UniqueIdentifier>{dc30b3fa-398a-4052-9a0b-0e83f821ca58}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TinNet\Visual">
-      <UniqueIdentifier>{47498849-1c9c-4bc6-8542-fee0ee7a4a43}</UniqueIdentifier>
+    <Filter Include="TinNet\Core">
+      <UniqueIdentifier>{4e6843f8-e605-413f-b77d-3087d3783847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TinNet\Compute">
+      <UniqueIdentifier>{ba0f46cf-39e2-4120-b3e2-eaf967f08c8c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -58,9 +61,6 @@
       <Filter>TinNet</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Node.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\CacheContainer.cpp">
       <Filter>TinNet</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Graph.cpp">
@@ -228,6 +228,30 @@
     <ClCompile Include="TinNet\GraphNode\Select.cpp">
       <Filter>TinNet\GraphNode</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Variable.cpp">
+      <Filter>TinNet</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\VariableAllocator.cpp">
+      <Filter>TinNet</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\CacheAllocator.cpp">
+      <Filter>TinNet</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Initializer\Initializer.cpp">
+      <Filter>TinNet\Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Core\Span.cpp">
+      <Filter>TinNet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Core\Shape.cpp">
+      <Filter>TinNet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Compute\GEMM.cpp">
+      <Filter>TinNet\Compute</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Core\Node.cpp">
+      <Filter>TinNet\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -279,9 +303,6 @@
       <Filter>TinNet</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Node.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\CacheContainer.h">
       <Filter>TinNet</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Graph.h">
@@ -457,6 +478,42 @@
     </ClInclude>
     <ClInclude Include="TinNet\GraphNode\Select.h">
       <Filter>TinNet\GraphNode</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Variable.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\VariableAllocator.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\CacheAllocator.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Initializer\Initializer.h">
+      <Filter>TinNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Span.h">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Span.hpp">
+      <Filter>TinNet</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\Span.h">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\Shape.h">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Compute\GEMM.h">
+      <Filter>TinNet\Compute</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\Node.h">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\FeedableNode.h">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\FeedableNode.hpp">
+      <Filter>TinNet\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

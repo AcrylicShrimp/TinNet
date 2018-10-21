@@ -41,7 +41,7 @@ namespace TinNet::GraphNode
 		ReduceSum &operator=(const ReduceSum &sSrc) = delete;
 		
 	public:
-		virtual const Shape &shape() const override;
+		virtual Shape shape() const override;
 		virtual std::string type() const override;
 		virtual void notifyShapeUpdated() override;
 		inline static std::string typeName();

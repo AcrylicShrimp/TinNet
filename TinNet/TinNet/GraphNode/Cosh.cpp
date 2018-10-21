@@ -14,7 +14,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 
-	const Shape &Cosh::shape() const
+	Shape Cosh::shape() const
 	{
 		return this->sInputList.front()->shape();
 	}

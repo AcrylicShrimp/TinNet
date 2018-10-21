@@ -29,7 +29,7 @@ namespace TinNet::GraphNode
 		~Cos() = default;
 
 	public:
-		virtual const Shape &shape() const override;
+		virtual Shape shape() const override;
 		virtual std::string type() const override;
 		inline static std::string typeName();
 

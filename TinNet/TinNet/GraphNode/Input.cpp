@@ -16,7 +16,7 @@ namespace TinNet::GraphNode
 		//Empty.
 	}
 
-	const Shape &Input::shape() const
+	Shape Input::shape() const
 	{
 		return this->sShapedCache.shape();
 	}

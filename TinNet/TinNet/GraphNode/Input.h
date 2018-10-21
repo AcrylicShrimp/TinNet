@@ -37,7 +37,7 @@ namespace TinNet::GraphNode
 		Input &operator=(const Input &sSrc) = delete;
 		
 	public:
-		virtual const Shape &shape() const override;
+		virtual Shape shape() const override;
 		virtual std::string type() const override;
 		virtual Cache forward() override;
 		virtual void feed(const ShapedCache &sShapedCache) override;

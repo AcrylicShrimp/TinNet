@@ -11,7 +11,7 @@
 #include "../TinNetDLL.h"
 
 #include "../Cache.h"
-#include "../CacheContainer.h"
+#include "../CacheAllocator.h"
 #include "../Graph.h"
 #include "BackpropNode.h"
 

@@ -20,10 +20,10 @@ namespace TinNet::GraphNode
 	{
 		if (!this->pSharingNode)
 			for (auto sVariable : this->sVariableList)
-				this->pGraph->cacheContainer().release(sVariable);
+				this->pGraph->cacheAllocator().deallocate(sVariable);
 
 		for (auto sVariableGradient : this->sVariableGradientList)
-			this->pGraph->cacheContainer().release(sVariableGradient);
+			this->pGraph->cacheAllocator().deallocate(sVariableGradient);
 
 		this->sVariableSizeList.clear();
 		this->sVariableList.clear();
@@ -40,7 +40,7 @@ namespace TinNet::GraphNode
 			}
 			else
 				for (auto nVariableSize : this->sVariableSizeList)
-					this->sVariableList.emplace_back(this->pGraph->cacheContainer().request(nVariableSize));
+					this->sVariableList.emplace_back(this->pGraph->cacheAllocator().allocate(nVariableSize));
 
 		this->FullNode::notifyShapeUpdated();
 	}
@@ -51,7 +51,7 @@ namespace TinNet::GraphNode
 
 		if (this->sVariableGradientList.empty())
 			for (auto nVariableSize : this->sVariableSizeList)
-				this->sVariableGradientList.emplace_back(this->pGraph->cacheContainer().request(nVariableSize));
+				this->sVariableGradientList.emplace_back(this->pGraph->cacheAllocator().allocate(nVariableSize));
 	}
 
 	void VariableNode::notifyBackwardDisabled()
@@ -59,7 +59,7 @@ namespace TinNet::GraphNode
 		this->FullNode::notifyBackwardDisabled();
 
 		for (auto pVariableGradient : this->sVariableGradientList)
-			this->pGraph->cacheContainer().release(pVariableGradient);
+			this->pGraph->cacheAllocator().deallocate(pVariableGradient);
 
 		this->sVariableGradientList.clear();
 	}

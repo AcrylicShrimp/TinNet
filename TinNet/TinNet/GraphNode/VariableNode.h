@@ -11,7 +11,7 @@
 #include "../TinNetDLL.h"
 
 #include "../Cache.h"
-#include "../CacheContainer.h"
+#include "../CacheAllocator.h"
 #include "../Graph.h"
 #include "../Initializable.h"
 #include "FullNode.h"
@@ -51,7 +51,7 @@ namespace TinNet::GraphNode
 
 	inline void VariableNode::registerVariable(std::size_t nSize)
 	{
-		return this->sVariableSizeList.emplace_back(nSize);
+		this->sVariableSizeList.emplace_back(nSize);
 	}
 }
 

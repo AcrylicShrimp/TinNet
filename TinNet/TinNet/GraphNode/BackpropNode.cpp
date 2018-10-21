@@ -24,21 +24,21 @@ namespace TinNet::GraphNode
 	{
 		if (this->pGradient && this->pGradient->sCache.size() < this->shape().element())
 		{
-			this->pGraph->cacheContainer().release(this->pGradient);
-			this->pGradient = this->pGraph->cacheContainer().request(this->shape().element());
+			this->pGraph->cacheAllocator().deallocate(this->pGradient);
+			this->pGradient = this->pGraph->cacheAllocator().allocate(this->shape().element());
 		}
 	}
 
 	void BackpropNode::notifyBackwardEnabled()
 	{
 		if (!this->pGradient)
-			this->pGradient = this->pGraph->cacheContainer().request(this->shape().element());
+			this->pGradient = this->pGraph->cacheAllocator().allocate(this->shape().element());
 	}
 
 	void BackpropNode::notifyBackwardDisabled()
 	{
 		if (this->pGradient)
-			this->pGraph->cacheContainer().release(this->pGradient);
+			this->pGraph->cacheAllocator().deallocate(this->pGradient);
 
 		this->pGradient = nullptr;
 	}

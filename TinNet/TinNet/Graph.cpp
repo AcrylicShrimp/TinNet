@@ -56,19 +56,19 @@ namespace TinNet
 			pNode->notifyBackwardDisabled();
 	}
 
-	void Graph::feed(NodeRef sNode, const ShapedCache &sShapedCache)
+	void Graph::feed(const std::vector<std::pair<NodeRef, ShapedCache>> &sFeedList)
 	{
-		auto iIndex{this->sFeedableMap.find(&sNode)};
+		for (auto &sPair : sFeedList)
+		{
+			auto iIndex{this->sFeedableMap.find(&sPair.first)};
 
-		if (iIndex != this->sFeedableMap.cend())
-			iIndex->second->feed(sShapedCache);
-	}
+			if (iIndex != this->sFeedableMap.cend())
+				iIndex->second->feed(sPair.second);
+		}
 
-	void Graph::endFeed()
-	{
 		for (auto pNode : this->sOrderedNodeList)
 			pNode->notifyShapeUpdated();
 
-		this->sCacheContainer.setDirtyAll();
+		this->sCacheAllocator.setDirtyAll();
 	}
 }

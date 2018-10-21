@@ -34,7 +34,7 @@ namespace TinNet::GraphNode
 		Reshape &operator=(const Reshape &sSrc) = delete;
 		
 	public:
-		virtual const Shape &shape() const override;
+		virtual Shape shape() const override;
 		virtual std::string type() const override;
 		virtual Cache forward() override;
 		inline static std::string typeName();

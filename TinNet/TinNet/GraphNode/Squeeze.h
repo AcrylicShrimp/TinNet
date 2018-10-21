@@ -34,7 +34,7 @@ namespace TinNet::GraphNode
 		Squeeze &operator=(const Squeeze &sSrc) = delete;
 
 	public:
-		virtual const Shape &shape() const override;
+		virtual Shape shape() const override;
 		virtual std::string type() const override;
 		virtual void notifyShapeUpdated() override;
 		virtual Cache forward() override;
