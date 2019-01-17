@@ -1,5 +1,5 @@
 # TinNet
-A C++14 based deep learning library. Easy to use!
+A C++14 based lightweight deep learning library.
 
 ## Dependencies
 There's no dependencies except for C++14 standard library.
