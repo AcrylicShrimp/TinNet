@@ -8,9 +8,9 @@
 
 namespace TinNet
 {
-	Variable::Variable(Shape sShape, float *pBegin, std::size_t nSize) :
+	Variable::Variable(Shape sShape, float *pBase, std::size_t nSize) :
 		sShape{sShape},
-		pBegin{pBegin},
+		pBase{pBase},
 		nSize{nSize}
 	{
 		//Empty.

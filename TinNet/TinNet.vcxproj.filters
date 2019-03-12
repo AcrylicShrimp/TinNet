@@ -25,6 +25,9 @@
     <Filter Include="TinNet\Compute">
       <UniqueIdentifier>{ba0f46cf-39e2-4120-b3e2-eaf967f08c8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TinNet\Node">
+      <UniqueIdentifier>{8d7bfea6-e7e7-4293-b354-3f23a9344e1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TinNet\Initializer\Constant.cpp">
@@ -251,6 +254,15 @@
     </ClCompile>
     <ClCompile Include="TinNet\Core\Node.cpp">
       <Filter>TinNet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Core\Memory.cpp">
+      <Filter>TinNet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Core\NodeInput.cpp">
+      <Filter>TinNet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\MM.cpp">
+      <Filter>TinNet\Node</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -514,6 +526,18 @@
     </ClInclude>
     <ClInclude Include="TinNet\Core\FeedableNode.hpp">
       <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\Memory.h">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\NodeInput.h">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\Shape.hpp">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\MM.h">
+      <Filter>TinNet\Node</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

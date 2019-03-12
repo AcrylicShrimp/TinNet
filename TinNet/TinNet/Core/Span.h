@@ -10,13 +10,13 @@
 
 #include "../TinNetDLL.h"
 
-#include <algorithm>	//std::min, std::fill, std::transform
-#include <cmath>		//std::fmaf
-#include <cstddef>		//std::size_t
-#include <cstring>		//::memcpy_s
-#include <functional>	//std::plus
-#include <iterator>		//std::distance
-#include <vector>		//std::vector
+#include <algorithm>
+#include <cmath>
+#include <cstddef>
+#include <cstring>
+#include <functional>
+#include <iterator>
+#include <utility>
 
 namespace TinNet::Core
 {
@@ -28,19 +28,15 @@ namespace TinNet::Core
 
 	public:
 		Span() noexcept;
-		Span(const Span &sSrc) noexcept = default;
 		Span(float *pBase, std::size_t nLength) noexcept;
-		Span(float *pBegin, float *pEnd) noexcept;
-		Span(std::vector<float> &sVector) noexcept;
-		template<std::size_t Length> inline Span(float(&vArray)[Length]) noexcept;
+		template<class I> Span(I iBegin, I iEnd) noexcept;
+		Span(const Span &sSrc) noexcept = default;
 		~Span() noexcept = default;
 
 	public:
 		Span &operator=(const Span &sSrc) noexcept = default;
-		Span &operator=(std::vector<float> &sVector) noexcept;
-		template<std::size_t Length> inline Span &operator=(float(&vArray)[Length]) noexcept;
-		inline float &operator[](std::size_t nIndex) noexcept;
-		inline const float &operator[](std::size_t nIndex) const noexcept;
+		inline float &operator[](std::size_t nIndex);
+		inline const float &operator[](std::size_t nIndex) const;
 
 	public:
 		inline float *begin() noexcept;
@@ -52,52 +48,33 @@ namespace TinNet::Core
 		inline std::size_t length() const noexcept;
 		inline Span subSpan(std::size_t nOffset) const noexcept;
 		inline Span subSpan(std::size_t nOffset, std::size_t nLength) const noexcept;
-		inline void fillZero() noexcept;
-		inline void fillOne() noexcept;
-		inline void fillScalar(float nScalar) noexcept;
-		inline void copyFrom(const Span &sSpan) noexcept;
-		inline void copyFrom(const float *pBase, std::size_t nLength) noexcept;
-		inline void copyFrom(const float *pBegin, const float *pEnd) noexcept;
-		inline void copyFrom(const std::vector<float> &sVector) noexcept;
-		template<std::size_t Length> inline void copyFrom(const float(&vArray)[Length]) noexcept;
-		inline void accumulateFrom(const Span &sSpan) noexcept;
-		inline void accumulateFrom(const float *pBase, std::size_t nLength) noexcept;
-		inline void accumulateFrom(const float *pBegin, const float *pEnd) noexcept;
-		inline void accumulateFrom(const std::vector<float> &sVector) noexcept;
-		template<std::size_t Length> inline void accumulateFrom(const float(&vArray)[Length]) noexcept;
-		inline void accumulateFrom(float nFactor, const Span &sSpan) noexcept;
-		inline void accumulateFrom(float nFactor, const float *pBase, std::size_t nLength) noexcept;
-		inline void accumulateFrom(float nFactor, const float *pBegin, const float *pEnd) noexcept;
-		inline void accumulateFrom(float nFactor, const std::vector<float> &sVector) noexcept;
-		template<std::size_t Length> inline void accumulateFrom(float nFactor, const float(&vArray)[Length]) noexcept;
+		inline void fillZero();
+		inline void fillOne();
+		inline void fillScalar(float nScalar);
+		inline void copyFrom(const Span &sSpan);
+		template<class I> inline void copyFrom(I iBegin, I iEnd);
+		inline void accumulateFrom(const Span &sSpan);
+		template<class I> inline void accumulateFrom(I iBegin, I iEnd);
+		inline void accumulateFrom(float nFactor, const Span &sSpan);
+		template<class I> inline void accumulateFrom(float nFactor, I iBegin, I iEnd);
 
-	private:
-		void __fillScalar(float nScalar) noexcept;
-		void __copyFrom(const float *pBase, std::size_t nLength) noexcept;
-		void __accumulateFrom(const float *pBase, std::size_t nLength) noexcept;
-		void __accumulateFrom(float nFactor, const float *pBase, std::size_t nLength) noexcept;
+	public:
+		inline friend void swap(Span &sLeft, Span &sRight) noexcept;
 	};
 
-	template<std::size_t Length> inline Span::Span(float(&vArray)[Length]) noexcept :
-		Span(vArray, Length)
+	template<class I> inline Span::Span(I iBegin, I iEnd) noexcept :
+		pBase{&*iBegin},
+		nLength{static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd))}
 	{
 		//Empty.
 	}
 
-	template<std::size_t Length> inline Span &Span::operator=(float(&vArray)[Length]) noexcept
-	{
-		this->pBase = vArray;
-		this->nLength = Length;
-
-		return *this;
-	}
-
-	inline float &Span::operator[](std::size_t nIndex) noexcept
+	inline float &Span::operator[](std::size_t nIndex)
 	{
 		return this->pBase[nIndex];
 	}
 
-	inline const float &Span::operator[](std::size_t nIndex) const noexcept
+	inline const float &Span::operator[](std::size_t nIndex) const
 	{
 		return this->pBase[nIndex];
 	}
@@ -139,102 +116,65 @@ namespace TinNet::Core
 
 	inline Span Span::subSpan(std::size_t nOffset) const noexcept
 	{
-		return {this->pBase + nOffset, this->nLength < nOffset ? 0 : this->nLength - nOffset};
+		return Span{this->pBase + nOffset, this->pBase + this->nLength};
 	}
 
 	inline Span Span::subSpan(std::size_t nOffset, std::size_t nLength) const noexcept
 	{
-		return {this->pBase + nOffset, this->nLength < nOffset ? 0 : std::min(this->nLength - nOffset, nLength)};
+		return Span{this->pBase + nOffset, this->pBase + std::min(this->nLength, nLength)};
 	}
 
-	inline void Span::fillZero() noexcept
+	inline void Span::fillZero()
 	{
-		this->__fillScalar(.0f);
+		std::fill(this->pBase, this->pBase + this->nLength, .0f);
 	}
 
-	inline void Span::fillOne() noexcept
+	inline void Span::fillOne()
 	{
-		this->__fillScalar(1.f);
+		std::fill(this->pBase, this->pBase + this->nLength, 1.f);
 	}
 
-	inline void Span::fillScalar(float nScalar) noexcept
+	inline void Span::fillScalar(float nScalar)
 	{
-		this->__fillScalar(nScalar);
+		std::fill(this->pBase, this->pBase + this->nLength, nScalar);
 	}
 
-	inline void Span::copyFrom(const Span &sSpan) noexcept
+	inline void Span::copyFrom(const Span &sSpan)
 	{
-		this->__copyFrom(sSpan.cbegin(), sSpan.length());
+		std::copy(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase);
 	}
 
-	inline void Span::copyFrom(const float *pBase, std::size_t nLength) noexcept
+	template<class I> inline void Span::copyFrom(I iBegin, I iEnd)
 	{
-		this->__copyFrom(pBase, nLength);
+		std::copy(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase);
 	}
 
-	inline void Span::copyFrom(const float *pBegin, const float *pEnd) noexcept
+	inline void Span::accumulateFrom(const Span &sSpan)
 	{
-		this->__copyFrom(pBegin, std::distance(pBegin, pEnd));
+		std::transform(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase, std::plus<float>{});
 	}
 
-	inline void Span::copyFrom(const std::vector<float> &sVector) noexcept
+	template<class I> inline void Span::accumulateFrom(I iBegin, I iEnd)
 	{
-		this->__copyFrom(sVector.data(), sVector.size());
+		std::transform(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase, std::plus<float>{});
 	}
 
-	template<std::size_t Length> inline void Span::copyFrom(const float(&vArray)[Length]) noexcept
+	inline void Span::accumulateFrom(float nFactor, const Span &sSpan)
 	{
-		this->copyFrom(vArray, Length);
+		std::transform(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase, [=](auto nLeft, auto nRight) { return std::fmaf(nLeft, nFactor, nRight); });
 	}
 
-	inline void Span::accumulateFrom(const Span &sSpan) noexcept
+	template<class I> inline void Span::accumulateFrom(float nFactor, I iBegin, I iEnd)
 	{
-		this->__accumulateFrom(sSpan.cbegin(), sSpan.length());
+		std::transform(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase, [=](auto nLeft, auto nRight) { return std::fmaf(nLeft, nFactor, nRight); });
 	}
 
-	inline void Span::accumulateFrom(const float *pBase, std::size_t nLength) noexcept
+	inline void swap(Span &sLeft, Span &sRight) noexcept
 	{
-		this->__accumulateFrom(pBase, nLength);
-	}
+		using std::swap;
 
-	inline void Span::accumulateFrom(const float *pBegin, const float *pEnd) noexcept
-	{
-		this->__accumulateFrom(pBegin, std::distance(pBegin, pEnd));
-	}
-
-	inline void Span::accumulateFrom(const std::vector<float> &sVector) noexcept
-	{
-		this->__accumulateFrom(sVector.data(), sVector.size());
-	}
-
-	template<std::size_t Length> inline void Span::accumulateFrom(const float(&vArray)[Length]) noexcept
-	{
-		this->accumulateFrom(vArray, Length);
-	}
-
-	inline void Span::accumulateFrom(float nFactor, const Span &sSpan) noexcept
-	{
-		this->__accumulateFrom(nFactor, sSpan.cbegin(), sSpan.length());
-	}
-
-	inline void Span::accumulateFrom(float nFactor, const float *pBase, std::size_t nLength) noexcept
-	{
-		this->__accumulateFrom(nFactor, pBase, nLength);
-	}
-
-	inline void Span::accumulateFrom(float nFactor, const float *pBegin, const float *pEnd) noexcept
-	{
-		this->__accumulateFrom(nFactor, pBegin, std::distance(pBegin, pEnd));
-	}
-
-	inline void Span::accumulateFrom(float nFactor, const std::vector<float> &sVector) noexcept
-	{
-		this->__accumulateFrom(nFactor, sVector.data(), sVector.size());
-	}
-
-	template<std::size_t Length> inline void Span::accumulateFrom(float nFactor, const float(&vArray)[Length]) noexcept
-	{
-		this->accumulateFrom(nFactor, vArray, Length);
+		swap(sLeft.pBase, sRight.pBase);
+		swap(sLeft.nLength, sRight.nLength);
 	}
 }
 

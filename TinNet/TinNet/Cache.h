@@ -22,14 +22,14 @@ namespace TinNet
 	class TINNET_DLL Cache final
 	{
 	private:
-		float *pBegin;
+		float *pBase;
 		std::size_t nSize;
 
 	public:
 		Cache();
 		Cache(std::vector<float> &sVector);
-		Cache(float *pBegin, const float *pEnd);
-		Cache(float *pBegin, std::size_t nSize);
+		Cache(float *pBase, const float *pEnd);
+		Cache(float *pBase, std::size_t nSize);
 		Cache(const Cache &sSrc);
 		~Cache() = default;
 
@@ -65,42 +65,42 @@ namespace TinNet
 
 	inline Cache::operator float *()
 	{
-		return this->pBegin;
+		return this->pBase;
 	}
 
 	inline Cache::operator const float *() const
 	{
-		return this->pBegin;
+		return this->pBase;
 	}
 
 	inline float *Cache::begin()
 	{
-		return this->pBegin;
+		return this->pBase;
 	}
 
 	inline const float *Cache::begin() const
 	{
-		return this->pBegin;
+		return this->pBase;
 	}
 
 	inline const float *Cache::cbegin() const
 	{
-		return this->pBegin;
+		return this->pBase;
 	}
 
 	inline float *Cache::end()
 	{
-		return this->pBegin + this->nSize;
+		return this->pBase + this->nSize;
 	}
 
 	inline const float *Cache::end() const
 	{
-		return this->pBegin + this->nSize;
+		return this->pBase + this->nSize;
 	}
 
 	inline const float *Cache::cend() const
 	{
-		return this->pBegin + this->nSize;
+		return this->pBase + this->nSize;
 	}
 
 	inline std::size_t Cache::size() const

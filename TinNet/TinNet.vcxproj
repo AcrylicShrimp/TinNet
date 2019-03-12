@@ -223,7 +223,9 @@
     <ClCompile Include="TinNet\Cache.cpp" />
     <ClCompile Include="TinNet\CacheAllocator.cpp" />
     <ClCompile Include="TinNet\Compute\GEMM.cpp" />
+    <ClCompile Include="TinNet\Core\Memory.cpp" />
     <ClCompile Include="TinNet\Core\Node.cpp" />
+    <ClCompile Include="TinNet\Core\NodeInput.cpp" />
     <ClCompile Include="TinNet\Core\Shape.cpp" />
     <ClCompile Include="TinNet\Core\Span.cpp" />
     <ClCompile Include="TinNet\Feedable.cpp" />
@@ -326,6 +328,7 @@
     <ClCompile Include="TinNet\IO\JSONObject.cpp" />
     <ClCompile Include="TinNet\IO\Serializable.cpp" />
     <ClCompile Include="TinNet\Node.cpp" />
+    <ClCompile Include="TinNet\Node\MM.cpp" />
     <ClCompile Include="TinNet\Optimizer\Adam.cpp" />
     <ClCompile Include="TinNet\Optimizer\Momentum.cpp" />
     <ClCompile Include="TinNet\Optimizer\OptimizerBase.cpp" />
@@ -344,8 +347,11 @@
     <ClInclude Include="TinNet\Compute\GEMM.h" />
     <ClInclude Include="TinNet\Core\FeedableNode.h" />
     <ClInclude Include="TinNet\Core\FeedableNode.hpp" />
+    <ClInclude Include="TinNet\Core\Memory.h" />
     <ClInclude Include="TinNet\Core\Node.h" />
+    <ClInclude Include="TinNet\Core\NodeInput.h" />
     <ClInclude Include="TinNet\Core\Shape.h" />
+    <ClInclude Include="TinNet\Core\Shape.hpp" />
     <ClInclude Include="TinNet\Core\Span.h" />
     <ClInclude Include="TinNet\Feedable.h" />
     <ClInclude Include="TinNet\Graph.h" />
@@ -458,6 +464,7 @@
     <ClInclude Include="TinNet\Iterator.h" />
     <ClInclude Include="TinNet\Iterator.hpp" />
     <ClInclude Include="TinNet\Node.h" />
+    <ClInclude Include="TinNet\Node\MM.h" />
     <ClInclude Include="TinNet\Optimizer\Adam.h" />
     <ClInclude Include="TinNet\Optimizer\Momentum.h" />
     <ClInclude Include="TinNet\Optimizer\OptimizerBase.h" />

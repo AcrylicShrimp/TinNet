@@ -9,7 +9,7 @@
 namespace TinNet
 {
 	Cache::Cache() :
-		pBegin{nullptr},
+		pBase{nullptr},
 		nSize{0}
 	{
 		//Empty.
@@ -21,21 +21,21 @@ namespace TinNet
 		//Empty.
 	}
 
-	Cache::Cache(float *pBegin, const float *pEnd) :
-		Cache(pBegin, static_cast<std::size_t>(pEnd - pBegin))
+	Cache::Cache(float *pBase, const float *pEnd) :
+		Cache(pBase, static_cast<std::size_t>(pEnd - pBase))
 	{
 		//Empty.
 	}
 
-	Cache::Cache(float *pBegin, std::size_t nSize) :
-		pBegin{pBegin},
+	Cache::Cache(float *pBase, std::size_t nSize) :
+		pBase{pBase},
 		nSize{nSize}
 	{
 		//Empty.
 	}
 
 	Cache::Cache(const Cache &sSrc) :
-		pBegin{sSrc.pBegin},
+		pBase{sSrc.pBase},
 		nSize{sSrc.nSize}
 	{
 		//Empty.
@@ -46,7 +46,7 @@ namespace TinNet
 		if (&sSrc == this)
 			return *this;
 
-		this->pBegin = sSrc.pBegin;
+		this->pBase = sSrc.pBase;
 		this->nSize = sSrc.nSize;
 
 		return *this;
@@ -54,7 +54,7 @@ namespace TinNet
 
 	Cache &Cache::operator=(std::vector<float> &sVector)
 	{
-		this->pBegin = sVector.data();
+		this->pBase = sVector.data();
 		this->nSize = sVector.size();
 
 		return *this;
@@ -62,52 +62,52 @@ namespace TinNet
 
 	void Cache::zero()
 	{
-		std::fill(this->pBegin, this->pBegin + this->nSize, .0f);
+		std::fill(this->pBase, this->pBase + this->nSize, .0f);
 	}
 
 	void Cache::one()
 	{
-		std::fill(this->pBegin, this->pBegin + this->nSize, 1.f);
+		std::fill(this->pBase, this->pBase + this->nSize, 1.f);
 	}
 
 	void Cache::fill(float nValue)
 	{
-		std::fill(this->pBegin, this->pBegin + this->nSize, nValue);
+		std::fill(this->pBase, this->pBase + this->nSize, nValue);
 	}
 
 	void Cache::copy(Cache sCache)
 	{
 		for (std::size_t nIndex{0}, nSize{std::min(this->nSize, sCache.nSize)}; nIndex < nSize; ++nIndex)
-			this->pBegin[nIndex] = sCache.pBegin[nIndex];
+			this->pBase[nIndex] = sCache.pBase[nIndex];
 	}
 
 	void Cache::copy(Cache sCache, float nFactor)
 	{
 		for (std::size_t nIndex{0}, nSize{std::min(this->nSize, sCache.nSize)}; nIndex < nSize; ++nIndex)
-			this->pBegin[nIndex] = nFactor * sCache.pBegin[nIndex];
+			this->pBase[nIndex] = nFactor * sCache.pBase[nIndex];
 	}
 
 	void Cache::copyNegative(Cache sCache)
 	{
 		for (std::size_t nIndex{0}, nSize{std::min(this->nSize, sCache.nSize)}; nIndex < nSize; ++nIndex)
-			this->pBegin[nIndex] = -sCache.pBegin[nIndex];
+			this->pBase[nIndex] = -sCache.pBase[nIndex];
 	}
 
 	float Cache::accumulate() const
 	{
-		return std::accumulate(this->pBegin, this->pBegin + this->nSize, .0f);
+		return std::accumulate(this->pBase, this->pBase + this->nSize, .0f);
 	}
 
 	void Cache::accumulate(Cache sCache)
 	{
 		for (std::size_t nIndex{0}, nSize{std::min(this->nSize, sCache.nSize)}; nIndex < nSize; ++nIndex)
-			this->pBegin[nIndex] += sCache.pBegin[nIndex];
+			this->pBase[nIndex] += sCache.pBase[nIndex];
 	}
 
 	void Cache::accumulate(Cache sCache, float nFactor)
 	{
 		for (std::size_t nIndex{0}, nSize{std::min(this->nSize, sCache.nSize)}; nIndex < nSize; ++nIndex)
-			this->pBegin[nIndex] += nFactor * sCache.pBegin[nIndex];
+			this->pBase[nIndex] += nFactor * sCache.pBase[nIndex];
 	}
 	
 	std::string Cache::toString() const
@@ -117,7 +117,7 @@ namespace TinNet
 
 		for (std::size_t nIndex{0}; nIndex < this->nSize; )
 		{
-			sStream << this->pBegin[nIndex];
+			sStream << this->pBase[nIndex];
 
 			if (++nIndex != this->nSize)
 				sStream << ", ";
@@ -136,7 +136,7 @@ namespace TinNet
 
 		for (std::size_t nIndex{0}; nIndex < nMaxIndex; )
 		{
-			sStream << this->pBegin[nIndex];
+			sStream << this->pBase[nIndex];
 
 			if (++nIndex != nMaxIndex)
 				sStream << ", ";

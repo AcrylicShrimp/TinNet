@@ -20,11 +20,11 @@ namespace TinNet
 	{
 	private:
 		Shape sShape;
-		float *pBegin;
+		float *pBase;
 		std::size_t nSize;
 		
 	public:
-		Variable(Shape sShape, float *pBegin, std::size_t nSize);
+		Variable(Shape sShape, float *pBase, std::size_t nSize);
 		Variable(const Variable &sSrc) = default;
 		Variable(Variable &&sSrc) = default;
 		~Variable() = default;
@@ -48,12 +48,12 @@ namespace TinNet
 
 	inline Variable::operator float *()
 	{
-		return this->pBegin;
+		return this->pBase;
 	}
 
 	inline Variable::operator const float *() const
 	{
-		return this->pBegin;
+		return this->pBase;
 	}
 
 	inline const Shape &Variable::shape() const
@@ -63,32 +63,32 @@ namespace TinNet
 
 	inline float *Variable::begin()
 	{
-		return this->pBegin;
+		return this->pBase;
 	}
 
 	inline const float *Variable::begin() const
 	{
-		return this->pBegin;
+		return this->pBase;
 	}
 
 	inline const float *Variable::cbegin() const
 	{
-		return this->pBegin;
+		return this->pBase;
 	}
 
 	inline float *Variable::end()
 	{
-		return this->pBegin + this->nSize;
+		return this->pBase + this->nSize;
 	}
 
 	inline const float *Variable::end() const
 	{
-		return this->pBegin + this->nSize;
+		return this->pBase + this->nSize;
 	}
 
 	inline const float *Variable::cend() const
 	{
-		return this->pBegin + this->nSize;
+		return this->pBase + this->nSize;
 	}
 
 	inline std::size_t Variable::size() const

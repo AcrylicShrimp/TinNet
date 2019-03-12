@@ -33,7 +33,7 @@ namespace TinNet
 		using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
 	private:
-		pointer pBegin;
+		pointer pBase;
 		index_type nSize;
 
 	public:
