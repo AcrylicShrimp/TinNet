@@ -21,7 +21,7 @@ namespace TinNet::Compute
 		const auto *pR{sRight.begin()};
 		auto *__restrict pD{sDestination.begin()};
 
-	#pragma omp parallel for schedule(guided) default(shared) num_threads(std::max<std::size_t>(1, std::min<std::size_t>(nMaxIndex * nRow * nColumn / 1600000, std::thread::hardware_concurrency())))
+	#pragma omp parallel for schedule(guided) default(shared) num_threads(static_cast<int>(std::max<std::size_t>(1u, std::min<std::size_t>(nMaxIndex * nRow * nColumn / 1600000u, std::thread::hardware_concurrency()))))
 		for (std::int64_t nR{0}; nR < nRow; ++nR)
 			for (std::size_t nC{0}; nC < nColumn; ++nC)
 			{
@@ -59,7 +59,7 @@ namespace TinNet::Compute
 		std::vector<float> sRightTransposed(nMaxIndex * nColumn);
 		auto *__restrict pRT{sRightTransposed.data()};
 
-	#pragma omp parallel default(shared) num_threads(std::max<std::size_t>(1, std::min<std::size_t>(nMaxIndex * nColumn / 1600000, std::thread::hardware_concurrency())))
+	#pragma omp parallel default(shared) num_threads(static_cast<int>(std::max<std::size_t>(1u, std::min<std::size_t>(nMaxIndex * nColumn / 1600000u, std::thread::hardware_concurrency()))))
 		{
 		#pragma omp for schedule(guided)
 			for (std::int64_t nR{0}; nR < nColumn; ++nR)
@@ -109,7 +109,7 @@ namespace TinNet::Compute
 		auto *__restrict pGT{sGradientTransposed.data()};
 		auto *__restrict pLT{sLeftTransposed.data()};
 
-	#pragma omp parallel default(shared) num_threads(std::max<std::size_t>(1, std::min<std::size_t>(nMaxIndex * nRow * nColumn / 1600000, std::thread::hardware_concurrency())))
+	#pragma omp parallel default(shared) num_threads(static_cast<int>(std::max<std::size_t>(1u, std::min<std::size_t>(nMaxIndex * nRow * nColumn / 1600000u, std::thread::hardware_concurrency()))))
 		{
 		#pragma omp for schedule(guided) nowait
 			for (std::int64_t nR{0}; nR < nRow; ++nR)

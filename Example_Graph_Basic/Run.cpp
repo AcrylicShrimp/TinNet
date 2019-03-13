@@ -5,193 +5,91 @@
 */
 
 #include "../TinNet/TinNet/TinNet.h"
-#include "../TinNet/TinNet/Optimizer/SGD.h"
-#include "../TinNet/TinNet/Optimizer/Momentum.h"
-#include "../TinNet/TinNet/Optimizer/Adam.h"
 
-#include "../TinNet/TinNet/GraphNode/GraphOp.h"
-
-#include <algorithm>
-#include <chrono>
-#include <fstream>
+#include <cstdlib>
 #include <iostream>
 #include <random>
 #include <vector>
-
-#include <Windows.h>
 
 int32_t main()
 {
 	using namespace TinNet;
 
-	//std::vector<float> train_x(60000 * 784);
-	//std::vector<float> train_y(60000 * 10);
-	//std::vector<float> test_x(10000 * 784);
-	//std::vector<float> test_y(10000 * 10);
-	//
-	//{
-	//	std::ifstream sInput{L"D:/Develop/Dataset/MNIST/MNIST_train_in.dat", std::ifstream::binary | std::ifstream::in};
-	//	sInput.read(reinterpret_cast<char *>(train_x.data()), sizeof(float) * train_x.size());
-	//}
-	//
-	//{
-	//	std::ifstream sInput{L"D:/Develop/Dataset/MNIST/MNIST_train_out.dat", std::ifstream::binary | std::ifstream::in};
-	//	sInput.read(reinterpret_cast<char *>(train_y.data()), sizeof(float) * train_y.size());
-	//}
-	//
-	//{
-	//	std::ifstream sInput{L"D:/Develop/Dataset/MNIST/MNIST_test_in.dat", std::ifstream::binary | std::ifstream::in};
-	//	sInput.read(reinterpret_cast<char *>(test_x.data()), sizeof(float) * test_x.size());
-	//}
-	//
-	//{
-	//	std::ifstream sInput{L"D:/Develop/Dataset/MNIST/MNIST_test_out.dat", std::ifstream::binary | std::ifstream::in};
-	//	sInput.read(reinterpret_cast<char *>(test_y.data()), sizeof(float) * test_y.size());
-	//}
+	Node::Input x{"x"};
+	Node::Input y{"y"};
+	Node::Input w{"w"};
+	Node::Input b{"b"};
+	Node::MM xw{"xw"};
+	Node::Add xw_b{"xw+b"};
+	Node::Sigmoid output{"output"};
+	Node::SigmoidCrossEntropy loss{"loss"};
 
-	std::vector<float> train_x(128);
-	std::vector<float> train_y(4 * 100 * 100);
+	xw["left"]->attach(&x);
+	xw["right"]->attach(&w);
+	xw_b["left"]->attach(&xw);
+	xw_b["right"]->attach(&b);
+	output["logit"]->attach(&xw_b);
+	loss["label"]->attach(&y);
+	loss["prob"]->attach(&output);
 
+	std::mt19937_64 sEngine{std::random_device{}()};
+	std::normal_distribution<float> sDist;
+
+	std::vector<std::vector<float>> x_data
 	{
-		std::mt19937_64 sEngine{std::random_device{}()};
-		std::normal_distribution<float> sDist;
-
-		for (auto &x : train_x)
-			x = sDist(sEngine);
-	}
-
-	{
-		std::ifstream sInput{L"D:/Develop/Dataset/TestImage/john_delete.dat", std::ifstream::binary | std::ifstream::in};
-		sInput.read(reinterpret_cast<char *>(train_y.data()), sizeof(float) * train_y.size());
-	}
-
-	Graph graph;
-	GraphBP bp{graph};
-
-	auto &x = bp.input(Shape{1, 128, 1, 1});
-
-	auto &layer1 = bp.transposedConvolution(x, 5, 5, 5, 5, 1024, 5, 5);
-	auto &output1 = bp.relu(layer1, .01f);
-
-	auto &layer2 = bp.transposedConvolution(output1, 5, 5, 25, 25, 512, 5, 5);
-	auto &output2 = bp.relu(layer2, .01f);
-
-	auto &layer3 = bp.transposedConvolution(output2, 5, 5, 100, 100, 4, 5, 5);
-	auto &output3 = bp.sigmoid(layer3);
-
-	auto &y = bp.input(Shape{1, 4, 100, 100});
-
-	auto &loss = bp.reduceMean(bp.square(y - output3));
-
-	//auto &x = bp.input(Shape{32, 784}, train_x);
-	//auto &reshaped_x = bp.reshape(x, {32, 1, 28, 28});
-	//auto &layer1 = bp.convolution(reshaped_x, 3, 3, 28, 28, 32);
-	//auto &output1 = bp.relu(layer1, .001f);
-	//
-	//auto &layer2 = bp.convolution(output1, 3, 3, 14, 14, 64, 2, 2);
-	//auto &output2 = bp.relu(layer2, .001f);
-	//auto &reshaped_output2 = bp.reshape(output2, {32, 12544});
-	//
-	//auto &layer3 = bp.dense(reshaped_output2, 10);
-	//auto &y_hat = bp.softmax(layer3, {false, true});
-	//auto &y = bp.input(Shape{32, 10}, train_y);
-
-	//auto &layer1 = bp.dense(x, 300);
-	//auto &output1 = bp.relu(layer1, .001f);
-	//
-	//auto &layer2 = bp.dense(output1, 10);
-	//auto &output2 = bp.relu(layer2, .001f);
-	//auto &y_hat = bp.softmax(output2, {false, true});
-	//auto &y = bp.input(Shape{32, 10}, train_y);
-	//auto &loss = bp.reduceMean(-bp.reduceSum(y * bp.log(y_hat), {false, true}));
-
-	graph.initialize();
-	graph.enableBackward();
-
-	//Optimizer::SGD optimizer{graph};
-	//Optimizer::Momentum optimizer{graph, .9f};
-	Optimizer::Adam optimizer{graph, .9f, .999f};
-
-	//auto fAccuracyFunc = [&]()
-	//{
-	//	std::size_t nCount{0};
-	//
-	//	for (std::size_t nIndex{0}; nIndex + 32 <= 10000; )
-	//	{
-	//		graph.feed(
-	//		{
-	//			{Shape{32, 784}, Cache{test_x.data() + nIndex * 784, 784 * 32}},
-	//			{Shape{32, 10}, Cache{test_y.data() + nIndex * 10, 10 * 32}}
-	//		});
-	//
-	//		auto sYHat{y_hat.forward()};
-	//
-	//		for (int i = 0; i < 32; ++i, ++nIndex)
-	//			if (std::distance(sYHat.cbegin() + i * 10, std::max_element(sYHat.cbegin() + i * 10, sYHat.cbegin() + (i + 1) * 10)) ==
-	//				std::distance(test_y.data() + nIndex * 10, std::max_element(test_y.data() + nIndex * 10, test_y.data() + (nIndex + 1) * 10)))
-	//				++nCount;
-	//	}
-	//
-	//	std::cout << "Accuracy : " << nCount / 10000.f * 100.f << "%" << std::endl;
-	//};
-
-	std::int64_t count{0};
-
-	auto fSaveResult = [&]()
-	{
-		std::ofstream sOutput{"out" + std::to_string(count++) + ".ppm", std::ofstream::out};
-
-		sOutput << "P3\n";
-		sOutput << "100 100\n";
-		sOutput << "255\n";
-
-		auto sImage{output3.forward()};
-
-		for (int h = 0; h < 100; ++h)
-			for (int w = 0; w < 100; ++w)
-			{
-				sOutput << static_cast<int>(sImage[h * 100 + w + 00000] * 255.f) << " ";
-				sOutput << static_cast<int>(sImage[h * 100 + w + 10000] * 255.f) << " ";
-				sOutput << static_cast<int>(sImage[h * 100 + w + 20000] * 255.f) << "\n";
-			}
+		{.0f, .0f},
+		{1.f, .0f},
+		{.0f, 1.f},
+		{1.f, 1.f}
 	};
-
-	Batch batch;
+	std::vector<std::vector<float>> y_data
+	{
+		{.0f},
+		{1.f},
+		{1.f},
+		{1.f}
+	};
+	std::vector<float> w_data
+	{
+		sDist(sEngine),
+		sDist(sEngine)
+	};
+	std::vector<float> b_data
+	{
+		sDist(sEngine)
+	};
 
 	for (;;)
 	{
-		auto sBegin{std::chrono::system_clock::now()};
+		w.feed({w_data.begin(), w_data.end()}, {1, 2});
+		b.feed({b_data.begin(), b_data.end()}, {1});
 
-		batch.sequential(1, 1);
+		x.feed({x_data[0].begin(), x_data[0].end()}, {2, 1});
+		y.feed({y_data[0].begin(), y_data[0].end()}, {1});
+		std::cout << "#1 Value : " << output.evalOutput().output()[0];
+		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
 
-		graph.feed(
-			batch,
-			{
-				{Shape{1, 128, 1, 1}, train_x},
-				{Shape{1, 4, 100, 100}, train_y}
-			});
+		x.feed({x_data[1].begin(), x_data[1].end()}, {2, 1});
+		y.feed({y_data[1].begin(), y_data[1].end()}, {1});
+		std::cout << "#2 Value : " << output.evalOutput().output()[0];
+		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
 
-		fSaveResult();
-		std::cout << "Saved." << std::endl;
-		std::cout << "Loss : " << loss.forward().toString() << std::endl;
+		x.feed({x_data[2].begin(), x_data[2].end()}, {2, 1});
+		y.feed({y_data[2].begin(), y_data[2].end()}, {1});
+		std::cout << "#3 Value : " << output.evalOutput().output()[0];
+		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
 
-		optimizer.reduce(loss, .001f);
+		x.feed({x_data[3].begin(), x_data[3].end()}, {2, 1});
+		y.feed({y_data[3].begin(), y_data[3].end()}, {1});
+		std::cout << "#4 Value : " << output.evalOutput().output()[0];
+		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
 
-		//fAccuracyFunc();
-		//for (std::size_t nIndex{0}; nIndex + 32 <= 60000; nIndex += 32)
-		//{
-		//	graph.feed(
-		//	{
-		//		{Shape{32, 784}, Cache{train_x.data() + nIndex * 784, 784 * 32}},
-		//		{Shape{32, 10}, Cache{train_y.data() + nIndex * 10, 10 * 32}}
-		//	});
-		//
-		//	optimizer.optimize(.001f);
-		//}
+		std::cout << std::endl;
 
-		auto sEnd{std::chrono::system_clock::now()};
+		system("pause");
 
-		std::cout << "==== Time took : " << std::chrono::duration_cast<std::chrono::milliseconds>(sEnd - sBegin).count() << "ms ====" << std::endl << std::endl;
+		Core::Span{w_data.begin(), w_data.end()}.accumulateFrom(-.001f, w.evalGradient(&loss).gradient());
+		Core::Span{b_data.begin(), b_data.end()}.accumulateFrom(-.001f, b.evalGradient(&loss).gradient());
 	}
 
 	return 0;

@@ -78,7 +78,7 @@ namespace TinNet::Core
 
 	inline std::size_t Shape::size() const noexcept
 	{
-		return std::accumulate(this->sDimension.cbegin(), this->sDimension.cend(), 1.f, std::multiplies<float>{});
+		return std::accumulate(this->sDimension.cbegin(), this->sDimension.cend(), static_cast<std::size_t>(1), std::multiplies<std::size_t>{});
 	}
 
 	inline void swap(Shape &sLeft, Shape &sRight) noexcept

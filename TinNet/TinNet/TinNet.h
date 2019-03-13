@@ -8,17 +8,17 @@
 
 #define _TINNET_H
 
-#include "Batch.h"
-#include "Cache.h"
-#include "Shape.h"
-#include "ShapedCache.h"
+#include "Core/Memory.h"
+#include "Core/Shape.h"
+#include "Core/Span.h"
 
-#include "Node.h"
-#include "Graph.h"
+#include "Node/Node.h"
+#include "Node/NodeInput.h"
 
-#include "GraphBP.h"
-#include "GraphBPOp.h"
-
-#include "Optimizer/Optimizer.h"
+#include "Node/MM.h"
+#include "Node/Input.h"
+#include "Node/Add.h"
+#include "Node/Sigmoid.h"
+#include "Node/SigmoidCrossEntropy.h"
 
 #endif

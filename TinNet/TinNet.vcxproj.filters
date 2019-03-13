@@ -10,15 +10,6 @@
     <Filter Include="TinNet\Reinforcement">
       <UniqueIdentifier>{f90ccafc-f83b-4d25-b325-871d4701aa87}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TinNet\Initializer">
-      <UniqueIdentifier>{dad43e90-25a1-4d2b-9b7d-f2f6db341203}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TinNet\GraphNode">
-      <UniqueIdentifier>{06706e3e-679b-455e-b52e-0a593299aed7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TinNet\Optimizer">
-      <UniqueIdentifier>{dc30b3fa-398a-4052-9a0b-0e83f821ca58}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TinNet\Core">
       <UniqueIdentifier>{4e6843f8-e605-413f-b77d-3087d3783847}</UniqueIdentifier>
     </Filter>
@@ -30,218 +21,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TinNet\Initializer\Constant.cpp">
-      <Filter>TinNet\Initializer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\Glorot.cpp">
-      <Filter>TinNet\Initializer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\He.cpp">
-      <Filter>TinNet\Initializer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\Normal.cpp">
-      <Filter>TinNet\Initializer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\Uniform.cpp">
-      <Filter>TinNet\Initializer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\Xavier.cpp">
-      <Filter>TinNet\Initializer</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\IO\Serializable.cpp">
       <Filter>TinNet\IO</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp">
       <Filter>TinNet\Reinforcement</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Cache.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Shape.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Accessor.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Node.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Graph.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphBP.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Feedable.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializable.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\BackpropNode.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\FullNode.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\VariableNode.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Add.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Input.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\ShapedCache.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Subtract.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Multiply.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Divide.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphBPOp.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Constant.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\GraphOp.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Exp.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Exp2.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Pow.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Log.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Log2.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Log10.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\LogN.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Abs.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Sin.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Cos.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Tan.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Sign.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Neg.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Reshape.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Squeeze.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\ReduceSum.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\ReduceMean.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\ReduceMin.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\ReduceMax.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Tanh.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Cosh.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Sinh.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\ReLU.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Sigmoid.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Square.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Softmax.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Softplus.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Dense.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Convolution.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\OptimizerBase.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\SGD.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\Momentum.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\Adam.cpp">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\IO\JSONObject.cpp">
       <Filter>TinNet\IO</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\IO\JSON.cpp">
       <Filter>TinNet\IO</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\DilatedConvolution.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\TransposedConvolution.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Batch.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\GraphNode\Select.cpp">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Variable.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\VariableAllocator.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\CacheAllocator.cpp">
-      <Filter>TinNet</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\Initializer.cpp">
-      <Filter>TinNet\Initializer</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Core\Span.cpp">
       <Filter>TinNet\Core</Filter>
@@ -252,43 +42,28 @@
     <ClCompile Include="TinNet\Compute\GEMM.cpp">
       <Filter>TinNet\Compute</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Core\Node.cpp">
-      <Filter>TinNet\Core</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Core\Memory.cpp">
-      <Filter>TinNet\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Core\NodeInput.cpp">
       <Filter>TinNet\Core</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Node\MM.cpp">
       <Filter>TinNet\Node</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Node\Input.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\Node.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\NodeInput.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\Add.cpp" />
+    <ClCompile Include="TinNet\Node\Sigmoid.cpp" />
+    <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
       <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Constant.h">
-      <Filter>TinNet\Initializer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Glorot.h">
-      <Filter>TinNet\Initializer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\He.h">
-      <Filter>TinNet\Initializer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Initializers.h">
-      <Filter>TinNet\Initializer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Normal.h">
-      <Filter>TinNet\Initializer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Uniform.h">
-      <Filter>TinNet\Initializer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Xavier.h">
-      <Filter>TinNet\Initializer</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\IO\Serializable.h">
       <Filter>TinNet\IO</Filter>
@@ -299,215 +74,14 @@
     <ClInclude Include="TinNet\Reinforcement\Game.h">
       <Filter>TinNet\Reinforcement</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Cache.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Shape.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Accessor.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Iterator.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Iterator.hpp">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Node.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Graph.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphBP.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Feedable.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializable.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\BackpropNode.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\FullNode.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\VariableNode.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Add.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Input.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\ShapedCache.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Subtract.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Multiply.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Divide.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\GraphNode.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphBPOp.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Constant.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\GraphOp.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Exp.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Exp2.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Pow.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Log.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Log2.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Log10.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\LogN.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Abs.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Sin.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Cos.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Tan.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Sign.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Neg.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Reshape.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Squeeze.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\ReduceSum.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\ReduceMean.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\ReduceMin.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\ReduceMax.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Tanh.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Cosh.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Sinh.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\ReLU.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Sigmoid.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\TinNet.h">
       <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Square.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Softmax.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Softplus.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Dense.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Convolution.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\OptimizerBase.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\SGD.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Momentum.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Adam.h">
-      <Filter>TinNet\Optimizer</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\IO\JSONObject.h">
       <Filter>TinNet\IO</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\IO\JSON.h">
       <Filter>TinNet\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\DilatedConvolution.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\TransposedConvolution.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Optimizer.h">
-      <Filter>TinNet\Optimizer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Batch.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\GraphNode\Select.h">
-      <Filter>TinNet\GraphNode</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Variable.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\VariableAllocator.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\CacheAllocator.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Initializer.h">
-      <Filter>TinNet\Initializer</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Span.h">
-      <Filter>TinNet</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Span.hpp">
-      <Filter>TinNet</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Core\Span.h">
       <Filter>TinNet\Core</Filter>
@@ -518,19 +92,7 @@
     <ClInclude Include="TinNet\Compute\GEMM.h">
       <Filter>TinNet\Compute</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Core\Node.h">
-      <Filter>TinNet\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Core\FeedableNode.h">
-      <Filter>TinNet\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Core\FeedableNode.hpp">
-      <Filter>TinNet\Core</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Core\Memory.h">
-      <Filter>TinNet\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Core\NodeInput.h">
       <Filter>TinNet\Core</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Core\Shape.hpp">
@@ -539,5 +101,17 @@
     <ClInclude Include="TinNet\Node\MM.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
+    <ClInclude Include="TinNet\Node\Input.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\Node.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\NodeInput.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\Add.h" />
+    <ClInclude Include="TinNet\Node\Sigmoid.h" />
+    <ClInclude Include="TinNet\Node\SigmoidCrossEntropy.h" />
   </ItemGroup>
 </Project>

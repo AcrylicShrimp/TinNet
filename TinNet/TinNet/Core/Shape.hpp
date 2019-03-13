@@ -18,7 +18,7 @@ namespace TinNet::Core
 		auto iThisEnd{this->sDimension.cend()};
 
 		for (; iBegin != iEnd && iThisBegin != iThisEnd; ++iBegin, ++iThisBegin)
-			if (*iBegin != iThisBegin)
+			if (*iBegin != *iThisBegin)
 				return false;
 
 		for (; iBegin != iEnd; ++iBegin)

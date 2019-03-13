@@ -1,41 +1,34 @@
 
 /*
-	2019.03.11
+	2019.03.13
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_NODE_MM_H
+#ifndef _CLASS_TINNET_NODE_ADD_H
 
-#define _CLASS_TINNET_NODE_MM_H
+#define _CLASS_TINNET_NODE_ADD_H
 
 #include "../TinNetDLL.h"
-
-#include "../Core/Shape.h"
-#include "../Core/Span.h"
-
-#include "../Compute/GEMM.h"
 
 #include "Node.h"
 #include "NodeInput.h"
 
+#include <cstddef>
 #include <string_view>
 
 namespace TinNet::Node
 {
-	class TINNET_DLL MM : public Node
+	class TINNET_DLL Add : public Node
 	{
 	protected:
 		NodeInput sInputLeft;
 		NodeInput sInputRight;
 
 	public:
-		MM(std::string_view sName);
-		MM(const MM &sSrc) = delete;
-		virtual ~MM() noexcept = default;
-		
-	public:
-		MM &operator=(const MM &sSrc) = delete;
-		
+		Add(std::string_view sName);
+		Add(const Add &sSrc) = delete;
+		virtual ~Add() noexcept = default;
+
 	protected:
 		virtual void __evaluateShape() override;
 		virtual void __evaluateOutput() override;

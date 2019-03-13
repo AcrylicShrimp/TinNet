@@ -10,52 +10,48 @@ namespace TinNet::Node
 {
 	MM::MM(std::string_view sName) :
 		Node(sName),
-		sInputLeft{this, "left", [this](const auto *pDy) { return this->backwardOpLeft(pDy); }},
-		sInputRight{this, "right", [this](const auto *pDy) { return this->backwardOpRight(pDy); }}
+		sInputLeft{this, "left", [this](const auto *pDy) { this->__backwardOpLeft(pDy); }},
+		sInputRight{this, "right", [this](const auto *pDy) { this->__backwardOpRight(pDy); }}
 	{
 		this->sNodeInputMap["left"] = &this->sInputLeft;
 		this->sNodeInputMap["right"] = &this->sInputRight;
 	}
 
-	void MM::updateShape()
+	void MM::__evaluateShape()
 	{
-		this->sShape = {this->sInputRight.pNode->shape()[0], this->sInputLeft.pNode->shape()[1]};
+		this->sShape = {this->sInputRight.inputNode()->shape()[0], this->sInputLeft.inputNode()->shape()[1]};
 	}
 
-	void MM::evaluate()
+	void MM::__evaluateOutput()
 	{
 		Compute::GEMM::multiply(
-			this->sInputLeft.pNode->shape()[0],
+			this->sInputLeft.inputNode()->shape()[0],
 			this->sShape[1],
 			this->sShape[0],
-			this->sInputLeft.pNode->evalOutput().output(),
-			this->sInputRight.pNode->evalOutput().output(),
+			this->sInputLeft.inputNode()->evalOutput().output(),
+			this->sInputRight.inputNode()->evalOutput().output(),
 			this->sOutput.span());
 	}
 
-	Core::Span MM::backwardOpLeft(const Core::Node *pDy)
+	void MM::__backwardOpLeft(const Node *pDy)
 	{
-		Compute::GEMM::dMultiplyLeft(
-			this->sInputLeft.pNode->shape()[0],
+		Compute::GEMM::dMultiplyAddLeft(
+			this->sInputLeft.inputNode()->shape()[0],
 			this->sShape[1],
 			this->sShape[0],
-			this->sInputLeft.pNode->evalGradient(pDy).output(),
-			this->sInputRight.pNode->evalGradient(pDy).output(),
-			this->sGradient.span());
-
-		return this->sGradient.span();
+			this->evalGradient(pDy).gradient(),
+			this->sInputRight.inputNode()->evalOutput().output(),
+			this->sInputLeft.inputNode()->gradient());
 	}
 
-	Core::Span MM::backwardOpRight(const Core::Node *pDy)
+	void MM::__backwardOpRight(const Node *pDy)
 	{
-		Compute::GEMM::dMultiplyRight(
-			this->sInputLeft.pNode->shape()[0],
+		Compute::GEMM::dMultiplyAddRight(
+			this->sInputLeft.inputNode()->shape()[0],
 			this->sShape[1],
 			this->sShape[0],
-			this->sInputLeft.pNode->evalGradient(pDy).output(),
-			this->sInputRight.pNode->evalGradient(pDy).output(),
-			this->sGradient.span());
-
-		return this->sGradient.span();
+			this->evalGradient(pDy).gradient(),
+			this->sInputLeft.inputNode()->evalOutput().output(),
+			this->sInputRight.inputNode()->gradient());
 	}
 }

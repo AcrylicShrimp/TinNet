@@ -29,7 +29,7 @@ namespace TinNet::Core
 	public:
 		Span() noexcept;
 		Span(float *pBase, std::size_t nLength) noexcept;
-		template<class I> Span(I iBegin, I iEnd) noexcept;
+		template<class I> inline Span(I iBegin, I iEnd) noexcept;
 		Span(const Span &sSrc) noexcept = default;
 		~Span() noexcept = default;
 
@@ -151,22 +151,22 @@ namespace TinNet::Core
 
 	inline void Span::accumulateFrom(const Span &sSpan)
 	{
-		std::transform(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase, std::plus<float>{});
+		std::transform(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase, this->pBase, std::plus<float>{});
 	}
 
 	template<class I> inline void Span::accumulateFrom(I iBegin, I iEnd)
 	{
-		std::transform(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase, std::plus<float>{});
+		std::transform(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase, this->pBase, std::plus<float>{});
 	}
 
 	inline void Span::accumulateFrom(float nFactor, const Span &sSpan)
 	{
-		std::transform(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase, [=](auto nLeft, auto nRight) { return std::fmaf(nLeft, nFactor, nRight); });
+		std::transform(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase, this->pBase, [=](auto nLeft, auto nRight) { return std::fmaf(nLeft, nFactor, nRight); });
 	}
 
 	template<class I> inline void Span::accumulateFrom(float nFactor, I iBegin, I iEnd)
 	{
-		std::transform(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase, [=](auto nLeft, auto nRight) { return std::fmaf(nLeft, nFactor, nRight); });
+		std::transform(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase, this->pBase, [=](auto nLeft, auto nRight) { return std::fmaf(nLeft, nFactor, nRight); });
 	}
 
 	inline void swap(Span &sLeft, Span &sRight) noexcept
