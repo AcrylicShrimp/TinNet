@@ -45,6 +45,6 @@ namespace TinNet::Node
 		this->evalGradient(pDy);
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sInputProb.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
-			this->sInputProb.inputNode()->gradient()[nIndex] += (this->sInputLabel.inputNode()->output()[nIndex] - this->sInputProb.inputNode()->output()[nIndex]) / (this->sInputLabel.inputNode()->output()[nIndex] - this->sInputLabel.inputNode()->output()[nIndex] * this->sInputLabel.inputNode()->output()[nIndex] + 1e-4f) * this->sGradient.span()[0];
+			this->sInputProb.inputNode()->gradient()[nIndex] += (this->sInputLabel.inputNode()->output()[nIndex] - this->sInputProb.inputNode()->output()[nIndex]) / (this->sInputProb.inputNode()->output()[nIndex] - this->sInputProb.inputNode()->output()[nIndex] * this->sInputProb.inputNode()->output()[nIndex] + 1e-4f) * this->sGradient.span()[0];
 	}
 }
