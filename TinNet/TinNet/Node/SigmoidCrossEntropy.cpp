@@ -31,6 +31,8 @@ namespace TinNet::Node
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sInputLabel.inputNode()->shape().size()}; nIndex < nMaxIndex; ++nIndex)
 			this->sOutput.span()[0] += -this->sInputLabel.inputNode()->output()[nIndex] * std::log(this->sInputProb.inputNode()->output()[nIndex] + 1e-4f) + (this->sInputLabel.inputNode()->output()[nIndex] - 1.f) * std::log(1.f - this->sInputProb.inputNode()->output()[nIndex] + 1e-4f);
+
+		this->sOutput.span()[0] /= this->sInputLabel.inputNode()->shape().size();
 	}
 
 	void SigmoidCrossEntropy::__backwardOpLabel(const Node *pDy)
@@ -44,7 +46,9 @@ namespace TinNet::Node
 		this->sInputProb.inputNode()->evalOutput();
 		this->evalGradient(pDy);
 
+		const auto nFactor{1.f / this->sInputLabel.inputNode()->shape().size()};
+
 		for (std::size_t nIndex{0}, nMaxIndex{this->sInputProb.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
-			this->sInputProb.inputNode()->gradient()[nIndex] += (this->sInputLabel.inputNode()->output()[nIndex] - this->sInputProb.inputNode()->output()[nIndex]) / (this->sInputProb.inputNode()->output()[nIndex] - this->sInputProb.inputNode()->output()[nIndex] * this->sInputProb.inputNode()->output()[nIndex] + 1e-4f) * this->sGradient.span()[0];
+			this->sInputProb.inputNode()->gradient()[nIndex] += (this->sInputLabel.inputNode()->output()[nIndex] - this->sInputProb.inputNode()->output()[nIndex]) / (this->sInputProb.inputNode()->output()[nIndex] - this->sInputProb.inputNode()->output()[nIndex] * this->sInputProb.inputNode()->output()[nIndex] + 1e-4f) * nFactor * this->sGradient.span()[0];
 	}
 }
