@@ -19,6 +19,12 @@
     <Filter Include="TinNet\Node">
       <UniqueIdentifier>{8d7bfea6-e7e7-4293-b354-3f23a9344e1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TinNet\Initializer">
+      <UniqueIdentifier>{eefc9253-9aa6-46ff-b70a-0442f93af458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TinNet\Optimizer">
+      <UniqueIdentifier>{23b202d6-0c34-496e-bf12-39cd08381953}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TinNet\IO\Serializable.cpp">
@@ -57,9 +63,27 @@
     <ClCompile Include="TinNet\Node\NodeInput.cpp">
       <Filter>TinNet\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Node\Add.cpp" />
-    <ClCompile Include="TinNet\Node\Sigmoid.cpp" />
-    <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp" />
+    <ClCompile Include="TinNet\Node\Parameter.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\Add.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\Sigmoid.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Initializer\Constant.cpp">
+      <Filter>TinNet\Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Initializer\Xavier.cpp">
+      <Filter>TinNet\Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Optimizer\SGD.cpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -110,8 +134,32 @@
     <ClInclude Include="TinNet\Node\NodeInput.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Node\Add.h" />
-    <ClInclude Include="TinNet\Node\Sigmoid.h" />
-    <ClInclude Include="TinNet\Node\SigmoidCrossEntropy.h" />
+    <ClInclude Include="TinNet\Node\Parameter.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\Parameter.hpp">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\Add.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\Sigmoid.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\SigmoidCrossEntropy.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Initializer\InitializerBase.h">
+      <Filter>TinNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Initializer\Constant.h">
+      <Filter>TinNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Initializer\Xavier.h">
+      <Filter>TinNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Optimizer\SGD.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -17,8 +17,8 @@ int32_t main()
 
 	Node::Input x{"x"};
 	Node::Input y{"y"};
-	Node::Input w{"w"};
-	Node::Input b{"b"};
+	Node::Parameter w{"w", {1, 2}};
+	Node::Parameter b{"b", {1}};
 	Node::MM xw{"xw"};
 	Node::Add xw_b{"xw+b"};
 	Node::Sigmoid output{"output"};
@@ -45,25 +45,18 @@ int32_t main()
 	std::vector<std::vector<float>> y_data
 	{
 		{.0f},
-		{1.f},
-		{1.f},
+		{.0f},
+		{.0f},
 		{1.f}
 	};
-	std::vector<float> w_data
-	{
-		sDist(sEngine),
-		sDist(sEngine)
-	};
-	std::vector<float> b_data
-	{
-		0
-	};
+
+	w.initialize(Initializer::Xavier{2, 1});
+	b.initialize(Initializer::Constant{});
+
+	Optimizer::SGD optimizer{&w, &b};
 
 	for (;;)
 	{
-		w.feed({w_data.begin(), w_data.end()}, {1, 2});
-		b.feed({b_data.begin(), b_data.end()}, {1});
-
 		x.feed({x_data[0].begin(), x_data[0].end()}, {2, 1});
 		y.feed({y_data[0].begin(), y_data[0].end()}, {1});
 		std::cout << "#1 Value : " << output.evalOutput().output()[0];
@@ -90,23 +83,19 @@ int32_t main()
 
 		x.feed({x_data[0].begin(), x_data[0].end()}, {2, 1});
 		y.feed({y_data[0].begin(), y_data[0].end()}, {1});
-		Core::Span{w_data.begin(), w_data.end()}.accumulateFrom(-.01f, w.evalGradient(&loss).gradient());
-		Core::Span{b_data.begin(), b_data.end()}.accumulateFrom(-.01f, b.evalGradient(&loss).gradient());
+		optimizer.reduce(.001f, &loss);
 
 		x.feed({x_data[1].begin(), x_data[1].end()}, {2, 1});
 		y.feed({y_data[1].begin(), y_data[1].end()}, {1});
-		Core::Span{w_data.begin(), w_data.end()}.accumulateFrom(-.01f, w.evalGradient(&loss).gradient());
-		Core::Span{b_data.begin(), b_data.end()}.accumulateFrom(-.01f, b.evalGradient(&loss).gradient());
+		optimizer.reduce(.001f, &loss);
 
 		x.feed({x_data[2].begin(), x_data[2].end()}, {2, 1});
 		y.feed({y_data[2].begin(), y_data[2].end()}, {1});
-		Core::Span{w_data.begin(), w_data.end()}.accumulateFrom(-.01f, w.evalGradient(&loss).gradient());
-		Core::Span{b_data.begin(), b_data.end()}.accumulateFrom(-.01f, b.evalGradient(&loss).gradient());
+		optimizer.reduce(.001f, &loss);
 
 		x.feed({x_data[3].begin(), x_data[3].end()}, {2, 1});
 		y.feed({y_data[3].begin(), y_data[3].end()}, {1});
-		Core::Span{w_data.begin(), w_data.end()}.accumulateFrom(-.01f, w.evalGradient(&loss).gradient());
-		Core::Span{b_data.begin(), b_data.end()}.accumulateFrom(-.01f, b.evalGradient(&loss).gradient());
+		optimizer.reduce(.001f, &loss);
 	}
 
 	return 0;
