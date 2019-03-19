@@ -8,7 +8,6 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <random>
 #include <vector>
 
 int32_t main()
@@ -31,9 +30,6 @@ int32_t main()
 	output["logit"]->attach(&xw_b);
 	loss["label"]->attach(&y);
 	loss["prob"]->attach(&output);
-
-	std::mt19937_64 sEngine{std::random_device{}()};
-	std::normal_distribution<float> sDist{.0f, .01f};
 
 	std::vector<std::vector<float>> x_data
 	{

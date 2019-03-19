@@ -232,6 +232,7 @@
     <ClCompile Include="TinNet\Node\Input.cpp" />
     <ClCompile Include="TinNet\Node\Node.cpp" />
     <ClCompile Include="TinNet\Node\NodeInput.cpp" />
+    <ClCompile Include="TinNet\Node\NodeType.cpp" />
     <ClCompile Include="TinNet\Node\Parameter.cpp" />
     <ClCompile Include="TinNet\Node\Sigmoid.cpp" />
     <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp" />
@@ -240,6 +241,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Compute\GEMM.h" />
+    <ClInclude Include="TinNet\Core\Graph.h" />
     <ClInclude Include="TinNet\Core\Memory.h" />
     <ClInclude Include="TinNet\Core\Shape.h" />
     <ClInclude Include="TinNet\Core\Shape.hpp" />
@@ -255,6 +257,8 @@
     <ClInclude Include="TinNet\Node\MM.h" />
     <ClInclude Include="TinNet\Node\Node.h" />
     <ClInclude Include="TinNet\Node\NodeInput.h" />
+    <ClInclude Include="TinNet\Node\NodeType.h" />
+    <ClInclude Include="TinNet\Node\NodeTypeManager.h" />
     <ClInclude Include="TinNet\Node\Parameter.h" />
     <ClInclude Include="TinNet\Node\Parameter.hpp" />
     <ClInclude Include="TinNet\Node\Sigmoid.h" />

@@ -4,9 +4,9 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_CORE_NODE_H
+#ifndef _CLASS_TINNET_NODE_NODE_H
 
-#define _CLASS_TINNET_CORE_NODE_H
+#define _CLASS_TINNET_NODE_NODE_H
 
 #include "../TinNetDLL.h"
 
@@ -14,6 +14,7 @@
 #include "../Core/Span.h"
 
 #include "NodeInput.h"
+#include "NodeType.h"
 
 #include <cstdint>
 #include <string>
@@ -22,18 +23,34 @@
 #include <unordered_set>
 #include <vector>
 
+#define TINNET_NODE_TYPE_DCL(TYPENAME)								\
+public:																\
+	virtual const NodeType *type() const override;					\
+	inline static std::string_view typeName()						\
+	{																\
+		return #TYPENAME;											\
+	}
+
+#define TINNET_NODE_TYPE_DEF(CLASS)									\
+	const NodeType *CLASS::type() const								\
+	{																\
+		return this->pGraph->nodeTypeManager().type<CLASS>();		\
+	}
+
+namespace TinNet::Core
+{
+	class Graph;
+}
+
 namespace TinNet::Node
 {
-	//class Graph;
-
 	class TINNET_DLL Node
 	{
 	public:
-		//friend Graph;
 		friend NodeInput;
 
 	public:
-		//Graph *const pGraph;
+		Core::Graph const *pGraph;
 		const std::string sName;
 
 	private:
@@ -49,20 +66,19 @@ namespace TinNet::Node
 		std::unordered_set<Node *> sDeps;
 		std::unordered_set<Node *> sRevDeps;
 		std::unordered_map<std::string, NodeInput *> sNodeInputMap;
-		
+
 	protected:
-		//Node(Graph *pGraph, std::string_view sName);
-		Node(std::string_view sName);
+		Node(Core::Graph *pGraph, std::string_view sName);
 
 	public:
 		Node(const Node &sSrc) = delete;
 		virtual ~Node() noexcept = default;
-		
+
 	public:
 		Node &operator=(const Node &sSrc) = delete;
 		NodeInput *operator[](std::string_view sNodeInputName);
 		const NodeInput *operator[](std::string_view sNodeInputName) const;
-		
+
 	public:
 		inline const Core::Shape &shape() const noexcept;
 		inline Core::Span output() const noexcept;
@@ -73,6 +89,11 @@ namespace TinNet::Node
 		Node &evalShape();
 		Node &evalOutput();
 		Node &evalGradient(const Node *pDy);
+		virtual const NodeType *type() const;
+		inline static std::string_view typeName()
+		{
+			return "node";
+		}
 
 	protected:
 		virtual void __evaluateShape() = 0;

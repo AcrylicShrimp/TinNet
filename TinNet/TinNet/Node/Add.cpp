@@ -8,8 +8,10 @@
 
 namespace TinNet::Node
 {
-	Add::Add(std::string_view sName) :
-		Node(sName),
+	TINNET_NODE_TYPE_DEF(Add)
+
+	Add::Add(Core::Graph *pGraph, std::string_view sName) :
+		Node(pGraph, sName),
 		sInputLeft{this, "left", [this](const auto *pDy) { this->__backwardOpLeft(pDy); }},
 		sInputRight{this, "right", [this](const auto *pDy) { this->__backwardOpRight(pDy); }}
 	{

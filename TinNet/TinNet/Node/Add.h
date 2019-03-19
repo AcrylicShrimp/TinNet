@@ -10,6 +10,8 @@
 
 #include "../TinNetDLL.h"
 
+#include "../Core/Graph.h"
+
 #include "Node.h"
 #include "NodeInput.h"
 
@@ -20,12 +22,14 @@ namespace TinNet::Node
 {
 	class TINNET_DLL Add : public Node
 	{
+		TINNET_NODE_TYPE_DCL(add)
+
 	protected:
 		NodeInput sInputLeft;
 		NodeInput sInputRight;
 
 	public:
-		Add(std::string_view sName);
+		Add(Core::Graph *pGraph, std::string_view sName);
 		Add(const Add &sSrc) = delete;
 		virtual ~Add() noexcept = default;
 

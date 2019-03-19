@@ -4,9 +4,9 @@
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_CORE_NODEINPUT_H
+#ifndef _CLASS_TINNET_NODE_NODEINPUT_H
 
-#define _CLASS_TINNET_CORE_NODEINPUT_H
+#define _CLASS_TINNET_NODE_NODEINPUT_H
 
 #include "../TinNetDLL.h"
 

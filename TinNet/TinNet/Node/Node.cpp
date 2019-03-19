@@ -6,17 +6,12 @@
 
 #include "Node.h"
 
+#include "../Core/Graph.h"
+
 namespace TinNet::Node
 {
-	//Node::Node(Graph *pGraph, std::string_view sName) :
-	//	pGraph{pGraph},
-	//	sName{sName},
-	//	sShape{0}
-	//{
-	//	//Empty.
-	//}
-
-	Node::Node(std::string_view sName) :
+	Node::Node(Core::Graph *pGraph, std::string_view sName) :
+		pGraph{pGraph},
 		sName{sName},
 		bShapeDirty{true},
 		bOutputDirty{true},
@@ -106,5 +101,10 @@ namespace TinNet::Node
 		this->pGradientDirty = pDy;
 
 		return *this;
+	}
+
+	const NodeType *Node::type() const
+	{
+		return this->pGraph->nodeTypeManager().type<Node>();
 	}
 }

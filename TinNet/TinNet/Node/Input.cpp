@@ -8,8 +8,10 @@
 
 namespace TinNet::Node
 {
-	Input::Input(std::string_view sName) :
-		Node(sName)
+	TINNET_NODE_TYPE_DEF(Input)
+
+	Input::Input(Core::Graph *pGraph, std::string_view sName) :
+		Node(pGraph, sName)
 	{
 		//Empty.
 	}

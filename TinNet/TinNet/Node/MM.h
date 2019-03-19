@@ -10,6 +10,7 @@
 
 #include "../TinNetDLL.h"
 
+#include "../Core/Graph.h"
 #include "../Core/Shape.h"
 #include "../Core/Span.h"
 
@@ -24,12 +25,14 @@ namespace TinNet::Node
 {
 	class TINNET_DLL MM : public Node
 	{
+		TINNET_NODE_TYPE_DCL(mm)
+
 	protected:
 		NodeInput sInputLeft;
 		NodeInput sInputRight;
 
 	public:
-		MM(std::string_view sName);
+		MM(Core::Graph *pGraph, std::string_view sName);
 		MM(const MM &sSrc) = delete;
 		virtual ~MM() noexcept = default;
 		

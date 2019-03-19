@@ -84,6 +84,7 @@
     <ClCompile Include="TinNet\Optimizer\SGD.cpp">
       <Filter>TinNet\Optimizer</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Node\NodeType.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -161,5 +162,8 @@
     <ClInclude Include="TinNet\Optimizer\SGD.h">
       <Filter>TinNet\Optimizer</Filter>
     </ClInclude>
+    <ClInclude Include="TinNet\Core\Graph.h" />
+    <ClInclude Include="TinNet\Node\NodeType.h" />
+    <ClInclude Include="TinNet\Node\NodeTypeManager.h" />
   </ItemGroup>
 </Project>
