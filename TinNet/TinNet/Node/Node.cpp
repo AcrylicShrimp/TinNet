@@ -105,6 +105,6 @@ namespace TinNet::Node
 
 	const NodeType *Node::type() const
 	{
-		return this->pGraph->nodeTypeManager().type<Node>();
+		return this->pGraph->sNodeTypeManager.type<Node>();
 	}
 }

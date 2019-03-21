@@ -18,7 +18,7 @@ namespace TinNet::Node
 	class TINNET_DLL NodeType final
 	{
 	public:
-		const NodeType const *pBaseType;
+		const NodeType *const pBaseType;
 		const std::string sTypeName;
 
 	public:

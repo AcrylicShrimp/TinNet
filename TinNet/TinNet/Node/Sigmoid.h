@@ -10,6 +10,8 @@
 
 #include "../TinNetDLL.h"
 
+#include "../Core/Graph.h"
+
 #include "Node.h"
 #include "NodeInput.h"
 
@@ -21,11 +23,13 @@ namespace TinNet::Node
 {
 	class TINNET_DLL Sigmoid : public Node
 	{
+		TINNET_NODE_TYPE_DCL(sigmoid)
+
 	protected:
 		NodeInput sInputLogit;
 
 	public:
-		Sigmoid(std::string_view sName);
+		Sigmoid(Core::Graph *pGraph, std::string_view sName);
 		Sigmoid(const Sigmoid &sSrc) = delete;
 		virtual ~Sigmoid() noexcept = default;
 

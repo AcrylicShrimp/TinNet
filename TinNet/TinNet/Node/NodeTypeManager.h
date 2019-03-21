@@ -28,7 +28,7 @@ namespace TinNet::Node
 		std::unordered_map<std::string, NodeType> sNodeTypeMap;
 
 	public:
-		NodeTypeManager() = default;
+		NodeTypeManager();
 		NodeTypeManager(const NodeTypeManager &sSrc) = delete;
 		~NodeTypeManager() noexcept = default;
 
@@ -53,7 +53,7 @@ namespace TinNet::Node
 	{
 		static_assert(std::is_base_of<Node, T>());
 
-		return this->type(T::typeName());
+		return this->type(std::string{T::typeName()});
 	}
 
 	template<class T> inline void NodeTypeManager::registerNode()
@@ -78,7 +78,7 @@ namespace TinNet::Node
 
 		auto sTypeName{T::typeName()};
 
-		this->sNodeTypeMap.emplace(std::piecewise_construct, std::forward_as_tuple(sTypeName), std::forward_as_tuple(pBaseType, sTypeName));
+		this->sNodeTypeMap.emplace(std::piecewise_construct, std::forward_as_tuple(std::string{sTypeName}), std::forward_as_tuple(pBaseType, sTypeName));
 	}
 }
 

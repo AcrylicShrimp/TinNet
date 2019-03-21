@@ -10,6 +10,7 @@
 
 #include "../TinNetDLL.h"
 
+#include "../Core/Graph.h"
 #include "../Core/Shape.h"
 #include "../Core/Span.h"
 #include "../Initializer/InitializerBase.h"
@@ -23,12 +24,14 @@ namespace TinNet::Node
 {
 	class TINNET_DLL Parameter : public Node
 	{
+		TINNET_NODE_TYPE_DCL(Parameter)
+
 	protected:
 		Core::Shape sParameterShape;
 		Core::Memory sParameter;
 		
 	public:
-		Parameter(std::string_view sName, Core::Shape sShape);
+		Parameter(Core::Graph *pGraph, std::string_view sName, Core::Shape sShape);
 		Parameter(const Parameter &sSrc) = delete;
 		virtual ~Parameter() noexcept = default;
 		

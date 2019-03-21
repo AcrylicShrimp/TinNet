@@ -85,6 +85,8 @@
       <Filter>TinNet\Optimizer</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Node\NodeType.cpp" />
+    <ClCompile Include="TinNet\TinNet.cpp" />
+    <ClCompile Include="TinNet\Node\NodeTypeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">

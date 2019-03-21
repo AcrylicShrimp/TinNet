@@ -8,8 +8,10 @@
 
 namespace TinNet::Node
 {
-	Parameter::Parameter(std::string_view sName, Core::Shape sShape) :
-		Node(sName),
+	TINNET_NODE_TYPE_DEF(Parameter)
+
+	Parameter::Parameter(Core::Graph *pGraph, std::string_view sName, Core::Shape sShape) :
+		Node(pGraph, sName),
 		sParameterShape{sShape}
 	{
 		//Empty.

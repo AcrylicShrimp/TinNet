@@ -8,8 +8,10 @@
 
 namespace TinNet::Node
 {
-	Sigmoid::Sigmoid(std::string_view sName) :
-		Node(sName),
+	TINNET_NODE_TYPE_DEF(Sigmoid)
+
+	Sigmoid::Sigmoid(Core::Graph *pGraph, std::string_view sName) :
+		Node(pGraph, sName),
 		sInputLogit{this, "logit", [this](const auto *pDy) { this->__backwardOp(pDy); }}
 	{
 		this->sNodeInputMap["logit"] = &this->sInputLogit;

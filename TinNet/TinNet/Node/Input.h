@@ -22,7 +22,7 @@ namespace TinNet::Node
 {
 	class TINNET_DLL Input : public Node
 	{
-		TINNET_NODE_TYPE_DCL(input)
+		TINNET_NODE_TYPE_DCL(Input)
 
 	protected:
 		Core::Span sInputSpan;

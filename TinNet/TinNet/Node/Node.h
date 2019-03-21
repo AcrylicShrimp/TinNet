@@ -23,18 +23,18 @@
 #include <unordered_set>
 #include <vector>
 
-#define TINNET_NODE_TYPE_DCL(TYPENAME)								\
+#define TINNET_NODE_TYPE_DCL(CLASS)									\
 public:																\
 	virtual const NodeType *type() const override;					\
 	inline static std::string_view typeName()						\
 	{																\
-		return #TYPENAME;											\
+		return #CLASS;												\
 	}
 
 #define TINNET_NODE_TYPE_DEF(CLASS)									\
 	const NodeType *CLASS::type() const								\
 	{																\
-		return this->pGraph->nodeTypeManager().type<CLASS>();		\
+		return this->pGraph->sNodeTypeManager.type<CLASS>();		\
 	}
 
 namespace TinNet::Core
@@ -92,7 +92,7 @@ namespace TinNet::Node
 		virtual const NodeType *type() const;
 		inline static std::string_view typeName()
 		{
-			return "node";
+			return "Node";
 		}
 
 	protected:

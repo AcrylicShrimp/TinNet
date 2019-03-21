@@ -42,6 +42,9 @@ namespace TinNet::Node
 
 	bool NodeType::isBaseOf(const NodeType *pBaseType, const NodeType *pDerivedType)
 	{
+		if (!pBaseType)
+			return false;
+
 		for (const auto *pBase{pDerivedType}; pBase; ++pBase)
 			if (*pBase == *pBaseType)
 				return true;
@@ -51,6 +54,9 @@ namespace TinNet::Node
 
 	bool NodeType::isExactlyBaseOf(const NodeType *pBaseType, const NodeType *pDerivedType)
 	{
+		if (!pBaseType)
+			return false;
+
 		if (!pDerivedType)
 			return false;
 

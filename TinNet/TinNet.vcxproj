@@ -233,11 +233,13 @@
     <ClCompile Include="TinNet\Node\Node.cpp" />
     <ClCompile Include="TinNet\Node\NodeInput.cpp" />
     <ClCompile Include="TinNet\Node\NodeType.cpp" />
+    <ClCompile Include="TinNet\Node\NodeTypeManager.cpp" />
     <ClCompile Include="TinNet\Node\Parameter.cpp" />
     <ClCompile Include="TinNet\Node\Sigmoid.cpp" />
     <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp" />
     <ClCompile Include="TinNet\Optimizer\SGD.cpp" />
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
+    <ClCompile Include="TinNet\TinNet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Compute\GEMM.h" />

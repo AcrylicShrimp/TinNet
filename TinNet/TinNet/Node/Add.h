@@ -22,7 +22,7 @@ namespace TinNet::Node
 {
 	class TINNET_DLL Add : public Node
 	{
-		TINNET_NODE_TYPE_DCL(add)
+		TINNET_NODE_TYPE_DCL(Add)
 
 	protected:
 		NodeInput sInputLeft;

@@ -8,9 +8,12 @@
 
 #define _TINNET_H
 
+#include "TinNetDLL.h"
+
 /*
 	TinNet::Core
 */
+#include "Core/Graph.h"
 #include "Core/Memory.h"
 #include "Core/Shape.h"
 #include "Core/Span.h"
@@ -32,6 +35,8 @@
 */
 #include "Node/Node.h"
 #include "Node/NodeInput.h"
+#include "Node/NodeType.h"
+#include "Node/NodeTypeManager.h"
 
 /*
 	Front nodes.
@@ -45,7 +50,7 @@
 #include "Node/Add.h"
 
 /*
-	BLAS arithmetic nodes.
+	BLAS nodes.
 */
 #include "Node/MM.h"
 
@@ -58,5 +63,10 @@
 	Loss nodes.
 */
 #include "Node/SigmoidCrossEntropy.h"
+
+namespace TinNet
+{
+	void TINNET_DLL registerStandardNodeType(Node::NodeTypeManager &sNodeTypeManager);
+}
 
 #endif

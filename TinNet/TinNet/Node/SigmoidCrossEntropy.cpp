@@ -8,8 +8,10 @@
 
 namespace TinNet::Node
 {
-	SigmoidCrossEntropy::SigmoidCrossEntropy(std::string_view sName) :
-		Node(sName),
+	TINNET_NODE_TYPE_DEF(SigmoidCrossEntropy)
+
+	SigmoidCrossEntropy::SigmoidCrossEntropy(Core::Graph *pGraph, std::string_view sName) :
+		Node(pGraph, sName),
 		sInputLabel{this, "label", [this](const auto *pDy) { this->__backwardOpLabel(pDy); }},
 		sInputProb{this, "prob", [this](const auto *pDy) { this->__backwardOpProb(pDy); }}
 	{

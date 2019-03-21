@@ -10,6 +10,8 @@
 
 #include "../TinNetDLL.h"
 
+#include "../Core/Graph.h"
+
 #include "Node.h"
 #include "NodeInput.h"
 
@@ -21,12 +23,14 @@ namespace TinNet::Node
 {
 	class TINNET_DLL SigmoidCrossEntropy : public Node
 	{
+		TINNET_NODE_TYPE_DCL(SigmoidCrossEntropy)
+
 	protected:
 		NodeInput sInputLabel;
 		NodeInput sInputProb;
 
 	public:
-		SigmoidCrossEntropy(std::string_view sName);
+		SigmoidCrossEntropy(Core::Graph *pGraph, std::string_view sName);
 		SigmoidCrossEntropy(const SigmoidCrossEntropy &sSrc) = delete;
 		virtual ~SigmoidCrossEntropy() noexcept = default;
 
