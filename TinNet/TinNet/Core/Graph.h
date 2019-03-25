@@ -15,6 +15,7 @@
 #include "../Node/NodeTypeManager.h"
 
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -23,7 +24,6 @@
 
 namespace TinNet::Core
 {
-	/// fdsfdafsd
 	class TINNET_DLL Graph final
 	{
 	public:
@@ -115,7 +115,7 @@ namespace TinNet::Core
 		const auto *pNodeType{this->sNodeTypeManager.type<T>()};
 
 		if (!pNodeType)
-			return false;
+			throw std::exception{"not registered or unknown node type."};
 
 		auto *pNode{this->node(sNodeName)};
 

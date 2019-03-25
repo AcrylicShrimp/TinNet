@@ -62,6 +62,7 @@
 /*
 	Loss nodes.
 */
+#include "Node/MSE.h"
 #include "Node/SigmoidCrossEntropy.h"
 
 namespace TinNet

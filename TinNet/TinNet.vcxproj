@@ -230,6 +230,7 @@
     <ClCompile Include="TinNet\Node\Add.cpp" />
     <ClCompile Include="TinNet\Node\MM.cpp" />
     <ClCompile Include="TinNet\Node\Input.cpp" />
+    <ClCompile Include="TinNet\Node\MSE.cpp" />
     <ClCompile Include="TinNet\Node\Node.cpp" />
     <ClCompile Include="TinNet\Node\NodeInput.cpp" />
     <ClCompile Include="TinNet\Node\NodeType.cpp" />
@@ -257,6 +258,7 @@
     <ClInclude Include="TinNet\Node\Add.h" />
     <ClInclude Include="TinNet\Node\Input.h" />
     <ClInclude Include="TinNet\Node\MM.h" />
+    <ClInclude Include="TinNet\Node\MSE.h" />
     <ClInclude Include="TinNet\Node\Node.h" />
     <ClInclude Include="TinNet\Node\NodeInput.h" />
     <ClInclude Include="TinNet\Node\NodeType.h" />

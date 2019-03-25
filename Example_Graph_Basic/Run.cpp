@@ -10,8 +10,6 @@
 #include <iostream>
 #include <vector>
 
-int al;
-
 int32_t main()
 {
 	using namespace TinNet;
@@ -20,8 +18,6 @@ int32_t main()
 
 	registerStandardNodeType(graph.sNodeTypeManager);
 
-	al = 10;
-
 	graph.createNode<Node::Input>("x");
 	graph.createNode<Node::Input>("y");
 	graph.createNode<Node::Parameter>("w", Core::Shape{1, 2});
@@ -29,7 +25,7 @@ int32_t main()
 	graph.createNode<Node::MM>("xw");
 	graph.createNode<Node::Add>("xw+b");
 	graph.createNode<Node::Sigmoid>("output");
-	graph.createNode<Node::SigmoidCrossEntropy>("loss");
+	graph.createNode<Node::MSE>("loss");
 
 	graph["xw"]["left"]->attach(&graph["x"]);
 	graph["xw"]["right"]->attach(&graph["w"]);
@@ -37,7 +33,7 @@ int32_t main()
 	graph["xw+b"]["right"]->attach(&graph["b"]);
 	graph["output"]["logit"]->attach(&graph["xw+b"]);
 	graph["loss"]["label"]->attach(&graph["y"]);
-	graph["loss"]["prob"]->attach(&graph["output"]);
+	graph["loss"]["prediction"]->attach(&graph["output"]);
 
 	std::vector<std::vector<float>> x_data
 	{
@@ -49,8 +45,8 @@ int32_t main()
 	std::vector<std::vector<float>> y_data
 	{
 		{.0f},
-		{.0f},
-		{.0f},
+		{1.f},
+		{1.f},
 		{1.f}
 	};
 
@@ -87,19 +83,19 @@ int32_t main()
 
 		graph.node<Node::Input>("x")->feed({x_data[0].begin(), x_data[0].end()}, {2, 1});
 		graph.node<Node::Input>("y")->feed({y_data[0].begin(), y_data[0].end()}, {1});
-		optimizer.reduce(.001f, &graph["loss"]);
+		optimizer.reduce(1.f, &graph["loss"]);
 
 		graph.node<Node::Input>("x")->feed({x_data[1].begin(), x_data[1].end()}, {2, 1});
 		graph.node<Node::Input>("y")->feed({y_data[1].begin(), y_data[1].end()}, {1});
-		optimizer.reduce(.001f, &graph["loss"]);
+		optimizer.reduce(1.f, &graph["loss"]);
 
 		graph.node<Node::Input>("x")->feed({x_data[2].begin(), x_data[2].end()}, {2, 1});
 		graph.node<Node::Input>("y")->feed({y_data[2].begin(), y_data[2].end()}, {1});
-		optimizer.reduce(.001f, &graph["loss"]);
+		optimizer.reduce(1.f, &graph["loss"]);
 
 		graph.node<Node::Input>("x")->feed({x_data[3].begin(), x_data[3].end()}, {2, 1});
 		graph.node<Node::Input>("y")->feed({y_data[3].begin(), y_data[3].end()}, {1});
-		optimizer.reduce(.001f, &graph["loss"]);
+		optimizer.reduce(1.f, &graph["loss"]);
 	}
 
 	return 0;
