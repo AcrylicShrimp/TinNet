@@ -34,15 +34,15 @@ namespace TinNet::Node
 		return iIndex == this->sNodeInputMap.cend() ? nullptr : iIndex->second;
 	}
 
-	Node &Node::markDirty()
+	Node &Node::markDirty(bool bDirtyShape)
 	{
-		this->bShapeDirty = true;
+		this->bShapeDirty = this->bShapeDirty || bDirtyShape;
 		this->bOutputDirty = true;
 		this->pGradientDirty = nullptr;
 
 		for (auto *pNode : this->sRevDeps)
 		{
-			pNode->bShapeDirty = true;
+			pNode->bShapeDirty = pNode->bShapeDirty || bDirtyShape;
 			pNode->bOutputDirty = true;
 			pNode->pGradientDirty = nullptr;
 		}

@@ -25,7 +25,7 @@ int32_t main()
 	graph.createNode<Node::MM>("xw");
 	graph.createNode<Node::Add>("xw+b");
 	graph.createNode<Node::Sigmoid>("output");
-	graph.createNode<Node::MSE>("loss");
+	graph.createNode<Node::SigmoidCrossEntropy>("loss");
 
 	graph["xw"]["left"]->attach(&graph["x"]);
 	graph["xw"]["right"]->attach(&graph["w"]);
@@ -33,7 +33,7 @@ int32_t main()
 	graph["xw+b"]["right"]->attach(&graph["b"]);
 	graph["output"]["logit"]->attach(&graph["xw+b"]);
 	graph["loss"]["label"]->attach(&graph["y"]);
-	graph["loss"]["prediction"]->attach(&graph["output"]);
+	graph["loss"]["prob"]->attach(&graph["output"]);
 
 	std::vector<std::vector<float>> x_data
 	{

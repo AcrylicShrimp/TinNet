@@ -85,7 +85,7 @@ namespace TinNet::Node
 		inline Core::Span gradient() const noexcept;
 		inline bool hasDeps(const Node *pNode) const;
 		inline bool hasRevDeps(const Node *pNode) const;
-		Node &markDirty();
+		Node &markDirty(bool bDirtyShape = true);
 		Node &evalShape();
 		Node &evalOutput();
 		Node &evalGradient(const Node *pDy);

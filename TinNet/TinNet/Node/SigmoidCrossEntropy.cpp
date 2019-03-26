@@ -51,6 +51,6 @@ namespace TinNet::Node
 		const auto nFactor{1.f / this->sInputLabel.inputNode()->shape().size()};
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sInputProb.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
-			this->sInputProb.inputNode()->gradient()[nIndex] += (this->sInputLabel.inputNode()->output()[nIndex] - this->sInputProb.inputNode()->output()[nIndex]) / (this->sInputProb.inputNode()->output()[nIndex] - this->sInputProb.inputNode()->output()[nIndex] * this->sInputProb.inputNode()->output()[nIndex] + 1e-4f) * nFactor * this->sGradient.span()[0];
+			this->sInputProb.inputNode()->gradient()[nIndex] += (this->sInputProb.inputNode()->output()[nIndex] - this->sInputLabel.inputNode()->output()[nIndex]) / (this->sInputProb.inputNode()->output()[nIndex] * (1.f - this->sInputProb.inputNode()->output()[nIndex]) + 1e-4f) * nFactor * this->sGradient.span()[0];
 	}
 }

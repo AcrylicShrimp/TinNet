@@ -19,9 +19,13 @@ namespace TinNet::Node
 	void Input::feed(Core::Span sSpan, Core::Shape sShape)
 	{
 		this->sInputSpan = sSpan;
-		this->sInputShape = sShape;
 
-		this->markDirty();
+		auto bDirtyShape{this->sInputShape != sShape};
+
+		if (bDirtyShape)
+			this->sInputShape = sShape;
+
+		this->markDirty(bDirtyShape);
 	}
 
 	void Input::__evaluateShape()
