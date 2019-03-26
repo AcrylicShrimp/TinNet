@@ -14,6 +14,7 @@
 	TinNet::Core
 */
 #include "Core/Graph.h"
+#include "Core/GraphBuilder.h"
 #include "Core/Memory.h"
 #include "Core/Shape.h"
 #include "Core/Span.h"
@@ -64,10 +65,5 @@
 */
 #include "Node/MSE.h"
 #include "Node/SigmoidCrossEntropy.h"
-
-namespace TinNet
-{
-	void TINNET_DLL registerStandardNodeType(Node::NodeTypeManager &sNodeTypeManager);
-}
 
 #endif

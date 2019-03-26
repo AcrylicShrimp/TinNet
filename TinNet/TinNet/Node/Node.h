@@ -76,15 +76,15 @@ namespace TinNet::Node
 
 	public:
 		Node &operator=(const Node &sSrc) = delete;
-		NodeInput *operator[](std::string_view sNodeInputName);
-		const NodeInput *operator[](std::string_view sNodeInputName) const;
+		NodeInput *operator[](const std::string &sInputName);
+		const NodeInput *operator[](const std::string &sInputName) const;
 
 	public:
 		inline const Core::Shape &shape() const noexcept;
 		inline Core::Span output() const noexcept;
 		inline Core::Span gradient() const noexcept;
-		inline bool hasDeps(const Node *pNode) const;
-		inline bool hasRevDeps(const Node *pNode) const;
+		inline bool hasDeps(const Node *pDep) const;
+		inline bool hasRevDeps(const Node *pRevDep) const;
 		Node &markDirty(bool bDirtyShape = true);
 		Node &evalShape();
 		Node &evalOutput();
@@ -115,14 +115,14 @@ namespace TinNet::Node
 		return this->sGradient.span();
 	}
 
-	inline bool Node::hasDeps(const Node *pNode) const
+	inline bool Node::hasDeps(const Node *pDep) const
 	{
-		return this->sDeps.count(const_cast<Node *>(pNode));
+		return this->sDeps.count(const_cast<Node *>(pDep));
 	}
 
-	inline bool Node::hasRevDeps(const Node *pNode) const
+	inline bool Node::hasRevDeps(const Node *pRevDep) const
 	{
-		return this->sRevDeps.count(const_cast<Node *>(pNode));
+		return this->sRevDeps.count(const_cast<Node *>(pRevDep));
 	}
 }
 

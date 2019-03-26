@@ -10,10 +10,14 @@
 
 #include "../TinNetDLL.h"
 
+#include "GraphBuilder.h"
+#include "NodeWrapper.h"
+
 #include "../Node/Node.h"
 #include "../Node/NodeType.h"
 #include "../Node/NodeTypeManager.h"
 
+#include <iterator>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -21,6 +25,7 @@
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 namespace TinNet::Core
 {
@@ -30,34 +35,49 @@ namespace TinNet::Core
 		Node::NodeTypeManager sNodeTypeManager;
 
 	private:
+		GraphBuilder sBuilder;
 		std::unordered_map<std::string, std::unique_ptr<Node::Node>> sNodeMap;
+		std::unordered_multimap<const Node::NodeType *, Node::Node *> sNodeTypeMap;
 
 	public:
-		Graph() = default;
+		Graph();
 		Graph(const Graph &sSrc) = delete;
 		~Graph() noexcept = default;
 
 	public:
 		Graph &operator=(const Graph &sSrc) = delete;
-		inline Node::Node &operator[](const std::string &sNodeName);
-		inline const Node::Node &operator[](const std::string &sNodeName) const;
+		inline NodeWrapper operator[](const std::string &sNodeName) const;
 
 	public:
+		inline GraphBuilder &builder() noexcept;
+		std::vector<Node::Node *> nodes(const Node::NodeType *pNodeType);
+		std::vector<const Node::Node *> nodes(const Node::NodeType *pNodeType) const;
+		inline std::size_t nodeCount(const Node::NodeType *pNodeType) const;
 		inline Node::Node *node(const std::string &sNodeName);
 		inline const Node::Node *node(const std::string &sNodeName) const;
-		template<class T> inline T *node(const std::string &sNodeName);
-		template<class T> inline const T *node(const std::string &sNodeName) const;
-		template<class T, class ...P> inline T *createNode(const std::string &sNodeName, P &&...tParam);
+		inline std::vector<Node::Node *> nodes();
+		inline std::vector<const Node::Node *> nodes() const;
+		template<class T> std::size_t nodeCount() const;
+		template<class T> T *node(const std::string &sNodeName);
+		template<class T> const T *node(const std::string &sNodeName) const;
+		template<class T> std::vector<T *> nodes();
+		template<class T> std::vector<const T *> nodes() const;
+		template<class T, class ...P> T *createNode(const std::string &sNodeName, P &&...tParam);
 	};
 
-	inline Node::Node &Graph::operator[](const std::string &sNodeName)
+	inline NodeWrapper Graph::operator[](const std::string &sNodeName) const
 	{
-		return *this->sNodeMap.find(sNodeName)->second.get();
+		return NodeWrapper{this->sNodeMap.find(sNodeName)->second.get()};
 	}
 
-	inline const Node::Node &Graph::operator[](const std::string &sNodeName) const
+	inline GraphBuilder &Graph::builder() noexcept
 	{
-		return *this->sNodeMap.find(sNodeName)->second.get();
+		return this->sBuilder;
+	}
+
+	inline std::size_t Graph::nodeCount(const Node::NodeType *pNodeType) const
+	{
+		return this->sNodeTypeMap.count(pNodeType);
 	}
 
 	inline Node::Node *Graph::node(const std::string &sNodeName)
@@ -74,59 +94,17 @@ namespace TinNet::Core
 		return iIndex == this->sNodeMap.cend() ? nullptr : iIndex->second.get();
 	}
 
-	template<class T> inline T *Graph::node(const std::string &sNodeName)
+	inline std::vector<Node::Node *> Graph::nodes()
 	{
-		static_assert(std::is_base_of<Node::Node, T>());
-
-		auto *pNode{this->node(sNodeName)};
-
-		if (!pNode)
-			return nullptr;
-
-		const auto *pNodeType{this->sNodeTypeManager.type<T>()};
-
-		if (!pNodeType || !pNodeType->isBaseOf(pNode->type()))
-			return nullptr;
-
-		return static_cast<T *>(pNode);
+		return this->nodes<Node::Node>();
 	}
 
-	template<class T> inline const T *Graph::node(const std::string &sNodeName) const
+	inline std::vector<const Node::Node *> Graph::nodes() const
 	{
-		static_assert(std::is_base_of<Node::Node, T>());
-
-		const auto *pNode{this->node(sNodeName)};
-
-		if (!pNode)
-			return nullptr;
-
-		const auto *pNodeType{this->sNodeTypeManager.type<T>()};
-
-		if (!pNodeType || !pNodeType->isBaseOf(pNode->type()))
-			return nullptr;
-
-		return static_cast<const T *>(pNode);
-	}
-
-	template<class T, class ...P> inline T *Graph::createNode(const std::string &sNodeName, P &&...tParam)
-	{
-		static_assert(std::is_base_of<Node::Node, T>());
-
-		const auto *pNodeType{this->sNodeTypeManager.type<T>()};
-
-		if (!pNodeType)
-			throw std::exception{"not registered or unknown node type."};
-
-		auto *pNode{this->node(sNodeName)};
-
-		if (!pNode)
-			pNode = this->sNodeMap.emplace(std::piecewise_construct, std::forward_as_tuple(sNodeName), std::forward_as_tuple(new T(this, sNodeName, std::forward<P>(tParam)...))).first->second.get();
-
-		if (!pNodeType->isBaseOf(pNode->type()))
-			return nullptr;
-
-		return static_cast<T *>(pNode);
+		return this->nodes<Node::Node>();
 	}
 }
+
+#include "Graph.hpp"
 
 #endif

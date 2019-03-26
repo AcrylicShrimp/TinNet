@@ -219,7 +219,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TinNet\Compute\GEMM.cpp" />
+    <ClCompile Include="TinNet\Core\Graph.cpp" />
+    <ClCompile Include="TinNet\Core\GraphBuilder.cpp" />
     <ClCompile Include="TinNet\Core\Memory.cpp" />
+    <ClCompile Include="TinNet\Core\NodeWrapper.cpp" />
     <ClCompile Include="TinNet\Core\Shape.cpp" />
     <ClCompile Include="TinNet\Core\Span.cpp" />
     <ClCompile Include="TinNet\Initializer\Constant.cpp" />
@@ -240,12 +243,14 @@
     <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp" />
     <ClCompile Include="TinNet\Optimizer\SGD.cpp" />
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
-    <ClCompile Include="TinNet\TinNet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\Compute\GEMM.h" />
     <ClInclude Include="TinNet\Core\Graph.h" />
+    <ClInclude Include="TinNet\Core\Graph.hpp" />
+    <ClInclude Include="TinNet\Core\GraphBuilder.h" />
     <ClInclude Include="TinNet\Core\Memory.h" />
+    <ClInclude Include="TinNet\Core\NodeWrapper.h" />
     <ClInclude Include="TinNet\Core\Shape.h" />
     <ClInclude Include="TinNet\Core\Shape.hpp" />
     <ClInclude Include="TinNet\Core\Span.h" />

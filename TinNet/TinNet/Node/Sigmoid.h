@@ -23,7 +23,7 @@ namespace TinNet::Node
 {
 	class TINNET_DLL Sigmoid : public Node
 	{
-		TINNET_NODE_TYPE_DCL(sigmoid)
+		TINNET_NODE_TYPE_DCL(Sigmoid)
 
 	protected:
 		NodeInput sInputLogit;

@@ -28,7 +28,7 @@ namespace TinNet::Optimizer
 		for (auto *pParameter : this->sParameterList)
 		{
 			pParameter->parameter().accumulateFrom(-nLearningRate, pParameter->gradient());
-			pParameter->markDirty();
+			pParameter->markDirty(false);
 		}
 	}
 }

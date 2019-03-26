@@ -20,16 +20,16 @@ namespace TinNet::Node
 		//Empty.
 	}
 
-	NodeInput *Node::operator[](std::string_view sNodeInputName)
+	NodeInput *Node::operator[](const std::string &sInputName)
 	{
-		auto iIndex{this->sNodeInputMap.find(std::string{sNodeInputName})};
+		auto iIndex{this->sNodeInputMap.find(sInputName)};
 
 		return iIndex == this->sNodeInputMap.cend() ? nullptr : iIndex->second;
 	}
 
-	const NodeInput *Node::operator[](std::string_view sNodeInputName) const
+	const NodeInput *Node::operator[](const std::string &sInputName) const
 	{
-		auto iIndex{this->sNodeInputMap.find(std::string{sNodeInputName})};
+		auto iIndex{this->sNodeInputMap.find(sInputName)};
 
 		return iIndex == this->sNodeInputMap.cend() ? nullptr : iIndex->second;
 	}

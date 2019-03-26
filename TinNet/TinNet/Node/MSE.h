@@ -38,7 +38,7 @@ namespace TinNet::Node
 		virtual void __evaluateShape() override;
 		virtual void __evaluateOutput() override;
 		void __backwardOpLabel(const Node *pDy);
-		void __backwardOpPrediction(const Node *pDy);
+		void __backwardOpPred(const Node *pDy);
 	};
 }
 
