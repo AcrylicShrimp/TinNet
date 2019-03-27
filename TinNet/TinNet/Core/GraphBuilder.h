@@ -57,6 +57,8 @@ namespace TinNet::Core
 		*/
 		NodeWrapper add(NodeWrapper sLeft, NodeWrapper sRight);
 		NodeWrapper add(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
+		NodeWrapper subtract(NodeWrapper sLeft, NodeWrapper sRight);
+		NodeWrapper subtract(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
 
 		/*
 			BLAS nodes.
@@ -84,6 +86,9 @@ namespace TinNet::Core
 		InitializerWrapper initConstant(float nConstant = .0f);
 		InitializerWrapper initXavier(std::size_t nFanIn, std::size_t nFanOut);
 	};
+
+	NodeWrapper TINNET_DLL operator+(NodeWrapper sLeft, NodeWrapper sRight);
+	NodeWrapper TINNET_DLL operator-(NodeWrapper sLeft, NodeWrapper sRight);
 }
 
 #endif

@@ -51,7 +51,7 @@ namespace TinNet::Node
 		friend NodeInput;
 
 	public:
-		Core::Graph const *pGraph;
+		Core::Graph *const pGraph;
 		const std::string sName;
 
 	private:

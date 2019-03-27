@@ -49,6 +49,7 @@
 	Basic arithmetic nodes.
 */
 #include "Node/Add.h"
+#include "Node/Subtract.h"
 
 /*
 	BLAS nodes.

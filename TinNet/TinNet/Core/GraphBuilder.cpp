@@ -12,6 +12,7 @@
 #include "../Node/Parameter.h"
 
 #include "../Node/Add.h"
+#include "../Node/Subtract.h"
 
 #include "../Node/MM.h"
 
@@ -81,6 +82,26 @@ namespace TinNet::Core
 	NodeWrapper GraphBuilder::add(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight)
 	{
 		NodeWrapper sNode{this->pGraph->createNode<Node::Add>(sNodeName)};
+
+		sNode["left"]->attach(sLeft);
+		sNode["right"]->attach(sRight);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::subtract(NodeWrapper sLeft, NodeWrapper sRight)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Subtract>(DEFAULT_NAME(Node::Subtract))};
+
+		sNode["left"]->attach(sLeft);
+		sNode["right"]->attach(sRight);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::subtract(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Subtract>(sNodeName)};
 
 		sNode["left"]->attach(sLeft);
 		sNode["right"]->attach(sRight);
@@ -174,5 +195,27 @@ namespace TinNet::Core
 	InitializerWrapper GraphBuilder::initXavier(std::size_t nFanIn, std::size_t nFanOut)
 	{
 		return InitializerWrapper{this->pGraph->createInitializer<Initializer::Xavier>(nFanIn, nFanOut)};
+	}
+
+	NodeWrapper operator+(NodeWrapper sLeft, NodeWrapper sRight)
+	{
+		assert(sLeft.pNode);
+		assert(sRight.pNode);
+		assert(sLeft.pNode->pGraph);
+		assert(sRight.pNode->pGraph);
+		assert(sLeft.pNode->pGraph == sRight.pNode->pGraph);
+
+		return sLeft.pNode->pGraph->builder().add(sLeft, sRight);
+	}
+
+	NodeWrapper operator-(NodeWrapper sLeft, NodeWrapper sRight)
+	{
+		assert(sLeft.pNode);
+		assert(sRight.pNode);
+		assert(sLeft.pNode->pGraph);
+		assert(sRight.pNode->pGraph);
+		assert(sLeft.pNode->pGraph == sRight.pNode->pGraph);
+
+		return sLeft.pNode->pGraph->builder().subtract(sLeft, sRight);
 	}
 }

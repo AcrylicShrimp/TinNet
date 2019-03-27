@@ -66,9 +66,6 @@
     <ClCompile Include="TinNet\Node\Parameter.cpp">
       <Filter>TinNet\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Node\Add.cpp">
-      <Filter>TinNet\Node</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Node\Sigmoid.cpp">
       <Filter>TinNet\Node</Filter>
     </ClCompile>
@@ -91,6 +88,10 @@
     <ClCompile Include="TinNet\Core\Graph.cpp" />
     <ClCompile Include="TinNet\Core\NodeWrapper.cpp" />
     <ClCompile Include="TinNet\Core\InitializerWrapper.cpp" />
+    <ClCompile Include="TinNet\Node\Subtract.cpp" />
+    <ClCompile Include="TinNet\Node\Add.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -144,9 +145,6 @@
     <ClInclude Include="TinNet\Node\Parameter.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Node\Add.h">
-      <Filter>TinNet\Node</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Node\Sigmoid.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
@@ -173,5 +171,9 @@
       <Filter>TinNet\Initializer</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Core\InitializerWrapper.h" />
+    <ClInclude Include="TinNet\Node\Subtract.h" />
+    <ClInclude Include="TinNet\Node\Add.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

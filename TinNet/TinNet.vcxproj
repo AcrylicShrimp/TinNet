@@ -242,6 +242,7 @@
     <ClCompile Include="TinNet\Node\Parameter.cpp" />
     <ClCompile Include="TinNet\Node\Sigmoid.cpp" />
     <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp" />
+    <ClCompile Include="TinNet\Node\Subtract.cpp" />
     <ClCompile Include="TinNet\Optimizer\SGD.cpp" />
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
   </ItemGroup>
@@ -273,6 +274,7 @@
     <ClInclude Include="TinNet\Node\Parameter.h" />
     <ClInclude Include="TinNet\Node\Sigmoid.h" />
     <ClInclude Include="TinNet\Node\SigmoidCrossEntropy.h" />
+    <ClInclude Include="TinNet\Node\Subtract.h" />
     <ClInclude Include="TinNet\Optimizer\SGD.h" />
     <ClInclude Include="TinNet\Reinforcement\Game.h" />
     <ClInclude Include="TinNet\Reinforcement\MCTS.h" />
