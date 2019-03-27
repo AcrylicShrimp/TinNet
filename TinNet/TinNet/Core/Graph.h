@@ -66,7 +66,7 @@ namespace TinNet::Core
 		template<class T> const T *node(const std::string &sNodeName) const;
 		template<class T> std::vector<T *> nodes();
 		template<class T> std::vector<const T *> nodes() const;
-		template<class T, class ...P> T *createIntializer(P &&...tParam);
+		template<class T, class ...P> T *createInitializer(P &&...tParam);
 		template<class T, class ...P> T *createNode(const std::string &sNodeName, P &&...tParam);
 	};
 

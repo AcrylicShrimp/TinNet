@@ -54,7 +54,7 @@ namespace TinNet::Core
 		return this->nodes(this->sNodeTypeManager.type<T>());
 	}
 
-	template<class T, class ...P> T *Graph::createIntializer(P &&...tParam)
+	template<class T, class ...P> T *Graph::createInitializer(P &&...tParam)
 	{
 		static_assert(std::is_base_of<Initializer::Initializer, T>());
 
