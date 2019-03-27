@@ -20,6 +20,9 @@
 #include "../Node/MSE.h"
 #include "../Node/SigmoidCrossEntropy.h"
 
+#include "../Initializer/Constant.h"
+#include "../Initializer/Xavier.h"
+
 #define DEFAULT_NAME(CLASS) ((std::ostringstream{} << CLASS::typeName() << this->pGraph->nodeCount<CLASS>()).str())
 
 namespace TinNet::Core
@@ -55,14 +58,14 @@ namespace TinNet::Core
 		return NodeWrapper{this->pGraph->createNode<Node::Input>(sNodeName)};
 	}
 
-	NodeWrapper GraphBuilder::parameter(const Shape &sShape)
+	NodeWrapper GraphBuilder::parameter(const Shape &sShape, InitializerWrapper sInitializer)
 	{
-		return NodeWrapper{this->pGraph->createNode<Node::Parameter>(DEFAULT_NAME(Node::Parameter), sShape)};
+		return NodeWrapper{this->pGraph->createNode<Node::Parameter>(DEFAULT_NAME(Node::Parameter), sShape, sInitializer)};
 	}
 
-	NodeWrapper GraphBuilder::parameter(const std::string &sNodeName, const Shape &sShape)
+	NodeWrapper GraphBuilder::parameter(const std::string &sNodeName, const Shape &sShape, InitializerWrapper sInitializer)
 	{
-		return NodeWrapper{this->pGraph->createNode<Node::Parameter>(sNodeName, sShape)};
+		return NodeWrapper{this->pGraph->createNode<Node::Parameter>(sNodeName, sShape, sInitializer)};
 	}
 
 	NodeWrapper GraphBuilder::add(NodeWrapper sLeft, NodeWrapper sRight)
@@ -161,5 +164,15 @@ namespace TinNet::Core
 		sNode["prob"]->attach(sProb);
 
 		return sNode;
+	}
+
+	InitializerWrapper GraphBuilder::initConstant(float nConstant)
+	{
+		return InitializerWrapper{this->pGraph->createInitializer<Initializer::Constant>(nConstant)};
+	}
+
+	InitializerWrapper GraphBuilder::initXavier(std::size_t nFanIn, std::size_t nFanOut)
+	{
+		return InitializerWrapper{this->pGraph->createInitializer<Initializer::Xavier>(nFanIn, nFanOut)};
 	}
 }

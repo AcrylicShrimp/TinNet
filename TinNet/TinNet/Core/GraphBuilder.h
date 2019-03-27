@@ -10,13 +10,13 @@
 
 #include "../TinNetDLL.h"
 
+#include "InitializerWrapper.h"
 #include "NodeWrapper.h"
 #include "Shape.h"
 #include "Span.h"
 
-#include "../Node/Node.h"
-
 #include <cassert>
+#include <cstddef>
 #include <initializer_list>
 #include <sstream>
 #include <string>
@@ -49,8 +49,8 @@ namespace TinNet::Core
 		*/
 		NodeWrapper input();
 		NodeWrapper input(const std::string &sNodeName);
-		NodeWrapper parameter(const Shape &sShape);
-		NodeWrapper parameter(const std::string &sNodeName, const Shape &sShape);
+		NodeWrapper parameter(const Shape &sShape, InitializerWrapper sInitializer);
+		NodeWrapper parameter(const std::string &sNodeName, const Shape &sShape, InitializerWrapper sInitializer);
 
 		/*
 			Basic arithmetic nodes.
@@ -77,6 +77,12 @@ namespace TinNet::Core
 		NodeWrapper mse(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sPred);
 		NodeWrapper sigmoidCE(NodeWrapper sLabel, NodeWrapper sProb);
 		NodeWrapper sigmoidCE(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sProb);
+
+		/*
+			Initializers.
+		*/
+		InitializerWrapper initConstant(float nConstant = .0f);
+		InitializerWrapper initXavier(std::size_t nFanIn, std::size_t nFanOut);
 	};
 }
 

@@ -90,6 +90,7 @@
     <ClCompile Include="TinNet\Core\GraphBuilder.cpp" />
     <ClCompile Include="TinNet\Core\Graph.cpp" />
     <ClCompile Include="TinNet\Core\NodeWrapper.cpp" />
+    <ClCompile Include="TinNet\Core\InitializerWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -143,9 +144,6 @@
     <ClInclude Include="TinNet\Node\Parameter.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Node\Parameter.hpp">
-      <Filter>TinNet\Node</Filter>
-    </ClInclude>
     <ClInclude Include="TinNet\Node\Add.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
@@ -154,9 +152,6 @@
     </ClInclude>
     <ClInclude Include="TinNet\Node\SigmoidCrossEntropy.h">
       <Filter>TinNet\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\InitializerBase.h">
-      <Filter>TinNet\Initializer</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Initializer\Constant.h">
       <Filter>TinNet\Initializer</Filter>
@@ -174,5 +169,9 @@
     <ClInclude Include="TinNet\Core\GraphBuilder.h" />
     <ClInclude Include="TinNet\Core\Graph.hpp" />
     <ClInclude Include="TinNet\Core\NodeWrapper.h" />
+    <ClInclude Include="TinNet\Initializer\Initializer.h">
+      <Filter>TinNet\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\InitializerWrapper.h" />
   </ItemGroup>
 </Project>

@@ -20,9 +20,9 @@
 #include "Core/Span.h"
 
 /*
-	TinNet::Intializer
+	TinNet::Initializer
 */
-#include "Initializer/InitializerBase.h"
+#include "Initializer/Initializer.h"
 #include "Initializer/Constant.h"
 #include "Initializer/Xavier.h"
 

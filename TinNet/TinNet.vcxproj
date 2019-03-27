@@ -221,6 +221,7 @@
     <ClCompile Include="TinNet\Compute\GEMM.cpp" />
     <ClCompile Include="TinNet\Core\Graph.cpp" />
     <ClCompile Include="TinNet\Core\GraphBuilder.cpp" />
+    <ClCompile Include="TinNet\Core\InitializerWrapper.cpp" />
     <ClCompile Include="TinNet\Core\Memory.cpp" />
     <ClCompile Include="TinNet\Core\NodeWrapper.cpp" />
     <ClCompile Include="TinNet\Core\Shape.cpp" />
@@ -249,13 +250,14 @@
     <ClInclude Include="TinNet\Core\Graph.h" />
     <ClInclude Include="TinNet\Core\Graph.hpp" />
     <ClInclude Include="TinNet\Core\GraphBuilder.h" />
+    <ClInclude Include="TinNet\Core\InitializerWrapper.h" />
     <ClInclude Include="TinNet\Core\Memory.h" />
     <ClInclude Include="TinNet\Core\NodeWrapper.h" />
     <ClInclude Include="TinNet\Core\Shape.h" />
     <ClInclude Include="TinNet\Core\Shape.hpp" />
     <ClInclude Include="TinNet\Core\Span.h" />
     <ClInclude Include="TinNet\Initializer\Constant.h" />
-    <ClInclude Include="TinNet\Initializer\InitializerBase.h" />
+    <ClInclude Include="TinNet\Initializer\Initializer.h" />
     <ClInclude Include="TinNet\Initializer\Xavier.h" />
     <ClInclude Include="TinNet\IO\JSON.h" />
     <ClInclude Include="TinNet\IO\JSONObject.h" />
@@ -269,7 +271,6 @@
     <ClInclude Include="TinNet\Node\NodeType.h" />
     <ClInclude Include="TinNet\Node\NodeTypeManager.h" />
     <ClInclude Include="TinNet\Node\Parameter.h" />
-    <ClInclude Include="TinNet\Node\Parameter.hpp" />
     <ClInclude Include="TinNet\Node\Sigmoid.h" />
     <ClInclude Include="TinNet\Node\SigmoidCrossEntropy.h" />
     <ClInclude Include="TinNet\Optimizer\SGD.h" />

@@ -34,7 +34,7 @@ namespace TinNet::Core
 		~NodeWrapper() noexcept = default;
 
 	public:
-		NodeWrapper &operator=(NodeWrapper &sSrc) = default;
+		NodeWrapper &operator=(const NodeWrapper &sSrc) = delete;
 		inline Node::NodeInput *operator[](const std::string &sInputName);
 		inline const Node::NodeInput *operator[](const std::string &sInputName) const;
 		inline operator Node::Node *() noexcept;

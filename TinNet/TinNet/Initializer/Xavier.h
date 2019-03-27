@@ -12,7 +12,7 @@
 
 #include "../Core/Span.h"
 
-#include "InitializerBase.h"
+#include "Initializer.h"
 
 #include <cmath>
 #include <cstddef>
@@ -20,7 +20,7 @@
 
 namespace TinNet::Initializer
 {
-	class TINNET_DLL Xavier : public InitializerBase
+	class TINNET_DLL Xavier : public Initializer
 	{
 	protected:
 		std::mt19937_64 sEngine;
@@ -34,8 +34,6 @@ namespace TinNet::Initializer
 		
 	public:
 		Xavier &operator=(const Xavier &sSrc) = default;
-		
-	public:
 		virtual void operator()(Core::Span sSpan) override;
 	};
 }

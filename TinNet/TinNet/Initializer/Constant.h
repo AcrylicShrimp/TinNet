@@ -12,11 +12,11 @@
 
 #include "../Core/Span.h"
 
-#include "InitializerBase.h"
+#include "Initializer.h"
 
 namespace TinNet::Initializer
 {
-	class TINNET_DLL Constant : public InitializerBase
+	class TINNET_DLL Constant : public Initializer
 	{
 	protected:
 		float nConstant;
@@ -28,8 +28,6 @@ namespace TinNet::Initializer
 		
 	public:
 		Constant &operator=(const Constant &sSrc) = default;
-		
-	public:
 		virtual void operator()(Core::Span sSpan) override;
 	};
 }

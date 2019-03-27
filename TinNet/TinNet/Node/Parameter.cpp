@@ -10,11 +10,15 @@ namespace TinNet::Node
 {
 	TINNET_NODE_TYPE_DEF(Parameter)
 
-	Parameter::Parameter(Core::Graph *pGraph, std::string_view sName, Core::Shape sShape) :
+	Parameter::Parameter(Core::Graph *pGraph, std::string_view sName, Core::Shape sShape, Initializer::Initializer *pInitializer) :
 		Node(pGraph, sName),
+		pInitializer{pInitializer},
 		sParameterShape{sShape}
 	{
-		//Empty.
+		assert(pInitializer);
+
+		this->sParameter.resize(this->evalShape().shape().size());
+		(*this->pInitializer)(this->sParameter.span());
 	}
 
 	void Parameter::__evaluateShape()

@@ -18,8 +18,8 @@ int32_t main()
 
 	graph.builder().input("x");
 	graph.builder().input("y");
-	graph.builder().parameter("w", Core::Shape{1, 2});
-	graph.builder().parameter("b", Core::Shape{1});
+	graph.builder().parameter("w", Core::Shape{1, 2}, graph.builder().initXavier(2, 1));
+	graph.builder().parameter("b", Core::Shape{1}, graph.builder().initConstant());
 	graph.builder().sigmoid("output", graph.builder().add(graph.builder().mm(graph["x"], graph["w"]), graph["b"]));
 	graph.builder().sigmoidCE("loss", graph["y"], graph["output"]);
 	
@@ -37,9 +37,6 @@ int32_t main()
 		{1.f},
 		{1.f}
 	};
-	
-	graph.node<Node::Parameter>("w")->initialize(Initializer::Xavier{2, 1});
-	graph.node<Node::Parameter>("b")->initialize(Initializer::Constant{});
 	
 	Optimizer::SGD optimizer{graph.node<Node::Parameter>("w"), graph.node<Node::Parameter>("b")};
 	

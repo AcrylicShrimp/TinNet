@@ -54,6 +54,13 @@ namespace TinNet::Core
 		return this->nodes(this->sNodeTypeManager.type<T>());
 	}
 
+	template<class T, class ...P> T *Graph::createIntializer(P &&...tParam)
+	{
+		static_assert(std::is_base_of<Initializer::Initializer, T>());
+
+		return static_cast<T *>(this->sInitializerSet.emplace(new T(std::forward<P>(tParam)...)).first->get());
+	}
+
 	template<class T, class ...P> inline T *Graph::createNode(const std::string &sNodeName, P &&...tParam)
 	{
 		static_assert(std::is_base_of<Node::Node, T>());

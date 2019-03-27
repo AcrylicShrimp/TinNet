@@ -10,8 +10,11 @@
 
 #include "../TinNetDLL.h"
 
+#include "InitializerWrapper.h"
 #include "GraphBuilder.h"
 #include "NodeWrapper.h"
+
+#include "../Initializer/Initializer.h"
 
 #include "../Node/Node.h"
 #include "../Node/NodeType.h"
@@ -38,6 +41,7 @@ namespace TinNet::Core
 		GraphBuilder sBuilder;
 		std::unordered_map<std::string, std::unique_ptr<Node::Node>> sNodeMap;
 		std::unordered_multimap<const Node::NodeType *, Node::Node *> sNodeTypeMap;
+		std::unordered_set<std::unique_ptr<Initializer::Initializer>> sInitializerSet;
 
 	public:
 		Graph();
@@ -62,6 +66,7 @@ namespace TinNet::Core
 		template<class T> const T *node(const std::string &sNodeName) const;
 		template<class T> std::vector<T *> nodes();
 		template<class T> std::vector<const T *> nodes() const;
+		template<class T, class ...P> T *createIntializer(P &&...tParam);
 		template<class T, class ...P> T *createNode(const std::string &sNodeName, P &&...tParam);
 	};
 

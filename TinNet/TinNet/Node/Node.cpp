@@ -17,7 +17,7 @@ namespace TinNet::Node
 		bOutputDirty{true},
 		pGradientDirty{nullptr}
 	{
-		//Empty.
+		assert(pGraph);
 	}
 
 	NodeInput *Node::operator[](const std::string &sInputName)

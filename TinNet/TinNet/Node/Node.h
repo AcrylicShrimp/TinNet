@@ -16,6 +16,7 @@
 #include "NodeInput.h"
 #include "NodeType.h"
 
+#include <cassert>
 #include <cstdint>
 #include <string>
 #include <string_view>
