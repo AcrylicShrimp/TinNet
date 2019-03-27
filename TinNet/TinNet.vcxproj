@@ -232,6 +232,7 @@
     <ClCompile Include="TinNet\IO\JSONObject.cpp" />
     <ClCompile Include="TinNet\IO\Serializable.cpp" />
     <ClCompile Include="TinNet\Node\Add.cpp" />
+    <ClCompile Include="TinNet\Node\Dense.cpp" />
     <ClCompile Include="TinNet\Node\MM.cpp" />
     <ClCompile Include="TinNet\Node\Input.cpp" />
     <ClCompile Include="TinNet\Node\MSE.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="TinNet\IO\JSONObject.h" />
     <ClInclude Include="TinNet\IO\Serializable.h" />
     <ClInclude Include="TinNet\Node\Add.h" />
+    <ClInclude Include="TinNet\Node\Dense.h" />
     <ClInclude Include="TinNet\Node\Input.h" />
     <ClInclude Include="TinNet\Node\MM.h" />
     <ClInclude Include="TinNet\Node\MSE.h" />

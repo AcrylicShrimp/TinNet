@@ -92,6 +92,7 @@
     <ClCompile Include="TinNet\Node\Add.cpp">
       <Filter>TinNet\Node</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Node\Dense.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -175,5 +176,6 @@
     <ClInclude Include="TinNet\Node\Add.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
+    <ClInclude Include="TinNet\Node\Dense.h" />
   </ItemGroup>
 </Project>
