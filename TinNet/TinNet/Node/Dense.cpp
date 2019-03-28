@@ -23,26 +23,62 @@ namespace TinNet::Node
 
 	void Dense::__evaluateShape()
 	{
-		//TODO: Implement this method.
+		if (this->sInput.inputNode()->shape().rank() != 2)
+			throw std::exception{"the rank of the input shape must be 2."};
+
+		if (this->sInputWeight.inputNode()->shape().rank() != 2)
+			throw std::exception{"the rank of the weight shape must be 2."};
+
+		if (this->sInputBias.inputNode()->shape().rank() != 1)
+			throw std::exception{"the rank of the bias shape must be 1."};
+
+		if (this->sInput.inputNode()->shape()[0] != this->sInputWeight.inputNode()->shape()[1])
+			throw std::exception{"the shape of the input and the weight is not compatible."};
+
+		if (this->sInputWeight.inputNode()->shape()[0] != this->sInputBias.inputNode()->shape()[0])
+			throw std::exception{"the shape of the weight and the bias is not compatible."};
+
+		this->sShape = {this->sInputWeight.inputNode()->shape()[0], this->sInput.inputNode()->shape()[1]};
 	}
 
 	void Dense::__evaluateOutput()
 	{
-		//TODO: Implement this method.
+		for (std::size_t nIndex{0}, nMaxIndex{this->sShape[1]}, nWidth{this->sShape[0]}; nIndex < nMaxIndex; ++nIndex)
+			this->sOutput.span().subSpan(nIndex * nWidth).copyFrom(this->sInputBias.inputNode()->evalOutput().output());
+
+		Compute::GEMM::multiplyAdd(
+			this->sInput.inputNode()->shape()[0],
+			this->sShape[1],
+			this->sShape[0],
+			this->sInput.inputNode()->evalOutput().output(),
+			this->sInputWeight.inputNode()->evalOutput().output(),
+			this->sOutput.span());
 	}
 
 	void Dense::__backwardOpInput(const Node *pDy)
 	{
-		//TODO: Implement this method.
+		Compute::GEMM::dMultiplyAddLeft(
+			this->sInput.inputNode()->shape()[0],
+			this->sShape[1],
+			this->sShape[0],
+			this->evalGradient(pDy).gradient(),
+			this->sInputWeight.inputNode()->evalOutput().output(),
+			this->sInput.inputNode()->gradient());
 	}
 
 	void Dense::__backwardOpWeight(const Node *pDy)
 	{
-		//TODO: Implement this method.
+		Compute::GEMM::dMultiplyAddRight(
+			this->sInput.inputNode()->shape()[0],
+			this->sShape[1],
+			this->sShape[0],
+			this->evalGradient(pDy).gradient(),
+			this->sInput.inputNode()->evalOutput().output(),
+			this->sInputWeight.inputNode()->gradient());
 	}
 	
 	void Dense::__backwardOpBias(const Node *pDy)
 	{
-		//TODO: Implement this method.
+		this->sInputBias.inputNode()->gradient().accumulateFrom(this->evalGradient(pDy).gradient());
 	}
 }

@@ -52,14 +52,19 @@
 #include "Node/Subtract.h"
 
 /*
+	Math function nodes.
+*/
+#include "Node/Sigmoid.h"
+
+/*
 	BLAS nodes.
 */
 #include "Node/MM.h"
 
 /*
-	Math function nodes.
+	Layers.
 */
-#include "Node/Sigmoid.h"
+#include "Node/Dense.h"
 
 /*
 	Loss nodes.

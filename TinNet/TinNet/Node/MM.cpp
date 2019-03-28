@@ -21,6 +21,15 @@ namespace TinNet::Node
 
 	void MM::__evaluateShape()
 	{
+		if (this->sInputLeft.inputNode()->shape().rank() != 2)
+			throw std::exception{"the rank of the left input shape must be 2."};
+
+		if (this->sInputRight.inputNode()->shape().rank() != 2)
+			throw std::exception{"the rank of the right input shape must be 2."};
+
+		if (this->sInputLeft.inputNode()->shape()[0] != this->sInputRight.inputNode()->shape()[1])
+			throw std::exception{"the shape of the input is not compatible."};
+
 		this->sShape = {this->sInputRight.inputNode()->shape()[0], this->sInputLeft.inputNode()->shape()[1]};
 	}
 

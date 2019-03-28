@@ -14,9 +14,11 @@
 #include "../Node/Add.h"
 #include "../Node/Subtract.h"
 
+#include "../Node/Sigmoid.h"
+
 #include "../Node/MM.h"
 
-#include "../Node/Sigmoid.h"
+#include "../Node/Dense.h"
 
 #include "../Node/MSE.h"
 #include "../Node/SigmoidCrossEntropy.h"
@@ -41,9 +43,11 @@ namespace TinNet::Core
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::Add>();
 
-		this->pGraph->sNodeTypeManager.registerNode<Node::MM>();
-
 		this->pGraph->sNodeTypeManager.registerNode<Node::Sigmoid>();
+
+		this->pGraph->sNodeTypeManager.registerNode<Node::MM>();
+		
+		this->pGraph->sNodeTypeManager.registerNode<Node::Dense>();
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::MSE>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::SigmoidCrossEntropy>();
@@ -109,6 +113,24 @@ namespace TinNet::Core
 		return sNode;
 	}
 
+	NodeWrapper GraphBuilder::sigmoid(NodeWrapper sLogit)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Sigmoid>(DEFAULT_NAME(Node::Sigmoid))};
+
+		sNode["logit"]->attach(sLogit);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::sigmoid(const std::string &sNodeName, NodeWrapper sLogit)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Sigmoid>(sNodeName)};
+
+		sNode["logit"]->attach(sLogit);
+
+		return sNode;
+	}
+
 	NodeWrapper GraphBuilder::mm(NodeWrapper sLeft, NodeWrapper sRight)
 	{
 		NodeWrapper sNode{this->pGraph->createNode<Node::MM>(DEFAULT_NAME(Node::MM))};
@@ -129,20 +151,24 @@ namespace TinNet::Core
 		return sNode;
 	}
 
-	NodeWrapper GraphBuilder::sigmoid(NodeWrapper sLogit)
+	NodeWrapper GraphBuilder::dense(NodeWrapper sInput, NodeWrapper sWeight, NodeWrapper sBias)
 	{
-		NodeWrapper sNode{this->pGraph->createNode<Node::Sigmoid>(DEFAULT_NAME(Node::Sigmoid))};
+		NodeWrapper sNode{this->pGraph->createNode<Node::Dense>(DEFAULT_NAME(Node::Dense))};
 
-		sNode["logit"]->attach(sLogit);
+		sNode["input"]->attach(sInput);
+		sNode["weight"]->attach(sWeight);
+		sNode["bias"]->attach(sBias);
 
 		return sNode;
 	}
 
-	NodeWrapper GraphBuilder::sigmoid(const std::string &sNodeName, NodeWrapper sLogit)
+	NodeWrapper GraphBuilder::dense(const std::string &sNodeName, NodeWrapper sInput, NodeWrapper sWeight, NodeWrapper sBias)
 	{
-		NodeWrapper sNode{this->pGraph->createNode<Node::Sigmoid>(sNodeName)};
+		NodeWrapper sNode{this->pGraph->createNode<Node::Dense>(sNodeName)};
 
-		sNode["logit"]->attach(sLogit);
+		sNode["input"]->attach(sInput);
+		sNode["weight"]->attach(sWeight);
+		sNode["bias"]->attach(sBias);
 
 		return sNode;
 	}

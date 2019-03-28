@@ -61,16 +61,22 @@ namespace TinNet::Core
 		NodeWrapper subtract(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
 
 		/*
+			Math function nodes.
+		*/
+		NodeWrapper sigmoid(NodeWrapper sLogit);
+		NodeWrapper sigmoid(const std::string &sNodeName, NodeWrapper sLogit);
+
+		/*
 			BLAS nodes.
 		*/
 		NodeWrapper mm(NodeWrapper sLeft, NodeWrapper sRight);
 		NodeWrapper mm(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
 
 		/*
-			Math function nodes.
+			Layers.
 		*/
-		NodeWrapper sigmoid(NodeWrapper sLogit);
-		NodeWrapper sigmoid(const std::string &sNodeName, NodeWrapper sLogit);
+		NodeWrapper dense(NodeWrapper sInput, NodeWrapper sWeight, NodeWrapper sBias);
+		NodeWrapper dense(const std::string &sNodeName, NodeWrapper sInput, NodeWrapper sWeight, NodeWrapper sBias);
 
 		/*
 			Loss nodes.
