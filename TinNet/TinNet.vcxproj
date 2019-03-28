@@ -241,6 +241,7 @@
     <ClCompile Include="TinNet\Node\NodeType.cpp" />
     <ClCompile Include="TinNet\Node\NodeTypeManager.cpp" />
     <ClCompile Include="TinNet\Node\Parameter.cpp" />
+    <ClCompile Include="TinNet\Node\ReLU.cpp" />
     <ClCompile Include="TinNet\Node\Sigmoid.cpp" />
     <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp" />
     <ClCompile Include="TinNet\Node\Subtract.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="TinNet\Node\NodeType.h" />
     <ClInclude Include="TinNet\Node\NodeTypeManager.h" />
     <ClInclude Include="TinNet\Node\Parameter.h" />
+    <ClInclude Include="TinNet\Node\ReLU.h" />
     <ClInclude Include="TinNet\Node\Sigmoid.h" />
     <ClInclude Include="TinNet\Node\SigmoidCrossEntropy.h" />
     <ClInclude Include="TinNet\Node\Subtract.h" />

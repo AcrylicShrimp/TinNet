@@ -20,8 +20,8 @@ int32_t main()
 	graph.builder().input("y");
 	graph.builder().parameter("w", Core::Shape{1, 2}, graph.builder().initXavier(2, 1));
 	graph.builder().parameter("b", Core::Shape{1}, graph.builder().initConstant());
-	graph.builder().sigmoid("output", graph.builder().dense(graph["x"], graph["w"], graph["b"]));
-	graph.builder().sigmoidCE("loss", graph["y"], graph["output"]);
+	graph.builder().relu("output", graph.builder().dense(graph["x"], graph["w"], graph["b"]), .01f);
+	graph.builder().mse("loss", graph["y"], graph["output"]);
 	
 	std::vector<std::vector<float>> x_data
 	{

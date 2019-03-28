@@ -14,6 +14,7 @@
 #include "../Node/Add.h"
 #include "../Node/Subtract.h"
 
+#include "../Node/ReLU.h"
 #include "../Node/Sigmoid.h"
 
 #include "../Node/MM.h"
@@ -43,6 +44,7 @@ namespace TinNet::Core
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::Add>();
 
+		this->pGraph->sNodeTypeManager.registerNode<Node::ReLU>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Sigmoid>();
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::MM>();
@@ -109,6 +111,24 @@ namespace TinNet::Core
 
 		sNode["left"]->attach(sLeft);
 		sNode["right"]->attach(sRight);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::relu(NodeWrapper sLogit, float nAlpha)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::ReLU>(DEFAULT_NAME(Node::ReLU), nAlpha)};
+
+		sNode["logit"]->attach(sLogit);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::relu(const std::string &sNodeName, NodeWrapper sLogit, float nAlpha)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::ReLU>(sNodeName, nAlpha)};
+
+		sNode["logit"]->attach(sLogit);
 
 		return sNode;
 	}

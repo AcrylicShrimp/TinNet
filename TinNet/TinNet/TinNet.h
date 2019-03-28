@@ -54,6 +54,7 @@
 /*
 	Math function nodes.
 */
+#include "Node/ReLU.h"
 #include "Node/Sigmoid.h"
 
 /*

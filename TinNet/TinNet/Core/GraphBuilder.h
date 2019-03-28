@@ -63,6 +63,8 @@ namespace TinNet::Core
 		/*
 			Math function nodes.
 		*/
+		NodeWrapper relu(NodeWrapper sLogit, float nAlpha = .0f);
+		NodeWrapper relu(const std::string &sNodeName, NodeWrapper sLogit, float nAlpha = .0f);
 		NodeWrapper sigmoid(NodeWrapper sLogit);
 		NodeWrapper sigmoid(const std::string &sNodeName, NodeWrapper sLogit);
 
