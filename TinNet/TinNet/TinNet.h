@@ -8,17 +8,68 @@
 
 #define _TINNET_H
 
-#include "Batch.h"
-#include "Cache.h"
-#include "Shape.h"
-#include "ShapedCache.h"
+#include "TinNetDLL.h"
 
-#include "Node.h"
-#include "Graph.h"
+/*
+	TinNet::Core
+*/
+#include "Core/Graph.h"
+#include "Core/GraphBuilder.h"
+#include "Core/Memory.h"
+#include "Core/Shape.h"
+#include "Core/Span.h"
 
-#include "GraphBP.h"
-#include "GraphBPOp.h"
+/*
+	TinNet::Initializer
+*/
+#include "Initializer/Initializer.h"
+#include "Initializer/Constant.h"
+#include "Initializer/Xavier.h"
 
-#include "Optimizer/Optimizer.h"
+/*
+	TinNet::Optimizer
+*/
+#include "Optimizer/SGD.h"
+
+/*
+	Basic node elements.
+*/
+#include "Node/Node.h"
+#include "Node/NodeInput.h"
+#include "Node/NodeType.h"
+#include "Node/NodeTypeManager.h"
+
+/*
+	Front nodes.
+*/
+#include "Node/Input.h"
+#include "Node/Parameter.h"
+
+/*
+	Basic arithmetic nodes.
+*/
+#include "Node/Add.h"
+#include "Node/Subtract.h"
+
+/*
+	Math function nodes.
+*/
+#include "Node/Sigmoid.h"
+
+/*
+	BLAS nodes.
+*/
+#include "Node/MM.h"
+
+/*
+	Layers.
+*/
+#include "Node/Dense.h"
+
+/*
+	Loss nodes.
+*/
+#include "Node/MSE.h"
+#include "Node/SigmoidCrossEntropy.h"
 
 #endif

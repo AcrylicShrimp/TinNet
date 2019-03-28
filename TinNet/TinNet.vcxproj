@@ -218,261 +218,70 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TinNet\Accessor.cpp" />
-    <ClCompile Include="TinNet\Batch.cpp" />
-    <ClCompile Include="TinNet\Cache.cpp" />
-    <ClCompile Include="TinNet\CacheAllocator.cpp" />
     <ClCompile Include="TinNet\Compute\GEMM.cpp" />
-    <ClCompile Include="TinNet\Core\Node.cpp" />
+    <ClCompile Include="TinNet\Core\Graph.cpp" />
+    <ClCompile Include="TinNet\Core\GraphBuilder.cpp" />
+    <ClCompile Include="TinNet\Core\InitializerWrapper.cpp" />
+    <ClCompile Include="TinNet\Core\Memory.cpp" />
+    <ClCompile Include="TinNet\Core\NodeWrapper.cpp" />
     <ClCompile Include="TinNet\Core\Shape.cpp" />
     <ClCompile Include="TinNet\Core\Span.cpp" />
-    <ClCompile Include="TinNet\Feedable.cpp" />
-    <ClCompile Include="TinNet\Graph.cpp" />
-    <ClCompile Include="TinNet\GraphBP.cpp" />
-    <ClCompile Include="TinNet\GraphBPOp.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Abs.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Add.cpp" />
-    <ClCompile Include="TinNet\GraphNode\BackpropNode.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Constant.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Convolution.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Cos.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Cosh.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Dense.cpp" />
-    <ClCompile Include="TinNet\GraphNode\DilatedConvolution.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Divide.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Exp.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Exp2.cpp" />
-    <ClCompile Include="TinNet\GraphNode\FullNode.cpp" />
-    <ClCompile Include="TinNet\GraphNode\GraphOp.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Input.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Log.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Log10.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Log2.cpp" />
-    <ClCompile Include="TinNet\GraphNode\LogN.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Multiply.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Neg.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Pow.cpp" />
-    <ClCompile Include="TinNet\GraphNode\ReduceMax.cpp" />
-    <ClCompile Include="TinNet\GraphNode\ReduceMean.cpp" />
-    <ClCompile Include="TinNet\GraphNode\ReduceMin.cpp" />
-    <ClCompile Include="TinNet\GraphNode\ReduceSum.cpp" />
-    <ClCompile Include="TinNet\GraphNode\ReLU.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Reshape.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Select.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Sigmoid.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Sign.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Sin.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Sinh.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Softmax.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Softplus.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Square.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Squeeze.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Subtract.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Tan.cpp" />
-    <ClCompile Include="TinNet\GraphNode\Tanh.cpp" />
-    <ClCompile Include="TinNet\GraphNode\TransposedConvolution.cpp" />
-    <ClCompile Include="TinNet\GraphNode\VariableNode.cpp" />
-    <ClCompile Include="TinNet\Initializable.cpp" />
-    <ClCompile Include="TinNet\Initializer\Constant.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\Glorot.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\He.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\Initializer.cpp" />
-    <ClCompile Include="TinNet\Initializer\Normal.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\Uniform.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="TinNet\Initializer\Xavier.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="TinNet\Initializer\Constant.cpp" />
+    <ClCompile Include="TinNet\Initializer\Xavier.cpp" />
     <ClCompile Include="TinNet\IO\JSON.cpp" />
     <ClCompile Include="TinNet\IO\JSONObject.cpp" />
     <ClCompile Include="TinNet\IO\Serializable.cpp" />
-    <ClCompile Include="TinNet\Node.cpp" />
-    <ClCompile Include="TinNet\Optimizer\Adam.cpp" />
-    <ClCompile Include="TinNet\Optimizer\Momentum.cpp" />
-    <ClCompile Include="TinNet\Optimizer\OptimizerBase.cpp" />
+    <ClCompile Include="TinNet\Node\Add.cpp" />
+    <ClCompile Include="TinNet\Node\Dense.cpp" />
+    <ClCompile Include="TinNet\Node\MM.cpp" />
+    <ClCompile Include="TinNet\Node\Input.cpp" />
+    <ClCompile Include="TinNet\Node\MSE.cpp" />
+    <ClCompile Include="TinNet\Node\Node.cpp" />
+    <ClCompile Include="TinNet\Node\NodeInput.cpp" />
+    <ClCompile Include="TinNet\Node\NodeType.cpp" />
+    <ClCompile Include="TinNet\Node\NodeTypeManager.cpp" />
+    <ClCompile Include="TinNet\Node\Parameter.cpp" />
+    <ClCompile Include="TinNet\Node\Sigmoid.cpp" />
+    <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp" />
+    <ClCompile Include="TinNet\Node\Subtract.cpp" />
     <ClCompile Include="TinNet\Optimizer\SGD.cpp" />
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
-    <ClCompile Include="TinNet\Shape.cpp" />
-    <ClCompile Include="TinNet\ShapedCache.cpp" />
-    <ClCompile Include="TinNet\Variable.cpp" />
-    <ClCompile Include="TinNet\VariableAllocator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TinNet\Accessor.h" />
-    <ClInclude Include="TinNet\Batch.h" />
-    <ClInclude Include="TinNet\Cache.h" />
-    <ClInclude Include="TinNet\CacheAllocator.h" />
     <ClInclude Include="TinNet\Compute\GEMM.h" />
-    <ClInclude Include="TinNet\Core\FeedableNode.h" />
-    <ClInclude Include="TinNet\Core\FeedableNode.hpp" />
-    <ClInclude Include="TinNet\Core\Node.h" />
+    <ClInclude Include="TinNet\Core\Graph.h" />
+    <ClInclude Include="TinNet\Core\Graph.hpp" />
+    <ClInclude Include="TinNet\Core\GraphBuilder.h" />
+    <ClInclude Include="TinNet\Core\InitializerWrapper.h" />
+    <ClInclude Include="TinNet\Core\Memory.h" />
+    <ClInclude Include="TinNet\Core\NodeWrapper.h" />
     <ClInclude Include="TinNet\Core\Shape.h" />
+    <ClInclude Include="TinNet\Core\Shape.hpp" />
     <ClInclude Include="TinNet\Core\Span.h" />
-    <ClInclude Include="TinNet\Feedable.h" />
-    <ClInclude Include="TinNet\Graph.h" />
-    <ClInclude Include="TinNet\GraphBP.h" />
-    <ClInclude Include="TinNet\GraphBPOp.h" />
-    <ClInclude Include="TinNet\GraphNode\Abs.h" />
-    <ClInclude Include="TinNet\GraphNode\Add.h" />
-    <ClInclude Include="TinNet\GraphNode\BackpropNode.h" />
-    <ClInclude Include="TinNet\GraphNode\Constant.h" />
-    <ClInclude Include="TinNet\GraphNode\Convolution.h" />
-    <ClInclude Include="TinNet\GraphNode\Cos.h" />
-    <ClInclude Include="TinNet\GraphNode\Cosh.h" />
-    <ClInclude Include="TinNet\GraphNode\Dense.h" />
-    <ClInclude Include="TinNet\GraphNode\DilatedConvolution.h" />
-    <ClInclude Include="TinNet\GraphNode\Divide.h" />
-    <ClInclude Include="TinNet\GraphNode\Exp.h" />
-    <ClInclude Include="TinNet\GraphNode\Exp2.h" />
-    <ClInclude Include="TinNet\GraphNode\FullNode.h" />
-    <ClInclude Include="TinNet\GraphNode\GraphNode.h" />
-    <ClInclude Include="TinNet\GraphNode\GraphOp.h" />
-    <ClInclude Include="TinNet\GraphNode\Input.h" />
-    <ClInclude Include="TinNet\GraphNode\Log.h" />
-    <ClInclude Include="TinNet\GraphNode\Log10.h" />
-    <ClInclude Include="TinNet\GraphNode\Log2.h" />
-    <ClInclude Include="TinNet\GraphNode\LogN.h" />
-    <ClInclude Include="TinNet\GraphNode\Multiply.h" />
-    <ClInclude Include="TinNet\GraphNode\Neg.h" />
-    <ClInclude Include="TinNet\GraphNode\Pow.h" />
-    <ClInclude Include="TinNet\GraphNode\ReduceMax.h" />
-    <ClInclude Include="TinNet\GraphNode\ReduceMean.h" />
-    <ClInclude Include="TinNet\GraphNode\ReduceMin.h" />
-    <ClInclude Include="TinNet\GraphNode\ReduceSum.h" />
-    <ClInclude Include="TinNet\GraphNode\ReLU.h" />
-    <ClInclude Include="TinNet\GraphNode\Reshape.h" />
-    <ClInclude Include="TinNet\GraphNode\Select.h" />
-    <ClInclude Include="TinNet\GraphNode\Sigmoid.h" />
-    <ClInclude Include="TinNet\GraphNode\Sign.h" />
-    <ClInclude Include="TinNet\GraphNode\Sin.h" />
-    <ClInclude Include="TinNet\GraphNode\Sinh.h" />
-    <ClInclude Include="TinNet\GraphNode\Softmax.h" />
-    <ClInclude Include="TinNet\GraphNode\Softplus.h" />
-    <ClInclude Include="TinNet\GraphNode\Square.h" />
-    <ClInclude Include="TinNet\GraphNode\Squeeze.h" />
-    <ClInclude Include="TinNet\GraphNode\Subtract.h" />
-    <ClInclude Include="TinNet\GraphNode\Tan.h" />
-    <ClInclude Include="TinNet\GraphNode\Tanh.h" />
-    <ClInclude Include="TinNet\GraphNode\TransposedConvolution.h" />
-    <ClInclude Include="TinNet\GraphNode\VariableNode.h" />
-    <ClInclude Include="TinNet\Initializable.h" />
-    <ClInclude Include="TinNet\Initializer\Constant.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Glorot.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\He.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="TinNet\Initializer\Constant.h" />
     <ClInclude Include="TinNet\Initializer\Initializer.h" />
-    <ClInclude Include="TinNet\Initializer\Initializers.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Normal.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Uniform.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="TinNet\Initializer\Xavier.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Export|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="TinNet\Initializer\Xavier.h" />
     <ClInclude Include="TinNet\IO\JSON.h" />
     <ClInclude Include="TinNet\IO\JSONObject.h" />
     <ClInclude Include="TinNet\IO\Serializable.h" />
-    <ClInclude Include="TinNet\Iterator.h" />
-    <ClInclude Include="TinNet\Iterator.hpp" />
-    <ClInclude Include="TinNet\Node.h" />
-    <ClInclude Include="TinNet\Optimizer\Adam.h" />
-    <ClInclude Include="TinNet\Optimizer\Momentum.h" />
-    <ClInclude Include="TinNet\Optimizer\OptimizerBase.h" />
-    <ClInclude Include="TinNet\Optimizer\Optimizer.h" />
+    <ClInclude Include="TinNet\Node\Add.h" />
+    <ClInclude Include="TinNet\Node\Dense.h" />
+    <ClInclude Include="TinNet\Node\Input.h" />
+    <ClInclude Include="TinNet\Node\MM.h" />
+    <ClInclude Include="TinNet\Node\MSE.h" />
+    <ClInclude Include="TinNet\Node\Node.h" />
+    <ClInclude Include="TinNet\Node\NodeInput.h" />
+    <ClInclude Include="TinNet\Node\NodeType.h" />
+    <ClInclude Include="TinNet\Node\NodeTypeManager.h" />
+    <ClInclude Include="TinNet\Node\Parameter.h" />
+    <ClInclude Include="TinNet\Node\Sigmoid.h" />
+    <ClInclude Include="TinNet\Node\SigmoidCrossEntropy.h" />
+    <ClInclude Include="TinNet\Node\Subtract.h" />
     <ClInclude Include="TinNet\Optimizer\SGD.h" />
     <ClInclude Include="TinNet\Reinforcement\Game.h" />
     <ClInclude Include="TinNet\Reinforcement\MCTS.h" />
-    <ClInclude Include="TinNet\Shape.h" />
-    <ClInclude Include="TinNet\ShapedCache.h" />
-    <ClInclude Include="TinNet\Span.h" />
-    <ClInclude Include="TinNet\Span.hpp" />
     <ClInclude Include="TinNet\TinNet.h" />
     <ClInclude Include="TinNet\TinNetDLL.h" />
-    <ClInclude Include="TinNet\Variable.h" />
-    <ClInclude Include="TinNet\VariableAllocator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
 
 /*
-	2018.06.21
+	2019.03.17
 	Created by AcrylicShrimp.
 */
 
@@ -10,16 +10,26 @@
 
 #include "../TinNetDLL.h"
 
-#include "../Cache.h"
-#include "../Graph.h"
-#include "OptimizerBase.h"
+#include "../Core/Memory.h"
+#include "../Core/Span.h"
+
+#include "../Node/Node.h"
+#include "../Node/Parameter.h"
+
+#include <cstddef>
+#include <initializer_list>
+#include <vector>
 
 namespace TinNet::Optimizer
 {
-	class TINNET_DLL SGD final : public OptimizerBase
+	class TINNET_DLL SGD
 	{
+	private:
+		std::vector<Node::Parameter *> sParameterList;
+		
 	public:
-		SGD(Graph &sGraph);
+		SGD(std::initializer_list<Node::Parameter *> sParameterList);
+		SGD(const std::vector<Node::Parameter *> &sParameterList);
 		SGD(const SGD &sSrc) = default;
 		SGD(SGD &&sSrc) = default;
 		~SGD() = default;
@@ -28,8 +38,8 @@ namespace TinNet::Optimizer
 		SGD &operator=(const SGD &sSrc) = default;
 		SGD &operator=(SGD &&sSrc) = default;
 		
-	protected:
-		virtual void applyGradient(float nLearningRate) override;
+	public:
+		void reduce(float nLearningRate, Node::Node *pTarget);
 	};
 }
 

@@ -1,6 +1,6 @@
 
 /*
-	2018.06.21
+	2019.03.17
 	Created by AcrylicShrimp.
 */
 
@@ -8,15 +8,27 @@
 
 namespace TinNet::Optimizer
 {
-	SGD::SGD(Graph &sGraph) :
-		OptimizerBase(sGraph)
+	SGD::SGD(std::initializer_list<Node::Parameter *> sParameterList) :
+		sParameterList{sParameterList}
 	{
 		//Empty.
 	}
 
-	void SGD::applyGradient(float nLearningRate)
+	SGD::SGD(const std::vector<Node::Parameter *> &sParameterList) :
+		sParameterList{sParameterList}
 	{
-		this->OptimizerBase::copyGradient(this->sGradient);
-		this->OptimizerBase::applyGradient(nLearningRate, this->sGradient);
+		//Empty.
+	}
+
+	void SGD::reduce(float nLearningRate, Node::Node *pTarget)
+	{
+		for (auto *pParameter : this->sParameterList)
+			pParameter->evalGradient(pTarget);
+
+		for (auto *pParameter : this->sParameterList)
+		{
+			pParameter->parameter().accumulateFrom(-nLearningRate, pParameter->gradient());
+			pParameter->markDirty(false);
+		}
 	}
 }

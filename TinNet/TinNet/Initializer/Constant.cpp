@@ -1,6 +1,6 @@
 
 /*
-	2017.08.05
+	2019.03.17
 	Created by AcrylicShrimp.
 */
 
@@ -8,41 +8,14 @@
 
 namespace TinNet::Initializer
 {
-	Constant::Constant(float nNewConstant) :
-		nConstant{nNewConstant}
+	Constant::Constant(float nConstant) :
+		nConstant{nConstant}
 	{
 		//Empty.
 	}
 
-	Constant::Constant(const Constant &sSrc) :
-		nConstant{sSrc.nConstant}
+	void Constant::operator()(Core::Span sSpan)
 	{
-		//Empty.
+		sSpan.fillScalar(this->nConstant);
 	}
-
-	Constant &Constant::operator=(const Constant &sSrc)
-	{
-		if (&sSrc == this)
-			return *this;
-
-		this->nConstant = sSrc.nConstant;
-
-		return *this;
-	}
-
-	//void Constant::initializeBias(Layer::LayerBase &sLayer) const
-	//{
-	//	sLayer.initBias([this]()
-	//	{
-	//		return this->nConstant;
-	//	});
-	//}
-	//
-	//void Constant::initializeWeight(Layer::LayerBase &sLayer) const
-	//{
-	//	sLayer.initWeight([this]()
-	//	{
-	//		return this->nConstant;
-	//	});
-	//}
 }

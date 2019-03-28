@@ -1,6 +1,6 @@
 
 /*
-	2017.08.05
+	2019.03.17
 	Created by AcrylicShrimp.
 */
 
@@ -10,33 +10,31 @@
 
 #include "../TinNetDLL.h"
 
-#include <chrono>
+#include "../Core/Span.h"
+
+#include "Initializer.h"
+
 #include <cmath>
-#include <cstdint>
+#include <cstddef>
 #include <random>
-#include <utility>
 
 namespace TinNet::Initializer
 {
-	class TINNET_DLL Xavier final
+	class TINNET_DLL Xavier : public Initializer
 	{
-	private:
+	protected:
 		std::mt19937_64 sEngine;
+		std::normal_distribution<float> sDist;
 		
 	public:
-		Xavier();
-		Xavier(std::mt19937_64::result_type nSeed);
-		Xavier(const Xavier &sSrc);
-		Xavier(Xavier &&sSrc);
-		~Xavier() = default;
+		Xavier(std::size_t nFanIn, std::size_t nFanOut);
+		Xavier(std::mt19937_64::result_type nSeed, std::size_t nFanIn, std::size_t nFanOut);
+		Xavier(const Xavier &sSrc) = default;
+		virtual ~Xavier() noexcept = default;
 		
 	public:
-		Xavier &operator=(const Xavier &sSrc);
-		Xavier &operator=(Xavier &&sSrc);
-		
-	public:
-		//void initializeBias(Layer::LayerBase &sLayer);
-		//void initializeWeight(Layer::LayerBase &sLayer);
+		Xavier &operator=(const Xavier &sSrc) = default;
+		virtual void operator()(Core::Span sSpan) override;
 	};
 }
 

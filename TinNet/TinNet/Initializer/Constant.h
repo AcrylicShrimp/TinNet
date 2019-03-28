@@ -1,6 +1,6 @@
 
 /*
-	2017.08.05
+	2019.03.17
 	Created by AcrylicShrimp.
 */
 
@@ -10,24 +10,25 @@
 
 #include "../TinNetDLL.h"
 
+#include "../Core/Span.h"
+
+#include "Initializer.h"
+
 namespace TinNet::Initializer
 {
-	class TINNET_DLL Constant final
+	class TINNET_DLL Constant : public Initializer
 	{
-	private:
+	protected:
 		float nConstant;
-
+		
 	public:
-		Constant(float nNewConstant);
-		Constant(const Constant &sSrc);
-		~Constant() = default;
-
+		Constant(float nConstant = .0f);
+		Constant(const Constant &sSrc) = default;
+		virtual ~Constant() noexcept = default;
+		
 	public:
-		Constant &operator=(const Constant &sSrc);
-
-	public:
-		//void initializeBias(Layer::LayerBase &sLayer) const;
-		//void initializeWeight(Layer::LayerBase &sLayer) const;
+		Constant &operator=(const Constant &sSrc) = default;
+		virtual void operator()(Core::Span sSpan) override;
 	};
 }
 

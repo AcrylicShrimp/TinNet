@@ -1,6 +1,6 @@
 
 /*
-	2018.09.02
+	2019.03.17
 	Created by AcrylicShrimp.
 */
 
@@ -10,7 +10,7 @@
 
 #include "../TinNetDLL.h"
 
-#include "../Variable.h"
+#include "../Core/Span.h"
 
 namespace TinNet::Initializer
 {
@@ -19,13 +19,11 @@ namespace TinNet::Initializer
 	public:
 		Initializer() = default;
 		Initializer(const Initializer &sSrc) = default;
-		virtual ~Initializer() = default;
+		virtual ~Initializer() noexcept = default;
 		
 	public:
 		Initializer &operator=(const Initializer &sSrc) = default;
-		
-	public:
-		virtual void initialize(Variable &sVariable) = 0;
+		virtual void operator()(Core::Span sSpan) = 0;
 	};
 }
 

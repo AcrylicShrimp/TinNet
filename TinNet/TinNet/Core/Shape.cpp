@@ -8,165 +8,106 @@
 
 namespace TinNet::Core
 {
-	Shape::Shape() :
-		nElement{1}
+	Shape::Shape()
+	{
+		this->sDimension.reserve(4);
+	}
+
+	Shape::Shape(std::initializer_list<std::size_t> sDimension) :
+		Shape(sDimension.begin(), sDimension.end())
 	{
 		//Empty.
 	}
 
-	Shape::Shape(const std::vector<std::size_t> &sDimension) :
-		nElement{1},
-		sDimension(sDimension)
+	Shape &Shape::operator=(std::initializer_list<std::size_t> sDimension)
 	{
-		for (auto nSize : this->sDimension)
-			nElement *= nSize;
-	}
-
-	Shape::Shape(std::vector<std::size_t> &&sDimension) :
-		nElement{1},
-		sDimension(std::move(sDimension))
-	{
-		for (auto nSize : this->sDimension)
-			nElement *= nSize;
-	}
-
-	Shape &Shape::operator=(const std::vector<std::size_t> &sDimension)
-	{
-		this->nElement = 1;
-		this->sDimension = sDimension;
-
-		for (auto nSize : this->sDimension)
-			nElement *= nSize;
+		this->assign(sDimension.begin(), sDimension.end());
 
 		return *this;
 	}
 
-	Shape &Shape::operator=(std::vector<std::size_t> &&sDimension)
+	bool Shape::operator==(std::initializer_list<std::size_t> sDimension) const
 	{
-		this->nElement = 1;
-		this->sDimension = std::move(sDimension);
-
-		for (auto nSize : this->sDimension)
-			nElement *= nSize;
-
-		return *this;
+		return this->equals(sDimension.begin(), sDimension.end());
 	}
 
-	bool Shape::operator==(const std::vector<std::size_t> &sDimension)
+	bool Shape::operator==(const Shape &sShape) const
 	{
-		if (this->rank() != sDimension.size())
-			return false;
-
-		for (std::size_t nAxis{0}, nMaxAxis{this->rank()}; nAxis < nMaxAxis; ++nAxis)
-			if (this->sDimension[nAxis] != sDimension[nAxis])
-				return false;
-
-		return true;
+		return this->equals(sShape.sDimension.cbegin(), sShape.sDimension.cend());
 	}
 
-	bool Shape::operator==(const Shape &sShape)
-	{
-		if (this->nElement != sShape.nElement || this->rank() != sShape.rank())
-			return false;
-
-		for (std::size_t nAxis{0}, nMaxAxis{this->rank()}; nAxis < nMaxAxis; ++nAxis)
-			if (this->sDimension[nAxis] != sShape.sDimension[nAxis])
-				return false;
-
-		return true;
-	}
-
-	bool Shape::operator!=(const std::vector<std::size_t> &sDimension)
+	bool Shape::operator!=(std::initializer_list<std::size_t> sDimension) const
 	{
 		return !this->operator==(sDimension);
 	}
 
-	bool Shape::operator!=(const Shape &sShape)
+	bool Shape::operator!=(const Shape &sShape) const
 	{
 		return !this->operator==(sShape);
 	}
 
-	Shape Shape::shrink() const
+	Shape Shape::expand() const
 	{
 		auto sResult{*this};
 
-		while (!sResult.sDimension.empty() && sResult.sDimension.front() == 1)
-			sResult.sDimension.erase(sResult.sDimension.begin());
-
-		return sResult;
-	}
-
-	Shape Shape::expand() const
-	{
-		Shape sResult{*this};
-
-		sResult.sDimension.insert(sResult.sDimension.cbegin(), 1);
+		sResult.sDimension.emplace_back(1);
 
 		return sResult;
 	}
 
 	Shape Shape::expand(std::size_t nRank) const
 	{
-		Shape sResult{*this};
+		auto sResult{*this};
 
 		if (nRank < this->rank())
 			return sResult;
 
 		for (std::size_t nR{this->rank()}; nR < nRank; ++nR)
-			sResult.sDimension.insert(sResult.sDimension.cbegin(), 1);
+			sResult.sDimension.emplace_back(1);
+
+		return sResult;
+	}
+
+	Shape Shape::shrink() const
+	{
+		auto sResult{*this};
+
+		while (!sResult.sDimension.empty() && sResult.sDimension.back() == 1)
+			sResult.sDimension.pop_back();
 
 		return sResult;
 	}
 
 	Shape Shape::squeeze() const
 	{
-		std::vector<std::size_t> sResult;
+		Shape sResult;
 
 		for (auto nSize : this->sDimension)
-		{
-			if (nSize == 1)
-				continue;
+			if (nSize != 1)
+				sResult.sDimension.emplace_back(nSize);
 
-			sResult.emplace_back(nSize);
-		}
-
-		return Shape{sResult};
-	}
-
-	void Shape::set(std::size_t nAxis, std::size_t nSize)
-	{
-		if (nAxis >= this->sDimension.size())
-			return;
-
-		this->sDimension[nAxis] = nSize;
-		this->nElement = 1;
-
-		for (auto nSize : this->sDimension)
-			nElement *= nSize;
+		return sResult;
 	}
 
 	Shape Shape::broadcast(const Shape &sLeft, const Shape &sRight)
 	{
-		if (!sLeft.element() || !sRight.element())
-			throw std::invalid_argument("element cannot be zero");
-
 		if (!sLeft.rank() && !sRight.rank())
-			return {};
+			return Shape{};
 
-		std::vector<std::size_t> sShape;
-		std::size_t nAxis{std::max(sLeft.rank(), sRight.rank()) - 1};
-		auto sExpandedLeft{sLeft.expand(nAxis + 1)};
-		auto sExpandedRight{sRight.expand(nAxis + 1)};
+		Shape sResult;
+		std::size_t nAxis{0};
 
-		do
+		for (auto nMinAxis{std::min(sLeft.rank(), sRight.rank())}; nAxis < nMinAxis; ++nAxis)
 		{
-			if (sExpandedLeft[nAxis] != sExpandedRight[nAxis] && (sExpandedLeft[nAxis] != 1 && sExpandedRight[nAxis] != 1))
+			if (sLeft[nAxis] != sRight[nAxis] && sLeft[nAxis] != 1 && sRight[nAxis] != 1)
 				throw std::invalid_argument("cannot broadcast");
 
-			sShape.insert(sShape.cbegin(), std::max(sExpandedLeft[nAxis], sExpandedRight[nAxis]));
+			sResult.sDimension.emplace_back(std::max(sLeft[nAxis], sRight[nAxis]));
 		}
-		while (nAxis--);
 
-		return {std::move(sShape)};
+		for (auto nMaxAxis{std::max(sLeft.rank(), sRight.rank())}; nAxis < nMaxAxis; ++nAxis)
+			sResult.sDimension.emplace_back((nAxis < sLeft.rank() ? sLeft : sRight)[nAxis]);
+
+		return sResult;
 	}
 }
