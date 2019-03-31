@@ -35,6 +35,9 @@ namespace TinNet::Node
 		ReLU(const ReLU &sSrc) = delete;
 		virtual ~ReLU() noexcept = default;
 
+	public:
+		ReLU &operator=(const ReLU &sSrc) = delete;
+
 	protected:
 		virtual void __evaluateShape() override;
 		virtual void __evaluateOutput() override;

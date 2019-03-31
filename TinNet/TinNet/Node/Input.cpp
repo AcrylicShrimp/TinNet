@@ -16,7 +16,7 @@ namespace TinNet::Node
 		//Empty.
 	}
 
-	void Input::feed(Core::Span sSpan, Core::Shape sShape)
+	void Input::feed(Core::Shape sShape, Core::Span sSpan)
 	{
 		this->sInputSpan = sSpan;
 

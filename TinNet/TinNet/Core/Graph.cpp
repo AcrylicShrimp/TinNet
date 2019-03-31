@@ -6,6 +6,8 @@
 
 #include "Graph.h"
 
+#include "../Node/Input.h"
+
 namespace TinNet::Core
 {
 	Graph::Graph() :
@@ -32,5 +34,11 @@ namespace TinNet::Core
 			sResult.emplace_back(sPair.first->second);
 
 		return sResult;
+	}
+
+	void Graph::feed(const std::vector<std::tuple<std::string, Core::Shape, Core::Span>> &sFeedDataList)
+	{
+		for (const auto &sFeedData : sFeedDataList)
+			this->node<Node::Input>(std::get<0>(sFeedData))->feed(std::get<1>(sFeedData), std::get<2>(sFeedData));
 	}
 }

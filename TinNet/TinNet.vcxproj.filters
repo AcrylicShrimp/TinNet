@@ -81,19 +81,42 @@
     <ClCompile Include="TinNet\Optimizer\SGD.cpp">
       <Filter>TinNet\Optimizer</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Node\NodeType.cpp" />
-    <ClCompile Include="TinNet\Node\NodeTypeManager.cpp" />
-    <ClCompile Include="TinNet\Node\MSE.cpp" />
-    <ClCompile Include="TinNet\Core\GraphBuilder.cpp" />
-    <ClCompile Include="TinNet\Core\Graph.cpp" />
-    <ClCompile Include="TinNet\Core\NodeWrapper.cpp" />
-    <ClCompile Include="TinNet\Core\InitializerWrapper.cpp" />
-    <ClCompile Include="TinNet\Node\Subtract.cpp" />
     <ClCompile Include="TinNet\Node\Add.cpp">
       <Filter>TinNet\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Node\Dense.cpp" />
-    <ClCompile Include="TinNet\Node\ReLU.cpp" />
+    <ClCompile Include="TinNet\Node\Sum.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\Dense.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\MSE.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\NodeType.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\NodeTypeManager.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\ReLU.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Node\Subtract.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Core\GraphBuilder.cpp">
+      <Filter>TinNet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Core\InitializerWrapper.cpp">
+      <Filter>TinNet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Core\Graph.cpp">
+      <Filter>TinNet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TinNet\Core\NodeWrapper.cpp">
+      <Filter>TinNet\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -162,22 +185,47 @@
     <ClInclude Include="TinNet\Optimizer\SGD.h">
       <Filter>TinNet\Optimizer</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Core\Graph.h" />
-    <ClInclude Include="TinNet\Node\NodeType.h" />
-    <ClInclude Include="TinNet\Node\NodeTypeManager.h" />
-    <ClInclude Include="TinNet\Node\MSE.h" />
-    <ClInclude Include="TinNet\Core\GraphBuilder.h" />
-    <ClInclude Include="TinNet\Core\Graph.hpp" />
-    <ClInclude Include="TinNet\Core\NodeWrapper.h" />
     <ClInclude Include="TinNet\Initializer\Initializer.h">
       <Filter>TinNet\Initializer</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Core\InitializerWrapper.h" />
-    <ClInclude Include="TinNet\Node\Subtract.h" />
     <ClInclude Include="TinNet\Node\Add.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Node\Dense.h" />
-    <ClInclude Include="TinNet\Node\ReLU.h" />
+    <ClInclude Include="TinNet\Node\Sum.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\Dense.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\MSE.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\NodeType.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\NodeTypeManager.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\ReLU.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\Subtract.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\InitializerWrapper.h">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\GraphBuilder.h">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\Graph.h">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\Graph.hpp">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\NodeWrapper.h">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

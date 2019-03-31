@@ -25,8 +25,8 @@ namespace TinNet::Node
 		TINNET_NODE_TYPE_DCL(Input)
 
 	protected:
-		Core::Span sInputSpan;
 		Core::Shape sInputShape;
+		Core::Span sInputSpan;
 
 	public:
 		Input(Core::Graph *pGraph, std::string_view sName);
@@ -37,7 +37,7 @@ namespace TinNet::Node
 		Input &operator=(const Input &sSrc) = delete;
 
 	public:
-		void feed(Core::Span sSpan, Core::Shape sShape);
+		void feed(Core::Shape sShape, Core::Span sSpan);
 
 	protected:
 		virtual void __evaluateShape() override;

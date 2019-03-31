@@ -33,6 +33,9 @@ namespace TinNet::Node
 		Sigmoid(const Sigmoid &sSrc) = delete;
 		virtual ~Sigmoid() noexcept = default;
 
+	public:
+		Sigmoid &operator=(const Sigmoid &sSrc) = delete;
+
 	protected:
 		virtual void __evaluateShape() override;
 		virtual void __evaluateOutput() override;

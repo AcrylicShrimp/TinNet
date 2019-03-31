@@ -16,12 +16,12 @@ int32_t main()
 
 	Core::Graph graph;
 
-	graph.builder().input("x");
-	graph.builder().input("y");
-	graph.builder().parameter("w", Core::Shape{1, 2}, graph.builder().initXavier(2, 1));
-	graph.builder().parameter("b", Core::Shape{1}, graph.builder().initConstant());
-	graph.builder().relu("output", graph.builder().dense(graph["x"], graph["w"], graph["b"]), .01f);
-	graph.builder().mse("loss", graph["y"], graph["output"]);
+	auto x = graph.builder().input("x");
+	auto y = graph.builder().input("y");
+	auto w = graph.builder().parameter("w", Core::Shape{1, 2}, graph.builder().initXavier(2, 1));
+	auto b = graph.builder().parameter("b", Core::Shape{1}, graph.builder().initConstant());
+	auto output = graph.builder().sigmoid("output", graph.builder().dense(x, w, b));
+	auto loss = graph.builder().sigmoidCE("loss", y, output);
 	
 	std::vector<std::vector<float>> x_data
 	{
@@ -37,50 +37,81 @@ int32_t main()
 		{1.f},
 		{1.f}
 	};
+
+	std::vector<Core::Span> x_span
+	{
+		Core::Span{x_data[0].begin(), x_data[0].end()},
+		Core::Span{x_data[1].begin(), x_data[1].end()},
+		Core::Span{x_data[2].begin(), x_data[2].end()},
+		Core::Span{x_data[3].begin(), x_data[3].end()}
+	};
+	std::vector<Core::Span> y_span
+	{
+		Core::Span{y_data[0].begin(), y_data[0].end()},
+		Core::Span{y_data[1].begin(), y_data[1].end()},
+		Core::Span{y_data[2].begin(), y_data[2].end()},
+		Core::Span{y_data[3].begin(), y_data[3].end()}
+	};
 	
 	Optimizer::SGD optimizer{graph.node<Node::Parameter>("w"), graph.node<Node::Parameter>("b")};
 	
 	for (;;)
 	{
-		graph.node<Node::Input>("x")->feed({x_data[0].begin(), x_data[0].end()}, Core::Shape{2, 1});
-		graph.node<Node::Input>("y")->feed({y_data[0].begin(), y_data[0].end()}, Core::Shape{1});
-		std::cout << "#1 Value : " << graph["output"].evalOutput().output()[0];
-		std::cout << " [" << graph["loss"].evalOutput().output()[0] << "]" << std::endl;
+		graph.feed({
+			{"x", Core::Shape{2, 1}, x_span[0]},
+			{"y", Core::Shape{1}, y_span[0]}
+		});
+		std::cout << "#1 Value : " << output.evalOutput().output()[0];
+		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
 	
-		graph.node<Node::Input>("x")->feed({x_data[1].begin(), x_data[1].end()}, Core::Shape{2, 1});
-		graph.node<Node::Input>("y")->feed({y_data[1].begin(), y_data[1].end()}, Core::Shape{1});
-		std::cout << "#2 Value : " << graph["output"].evalOutput().output()[0];
-		std::cout << " [" << graph["loss"].evalOutput().output()[0] << "]" << std::endl;
+		graph.feed({
+			{"x", Core::Shape{2, 1}, x_span[1]},
+			{"y", Core::Shape{1}, y_span[1]}
+		});
+		std::cout << "#2 Value : " << output.evalOutput().output()[0];
+		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
 	
-		graph.node<Node::Input>("x")->feed({x_data[2].begin(), x_data[2].end()}, Core::Shape{2, 1});
-		graph.node<Node::Input>("y")->feed({y_data[2].begin(), y_data[2].end()}, Core::Shape{1});
-		std::cout << "#3 Value : " << graph["output"].evalOutput().output()[0];
-		std::cout << " [" << graph["loss"].evalOutput().output()[0] << "]" << std::endl;
+		graph.feed({
+			{"x", Core::Shape{2, 1}, x_span[2]},
+			{"y", Core::Shape{1}, y_span[2]}
+		});
+		std::cout << "#3 Value : " << output.evalOutput().output()[0];
+		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
 	
-		graph.node<Node::Input>("x")->feed({x_data[3].begin(), x_data[3].end()}, Core::Shape{2, 1});
-		graph.node<Node::Input>("y")->feed({y_data[3].begin(), y_data[3].end()}, Core::Shape{1});
-		std::cout << "#4 Value : " << graph["output"].evalOutput().output()[0];
-		std::cout << " [" << graph["loss"].evalOutput().output()[0] << "]" << std::endl;
+		graph.feed({
+			{"x", Core::Shape{2, 1}, x_span[3]},
+			{"y", Core::Shape{1}, y_span[3]}
+		});
+		std::cout << "#4 Value : " << output.evalOutput().output()[0];
+		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
 	
 		std::cout << std::endl;
 	
 		system("pause");
 	
-		graph.node<Node::Input>("x")->feed({x_data[0].begin(), x_data[0].end()}, Core::Shape{2, 1});
-		graph.node<Node::Input>("y")->feed({y_data[0].begin(), y_data[0].end()}, Core::Shape{1});
-		optimizer.reduce(1.f, graph["loss"]);
+		graph.feed({
+			{"x", Core::Shape{2, 1}, x_span[0]},
+			{"y", Core::Shape{1}, y_span[0]}
+		});
+		optimizer.reduce(1.f, loss);
 	
-		graph.node<Node::Input>("x")->feed({x_data[1].begin(), x_data[1].end()}, Core::Shape{2, 1});
-		graph.node<Node::Input>("y")->feed({y_data[1].begin(), y_data[1].end()}, Core::Shape{1});
-		optimizer.reduce(1.f, graph["loss"]);
+		graph.feed({
+			{"x", Core::Shape{2, 1}, x_span[1]},
+			{"y", Core::Shape{1}, y_span[1]}
+		});
+		optimizer.reduce(1.f, loss);
 	
-		graph.node<Node::Input>("x")->feed({x_data[2].begin(), x_data[2].end()}, Core::Shape{2, 1});
-		graph.node<Node::Input>("y")->feed({y_data[2].begin(), y_data[2].end()}, Core::Shape{1});
-		optimizer.reduce(1.f, graph["loss"]);
+		graph.feed({
+			{"x", Core::Shape{2, 1}, x_span[2]},
+			{"y", Core::Shape{1}, y_span[2]}
+		});
+		optimizer.reduce(1.f, loss);
 	
-		graph.node<Node::Input>("x")->feed({x_data[3].begin(), x_data[3].end()}, Core::Shape{2, 1});
-		graph.node<Node::Input>("y")->feed({y_data[3].begin(), y_data[3].end()}, Core::Shape{1});
-		optimizer.reduce(1.f, graph["loss"]);
+		graph.feed({
+			{"x", Core::Shape{2, 1}, x_span[3]},
+			{"y", Core::Shape{1}, y_span[3]}
+		});
+		optimizer.reduce(1.f, loss);
 	}
 
 	return 0;

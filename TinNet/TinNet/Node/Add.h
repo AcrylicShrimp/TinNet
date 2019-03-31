@@ -33,6 +33,9 @@ namespace TinNet::Node
 		Add(const Add &sSrc) = delete;
 		virtual ~Add() noexcept = default;
 
+	public:
+		Add &operator=(const Add &sSrc) = delete;
+
 	protected:
 		virtual void __evaluateShape() override;
 		virtual void __evaluateOutput() override;

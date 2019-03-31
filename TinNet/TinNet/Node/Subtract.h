@@ -33,6 +33,9 @@ namespace TinNet::Node
 		Subtract(const Subtract &sSrc) = delete;
 		virtual ~Subtract() noexcept = default;
 
+	public:
+		Subtract &operator=(const Subtract &sSrc) = delete;
+
 	protected:
 		virtual void __evaluateShape() override;
 		virtual void __evaluateOutput() override;

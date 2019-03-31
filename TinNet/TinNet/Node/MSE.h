@@ -34,6 +34,9 @@ namespace TinNet::Node
 		MSE(const MSE &sSrc) = delete;
 		virtual ~MSE() noexcept = default;
 
+	public:
+		MSE &operator=(const MSE &sSrc) = delete;
+
 	protected:
 		virtual void __evaluateShape() override;
 		virtual void __evaluateOutput() override;

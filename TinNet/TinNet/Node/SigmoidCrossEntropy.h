@@ -34,6 +34,9 @@ namespace TinNet::Node
 		SigmoidCrossEntropy(const SigmoidCrossEntropy &sSrc) = delete;
 		virtual ~SigmoidCrossEntropy() noexcept = default;
 
+	public:
+		SigmoidCrossEntropy &operator=(const SigmoidCrossEntropy &sSrc) = delete;
+
 	protected:
 		virtual void __evaluateShape() override;
 		virtual void __evaluateOutput() override;
