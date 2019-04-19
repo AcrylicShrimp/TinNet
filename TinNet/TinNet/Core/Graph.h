@@ -10,9 +10,9 @@
 
 #include "../TinNetDLL.h"
 
-#include "InitializerWrapper.h"
-#include "GraphBuilder.h"
-#include "NodeWrapper.h"
+#include "../Core/InitializerWrapper.h"
+#include "../Core/GraphBuilder.h"
+#include "../Core/NodeWrapper.h"
 
 #include "../Initializer/Initializer.h"
 

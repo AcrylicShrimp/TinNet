@@ -117,6 +117,7 @@
     <ClCompile Include="TinNet\Core\NodeWrapper.cpp">
       <Filter>TinNet\Core</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Compute\Denormal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -227,5 +228,6 @@
     <ClInclude Include="TinNet\Core\NodeWrapper.h">
       <Filter>TinNet\Core</Filter>
     </ClInclude>
+    <ClInclude Include="TinNet\Compute\Denormal.h" />
   </ItemGroup>
 </Project>

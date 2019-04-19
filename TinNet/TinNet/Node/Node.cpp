@@ -10,6 +10,8 @@
 
 namespace TinNet::Node
 {
+	Compute::Denormal Node::sDenormal;
+
 	Node::Node(Core::Graph *pGraph, std::string_view sName) :
 		pGraph{pGraph},
 		sName{sName},

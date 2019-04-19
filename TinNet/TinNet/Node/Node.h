@@ -10,6 +10,8 @@
 
 #include "../TinNetDLL.h"
 
+#include "../Compute/Denormal.h"
+
 #include "../Core/Memory.h"
 #include "../Core/Span.h"
 
@@ -49,6 +51,9 @@ namespace TinNet::Node
 	{
 	public:
 		friend NodeInput;
+
+	private:
+		static Compute::Denormal sDenormal;
 
 	public:
 		Core::Graph *const pGraph;

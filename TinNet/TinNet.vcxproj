@@ -218,6 +218,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TinNet\Compute\Denormal.cpp" />
     <ClCompile Include="TinNet\Compute\GEMM.cpp" />
     <ClCompile Include="TinNet\Core\Graph.cpp" />
     <ClCompile Include="TinNet\Core\GraphBuilder.cpp" />
@@ -250,6 +251,7 @@
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TinNet\Compute\Denormal.h" />
     <ClInclude Include="TinNet\Compute\GEMM.h" />
     <ClInclude Include="TinNet\Core\Graph.h" />
     <ClInclude Include="TinNet\Core\Graph.hpp" />
