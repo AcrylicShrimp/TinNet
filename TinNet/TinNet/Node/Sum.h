@@ -11,11 +11,13 @@
 #include "../TinNetDLL.h"
 
 #include "../Core/Graph.h"
+#include "../Core/Memory.h"
 
 #include "Node.h"
 #include "NodeInput.h"
 
 #include <cstddef>
+#include <stdexcept>
 #include <string_view>
 
 namespace TinNet::Node
@@ -24,11 +26,15 @@ namespace TinNet::Node
 	{
 		TINNET_NODE_TYPE_DCL(Sum)
 
+	public:
+		const bool bSqueeze;
+
 	protected:
 		NodeInput sInput;
+		NodeInput sInputAxis;
 		
 	public:
-		Sum(Core::Graph *pGraph, std::string_view sName);
+		Sum(Core::Graph *pGraph, std::string_view sName, bool bSqueeze);
 		Sum(const Sum &sSrc) = delete;
 		virtual ~Sum() noexcept = default;
 		

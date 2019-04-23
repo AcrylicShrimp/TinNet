@@ -20,11 +20,17 @@ namespace TinNet::Node
 
 	void ReLU::__evaluateShape()
 	{
+		if (!this->sInputLogit.inputNode())
+			throw std::logic_error{"no node attached at 'logit'"};
+
 		this->sShape = this->sInputLogit.inputNode()->shape();
 	}
 
 	void ReLU::__evaluateOutput()
 	{
+		if (!this->sInputLogit.inputNode())
+			throw std::logic_error{ "no node attached at 'logit'" };
+
 		this->sInputLogit.inputNode()->evalOutput();
 
 		const auto fRectify = [](float nValue, float nAlpha)
@@ -38,6 +44,9 @@ namespace TinNet::Node
 
 	void ReLU::__backwardOp(const Node *pDy)
 	{
+		if (!this->sInputLogit.inputNode())
+			throw std::logic_error{ "no node attached at 'logit'" };
+
 		this->sInputLogit.inputNode()->evalOutput();
 		this->evalGradient(pDy);
 
