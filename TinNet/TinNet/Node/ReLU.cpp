@@ -35,7 +35,7 @@ namespace TinNet::Node
 
 		const auto fRectify = [](float nValue, float nAlpha)
 		{
-			return nValue < .0f ? nValue * nAlpha : nValue;
+			return nValue < .0f ? nAlpha * nValue : nValue;
 		};
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
