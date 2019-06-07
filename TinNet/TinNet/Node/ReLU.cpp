@@ -21,7 +21,7 @@ namespace TinNet::Node
 	void ReLU::__evaluateShape()
 	{
 		if (!this->sInputLogit.inputNode())
-			throw std::logic_error{"no node attached at 'logit'"};
+			throw std::runtime_error{"no node attached at 'logit'"};
 
 		this->sShape = this->sInputLogit.inputNode()->shape();
 	}
@@ -29,7 +29,7 @@ namespace TinNet::Node
 	void ReLU::__evaluateOutput()
 	{
 		if (!this->sInputLogit.inputNode())
-			throw std::logic_error{ "no node attached at 'logit'" };
+			throw std::runtime_error{ "no node attached at 'logit'" };
 
 		this->sInputLogit.inputNode()->evalOutput();
 
@@ -45,7 +45,7 @@ namespace TinNet::Node
 	void ReLU::__backwardOp(const Node *pDy)
 	{
 		if (!this->sInputLogit.inputNode())
-			throw std::logic_error{ "no node attached at 'logit'" };
+			throw std::runtime_error{ "no node attached at 'logit'" };
 
 		this->sInputLogit.inputNode()->evalOutput();
 		this->evalGradient(pDy);

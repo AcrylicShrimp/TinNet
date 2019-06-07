@@ -23,7 +23,7 @@ namespace TinNet::Node
 	void Sum::__evaluateShape()
 	{
 		if (!this->sInput.inputNode())
-			throw std::logic_error{ "no node attached at 'input'" };
+			throw std::runtime_error{"no node attached at 'input'"};
 
 		if (!this->sInputAxis.inputNode())
 		{
@@ -31,11 +31,31 @@ namespace TinNet::Node
 			return;
 		}
 
-		const auto &sShape{this->sInputAxis.inputNode()->evalShape().shape()};
+		const auto &sShape{this->sInput.inputNode()->evalShape().shape()};
+		const auto &sAxisShape{this->sInputAxis.inputNode()->evalShape().shape()};
 
-		//if (sShape.rank())
+		auto sAxisOutput{this->sInputAxis.inputNode()->evalOutput().output()};
 
-		this->sShape;
+		if (!sAxisShape.rank() && !sAxisShape.size() || sAxisShape.rank() == 1 && sAxisShape.size() == 1)
+		{
+			this->sShape = sAxisOutput[0] < .5f ? this->bSqueeze ? sShape.squeeze() : sShape : Core::Shape{1};
+			return;
+		}
+
+		if (sAxisShape.rank() != 1)
+			throw std::runtime_error{"'axis' must be a scalar or vector"};
+
+		if (sAxisShape.size() != sShape.rank())
+			throw std::runtime_error{"the size of 'axis' must be equal to the rank of 'input'"};
+
+		this->sShape = sShape;
+
+		for (std::size_t nIndex{0}, nMaxIndex{sShape.rank()}; nIndex < nMaxIndex; ++nIndex)
+			if (sAxisOutput[nIndex] >= .5f)
+				this->sShape[nIndex] = 1;
+
+		if (this->bSqueeze)
+			this->sShape = this->sShape.squeeze();
 	}
 
 	void Sum::__evaluateOutput()
