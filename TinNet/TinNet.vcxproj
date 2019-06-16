@@ -30,46 +30,46 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D09C5062-ECA6-4002-9EF5-E613F9183971}</ProjectGuid>
     <RootNamespace>TinNet</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -223,10 +223,8 @@
     <ClCompile Include="TinNet\Core\Graph.cpp" />
     <ClCompile Include="TinNet\Core\GraphBuilder.cpp" />
     <ClCompile Include="TinNet\Core\InitializerWrapper.cpp" />
-    <ClCompile Include="TinNet\Core\Memory.cpp" />
     <ClCompile Include="TinNet\Core\NodeWrapper.cpp" />
     <ClCompile Include="TinNet\Core\Shape.cpp" />
-    <ClCompile Include="TinNet\Core\Span.cpp" />
     <ClCompile Include="TinNet\Initializer\Constant.cpp" />
     <ClCompile Include="TinNet\Initializer\Xavier.cpp" />
     <ClCompile Include="TinNet\IO\JSON.cpp" />
@@ -258,10 +256,12 @@
     <ClInclude Include="TinNet\Core\GraphBuilder.h" />
     <ClInclude Include="TinNet\Core\InitializerWrapper.h" />
     <ClInclude Include="TinNet\Core\Memory.h" />
+    <ClInclude Include="TinNet\Core\Memory.hpp" />
     <ClInclude Include="TinNet\Core\NodeWrapper.h" />
     <ClInclude Include="TinNet\Core\Shape.h" />
     <ClInclude Include="TinNet\Core\Shape.hpp" />
     <ClInclude Include="TinNet\Core\Span.h" />
+    <ClInclude Include="TinNet\Core\Span.hpp" />
     <ClInclude Include="TinNet\Initializer\Constant.h" />
     <ClInclude Include="TinNet\Initializer\Initializer.h" />
     <ClInclude Include="TinNet\Initializer\Xavier.h" />

@@ -11,6 +11,7 @@
 #include "../TinNetDLL.h"
 
 #include "../Core/Graph.h"
+#include "../Core/Memory.h"
 #include "../Core/Shape.h"
 #include "../Core/Span.h"
 #include "../Initializer/Initializer.h"
@@ -32,7 +33,7 @@ namespace TinNet::Node
 		const Core::Shape sParameterShape;
 
 	protected:
-		Core::Memory sParameter;
+		Core::Memory<float> sParameter;
 		
 	public:
 		Parameter(Core::Graph *pGraph, std::string_view sName, Core::Shape sShape, Initializer::Initializer *pInitializer);

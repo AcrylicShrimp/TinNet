@@ -18,13 +18,13 @@
 
 namespace TinNet::Core
 {
-	class TINNET_DLL Memory final
+	template<class T> class Memory final
 	{
 	private:
 		std::size_t nSize;
 		std::size_t nCapacity;
-		std::unique_ptr<float[]> sPointer;
-		
+		std::unique_ptr<T[]> sPointer;
+
 	public:
 		Memory();
 		Memory(std::size_t nSize);
@@ -35,34 +35,34 @@ namespace TinNet::Core
 	public:
 		Memory &operator=(Memory sSrc) noexcept;
 		Memory &operator=(Memory &&sSrc) noexcept;
-		
+
 	public:
 		inline std::size_t size() const noexcept;
 		inline std::size_t capacity() const noexcept;
-		inline Span span() const noexcept;
+		inline Span<T> span() const noexcept;
 		void resize(std::size_t nSize);
 		void reserve(std::size_t nCapacity);
 
 	public:
-		inline friend void swap(Memory &sLeft, Memory &sRight) noexcept;
+		template<class T> inline friend void swap(Memory<T> &sLeft, Memory<T> &sRight) noexcept;
 	};
 
-	inline std::size_t Memory::size() const noexcept
+	template<class T> inline std::size_t Memory<T>::size() const noexcept
 	{
 		return this->nSize;
 	}
 
-	inline std::size_t Memory::capacity() const noexcept
+	template<class T> inline std::size_t Memory<T>::capacity() const noexcept
 	{
 		return this->nCapacity;
 	}
 
-	inline Span Memory::span() const noexcept
+	template<class T> inline Span<T> Memory<T>::span() const noexcept
 	{
 		return Span{this->sPointer.get(), this->nSize};
 	}
 
-	inline void swap(Memory &sLeft, Memory &sRight) noexcept
+	template<class T> inline void swap(Memory<T> &sLeft, Memory<T> &sRight) noexcept
 	{
 		using std::swap;
 
@@ -71,5 +71,7 @@ namespace TinNet::Core
 		swap(sLeft.sPointer, sRight.sPointer);
 	}
 }
+
+#include "Memory.hpp"
 
 #endif

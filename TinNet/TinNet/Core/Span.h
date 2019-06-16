@@ -8,8 +8,6 @@
 
 #define _CLASS_TINNET_CORE_SPAN_H
 
-#include "../TinNetDLL.h"
-
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -20,156 +18,156 @@
 
 namespace TinNet::Core
 {
-	class TINNET_DLL Span final
+	template<class T> class Span final
 	{
 	private:
-		float *pBase;
+		T *pBase;
 		std::size_t nLength;
 
 	public:
 		Span() noexcept;
-		Span(float *pBase, std::size_t nLength) noexcept;
+		Span(T *pBase, std::size_t nLength) noexcept;
 		template<class I> inline Span(I iBegin, I iEnd) noexcept;
 		Span(const Span &sSrc) noexcept = default;
 		~Span() noexcept = default;
 
 	public:
 		Span &operator=(const Span &sSrc) noexcept = default;
-		inline float &operator[](std::size_t nIndex);
-		inline const float &operator[](std::size_t nIndex) const;
+		inline T &operator[](std::size_t nIndex);
+		inline const T &operator[](std::size_t nIndex) const;
 
 	public:
-		inline float *begin() noexcept;
-		inline const float *begin() const noexcept;
-		inline const float *cbegin() const noexcept;
-		inline float *end() noexcept;
-		inline const float *end() const noexcept;
-		inline const float *cend() const noexcept;
+		inline T *begin() noexcept;
+		inline const T *begin() const noexcept;
+		inline const T *cbegin() const noexcept;
+		inline T *end() noexcept;
+		inline const T *end() const noexcept;
+		inline const T *cend() const noexcept;
 		inline std::size_t length() const noexcept;
 		inline Span subSpan(std::size_t nOffset) const noexcept;
 		inline Span subSpan(std::size_t nOffset, std::size_t nLength) const noexcept;
 		inline void fillZero();
 		inline void fillOne();
-		inline void fillScalar(float nScalar);
+		inline void fillScalar(T tScalar);
 		inline void copyFrom(const Span &sSpan);
 		template<class I> inline void copyFrom(I iBegin, I iEnd);
 		inline void accumulateFrom(const Span &sSpan);
 		template<class I> inline void accumulateFrom(I iBegin, I iEnd);
-		inline void accumulateFrom(float nFactor, const Span &sSpan);
-		template<class I> inline void accumulateFrom(float nFactor, I iBegin, I iEnd);
+		inline void accumulateFrom(T tFactor, const Span &sSpan);
+		template<class I> inline void accumulateFrom(T tFactor, I iBegin, I iEnd);
 
 	public:
-		inline friend void swap(Span &sLeft, Span &sRight) noexcept;
+		template<class T> inline friend void swap(Span &sLeft, Span &sRight) noexcept;
 	};
 
-	template<class I> inline Span::Span(I iBegin, I iEnd) noexcept :
+	template<class T> template<class I> inline Span<T>::Span(I iBegin, I iEnd) noexcept :
 		pBase{&*iBegin},
 		nLength{static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd))}
 	{
 		//Empty.
 	}
 
-	inline float &Span::operator[](std::size_t nIndex)
+	template<class T> inline T &Span<T>::operator[](std::size_t nIndex)
 	{
 		return this->pBase[nIndex];
 	}
 
-	inline const float &Span::operator[](std::size_t nIndex) const
+	template<class T> inline const T &Span<T>::operator[](std::size_t nIndex) const
 	{
 		return this->pBase[nIndex];
 	}
 
-	inline float *Span::begin() noexcept
+	template<class T> inline T *Span<T>::begin() noexcept
 	{
 		return this->pBase;
 	}
 
-	inline const float *Span::begin() const noexcept
+	template<class T> inline const T *Span<T>::begin() const noexcept
 	{
 		return this->pBase;
 	}
 
-	inline const float *Span::cbegin() const noexcept
+	template<class T> inline const T *Span<T>::cbegin() const noexcept
 	{
 		return this->pBase;
 	}
 
-	inline float *Span::end() noexcept
+	template<class T> inline T *Span<T>::end() noexcept
 	{
 		return this->pBase + this->nLength;
 	}
 
-	inline const float *Span::end() const noexcept
+	template<class T> inline const T *Span<T>::end() const noexcept
 	{
 		return this->pBase + this->nLength;
 	}
 
-	inline const float *Span::cend() const noexcept
+	template<class T> inline const T *Span<T>::cend() const noexcept
 	{
 		return this->pBase + this->nLength;
 	}
 
-	inline std::size_t Span::length() const noexcept
+	template<class T> inline std::size_t Span<T>::length() const noexcept
 	{
 		return this->nLength;
 	}
 
-	inline Span Span::subSpan(std::size_t nOffset) const noexcept
+	template<class T> inline Span<T> Span<T>::subSpan(std::size_t nOffset) const noexcept
 	{
 		return Span{this->pBase + nOffset, this->pBase + this->nLength};
 	}
 
-	inline Span Span::subSpan(std::size_t nOffset, std::size_t nLength) const noexcept
+	template<class T> inline Span<T> Span<T>::subSpan(std::size_t nOffset, std::size_t nLength) const noexcept
 	{
 		return Span{this->pBase + nOffset, this->pBase + std::min(this->nLength, nLength)};
 	}
 
-	inline void Span::fillZero()
+	template<class T> inline void Span<T>::fillZero()
 	{
-		std::fill(this->pBase, this->pBase + this->nLength, .0f);
+		std::fill(this->pBase, this->pBase + this->nLength, static_cast<T>(0));
 	}
 
-	inline void Span::fillOne()
+	template<class T> inline void Span<T>::fillOne()
 	{
-		std::fill(this->pBase, this->pBase + this->nLength, 1.f);
+		std::fill(this->pBase, this->pBase + this->nLength, static_cast<T>(1));
 	}
 
-	inline void Span::fillScalar(float nScalar)
+	template<class T> inline void Span<T>::fillScalar(T tScalar)
 	{
-		std::fill(this->pBase, this->pBase + this->nLength, nScalar);
+		std::fill(this->pBase, this->pBase + this->nLength, tScalar);
 	}
 
-	inline void Span::copyFrom(const Span &sSpan)
+	template<class T> inline void Span<T>::copyFrom(const Span &sSpan)
 	{
 		std::copy(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase);
 	}
 
-	template<class I> inline void Span::copyFrom(I iBegin, I iEnd)
+	template<class T> template<class I> inline void Span<T>::copyFrom(I iBegin, I iEnd)
 	{
 		std::copy(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase);
 	}
 
-	inline void Span::accumulateFrom(const Span &sSpan)
+	template<class T> inline void Span<T>::accumulateFrom(const Span &sSpan)
 	{
-		std::transform(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase, this->pBase, std::plus<float>{});
+		std::transform(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase, this->pBase, std::plus<T>{});
 	}
 
-	template<class I> inline void Span::accumulateFrom(I iBegin, I iEnd)
+	template<class T> template<class I> inline void Span<T>::accumulateFrom(I iBegin, I iEnd)
 	{
-		std::transform(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase, this->pBase, std::plus<float>{});
+		std::transform(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase, this->pBase, std::plus<T>{});
 	}
 
-	inline void Span::accumulateFrom(float nFactor, const Span &sSpan)
+	template<class T> inline void Span<T>::accumulateFrom(T tFactor, const Span &sSpan)
 	{
-		std::transform(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase, this->pBase, [=](auto nLeft, auto nRight) { return std::fmaf(nLeft, nFactor, nRight); });
+		std::transform(sSpan.pBase, sSpan.pBase + std::min(sSpan.nLength, this->nLength), this->pBase, this->pBase, [=](auto nLeft, auto nRight) { return std::fma(nLeft, tFactor, nRight); });
 	}
 
-	template<class I> inline void Span::accumulateFrom(float nFactor, I iBegin, I iEnd)
+	template<class T> template<class I> inline void Span<T>::accumulateFrom(T tFactor, I iBegin, I iEnd)
 	{
-		std::transform(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase, this->pBase, [=](auto nLeft, auto nRight) { return std::fmaf(nLeft, nFactor, nRight); });
+		std::transform(iBegin, iBegin + std::min(static_cast<decltype(this->nLength)>(std::distance(iBegin, iEnd)), this->nLength), this->pBase, this->pBase, [=](auto nLeft, auto nRight) { return std::fma(nLeft, tFactor, nRight); });
 	}
 
-	inline void swap(Span &sLeft, Span &sRight) noexcept
+	template<class T> inline void swap(Span<T> &sLeft, Span<T> &sRight) noexcept
 	{
 		using std::swap;
 
@@ -177,5 +175,7 @@ namespace TinNet::Core
 		swap(sLeft.nLength, sRight.nLength);
 	}
 }
+
+#include "Span.hpp"
 
 #endif

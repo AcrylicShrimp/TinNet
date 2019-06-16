@@ -25,18 +25,19 @@ namespace TinNet::Node
 		if (!this->sInput.inputNode())
 			throw std::runtime_error{"no node attached at 'input'"};
 
+		const auto &sShape{this->sInput.inputNode()->evalShape().shape()};
+
 		if (!this->sInputAxis.inputNode())
 		{
 			this->sShape = {1};
 			return;
 		}
 
-		const auto &sShape{this->sInput.inputNode()->evalShape().shape()};
 		const auto &sAxisShape{this->sInputAxis.inputNode()->evalShape().shape()};
 
 		auto sAxisOutput{this->sInputAxis.inputNode()->evalOutput().output()};
 
-		if (!sAxisShape.rank() && !sAxisShape.size() || sAxisShape.rank() == 1 && sAxisShape.size() == 1)
+		if (!sAxisShape.rank() || sAxisShape.rank() == 1 && sAxisShape.size() == 1)
 		{
 			this->sShape = sAxisOutput[0] < .5f ? this->bSqueeze ? sShape.squeeze() : sShape : Core::Shape{1};
 			return;
@@ -60,6 +61,13 @@ namespace TinNet::Node
 
 	void Sum::__evaluateOutput()
 	{
+
+
+		auto fPassIndex{[](std::size_t nIndex)
+		{
+
+		}};
+
 
 	}
 

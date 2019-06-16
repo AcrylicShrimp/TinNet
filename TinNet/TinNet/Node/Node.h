@@ -66,8 +66,8 @@ namespace TinNet::Node
 
 	protected:
 		Core::Shape sShape;
-		Core::Memory sOutput;
-		Core::Memory sGradient;
+		Core::Memory<float> sOutput;
+		Core::Memory<float> sGradient;
 		std::vector<NodeInput *> sRevNodeInputList;
 		std::unordered_set<Node *> sDeps;
 		std::unordered_set<Node *> sRevDeps;
@@ -87,8 +87,8 @@ namespace TinNet::Node
 
 	public:
 		inline const Core::Shape &shape() const noexcept;
-		inline Core::Span output() const noexcept;
-		inline Core::Span gradient() const noexcept;
+		inline Core::Span<float> output() const noexcept;
+		inline Core::Span<float> gradient() const noexcept;
 		inline bool hasDeps(const Node *pDep) const;
 		inline bool hasRevDeps(const Node *pRevDep) const;
 		Node &markDirty(bool bDirtyShape = true);
@@ -111,12 +111,12 @@ namespace TinNet::Node
 		return this->sShape;
 	}
 
-	inline Core::Span Node::output() const noexcept
+	inline Core::Span<float> Node::output() const noexcept
 	{
 		return this->sOutput.span();
 	}
 
-	inline Core::Span Node::gradient() const noexcept
+	inline Core::Span<float> Node::gradient() const noexcept
 	{
 		return this->sGradient.span();
 	}

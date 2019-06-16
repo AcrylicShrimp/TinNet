@@ -19,6 +19,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <string_view>
+#include <vector>
 
 namespace TinNet::Node
 {

@@ -39,17 +39,11 @@
     <ClCompile Include="TinNet\IO\JSON.cpp">
       <Filter>TinNet\IO</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Core\Span.cpp">
-      <Filter>TinNet\Core</Filter>
-    </ClCompile>
     <ClCompile Include="TinNet\Core\Shape.cpp">
       <Filter>TinNet\Core</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Compute\GEMM.cpp">
       <Filter>TinNet\Compute</Filter>
-    </ClCompile>
-    <ClCompile Include="TinNet\Core\Memory.cpp">
-      <Filter>TinNet\Core</Filter>
     </ClCompile>
     <ClCompile Include="TinNet\Node\MM.cpp">
       <Filter>TinNet\Node</Filter>
@@ -229,5 +223,11 @@
       <Filter>TinNet\Core</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Compute\Denormal.h" />
+    <ClInclude Include="TinNet\Core\Memory.hpp">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Core\Span.hpp">
+      <Filter>TinNet\Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
