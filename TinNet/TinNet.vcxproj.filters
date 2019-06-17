@@ -111,7 +111,9 @@
     <ClCompile Include="TinNet\Core\NodeWrapper.cpp">
       <Filter>TinNet\Core</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Compute\Denormal.cpp" />
+    <ClCompile Include="TinNet\Compute\Denormal.cpp">
+      <Filter>TinNet\Compute</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -222,12 +224,14 @@
     <ClInclude Include="TinNet\Core\NodeWrapper.h">
       <Filter>TinNet\Core</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Compute\Denormal.h" />
     <ClInclude Include="TinNet\Core\Memory.hpp">
       <Filter>TinNet\Core</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Core\Span.hpp">
       <Filter>TinNet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Compute\Denormal.h">
+      <Filter>TinNet\Compute</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

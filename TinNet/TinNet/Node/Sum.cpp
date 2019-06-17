@@ -85,11 +85,18 @@ namespace TinNet::Node
 
 		const auto &sShape{this->sInput.inputNode()->evalShape().shape()};
 
+		if (sShape.rank() != this->sReduceAxis.size())
+			throw std::runtime_error{"the rank of 'input' must be equal to the length of 'reduce axis'"};
+
+		std::vector<std::size_t> sMultipliedShape{1};
 		std::vector<std::tuple<std::size_t, std::size_t, std::size_t>> sIndexFactorList;
 
-		/*
-			TODO : Fill the sIndexFactorList above.
-		*/
+		for (std::size_t nIndex{0}, nMaxIndex{sShape.rank() - 1}; nIndex < nMaxIndex; ++nIndex)
+			sMultipliedShape.emplace_back(sMultipliedShape.back() * sMultipliedShape[nIndex]);
+
+		for (std::size_t nIndex{0}, nMaxIndex{sShape.rank()}; nIndex < nMaxIndex; ++nIndex)
+			if (this->sReduceAxis[nIndex])
+				sIndexFactorList.emplace_back(sMultipliedShape[nIndex], sMultipliedShape[nIndex + 1], sMultipliedShape[nIndex]);
 
 		auto fReduceIndex{[&sIndexFactorList](std::size_t nIndex)
 		{
