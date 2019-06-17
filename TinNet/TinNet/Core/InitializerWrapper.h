@@ -28,12 +28,12 @@ namespace TinNet::Core
 
 	public:
 		InitializerWrapper &operator=(const InitializerWrapper &sSrc) = delete;
-		inline void operator()(Core::Span sSpan);
+		inline void operator()(Core::Span<float> sSpan);
 		inline operator Initializer::Initializer *() noexcept;
 		inline operator const Initializer::Initializer *() const noexcept;
 	};
 
-	inline void InitializerWrapper::operator()(Core::Span sSpan)
+	inline void InitializerWrapper::operator()(Core::Span<float> sSpan)
 	{
 		this->pInitializer->operator()(sSpan);
 	}

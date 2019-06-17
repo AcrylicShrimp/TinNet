@@ -28,7 +28,7 @@ namespace TinNet::Initializer
 		
 	public:
 		Constant &operator=(const Constant &sSrc) = default;
-		virtual void operator()(Core::Span sSpan) override;
+		virtual void operator()(Core::Span<float> sSpan) override;
 	};
 }
 

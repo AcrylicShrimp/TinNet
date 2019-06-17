@@ -20,6 +20,7 @@
 #include <initializer_list>
 #include <sstream>
 #include <string>
+#include <vector>
 
 namespace TinNet::Core
 {
@@ -67,6 +68,14 @@ namespace TinNet::Core
 		NodeWrapper relu(const std::string &sNodeName, NodeWrapper sLogit, float nAlpha = .0f);
 		NodeWrapper sigmoid(NodeWrapper sLogit);
 		NodeWrapper sigmoid(const std::string &sNodeName, NodeWrapper sLogit);
+
+		/*
+			Reduce nodes.
+		*/
+		NodeWrapper sum(NodeWrapper sInput, bool bSqueeze);
+		NodeWrapper sum(NodeWrapper sInput, bool bSqueeze, const std::vector<bool> &sReduceAxis);
+		NodeWrapper sum(const std::string &sNodeName, NodeWrapper sInput, bool bSqueeze);
+		NodeWrapper sum(const std::string &sNodeName, NodeWrapper sInput, bool bSqueeze, const std::vector<bool> &sReduceAxis);
 
 		/*
 			BLAS nodes.

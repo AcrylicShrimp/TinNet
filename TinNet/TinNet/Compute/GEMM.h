@@ -31,14 +31,14 @@ namespace TinNet::Compute
 		GEMM &operator=(const GEMM &sSrc) = delete;
 
 	public:
-		static void __vectorcall multiply(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sLeft, const Core::Span sRight, Core::Span sDestination) noexcept;
-		static void __vectorcall multiplyAdd(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sLeft, const Core::Span sRight, Core::Span sDestination) noexcept;
+		static void __vectorcall multiply(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sLeft, const Core::Span<float> sRight, Core::Span<float> sDestination) noexcept;
+		static void __vectorcall multiplyAdd(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sLeft, const Core::Span<float> sRight, Core::Span<float> sDestination) noexcept;
 
-		static void __vectorcall dMultiplyLeft(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sGradient, const Core::Span sRight, Core::Span sDestination) noexcept;
-		static void __vectorcall dMultiplyAddLeft(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sGradient, const Core::Span sRight, Core::Span sDestination) noexcept;
+		static void __vectorcall dMultiplyLeft(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sGradient, const Core::Span<float> sRight, Core::Span<float> sDestination) noexcept;
+		static void __vectorcall dMultiplyAddLeft(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sGradient, const Core::Span<float> sRight, Core::Span<float> sDestination) noexcept;
 
-		static void __vectorcall dMultiplyRight(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sGradient, const Core::Span sLeft, Core::Span sDestination) noexcept;
-		static void __vectorcall dMultiplyAddRight(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sGradient, const Core::Span sLeft, Core::Span sDestination) noexcept;
+		static void __vectorcall dMultiplyRight(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sGradient, const Core::Span<float> sLeft, Core::Span<float> sDestination) noexcept;
+		static void __vectorcall dMultiplyAddRight(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sGradient, const Core::Span<float> sLeft, Core::Span<float> sDestination) noexcept;
 	};
 }
 

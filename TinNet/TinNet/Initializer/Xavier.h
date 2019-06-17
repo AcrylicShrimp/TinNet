@@ -34,7 +34,7 @@ namespace TinNet::Initializer
 		
 	public:
 		Xavier &operator=(const Xavier &sSrc) = default;
-		virtual void operator()(Core::Span sSpan) override;
+		virtual void operator()(Core::Span<float> sSpan) override;
 	};
 }
 

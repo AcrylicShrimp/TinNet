@@ -42,8 +42,8 @@ namespace TinNet::Core
 
 	public:
 		inline const Core::Shape &shape() const noexcept;
-		inline Core::Span output() const noexcept;
-		inline Core::Span gradient() const noexcept;
+		inline Core::Span<float> output() const noexcept;
+		inline Core::Span<float> gradient() const noexcept;
 		inline bool hasDeps(NodeWrapper sDep) const;
 		inline bool hasRevDeps(NodeWrapper sRevDep) const;
 		inline NodeWrapper &markDirty(bool bDirtyShape = true);
@@ -77,12 +77,12 @@ namespace TinNet::Core
 		return this->pNode->shape();
 	}
 
-	inline Core::Span NodeWrapper::output() const noexcept
+	inline Core::Span<float> NodeWrapper::output() const noexcept
 	{
 		return this->pNode->output();
 	}
 
-	inline Core::Span NodeWrapper::gradient() const noexcept
+	inline Core::Span<float> NodeWrapper::gradient() const noexcept
 	{
 		return this->pNode->gradient();
 	}

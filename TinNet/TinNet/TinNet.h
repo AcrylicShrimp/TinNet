@@ -58,6 +58,11 @@
 #include "Node/Sigmoid.h"
 
 /*
+	Reduce nodes.
+*/
+#include "Node/Sum.h"
+
+/*
 	BLAS nodes.
 */
 #include "Node/MM.h"

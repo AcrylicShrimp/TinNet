@@ -14,7 +14,7 @@ namespace TinNet::Initializer
 		//Empty.
 	}
 
-	void Constant::operator()(Core::Span sSpan)
+	void Constant::operator()(Core::Span<float> sSpan)
 	{
 		sSpan.fillScalar(this->nConstant);
 	}

@@ -8,14 +8,14 @@
 
 namespace TinNet::Compute
 {
-	void __vectorcall GEMM::multiply(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sLeft, const Core::Span sRight, Core::Span sDestination) noexcept
+	void __vectorcall GEMM::multiply(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sLeft, const Core::Span<float> sRight, Core::Span<float> sDestination) noexcept
 	{
 		sDestination.fillZero();
 
 		GEMM::multiplyAdd(nMaxIndex, nRow, nColumn, sLeft, sRight, sDestination);
 	}
 
-	void __vectorcall GEMM::multiplyAdd(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sLeft, const Core::Span sRight, Core::Span sDestination) noexcept
+	void __vectorcall GEMM::multiplyAdd(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sLeft, const Core::Span<float> sRight, Core::Span<float> sDestination) noexcept
 	{
 		const auto *pL{sLeft.begin()};
 		const auto *pR{sRight.begin()};
@@ -43,14 +43,14 @@ namespace TinNet::Compute
 			}
 	}
 
-	void __vectorcall GEMM::dMultiplyLeft(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sGradient, const Core::Span sRight, Core::Span sDestination) noexcept
+	void __vectorcall GEMM::dMultiplyLeft(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sGradient, const Core::Span<float> sRight, Core::Span<float> sDestination) noexcept
 	{
 		sDestination.fillZero();
 
 		GEMM::dMultiplyAddLeft(nMaxIndex, nRow, nColumn, sGradient, sRight, sDestination);
 	}
 
-	void __vectorcall GEMM::dMultiplyAddLeft(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sGradient, const Core::Span sRight, Core::Span sDestination) noexcept
+	void __vectorcall GEMM::dMultiplyAddLeft(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sGradient, const Core::Span<float> sRight, Core::Span<float> sDestination) noexcept
 	{
 		const auto *pG{sGradient.begin()};
 		const auto *pR{sRight.begin()};
@@ -91,14 +91,14 @@ namespace TinNet::Compute
 		}
 	}
 
-	void __vectorcall GEMM::dMultiplyRight(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sGradient, const Core::Span sLeft, Core::Span sDestination) noexcept
+	void __vectorcall GEMM::dMultiplyRight(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sGradient, const Core::Span<float> sLeft, Core::Span<float> sDestination) noexcept
 	{
 		sDestination.fillZero();
 
 		GEMM::dMultiplyAddRight(nMaxIndex, nRow, nColumn, sGradient, sLeft, sDestination);
 	}
 
-	void __vectorcall GEMM::dMultiplyAddRight(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span sGradient, const Core::Span sLeft, Core::Span sDestination) noexcept
+	void __vectorcall GEMM::dMultiplyAddRight(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sGradient, const Core::Span<float> sLeft, Core::Span<float> sDestination) noexcept
 	{
 		const auto *pG{sGradient.begin()};
 		const auto *pL{sLeft.begin()};

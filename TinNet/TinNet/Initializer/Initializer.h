@@ -23,7 +23,7 @@ namespace TinNet::Initializer
 		
 	public:
 		Initializer &operator=(const Initializer &sSrc) = default;
-		virtual void operator()(Core::Span sSpan) = 0;
+		virtual void operator()(Core::Span<float> sSpan) = 0;
 	};
 }
 

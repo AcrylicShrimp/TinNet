@@ -22,7 +22,7 @@ namespace TinNet::Initializer
 		//Empty.
 	}
 
-	void Xavier::operator()(Core::Span sSpan)
+	void Xavier::operator()(Core::Span<float> sSpan)
 	{
 		for (auto &nValue : sSpan)
 			nValue = this->sDist(this->sEngine);

@@ -44,14 +44,14 @@ namespace TinNet::Node
 		Parameter &operator=(const Parameter &sSrc) = delete;
 		
 	public:
-		inline Core::Span parameter() const noexcept;
+		inline Core::Span<float> parameter() const noexcept;
 
 	protected:
 		virtual void __evaluateShape() override;
 		virtual void __evaluateOutput() override;
 	};
 
-	inline Core::Span Parameter::parameter() const noexcept
+	inline Core::Span<float> Parameter::parameter() const noexcept
 	{
 		return this->sParameter.span();
 	}

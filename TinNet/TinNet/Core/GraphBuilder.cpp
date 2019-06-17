@@ -17,6 +17,8 @@
 #include "../Node/ReLU.h"
 #include "../Node/Sigmoid.h"
 
+#include "../Node/Sum.h"
+
 #include "../Node/MM.h"
 
 #include "../Node/Dense.h"
@@ -46,6 +48,8 @@ namespace TinNet::Core
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::ReLU>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Sigmoid>();
+
+		this->pGraph->sNodeTypeManager.registerNode<Node::Sum>();
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::MM>();
 		
@@ -147,6 +151,42 @@ namespace TinNet::Core
 		NodeWrapper sNode{this->pGraph->createNode<Node::Sigmoid>(sNodeName)};
 
 		sNode["logit"]->attach(sLogit);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::sum(NodeWrapper sInput, bool bSqueeze)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Sum>(DEFAULT_NAME(Node::Sum), bSqueeze, std::vector<bool>{})};
+
+		sNode["input"]->attach(sInput);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::sum(NodeWrapper sInput, bool bSqueeze, const std::vector<bool> &sReduceAxis)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Sum>(DEFAULT_NAME(Node::Sum), bSqueeze, sReduceAxis)};
+
+		sNode["input"]->attach(sInput);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::sum(const std::string &sNodeName, NodeWrapper sInput, bool bSqueeze)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Sum>(sNodeName, bSqueeze, std::vector<bool>{})};
+
+		sNode["input"]->attach(sInput);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::sum(const std::string &sNodeName, NodeWrapper sInput, bool bSqueeze, const std::vector<bool> &sReduceAxis)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Sum>(sNodeName, bSqueeze, sReduceAxis)};
+
+		sNode["input"]->attach(sInput);
 
 		return sNode;
 	}
