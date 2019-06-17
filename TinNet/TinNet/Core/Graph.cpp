@@ -36,7 +36,7 @@ namespace TinNet::Core
 		return sResult;
 	}
 
-	void Graph::feed(const std::vector<std::tuple<std::string, Core::Shape, Core::Span>> &sFeedDataList)
+	void Graph::feed(const std::vector<std::tuple<std::string, Core::Shape, Core::Span<float>>> &sFeedDataList)
 	{
 		for (const auto &sFeedData : sFeedDataList)
 			this->node<Node::Input>(std::get<0>(sFeedData))->feed(std::get<1>(sFeedData), std::get<2>(sFeedData));

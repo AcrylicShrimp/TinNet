@@ -38,19 +38,19 @@ int32_t main()
 		{1.f}
 	};
 
-	std::vector<Core::Span> x_span
+	std::vector<Core::Span<float>> x_span
 	{
-		Core::Span{x_data[0].begin(), x_data[0].end()},
-		Core::Span{x_data[1].begin(), x_data[1].end()},
-		Core::Span{x_data[2].begin(), x_data[2].end()},
-		Core::Span{x_data[3].begin(), x_data[3].end()}
+		Core::Span<float>{x_data[0].begin(), x_data[0].end()},
+		Core::Span<float>{x_data[1].begin(), x_data[1].end()},
+		Core::Span<float>{x_data[2].begin(), x_data[2].end()},
+		Core::Span<float>{x_data[3].begin(), x_data[3].end()}
 	};
-	std::vector<Core::Span> y_span
+	std::vector<Core::Span<float>> y_span
 	{
-		Core::Span{y_data[0].begin(), y_data[0].end()},
-		Core::Span{y_data[1].begin(), y_data[1].end()},
-		Core::Span{y_data[2].begin(), y_data[2].end()},
-		Core::Span{y_data[3].begin(), y_data[3].end()}
+		Core::Span<float>{y_data[0].begin(), y_data[0].end()},
+		Core::Span<float>{y_data[1].begin(), y_data[1].end()},
+		Core::Span<float>{y_data[2].begin(), y_data[2].end()},
+		Core::Span<float>{y_data[3].begin(), y_data[3].end()}
 	};
 	
 	Optimizer::SGD optimizer{graph.node<Node::Parameter>("w"), graph.node<Node::Parameter>("b")};

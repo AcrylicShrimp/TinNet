@@ -57,7 +57,7 @@ namespace TinNet::Core
 		inline GraphBuilder &builder() noexcept;
 		std::vector<Node::Node *> nodes(const Node::NodeType *pNodeType);
 		std::vector<const Node::Node *> nodes(const Node::NodeType *pNodeType) const;
-		void feed(const std::vector<std::tuple<std::string, Core::Shape, Core::Span>> &sFeedDataList);
+		void feed(const std::vector<std::tuple<std::string, Core::Shape, Core::Span<float>>> &sFeedDataList);
 		inline std::size_t nodeCount(const Node::NodeType *pNodeType) const;
 		inline Node::Node *node(const std::string &sNodeName);
 		inline const Node::Node *node(const std::string &sNodeName) const;

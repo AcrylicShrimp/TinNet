@@ -10,14 +10,13 @@ namespace TinNet::Node
 {
 	TINNET_NODE_TYPE_DEF(Sum)
 
-	Sum::Sum(Core::Graph *pGraph, std::string_view sName, bool bSqueeze) :
+	Sum::Sum(Core::Graph *pGraph, std::string_view sName, bool bSqueeze, const std::vector<bool> &sReduceAxis) :
 		Node(pGraph, sName),
 		bSqueeze{bSqueeze},
 		sInput{this, "input", [this](const auto *pDy) { this->__backwardOpInput(pDy); }},
-		sInputAxis{this, "axis", [this](const auto *pDy) { /* Do nothing. */ }}
+		sReduceAxis{sReduceAxis}
 	{
 		this->sNodeInputMap["input"] = &this->sInput;
-		this->sNodeInputMap["axis"] = &this->sInputAxis;
 	}
 
 	void Sum::__evaluateShape()
@@ -27,32 +26,33 @@ namespace TinNet::Node
 
 		const auto &sShape{this->sInput.inputNode()->evalShape().shape()};
 
-		if (!this->sInputAxis.inputNode())
+		if (!this->sReduceAxis.size())
 		{
 			this->sShape = {1};
+
+			if (this->bSqueeze)
+				this->sShape = this->sShape.squeeze();
+
 			return;
 		}
 
-		const auto &sAxisShape{this->sInputAxis.inputNode()->evalShape().shape()};
-
-		auto sAxisOutput{this->sInputAxis.inputNode()->evalOutput().output()};
-
-		if (!sAxisShape.rank() || sAxisShape.rank() == 1 && sAxisShape.size() == 1)
+		if (this->sReduceAxis.size() == 1)
 		{
-			this->sShape = sAxisOutput[0] < .5f ? this->bSqueeze ? sShape.squeeze() : sShape : Core::Shape{1};
+			this->sShape = this->sReduceAxis[0] ? Core::Shape{1} : sShape;
+
+			if (this->bSqueeze)
+				this->sShape = this->sShape.squeeze();
+
 			return;
 		}
 
-		if (sAxisShape.rank() != 1)
-			throw std::runtime_error{"'axis' must be a scalar or vector"};
-
-		if (sAxisShape.size() != sShape.rank())
-			throw std::runtime_error{"the size of 'axis' must be equal to the rank of 'input'"};
+		if (this->sReduceAxis.size() != sShape.rank())
+			throw std::runtime_error{"the length of 'reduce axis' must be equal to the rank of 'input'"};
 
 		this->sShape = sShape;
 
-		for (std::size_t nIndex{0}, nMaxIndex{sShape.rank()}; nIndex < nMaxIndex; ++nIndex)
-			if (sAxisOutput[nIndex] >= .5f)
+		for (std::size_t nIndex{0}, nMaxIndex{this->sReduceAxis.size()}; nIndex < nMaxIndex; ++nIndex)
+			if (this->sReduceAxis[nIndex])
 				this->sShape[nIndex] = 1;
 
 		if (this->bSqueeze)
@@ -61,14 +61,48 @@ namespace TinNet::Node
 
 	void Sum::__evaluateOutput()
 	{
+		this->sOutput.span().fillZero();
 
-
-		auto fPassIndex{[](std::size_t nIndex)
+		if (!this->sReduceAxis.size())
 		{
+			for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
+				this->sOutput.span()[0] += this->sInput.inputNode()->output()[nIndex];
 
+			return;
+		}
+
+		if (this->sReduceAxis.size() == 1)
+		{
+			if (this->sReduceAxis[0])
+				for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
+					this->sOutput.span()[0] += this->sInput.inputNode()->output()[nIndex];
+			else
+				for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
+					this->sOutput.span()[nIndex] += this->sInput.inputNode()->output()[nIndex];
+
+			return;
+		}
+
+		const auto &sShape{this->sInput.inputNode()->evalShape().shape()};
+
+		std::vector<std::tuple<std::size_t, std::size_t, std::size_t>> sIndexFactorList;
+
+		/*
+			TODO : Fill the sIndexFactorList above.
+		*/
+
+		auto fReduceIndex{[&sIndexFactorList](std::size_t nIndex)
+		{
+			std::size_t nResult{nIndex};
+
+			for (const auto &sIndexFactorTuple : sIndexFactorList)
+				nResult -= nIndex / std::get<0>(sIndexFactorTuple) % std::get<1>(sIndexFactorTuple) * std::get<2>(sIndexFactorTuple);
+
+			return nResult;
 		}};
 
-
+		for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
+			this->sOutput.span()[fReduceIndex(nIndex)] += this->sInput.inputNode()->output()[nIndex];
 	}
 
 	void Sum::__backwardOpInput(const Node *pDy)

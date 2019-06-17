@@ -26,7 +26,7 @@ namespace TinNet::Node
 
 	protected:
 		Core::Shape sInputShape;
-		Core::Span sInputSpan;
+		Core::Span<float> sInputSpan;
 
 	public:
 		Input(Core::Graph *pGraph, std::string_view sName);
@@ -37,7 +37,7 @@ namespace TinNet::Node
 		Input &operator=(const Input &sSrc) = delete;
 
 	public:
-		void feed(Core::Shape sShape, Core::Span sSpan);
+		void feed(Core::Shape sShape, Core::Span<float> sSpan);
 
 	protected:
 		virtual void __evaluateShape() override;

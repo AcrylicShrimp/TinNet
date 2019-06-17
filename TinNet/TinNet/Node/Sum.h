@@ -11,7 +11,6 @@
 #include "../TinNetDLL.h"
 
 #include "../Core/Graph.h"
-#include "../Core/Memory.h"
 
 #include "Node.h"
 #include "NodeInput.h"
@@ -19,6 +18,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <string_view>
+#include <tuple>
 #include <vector>
 
 namespace TinNet::Node
@@ -32,10 +32,10 @@ namespace TinNet::Node
 
 	protected:
 		NodeInput sInput;
-		NodeInput sInputAxis;
+		std::vector<bool> sReduceAxis;
 		
 	public:
-		Sum(Core::Graph *pGraph, std::string_view sName, bool bSqueeze);
+		Sum(Core::Graph *pGraph, std::string_view sName, bool bSqueeze, const std::vector<bool> &sReduceAxis);
 		Sum(const Sum &sSrc) = delete;
 		virtual ~Sum() noexcept = default;
 		
