@@ -61,6 +61,7 @@ namespace TinNet::Node
 
 	void Sum::__evaluateOutput()
 	{
+		this->sInput.inputNode()->evalOutput();
 		this->sOutput.span().fillZero();
 
 		if (!this->sReduceAxis.size())
@@ -83,27 +84,28 @@ namespace TinNet::Node
 			return;
 		}
 
-		const auto &sShape{this->sInput.inputNode()->evalShape().shape()};
+		const auto &sShape{this->sInput.inputNode()->shape()};
 
 		if (sShape.rank() != this->sReduceAxis.size())
 			throw std::runtime_error{"the rank of 'input' must be equal to the length of 'reduce axis'"};
 
 		std::vector<std::size_t> sMultipliedShape{1};
-		std::vector<std::tuple<std::size_t, std::size_t, std::size_t>> sIndexFactorList;
 
 		for (std::size_t nIndex{0}, nMaxIndex{sShape.rank() - 1}; nIndex < nMaxIndex; ++nIndex)
-			sMultipliedShape.emplace_back(sMultipliedShape.back() * sMultipliedShape[nIndex]);
+			sMultipliedShape.emplace_back(sMultipliedShape.back() * sShape[nIndex]);
+
+		std::vector<std::tuple<std::size_t, std::size_t, std::size_t>> sIndexFactorList;
 
 		for (std::size_t nIndex{0}, nMaxIndex{sShape.rank()}; nIndex < nMaxIndex; ++nIndex)
-			if (this->sReduceAxis[nIndex])
-				sIndexFactorList.emplace_back(sMultipliedShape[nIndex], sMultipliedShape[nIndex + 1], sMultipliedShape[nIndex]);
+			if (!this->sReduceAxis[nIndex])
+				sIndexFactorList.emplace_back(sShape[nIndex], sMultipliedShape[nIndex], sIndexFactorList.size() ? std::get<0>(sIndexFactorList.back()) * std::get<2>(sIndexFactorList.back()) : 1);
 
 		auto fReduceIndex{[&sIndexFactorList](std::size_t nIndex)
 		{
-			std::size_t nResult{nIndex};
+			std::size_t nResult{0};
 
 			for (const auto &sIndexFactorTuple : sIndexFactorList)
-				nResult -= nIndex / std::get<0>(sIndexFactorTuple) % std::get<1>(sIndexFactorTuple) * std::get<2>(sIndexFactorTuple);
+				nResult += nIndex / std::get<1>(sIndexFactorTuple) % std::get<0>(sIndexFactorTuple) * std::get<2>(sIndexFactorTuple);
 
 			return nResult;
 		}};
@@ -142,21 +144,22 @@ namespace TinNet::Node
 			throw std::runtime_error{"the rank of 'input' must be equal to the length of 'reduce axis'"};
 
 		std::vector<std::size_t> sMultipliedShape{1};
-		std::vector<std::tuple<std::size_t, std::size_t, std::size_t>> sIndexFactorList;
 
 		for (std::size_t nIndex{0}, nMaxIndex{sShape.rank() - 1}; nIndex < nMaxIndex; ++nIndex)
-			sMultipliedShape.emplace_back(sMultipliedShape.back() * sMultipliedShape[nIndex]);
+			sMultipliedShape.emplace_back(sMultipliedShape.back() * sShape[nIndex]);
+
+		std::vector<std::tuple<std::size_t, std::size_t, std::size_t>> sIndexFactorList;
 
 		for (std::size_t nIndex{0}, nMaxIndex{sShape.rank()}; nIndex < nMaxIndex; ++nIndex)
-			if (this->sReduceAxis[nIndex])
-				sIndexFactorList.emplace_back(sMultipliedShape[nIndex], sMultipliedShape[nIndex + 1], sMultipliedShape[nIndex]);
+			if (!this->sReduceAxis[nIndex])
+				sIndexFactorList.emplace_back(sShape[nIndex], sMultipliedShape[nIndex], sIndexFactorList.size() ? std::get<0>(sIndexFactorList.back()) * std::get<2>(sIndexFactorList.back()) : 1);
 
 		auto fReduceIndex{[&sIndexFactorList](std::size_t nIndex)
 		{
-			std::size_t nResult{nIndex};
+			std::size_t nResult{0};
 
 			for (const auto &sIndexFactorTuple : sIndexFactorList)
-				nResult -= nIndex / std::get<0>(sIndexFactorTuple) % std::get<1>(sIndexFactorTuple) * std::get<2>(sIndexFactorTuple);
+				nResult += nIndex / std::get<1>(sIndexFactorTuple) % std::get<0>(sIndexFactorTuple) * std::get<2>(sIndexFactorTuple);
 
 			return nResult;
 		}};

@@ -22,6 +22,62 @@ int32_t main()
 	auto b = graph.builder().parameter("b", Core::Shape{1}, graph.builder().initConstant());
 	auto output = graph.builder().sigmoid("output", graph.builder().dense(x, w, b));
 	auto loss = graph.builder().sigmoidCE("loss", y, output);
+
+	Core::Graph testGraph;
+
+	auto test_in = testGraph.builder().input("test_in");
+	//auto test_output = testGraph.builder().sum(test_in, true, {true, false, true, false});
+	auto test_output = testGraph.builder().sum(test_in, true);
+
+	std::vector<float> testData{
+		1, 1, 1,
+		1, 1, 1,
+		1, 1, 1,
+
+		1, 1, 1,
+		1, 1, 1,
+		1, 1, 1,
+
+		1, 1, 1,
+		1, 1, 1,
+		1, 1, 1,
+
+
+
+		1, 1, 1,
+		1, 1, 1,
+		1, 1, 1,
+
+		1, 1, 1,
+		1, 1, 1,
+		1, 1, 1,
+
+		1, 1, 1,
+		1, 1, 1,
+		1, 1, 1,
+
+
+
+		1, 1, 1,
+		1, 1, 1,
+		1, 1, 1,
+
+		1, 1, 1,
+		1, 1, 1,
+		1, 1, 1,
+
+		1, 1, 1,
+		1, 1, 1,
+		1, 1, 1,
+	};
+
+	testGraph.feed({
+		{"test_in", Core::Shape{3, 3, 3, 3}, Core::Span<float>{testData.begin(), testData.end()}}
+	});
+
+	auto test_a{test_output.evalShape().shape()};
+	auto test_b{test_output.evalOutput().output()};
+	auto test_c{test_in.evalGradient(test_output).gradient()};
 	
 	std::vector<std::vector<float>> x_data
 	{
