@@ -19,6 +19,9 @@ namespace TinNet::Node
 
 	void Sigmoid::__evaluateShape()
 	{
+		if (!this->sInputLogit)
+			throw std::runtime_error{"no node attached at 'logit'"};
+
 		this->sShape = this->sInputLogit.inputNode()->shape();
 	}
 

@@ -114,6 +114,7 @@
     <ClCompile Include="TinNet\Compute\Denormal.cpp">
       <Filter>TinNet\Compute</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Node\Mean.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -233,5 +234,6 @@
     <ClInclude Include="TinNet\Compute\Denormal.h">
       <Filter>TinNet\Compute</Filter>
     </ClInclude>
+    <ClInclude Include="TinNet\Node\Mean.h" />
   </ItemGroup>
 </Project>

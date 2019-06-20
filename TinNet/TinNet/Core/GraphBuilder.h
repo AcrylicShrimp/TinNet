@@ -76,6 +76,10 @@ namespace TinNet::Core
 		NodeWrapper sum(NodeWrapper sInput, bool bSqueeze, const std::vector<bool> &sReduceAxis);
 		NodeWrapper sum(const std::string &sNodeName, NodeWrapper sInput, bool bSqueeze);
 		NodeWrapper sum(const std::string &sNodeName, NodeWrapper sInput, bool bSqueeze, const std::vector<bool> &sReduceAxis);
+		NodeWrapper mean(NodeWrapper sInput, bool bSqueeze);
+		NodeWrapper mean(NodeWrapper sInput, bool bSqueeze, const std::vector<bool> &sReduceAxis);
+		NodeWrapper mean(const std::string &sNodeName, NodeWrapper sInput, bool bSqueeze);
+		NodeWrapper mean(const std::string &sNodeName, NodeWrapper sInput, bool bSqueeze, const std::vector<bool> &sReduceAxis);
 
 		/*
 			BLAS nodes.
@@ -86,6 +90,8 @@ namespace TinNet::Core
 		/*
 			Layers.
 		*/
+		NodeWrapper dense(NodeWrapper sInput, NodeWrapper sWeight);
+		NodeWrapper dense(const std::string &sNodeName, NodeWrapper sInput, NodeWrapper sWeight);
 		NodeWrapper dense(NodeWrapper sInput, NodeWrapper sWeight, NodeWrapper sBias);
 		NodeWrapper dense(const std::string &sNodeName, NodeWrapper sInput, NodeWrapper sWeight, NodeWrapper sBias);
 

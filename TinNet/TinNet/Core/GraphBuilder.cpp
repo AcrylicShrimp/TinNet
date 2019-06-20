@@ -18,6 +18,7 @@
 #include "../Node/Sigmoid.h"
 
 #include "../Node/Sum.h"
+#include "../Node/Mean.h"
 
 #include "../Node/MM.h"
 
@@ -50,6 +51,7 @@ namespace TinNet::Core
 		this->pGraph->sNodeTypeManager.registerNode<Node::Sigmoid>();
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::Sum>();
+		this->pGraph->sNodeTypeManager.registerNode<Node::Mean>();
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::MM>();
 		
@@ -191,6 +193,42 @@ namespace TinNet::Core
 		return sNode;
 	}
 
+	NodeWrapper GraphBuilder::mean(NodeWrapper sInput, bool bSqueeze)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Mean>(DEFAULT_NAME(Node::Mean), bSqueeze, std::vector<bool>{})};
+
+		sNode["input"]->attach(sInput);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::mean(NodeWrapper sInput, bool bSqueeze, const std::vector<bool> &sReduceAxis)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Mean>(DEFAULT_NAME(Node::Mean), bSqueeze, sReduceAxis)};
+
+		sNode["input"]->attach(sInput);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::mean(const std::string &sNodeName, NodeWrapper sInput, bool bSqueeze)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Mean>(sNodeName, bSqueeze, std::vector<bool>{})};
+
+		sNode["input"]->attach(sInput);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::mean(const std::string &sNodeName, NodeWrapper sInput, bool bSqueeze, const std::vector<bool> &sReduceAxis)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Mean>(sNodeName, bSqueeze, sReduceAxis)};
+
+		sNode["input"]->attach(sInput);
+
+		return sNode;
+	}
+
 	NodeWrapper GraphBuilder::mm(NodeWrapper sLeft, NodeWrapper sRight)
 	{
 		NodeWrapper sNode{this->pGraph->createNode<Node::MM>(DEFAULT_NAME(Node::MM))};
@@ -207,6 +245,26 @@ namespace TinNet::Core
 
 		sNode["left"]->attach(sLeft);
 		sNode["right"]->attach(sRight);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::dense(NodeWrapper sInput, NodeWrapper sWeight)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Dense>(DEFAULT_NAME(Node::Dense))};
+
+		sNode["input"]->attach(sInput);
+		sNode["weight"]->attach(sWeight);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::dense(const std::string &sNodeName, NodeWrapper sInput, NodeWrapper sWeight)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Dense>(sNodeName)};
+
+		sNode["input"]->attach(sInput);
+		sNode["weight"]->attach(sWeight);
 
 		return sNode;
 	}

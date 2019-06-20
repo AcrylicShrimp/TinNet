@@ -23,28 +23,34 @@ namespace TinNet::Node
 
 	void Dense::__evaluateShape()
 	{
+		if (!this->sInput)
+			throw std::runtime_error{"no node attached at 'input'"};
+
 		if (this->sInput.inputNode()->shape().rank() != 2)
-			throw std::exception{"the rank of the input shape must be 2."};
+			throw std::runtime_error{"the rank of 'input' must be 2"};
 
 		if (this->sInputWeight.inputNode()->shape().rank() != 2)
-			throw std::exception{"the rank of the weight shape must be 2."};
+			throw std::runtime_error{"the rank of 'weight' must be 2"};
 
-		if (this->sInputBias.inputNode()->shape().rank() != 1)
-			throw std::exception{"the rank of the bias shape must be 1."};
+		if (this->sInputBias && this->sInputBias.inputNode()->shape().rank() != 1)
+			throw std::runtime_error{"the rank of 'bias' must be 1"};
 
 		if (this->sInput.inputNode()->shape()[0] != this->sInputWeight.inputNode()->shape()[1])
-			throw std::exception{"the shape of the input and the weight is not compatible."};
+			throw std::runtime_error{"the shape of 'input' and 'weight' is not compatible"};
 
-		if (this->sInputWeight.inputNode()->shape()[0] != this->sInputBias.inputNode()->shape()[0])
-			throw std::exception{"the shape of the weight and the bias is not compatible."};
+		if (this->sInputBias && this->sInputWeight.inputNode()->shape()[0] != this->sInputBias.inputNode()->shape()[0])
+			throw std::runtime_error{"the shape of 'weight' and 'bias' is not compatible"};
 
 		this->sShape = {this->sInputWeight.inputNode()->shape()[0], this->sInput.inputNode()->shape()[1]};
 	}
 
 	void Dense::__evaluateOutput()
 	{
-		for (std::size_t nIndex{0}, nMaxIndex{this->sShape[1]}, nWidth{this->sShape[0]}; nIndex < nMaxIndex; ++nIndex)
-			this->sOutput.span().subSpan(nIndex * nWidth).copyFrom(this->sInputBias.inputNode()->evalOutput().output());
+		if (this->sInputBias)
+			for (std::size_t nIndex{0}, nMaxIndex{this->sShape[1]}, nWidth{this->sShape[0]}; nIndex < nMaxIndex; ++nIndex)
+				this->sOutput.span().subSpan(nIndex * nWidth).copyFrom(this->sInputBias.inputNode()->evalOutput().output());
+		else
+			this->sOutput.span().fillZero();
 
 		Compute::GEMM::multiplyAdd(
 			this->sInput.inputNode()->shape()[0],

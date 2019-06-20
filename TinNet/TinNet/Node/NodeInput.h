@@ -15,6 +15,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <unordered_set>
@@ -43,6 +44,7 @@ namespace TinNet::Node
 	public:
 		NodeInput &operator=(const NodeInput &sSrc) = default;
 		NodeInput &operator=(NodeInput &&sSrc) noexcept = default;
+		inline operator bool() const;
 		
 	public:
 		inline Node *inputNode() noexcept;
@@ -50,6 +52,11 @@ namespace TinNet::Node
 		inline bool isDependOn(const Node *pNode) const;
 		void attach(Node *pInputNode);
 	};
+
+	inline NodeInput::operator bool() const
+	{
+		return static_cast<bool>(this->pInputNode);
+	}
 
 	inline Node *NodeInput::inputNode() noexcept
 	{

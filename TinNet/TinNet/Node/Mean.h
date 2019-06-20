@@ -1,12 +1,12 @@
 
 /*
-	2019.03.31
+	2019.06.20
 	Created by AcrylicShrimp.
 */
 
-#ifndef _CLASS_TINNET_NODE_SUM_H
+#ifndef _CLASS_TINNET_NODE_MEAN_H
 
-#define _CLASS_TINNET_NODE_SUM_H
+#define _CLASS_TINNET_NODE_MEAN_H
 
 #include "../TinNetDLL.h"
 
@@ -23,9 +23,9 @@
 
 namespace TinNet::Node
 {
-	class TINNET_DLL Sum : public Node
+	class TINNET_DLL Mean : public Node
 	{
-		TINNET_NODE_TYPE_DCL(Sum)
+		TINNET_NODE_TYPE_DCL(Mean)
 
 	public:
 		const bool bSqueeze;
@@ -33,17 +33,18 @@ namespace TinNet::Node
 
 	protected:
 		NodeInput sInput;
+		float nMeanFactor;
 		std::vector<std::tuple<std::size_t, std::size_t, std::size_t>> sIndexFactorList;
-
-	public:
-		Sum(Core::Graph *pGraph, std::string_view sName, bool bSqueeze, const std::vector<bool> &sReduceAxis);
-		Sum(const Sum &sSrc) = delete;
-		virtual ~Sum() noexcept = default;
 		
 	public:
-		Sum &operator=(const Sum &sSrc) = delete;
+		Mean(Core::Graph *pGraph, std::string_view sName, bool bSqueeze, const std::vector<bool> &sReduceAxis);
+		Mean(const Mean &sSrc) = delete;
+		virtual ~Mean() noexcept = default;
 		
-	protected:
+	public:
+		Mean &operator=(const Mean &sSrc) = delete;
+		
+	public:
 		virtual void __evaluateShape() override;
 		virtual void __evaluateOutput() override;
 		void __backwardOpInput(const Node *pDy);

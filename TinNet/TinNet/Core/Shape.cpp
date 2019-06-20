@@ -100,7 +100,7 @@ namespace TinNet::Core
 		for (auto nMinAxis{std::min(sLeft.rank(), sRight.rank())}; nAxis < nMinAxis; ++nAxis)
 		{
 			if (sLeft[nAxis] != sRight[nAxis] && sLeft[nAxis] != 1 && sRight[nAxis] != 1)
-				throw std::invalid_argument("cannot broadcast");
+				throw std::runtime_error("unable to broadcast");
 
 			sResult.sDimension.emplace_back(std::max(sLeft[nAxis], sRight[nAxis]));
 		}

@@ -21,6 +21,15 @@ namespace TinNet::Node
 
 	void SigmoidCrossEntropy::__evaluateShape()
 	{
+		if (!this->sInputLabel)
+			throw std::runtime_error{"no node attached at 'label'"};
+
+		if (!this->sInputProb)
+			throw std::runtime_error{"no node attached at 'prob'"};
+
+		if (this->sInputLabel.inputNode()->evalShape().shape() != this->sInputProb.inputNode()->evalShape().shape())
+			throw std::runtime_error{"the shape of 'label' and 'prob' must be equal"};
+
 		this->sShape = {1};
 	}
 

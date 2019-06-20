@@ -61,6 +61,7 @@
 	Reduce nodes.
 */
 #include "Node/Sum.h"
+#include "Node/Mean.h"
 
 /*
 	BLAS nodes.

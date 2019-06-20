@@ -21,6 +21,15 @@ namespace TinNet::Node
 
 	void Add::__evaluateShape()
 	{
+		if (!this->sInputLeft)
+			throw std::runtime_error{"no node attached at 'left'"};
+
+		if (!this->sInputRight)
+			throw std::runtime_error{"no node attached at 'right'"};
+
+		if (this->sInputLeft.inputNode()->evalShape().shape() != this->sInputRight.inputNode()->evalShape().shape())
+			throw std::runtime_error{"the shape of 'left' and 'right' must be equal"};
+
 		this->sShape = this->sInputLeft.inputNode()->shape();
 	}
 

@@ -17,6 +17,7 @@
 
 #include <cmath>
 #include <cstddef>
+#include <stdexcept>
 #include <string_view>
 
 namespace TinNet::Node

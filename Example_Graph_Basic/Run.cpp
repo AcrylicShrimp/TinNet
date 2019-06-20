@@ -27,7 +27,7 @@ int32_t main()
 
 	auto test_in = testGraph.builder().input("test_in");
 	//auto test_output = testGraph.builder().sum(test_in, true, {true, false, true, false});
-	auto test_output = testGraph.builder().sum(test_in, true);
+	auto test_output = testGraph.builder().mean(test_in, true);
 
 	std::vector<float> testData{
 		1, 1, 1,

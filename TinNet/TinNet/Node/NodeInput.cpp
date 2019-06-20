@@ -22,7 +22,7 @@ namespace TinNet::Node
 	void NodeInput::attach(Node *pInputNode)
 	{
 		if (!pInputNode)
-			return;
+			throw std::runtime_error{"unable to attach null node"};
 
 		if (this->pInputNode)
 			return;

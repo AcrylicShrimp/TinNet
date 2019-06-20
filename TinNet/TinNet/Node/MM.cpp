@@ -21,14 +21,20 @@ namespace TinNet::Node
 
 	void MM::__evaluateShape()
 	{
+		if (!this->sInputLeft)
+			throw std::runtime_error{"no node attached at 'left'"};
+
+		if (!this->sInputRight)
+			throw std::runtime_error{"no node attached at 'right'"};
+
 		if (this->sInputLeft.inputNode()->shape().rank() != 2)
-			throw std::exception{"the rank of the left input shape must be 2."};
+			throw std::runtime_error{"the rank of 'left' must be 2"};
 
 		if (this->sInputRight.inputNode()->shape().rank() != 2)
-			throw std::exception{"the rank of the right input shape must be 2."};
+			throw std::runtime_error{"the rank of 'right' must be 2"};
 
 		if (this->sInputLeft.inputNode()->shape()[0] != this->sInputRight.inputNode()->shape()[1])
-			throw std::exception{"the shape of the input is not compatible."};
+			throw std::runtime_error{"the shape of 'left' and 'right' is not compatible"};
 
 		this->sShape = {this->sInputRight.inputNode()->shape()[0], this->sInputLeft.inputNode()->shape()[1]};
 	}

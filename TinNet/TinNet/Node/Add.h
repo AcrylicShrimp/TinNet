@@ -16,6 +16,7 @@
 #include "NodeInput.h"
 
 #include <cstddef>
+#include <stdexcept>
 #include <string_view>
 
 namespace TinNet::Node

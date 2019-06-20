@@ -21,6 +21,15 @@ namespace TinNet::Node
 
 	void MSE::__evaluateShape()
 	{
+		if (!this->sInputLabel)
+			throw std::runtime_error{"no node attached at 'label'"};
+
+		if (!this->sInputPrediction)
+			throw std::runtime_error{"no node attached at 'pred'"};
+
+		if (this->sInputLabel.inputNode()->evalShape().shape() != this->sInputPrediction.inputNode()->evalShape().shape())
+			throw std::runtime_error{"the shape of 'label' and 'pred' must be equal"};
+
 		this->sShape = {1};
 	}
 
