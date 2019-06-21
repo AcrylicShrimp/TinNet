@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.29
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinNet", "TinNet\TinNet.vcxproj", "{D09C5062-ECA6-4002-9EF5-E613F9183971}"
 EndProject
@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example_Graph_Basic", "Exam
 	ProjectSection(ProjectDependencies) = postProject
 		{D09C5062-ECA6-4002-9EF5-E613F9183971} = {D09C5062-ECA6-4002-9EF5-E613F9183971}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinNet Test", "TinNet Test\TinNet Test.vcxproj", "{DE039C24-38CD-44BE-AFBF-CCC08559887A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,18 @@ Global
 		{E3BD4E64-073B-428B-98E5-37E44D5934EC}.Release|Win32.Build.0 = Release|Win32
 		{E3BD4E64-073B-428B-98E5-37E44D5934EC}.Release|x64.ActiveCfg = Release|x64
 		{E3BD4E64-073B-428B-98E5-37E44D5934EC}.Release|x64.Build.0 = Release|x64
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Debug|Win32.Build.0 = Debug|Win32
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Debug|x64.ActiveCfg = Debug|x64
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Debug|x64.Build.0 = Debug|x64
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Export|Win32.ActiveCfg = Release|Win32
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Export|Win32.Build.0 = Release|Win32
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Export|x64.ActiveCfg = Release|x64
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Export|x64.Build.0 = Release|x64
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Release|Win32.ActiveCfg = Release|Win32
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Release|Win32.Build.0 = Release|Win32
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Release|x64.ActiveCfg = Release|x64
+		{DE039C24-38CD-44BE-AFBF-CCC08559887A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

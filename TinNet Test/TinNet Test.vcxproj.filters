@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="TinNet">
+      <UniqueIdentifier>{869ba700-971d-44a4-b703-82a2e7241d9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TinNet\Core">
+      <UniqueIdentifier>{b83e8f39-1939-400a-bc17-abcb71b18539}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="TinNet\Core\Shape.cpp">
+      <Filter>TinNet\Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

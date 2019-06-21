@@ -113,6 +113,8 @@
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
       <FloatingPointModel>Precise</FloatingPointModel>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
@@ -138,6 +140,8 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <FloatingPointModel>Precise</FloatingPointModel>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -152,6 +156,8 @@
       <PreprocessorDefinitions>_TINNET_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
@@ -176,6 +182,8 @@
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -193,6 +201,8 @@
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
       <FloatingPointModel>Precise</FloatingPointModel>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -210,6 +220,8 @@
       <PreprocessorDefinitions>_TINNET_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

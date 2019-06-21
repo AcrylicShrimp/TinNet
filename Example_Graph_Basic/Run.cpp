@@ -4,7 +4,7 @@
 	Created by AcrylicShrimp.
 */
 
-#include "../TinNet/TinNet/TinNet.h"
+#include <TinNet/TinNet.h>
 
 #include <cstdlib>
 #include <iostream>
