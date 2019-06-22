@@ -11,6 +11,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example_Graph_Basic", "Exam
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinNet Test", "TinNet Test\TinNet Test.vcxproj", "{DE039C24-38CD-44BE-AFBF-CCC08559887A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D09C5062-ECA6-4002-9EF5-E613F9183971} = {D09C5062-ECA6-4002-9EF5-E613F9183971}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

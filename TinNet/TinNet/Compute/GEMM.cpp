@@ -22,7 +22,7 @@ namespace TinNet::Compute
 		auto *__restrict pD{sDestination.begin()};
 
 	#pragma omp parallel for schedule(guided) default(shared) num_threads(static_cast<int>(std::max<std::size_t>(1u, std::min<std::size_t>(nMaxIndex * nRow * nColumn / 1600000u, std::thread::hardware_concurrency()))))
-		for (std::int64_t nR{0}; nR < nRow; ++nR)
+		for (std::int64_t nR{0}; nR < static_cast<std::int64_t>(nRow); ++nR)
 			for (std::size_t nC{0}; nC < nColumn; ++nC)
 			{
 				std::size_t nIndex{0};
@@ -62,12 +62,12 @@ namespace TinNet::Compute
 	#pragma omp parallel default(shared) num_threads(static_cast<int>(std::max<std::size_t>(1u, std::min<std::size_t>(nMaxIndex * nColumn / 1600000u, std::thread::hardware_concurrency()))))
 		{
 		#pragma omp for schedule(guided)
-			for (std::int64_t nR{0}; nR < nColumn; ++nR)
+			for (std::int64_t nR{0}; nR < static_cast<std::int64_t>(nColumn); ++nR)
 				for (std::size_t nC{0}; nC < nMaxIndex; ++nC)
 					pRT[nC * nColumn + nR] = pR[nR * nMaxIndex + nC];
 
 		#pragma omp for schedule(guided)
-			for (std::int64_t nR{0}; nR < nRow; ++nR)
+			for (std::int64_t nR{0}; nR < static_cast<std::int64_t>(nRow); ++nR)
 			{
 				for (std::size_t nC{0}; nC < nMaxIndex; ++nC)
 				{
@@ -112,17 +112,17 @@ namespace TinNet::Compute
 	#pragma omp parallel default(shared) num_threads(static_cast<int>(std::max<std::size_t>(1u, std::min<std::size_t>(nMaxIndex * nRow * nColumn / 1600000u, std::thread::hardware_concurrency()))))
 		{
 		#pragma omp for schedule(guided) nowait
-			for (std::int64_t nR{0}; nR < nRow; ++nR)
+			for (std::int64_t nR{0}; nR < static_cast<std::int64_t>(nRow); ++nR)
 				for (std::size_t nC{0}; nC < nColumn; ++nC)
 					pGT[nC * nRow + nR] = pG[nR * nColumn + nC];
 
 		#pragma omp for schedule(guided)
-			for (std::int64_t nR{0}; nR < nRow; ++nR)
+			for (std::int64_t nR{0}; nR < static_cast<std::int64_t>(nRow); ++nR)
 				for (std::size_t nC{0}; nC < nMaxIndex; ++nC)
 					pLT[nC * nRow + nR] = pL[nR * nMaxIndex + nC];
 
 		#pragma omp for schedule(guided)
-			for (std::int64_t nR{0}; nR < nColumn; ++nR)
+			for (std::int64_t nR{0}; nR < static_cast<std::int64_t>(nColumn); ++nR)
 				for (std::size_t nC{0}; nC < nMaxIndex; ++nC)
 				{
 					std::size_t nIndex{0};

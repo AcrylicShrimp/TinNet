@@ -65,7 +65,7 @@ namespace TinNet::Node
 			if (this->sReduceAxis[nIndex])
 			{
 				this->sShape[nIndex] = 1;
-				nFactorSize *= static_cast<float>(sShape[nIndex]);
+				nFactorSize *= sShape[nIndex];
 			}
 			else
 				this->sIndexFactorList.emplace_back(sShape[nIndex], sMultipliedShape[nIndex], this->sIndexFactorList.size() ? std::get<0>(this->sIndexFactorList.back()) * std::get<2>(this->sIndexFactorList.back()) : 1);
