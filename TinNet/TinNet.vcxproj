@@ -256,6 +256,7 @@
     <ClCompile Include="TinNet\Node\ReLU.cpp" />
     <ClCompile Include="TinNet\Node\Sigmoid.cpp" />
     <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp" />
+    <ClCompile Include="TinNet\Node\Softmax.cpp" />
     <ClCompile Include="TinNet\Node\Subtract.cpp" />
     <ClCompile Include="TinNet\Node\Sum.cpp" />
     <ClCompile Include="TinNet\Optimizer\SGD.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="TinNet\Node\ReLU.h" />
     <ClInclude Include="TinNet\Node\Sigmoid.h" />
     <ClInclude Include="TinNet\Node\SigmoidCrossEntropy.h" />
+    <ClInclude Include="TinNet\Node\Softmax.h" />
     <ClInclude Include="TinNet\Node\Subtract.h" />
     <ClInclude Include="TinNet\Node\Sum.h" />
     <ClInclude Include="TinNet\Optimizer\SGD.h" />

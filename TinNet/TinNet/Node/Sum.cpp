@@ -24,7 +24,7 @@ namespace TinNet::Node
 		if (!this->sInput)
 			throw std::runtime_error{"no node attached at 'input'"};
 
-		const auto &sShape{this->sInput.inputNode()->evalShape().shape()};
+		const auto &sShape{this->sInput.inputNode()->shape()};
 
 		if (!this->sReduceAxis.size())
 		{
