@@ -117,6 +117,9 @@
     <ClCompile Include="TinNet\Node\Mean.cpp">
       <Filter>TinNet\Node</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Node\Softmax.cpp">
+      <Filter>TinNet\Node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -237,6 +240,9 @@
       <Filter>TinNet\Compute</Filter>
     </ClInclude>
     <ClInclude Include="TinNet\Node\Mean.h">
+      <Filter>TinNet\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="TinNet\Node\Softmax.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
   </ItemGroup>

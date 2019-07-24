@@ -68,6 +68,10 @@ namespace TinNet::Core
 		NodeWrapper relu(const std::string &sNodeName, NodeWrapper sLogit, float nAlpha = .0f);
 		NodeWrapper sigmoid(NodeWrapper sLogit);
 		NodeWrapper sigmoid(const std::string &sNodeName, NodeWrapper sLogit);
+		NodeWrapper softmax(NodeWrapper sLogit);
+		NodeWrapper softmax(NodeWrapper sLogit, const std::vector<bool> &sReduceAxis);
+		NodeWrapper softmax(const std::string &sNodeName, NodeWrapper sLogit);
+		NodeWrapper softmax(const std::string &sNodeName, NodeWrapper sLogit, const std::vector<bool> &sReduceAxis);
 
 		/*
 			Reduce nodes.

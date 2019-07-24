@@ -44,6 +44,10 @@ namespace TinNet::Core
 		inline const T *end() const noexcept;
 		inline const T *cend() const noexcept;
 		inline std::size_t length() const noexcept;
+		inline T *min();
+		inline const T *min() const;
+		inline T *max();
+		inline const T *max() const;
 		inline Span subSpan(std::size_t nOffset) const noexcept;
 		inline Span subSpan(std::size_t nOffset, std::size_t nLength) const noexcept;
 		inline void fillZero();
@@ -110,6 +114,26 @@ namespace TinNet::Core
 	template<class T> inline std::size_t Span<T>::length() const noexcept
 	{
 		return this->nLength;
+	}
+
+	template<class T> inline T *Span<T>::min()
+	{
+		return std::min_element(this->begin(), this->end());
+	}
+
+	template<class T> inline const T *Span<T>::min() const
+	{
+		return std::min_element(this->cbegin(), this->cend());
+	}
+
+	template<class T> inline T *Span<T>::max()
+	{
+		return std::max_element(this->begin(), this->end());
+	}
+
+	template<class T> inline const T *Span<T>::max() const
+	{
+		return std::max_element(this->cbegin(), this->cend());
 	}
 
 	template<class T> inline Span<T> Span<T>::subSpan(std::size_t nOffset) const noexcept

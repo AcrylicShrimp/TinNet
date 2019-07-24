@@ -10,7 +10,7 @@ namespace TinNet::Node
 {
 	TINNET_NODE_TYPE_DEF(ReLU)
 
-		ReLU::ReLU(Core::Graph *pGraph, std::string_view sName, float nAlpha) :
+	ReLU::ReLU(Core::Graph *pGraph, std::string_view sName, float nAlpha) :
 		Node(pGraph, sName),
 		nAlpha{nAlpha},
 		sInputLogit{this, "logit", [this](const auto *pDy) { this->__backwardOp(pDy); }}
