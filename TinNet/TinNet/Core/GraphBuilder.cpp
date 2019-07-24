@@ -16,6 +16,7 @@
 
 #include "../Node/ReLU.h"
 #include "../Node/Sigmoid.h"
+#include "../Node/Softmax.h"
 
 #include "../Node/Sum.h"
 #include "../Node/Mean.h"
@@ -49,6 +50,7 @@ namespace TinNet::Core
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::ReLU>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Sigmoid>();
+		this->pGraph->sNodeTypeManager.registerNode<Node::Softmax>();
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::Sum>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Mean>();
@@ -151,6 +153,42 @@ namespace TinNet::Core
 	NodeWrapper GraphBuilder::sigmoid(const std::string &sNodeName, NodeWrapper sLogit)
 	{
 		NodeWrapper sNode{this->pGraph->createNode<Node::Sigmoid>(sNodeName)};
+
+		sNode["logit"]->attach(sLogit);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::softmax(NodeWrapper sLogit)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Softmax>(DEFAULT_NAME(Node::Softmax), std::vector<bool>{})};
+
+		sNode["logit"]->attach(sLogit);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::softmax(NodeWrapper sLogit, const std::vector<bool> &sReduceAxis)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Softmax>(DEFAULT_NAME(Node::Softmax), sReduceAxis)};
+
+		sNode["logit"]->attach(sLogit);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::softmax(const std::string &sNodeName, NodeWrapper sLogit)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Softmax>(sNodeName, std::vector<bool>{})};
+
+		sNode["logit"]->attach(sLogit);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::softmax(const std::string &sNodeName, NodeWrapper sLogit, const std::vector<bool> &sReduceAxis)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Softmax>(sNodeName, sReduceAxis)};
 
 		sNode["logit"]->attach(sLogit);
 

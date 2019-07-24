@@ -56,6 +56,7 @@
 */
 #include "Node/ReLU.h"
 #include "Node/Sigmoid.h"
+#include "Node/Softmax.h"
 
 /*
 	Reduce nodes.

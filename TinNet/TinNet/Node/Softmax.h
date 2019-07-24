@@ -34,7 +34,6 @@ namespace TinNet::Node
 
 	protected:
 		Core::Memory<float> sSummation;
-		Core::Memory<float> sSummationGradient;
 		NodeInput sInputLogit;
 		std::vector<std::tuple<std::size_t, std::size_t, std::size_t>> sIndexFactorList;
 

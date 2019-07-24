@@ -28,18 +28,10 @@ namespace TinNet::Node
 		this->sShape = sShape;
 
 		if (!this->sGroupAxis.size())
-		{
-			this->sSummation.resize(1);
-			this->sSummationGradient.resize(1);
 			return;
-		}
 
 		if (this->sGroupAxis.size() == 1)
-		{
-			this->sSummation.resize(1);
-			this->sSummationGradient.resize(1);
 			return;
-		}
 
 		if (this->sGroupAxis.size() != sShape.rank())
 			throw std::runtime_error{"the length of 'group axis' must be equal to the rank of 'logit'"};
@@ -60,7 +52,6 @@ namespace TinNet::Node
 				this->sIndexFactorList.emplace_back(sShape[nIndex], sMultipliedShape[nIndex], this->sIndexFactorList.size() ? std::get<0>(this->sIndexFactorList.back()) * std::get<2>(this->sIndexFactorList.back()) : 1);
 
 		this->sSummation.resize(nSummationSize);
-		this->sSummationGradient.resize(nSummationSize);
 	}
 
 	void Softmax::__evaluateOutput()
@@ -128,16 +119,18 @@ namespace TinNet::Node
 
 	void Softmax::__backwardOp(const Node *pDy)
 	{
-		this->sInputLogit.inputNode()->evalOutput();
 		this->evalOutput();
 		this->evalGradient(pDy);
 
-		auto nMaxInput{*this->sInputLogit.inputNode()->output().max()};
-
 		if (!this->sGroupAxis.size())
 		{
-			for (std::size_t nIndex{0}, nMaxIndex{this->sInputLogit.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
-				;
+			auto nSum{.0f};
+
+			for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
+				nSum += this->sGradient.span()[nIndex] * this->sOutput.span()[nIndex];
+
+			for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
+				this->sInputLogit.inputNode()->gradient()[nIndex] += this->sOutput.span()[nIndex] * (this->sGradient.span()[nIndex] - nSum);
 
 			return;
 		}
@@ -146,11 +139,16 @@ namespace TinNet::Node
 		{
 			if (this->sGroupAxis[0])
 			{
-				for (std::size_t nIndex{0}, nMaxIndex{this->sInputLogit.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
-					;
+				auto nSum{.0f};
+
+				for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
+					nSum += this->sGradient.span()[nIndex] * this->sOutput.span()[nIndex];
+
+				for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
+					this->sInputLogit.inputNode()->gradient()[nIndex] += this->sOutput.span()[nIndex] * (this->sGradient.span()[nIndex] - nSum);
 			}
 			else
-				this->sOutput.span().fillOne();
+				this->sInputLogit.inputNode()->gradient().fillZero();
 
 			return;
 		}
@@ -165,12 +163,12 @@ namespace TinNet::Node
 			return nResult;
 		}};
 
-		this->sSummationGradient.span().fillZero();
+		this->sSummation.span().fillZero();
 
-		for (std::size_t nIndex{0}, nMaxIndex{this->sInputLogit.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
-			this->sSummationGradient.span()[fReduceIndex(nIndex)] -= std::exp(this->sInputLogit.inputNode()->output()[nIndex] - nMaxInput) * this->sSummation.span()[fReduceIndex(nIndex)] * this->sSummation.span()[fReduceIndex(nIndex)] * this->sGradient.span()[nIndex];
+		for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
+			this->sSummation.span()[fReduceIndex(nIndex)] += this->sGradient.span()[nIndex] * this->sOutput.span()[nIndex];
 
-		for (std::size_t nIndex{0}, nMaxIndex{this->sInputLogit.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
-			this->sInputLogit.inputNode()->gradient()[nIndex] += std::exp(this->sInputLogit.inputNode()->output()[nIndex] - nMaxInput) * (this->sSummationGradient.span()[fReduceIndex(nIndex)] + this->sSummation.span()[fReduceIndex(nIndex)] * this->sGradient.span()[nIndex]);
+		for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
+			this->sInputLogit.inputNode()->gradient()[nIndex] += this->sOutput.span()[nIndex] * (this->sGradient.span()[nIndex] - this->sSummation.span()[fReduceIndex(nIndex)]);
 	}
 }
