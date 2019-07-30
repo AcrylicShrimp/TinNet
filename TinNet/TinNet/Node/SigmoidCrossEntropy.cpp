@@ -41,14 +41,20 @@ namespace TinNet::Node
 		this->sOutput.span()[0] = .0f;
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sInputLabel.inputNode()->shape().size()}; nIndex < nMaxIndex; ++nIndex)
-			this->sOutput.span()[0] += -this->sInputLabel.inputNode()->output()[nIndex] * std::log(this->sInputProb.inputNode()->output()[nIndex] + 1e-6f) + (this->sInputLabel.inputNode()->output()[nIndex] - 1.f) * std::log(1.f - this->sInputProb.inputNode()->output()[nIndex] + 1e-6f);
+			this->sOutput.span()[0] += this->sInputLabel.inputNode()->output()[nIndex] * std::log(this->sInputProb.inputNode()->output()[nIndex] + 1e-6f) + (this->sInputLabel.inputNode()->output()[nIndex] - 1.f) * std::log(1.f - this->sInputProb.inputNode()->output()[nIndex] + 1e-6f);
 
-		this->sOutput.span()[0] /= this->sInputLabel.inputNode()->shape().size();
+		this->sOutput.span()[0] /= -static_cast<float>(this->sInputLabel.inputNode()->shape().size());
 	}
 
 	void SigmoidCrossEntropy::__backwardOpLabel(const Node *pDy)
 	{
-		//TODO : Implement this method.
+		this->sInputProb.inputNode()->evalOutput();
+		this->evalGradient(pDy);
+
+		const auto nFactor{this->sGradient.span()[0] / this->sInputProb.inputNode()->shape().size()};
+
+		for (std::size_t nIndex{0}, nMaxIndex{this->sInputProb.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
+			this->sInputLabel.inputNode()->gradient()[nIndex] += nFactor * (std::log(1.f - this->sInputProb.inputNode()->output()[nIndex] + 1e-6f) - std::log(this->sInputProb.inputNode()->output()[nIndex] + 1e-6f));
 	}
 
 	void SigmoidCrossEntropy::__backwardOpProb(const Node *pDy)
@@ -57,9 +63,9 @@ namespace TinNet::Node
 		this->sInputProb.inputNode()->evalOutput();
 		this->evalGradient(pDy);
 
-		const auto nFactor{1.f / this->sInputLabel.inputNode()->shape().size()};
+		const auto nFactor{this->sGradient.span()[0] / this->sInputProb.inputNode()->shape().size()};
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sInputProb.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
-			this->sInputProb.inputNode()->gradient()[nIndex] += (this->sInputProb.inputNode()->output()[nIndex] - this->sInputLabel.inputNode()->output()[nIndex]) / (this->sInputProb.inputNode()->output()[nIndex] * (1.f - this->sInputProb.inputNode()->output()[nIndex]) + 1e-6f) * nFactor * this->sGradient.span()[0];
+			this->sInputProb.inputNode()->gradient()[nIndex] += nFactor * (this->sInputProb.inputNode()->output()[nIndex] - this->sInputLabel.inputNode()->output()[nIndex]) / (this->sInputProb.inputNode()->output()[nIndex] * (1.f - this->sInputProb.inputNode()->output()[nIndex]) + 1e-6f);
 	}
 }
