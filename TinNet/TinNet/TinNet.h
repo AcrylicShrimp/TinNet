@@ -50,10 +50,13 @@
 */
 #include "Node/Add.h"
 #include "Node/Subtract.h"
+#include "Node/Multiply.h"
+#include "Node/Negative.h"
 
 /*
 	Math function nodes.
 */
+#include "Node/Log.h"
 #include "Node/ReLU.h"
 #include "Node/Sigmoid.h"
 #include "Node/Softmax.h"

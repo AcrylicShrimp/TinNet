@@ -14,28 +14,28 @@
 
 std::int32_t main()
 {
-	std::vector<float> train_x(55000 * 784);
-	std::vector<float> train_y(55000 * 10);
+	std::vector<float> train_x(60000 * 784);
+	std::vector<float> train_y(60000 * 10);
 	std::vector<float> test_x(10000 * 784);
 	std::vector<float> test_y(10000 * 10);
 
 	{
-		std::ifstream sInput{L"MNIST_train_in.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"training_input.dat", std::ifstream::binary | std::ifstream::in};
 		sInput.read(reinterpret_cast<char *>(train_x.data()), sizeof(float) * train_x.size());
 	}
 
 	{
-		std::ifstream sInput{L"MNIST_train_out.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"training_label.dat", std::ifstream::binary | std::ifstream::in};
 		sInput.read(reinterpret_cast<char *>(train_y.data()), sizeof(float) * train_y.size());
 	}
 
 	{
-		std::ifstream sInput{L"MNIST_test_in.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"testing_input.dat", std::ifstream::binary | std::ifstream::in};
 		sInput.read(reinterpret_cast<char *>(test_x.data()), sizeof(float) * test_x.size());
 	}
 
 	{
-		std::ifstream sInput{L"MNIST_test_out.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"testing_label.dat", std::ifstream::binary | std::ifstream::in};
 		sInput.read(reinterpret_cast<char *>(test_y.data()), sizeof(float) * test_y.size());
 	}
 
@@ -46,32 +46,23 @@ std::int32_t main()
 	auto x = graph.builder().input("x");
 	auto y = graph.builder().input("y");
 
-	auto w1 = graph.builder().parameter(Core::Shape{300, 764}, graph.builder().initXavier(764, 300));
-	auto b1 = graph.builder().parameter(Core::Shape{300}, graph.builder().initConstant());
-	auto o1 = graph.builder().sigmoid(graph.builder().dense(x, w1, b1));
+	auto w1 = graph.builder().parameter("w1", Core::Shape{300, 764}, graph.builder().initXavier(764, 300));
+	auto b1 = graph.builder().parameter("b1", Core::Shape{300}, graph.builder().initConstant());
+	auto o1 = graph.builder().relu(graph.builder().dense(x, w1, b1));
 
-	auto w2 = graph.builder().parameter(Core::Shape{10, 300}, graph.builder().initXavier(10, 300));
-	auto b2 = graph.builder().parameter(Core::Shape{10}, graph.builder().initConstant());
+	auto w2 = graph.builder().parameter("w2", Core::Shape{10, 300}, graph.builder().initXavier(10, 300));
+	auto b2 = graph.builder().parameter("b2", Core::Shape{10}, graph.builder().initConstant());
 	auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2), {false, true});
 
-	auto loss = graph.builder().sigmoidCE(y, o2);
+	auto loss = graph.builder().mean(-graph.builder().sum(y * graph.builder().log(o2), true, {false, true}), true);
 
-	std::vector<Core::Span<float>> x_span
+	Optimizer::SGD optimizer
 	{
-		Core::Span<float>{x_data[0].begin(), x_data[0].end()},
-		Core::Span<float>{x_data[1].begin(), x_data[1].end()},
-		Core::Span<float>{x_data[2].begin(), x_data[2].end()},
-		Core::Span<float>{x_data[3].begin(), x_data[3].end()}
+		graph.node<Node::Parameter>("w1"),
+		graph.node<Node::Parameter>("b1"),
+		graph.node<Node::Parameter>("w2"),
+		graph.node<Node::Parameter>("b2")
 	};
-	std::vector<Core::Span<float>> y_span
-	{
-		Core::Span<float>{y_data[0].begin(), y_data[0].end()},
-		Core::Span<float>{y_data[1].begin(), y_data[1].end()},
-		Core::Span<float>{y_data[2].begin(), y_data[2].end()},
-		Core::Span<float>{y_data[3].begin(), y_data[3].end()}
-	};
-	
-	Optimizer::SGD optimizer{graph.node<Node::Parameter>("w"), graph.node<Node::Parameter>("b")};
 	
 	for (;;)
 	{

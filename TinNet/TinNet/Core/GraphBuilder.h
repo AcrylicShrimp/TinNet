@@ -60,10 +60,16 @@ namespace TinNet::Core
 		NodeWrapper add(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
 		NodeWrapper subtract(NodeWrapper sLeft, NodeWrapper sRight);
 		NodeWrapper subtract(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
+		NodeWrapper multiply(NodeWrapper sLeft, NodeWrapper sRight);
+		NodeWrapper multiply(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
+		NodeWrapper negative(NodeWrapper sInput);
+		NodeWrapper negative(const std::string &sNodeName, NodeWrapper sInput);
 
 		/*
 			Math function nodes.
 		*/
+		NodeWrapper log(NodeWrapper sLogit);
+		NodeWrapper log(const std::string &sNodeName, NodeWrapper sLogit);
 		NodeWrapper relu(NodeWrapper sLogit, float nAlpha = .0f);
 		NodeWrapper relu(const std::string &sNodeName, NodeWrapper sLogit, float nAlpha = .0f);
 		NodeWrapper sigmoid(NodeWrapper sLogit);
@@ -118,6 +124,8 @@ namespace TinNet::Core
 
 	NodeWrapper TINNET_DLL operator+(NodeWrapper sLeft, NodeWrapper sRight);
 	NodeWrapper TINNET_DLL operator-(NodeWrapper sLeft, NodeWrapper sRight);
+	NodeWrapper TINNET_DLL operator*(NodeWrapper sLeft, NodeWrapper sRight);
+	NodeWrapper TINNET_DLL operator-(NodeWrapper sInput);
 }
 
 #endif
