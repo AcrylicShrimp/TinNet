@@ -6,10 +6,14 @@
 
 #include <TinNet/TinNet.h>
 
+#include <algorithm>
+#include <cstddef>
 #include <cstdint>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <random>
+#include <utility>
 #include <vector>
 
 std::int32_t main()
@@ -20,22 +24,22 @@ std::int32_t main()
 	std::vector<float> test_y(10000 * 10);
 
 	{
-		std::ifstream sInput{L"training_input.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"train_input.dat", std::ifstream::binary | std::ifstream::in};
 		sInput.read(reinterpret_cast<char *>(train_x.data()), sizeof(float) * train_x.size());
 	}
 
 	{
-		std::ifstream sInput{L"training_label.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"train_label.dat", std::ifstream::binary | std::ifstream::in};
 		sInput.read(reinterpret_cast<char *>(train_y.data()), sizeof(float) * train_y.size());
 	}
 
 	{
-		std::ifstream sInput{L"testing_input.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"test_input.dat", std::ifstream::binary | std::ifstream::in};
 		sInput.read(reinterpret_cast<char *>(test_x.data()), sizeof(float) * test_x.size());
 	}
 
 	{
-		std::ifstream sInput{L"testing_label.dat", std::ifstream::binary | std::ifstream::in};
+		std::ifstream sInput{L"test_label.dat", std::ifstream::binary | std::ifstream::in};
 		sInput.read(reinterpret_cast<char *>(test_y.data()), sizeof(float) * test_y.size());
 	}
 
@@ -50,11 +54,11 @@ std::int32_t main()
 	auto b1 = graph.builder().parameter("b1", Core::Shape{300}, graph.builder().initConstant());
 	auto o1 = graph.builder().relu(graph.builder().dense(x, w1, b1));
 
-	auto w2 = graph.builder().parameter("w2", Core::Shape{10, 300}, graph.builder().initXavier(10, 300));
+	auto w2 = graph.builder().parameter("w2", Core::Shape{10, 300}, graph.builder().initXavier(300, 10));
 	auto b2 = graph.builder().parameter("b2", Core::Shape{10}, graph.builder().initConstant());
-	auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2), {false, true});
+	auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2), {true, false});
 
-	auto loss = graph.builder().mean(-graph.builder().sum(y * graph.builder().log(o2), true, {false, true}), true);
+	auto loss = graph.builder().mean(-graph.builder().sum(y * graph.builder().log(o2), true, {true, false}), true);
 
 	Optimizer::SGD optimizer
 	{
@@ -64,63 +68,45 @@ std::int32_t main()
 		graph.node<Node::Parameter>("b2")
 	};
 	
+	std::mt19937_64 sEngine{std::random_device{}()};
+	std::vector<std::size_t> sShuffledIndexList;
+
+	for (std::size_t nIndex{0}; nIndex < 60000; ++nIndex)
+		sShuffledIndexList.emplace_back(nIndex);
+
+	std::vector<float> sInput(32 * 764);
+	std::vector<float> sLabel(32 * 10);
+
 	for (;;)
 	{
-		graph.feed({
-			{"x", Core::Shape{2, 1}, x_span[0]},
-			{"y", Core::Shape{1}, y_span[0]}
-		});
-		std::cout << "#1 Value : " << output.evalOutput().output()[0];
-		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
-	
-		graph.feed({
-			{"x", Core::Shape{2, 1}, x_span[1]},
-			{"y", Core::Shape{1}, y_span[1]}
-		});
-		std::cout << "#2 Value : " << output.evalOutput().output()[0];
-		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
-	
-		graph.feed({
-			{"x", Core::Shape{2, 1}, x_span[2]},
-			{"y", Core::Shape{1}, y_span[2]}
-		});
-		std::cout << "#3 Value : " << output.evalOutput().output()[0];
-		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
-	
-		graph.feed({
-			{"x", Core::Shape{2, 1}, x_span[3]},
-			{"y", Core::Shape{1}, y_span[3]}
-		});
-		std::cout << "#4 Value : " << output.evalOutput().output()[0];
-		std::cout << " [" << loss.evalOutput().output()[0] << "]" << std::endl;
-	
-		std::cout << std::endl;
-	
-		system("pause");
-	
-		graph.feed({
-			{"x", Core::Shape{2, 1}, x_span[0]},
-			{"y", Core::Shape{1}, y_span[0]}
-		});
-		optimizer.reduce(1.f, loss);
-	
-		graph.feed({
-			{"x", Core::Shape{2, 1}, x_span[1]},
-			{"y", Core::Shape{1}, y_span[1]}
-		});
-		optimizer.reduce(1.f, loss);
-	
-		graph.feed({
-			{"x", Core::Shape{2, 1}, x_span[2]},
-			{"y", Core::Shape{1}, y_span[2]}
-		});
-		optimizer.reduce(1.f, loss);
-	
-		graph.feed({
-			{"x", Core::Shape{2, 1}, x_span[3]},
-			{"y", Core::Shape{1}, y_span[3]}
-		});
-		optimizer.reduce(1.f, loss);
+		graph.feed(
+			{
+				{"x", Core::Shape{764, 10000}, Core::Span<float>{train_x.begin(), train_x.end()}},
+				{"y", Core::Shape{10, 10000}, Core::Span<float>{train_y.begin(), train_y.end()}}
+			});
+
+		auto &test{o1.evalOutput().output()};
+
+		std::cout << "Loss: " << loss.evalOutput().output()[0] << std::endl;
+
+		for (std::size_t nIndex{1}; nIndex < 60000; ++nIndex)
+			std::swap(sShuffledIndexList[nIndex - 1], sShuffledIndexList[std::uniform_int_distribution<std::size_t>{nIndex, 60000 - 1}(sEngine)]);
+
+		for (std::size_t nIndex{0}; nIndex < 60000; nIndex += 32)
+		{
+			std::size_t nActualBatchSize{std::min<std::size_t>(60000 - nIndex, 32)};
+
+			std::copy(train_x.begin() + nIndex / 32 * nActualBatchSize * 764, train_x.begin() + (nIndex / 32 + 1) * nActualBatchSize * 764, sInput.begin());
+			std::copy(train_y.begin() + nIndex / 32 * nActualBatchSize * 10, train_y.begin() + (nIndex / 32 + 1) * nActualBatchSize * 10, sLabel.begin());
+
+			graph.feed(
+				{
+					{"x", Core::Shape{764, nActualBatchSize}, Core::Span<float>{sInput.begin(), sInput.end()}},
+					{"y", Core::Shape{10, nActualBatchSize}, Core::Span<float>{sLabel.begin(), sLabel.end()}}
+				});
+
+			optimizer.reduce(.001f, loss);
+		}
 	}
 
 	return 0;

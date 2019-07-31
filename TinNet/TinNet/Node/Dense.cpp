@@ -46,9 +46,11 @@ namespace TinNet::Node
 
 	void Dense::__evaluateOutput()
 	{
+		this->sInputBias.inputNode()->evalOutput();
+
 		if (this->sInputBias)
 			for (std::size_t nIndex{0}, nMaxIndex{this->sShape[1]}, nWidth{this->sShape[0]}; nIndex < nMaxIndex; ++nIndex)
-				this->sOutput.span().subSpan(nIndex * nWidth).copyFrom(this->sInputBias.inputNode()->evalOutput().output());
+				this->sOutput.span().subSpan(nIndex * nWidth).copyFrom(this->sInputBias.inputNode()->output());
 		else
 			this->sOutput.span().fillZero();
 
