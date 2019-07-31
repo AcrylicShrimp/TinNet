@@ -79,5 +79,6 @@
 */
 #include "Node/MSE.h"
 #include "Node/SigmoidCrossEntropy.h"
+#include "Node/SoftmaxCrossEntropy.h"
 
 #endif

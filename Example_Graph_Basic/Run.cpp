@@ -6,37 +6,55 @@
 
 #include <TinNet/TinNet.h>
 
+#include <cstdint>
 #include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <vector>
 
-int32_t main()
+std::int32_t main()
 {
+	std::vector<float> train_x(55000 * 784);
+	std::vector<float> train_y(55000 * 10);
+	std::vector<float> test_x(10000 * 784);
+	std::vector<float> test_y(10000 * 10);
+
+	{
+		std::ifstream sInput{L"MNIST_train_in.dat", std::ifstream::binary | std::ifstream::in};
+		sInput.read(reinterpret_cast<char *>(train_x.data()), sizeof(float) * train_x.size());
+	}
+
+	{
+		std::ifstream sInput{L"MNIST_train_out.dat", std::ifstream::binary | std::ifstream::in};
+		sInput.read(reinterpret_cast<char *>(train_y.data()), sizeof(float) * train_y.size());
+	}
+
+	{
+		std::ifstream sInput{L"MNIST_test_in.dat", std::ifstream::binary | std::ifstream::in};
+		sInput.read(reinterpret_cast<char *>(test_x.data()), sizeof(float) * test_x.size());
+	}
+
+	{
+		std::ifstream sInput{L"MNIST_test_out.dat", std::ifstream::binary | std::ifstream::in};
+		sInput.read(reinterpret_cast<char *>(test_y.data()), sizeof(float) * test_y.size());
+	}
+
 	using namespace TinNet;
 
 	Core::Graph graph;
 
 	auto x = graph.builder().input("x");
 	auto y = graph.builder().input("y");
-	auto w = graph.builder().parameter("w", Core::Shape{1, 2}, graph.builder().initXavier(2, 1));
-	auto b = graph.builder().parameter("b", Core::Shape{1}, graph.builder().initConstant());
-	auto output = graph.builder().sigmoid("output", graph.builder().dense(x, w, b));
-	auto loss = graph.builder().sigmoidCE("loss", y, output);
 
-	std::vector<std::vector<float>> x_data
-	{
-		{.0f, .0f},
-		{1.f, .0f},
-		{.0f, 1.f},
-		{1.f, 1.f}
-	};
-	std::vector<std::vector<float>> y_data
-	{
-		{.0f},
-		{1.f},
-		{1.f},
-		{1.f}
-	};
+	auto w1 = graph.builder().parameter(Core::Shape{300, 764}, graph.builder().initXavier(764, 300));
+	auto b1 = graph.builder().parameter(Core::Shape{300}, graph.builder().initConstant());
+	auto o1 = graph.builder().sigmoid(graph.builder().dense(x, w1, b1));
+
+	auto w2 = graph.builder().parameter(Core::Shape{10, 300}, graph.builder().initXavier(10, 300));
+	auto b2 = graph.builder().parameter(Core::Shape{10}, graph.builder().initConstant());
+	auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2), {false, true});
+
+	auto loss = graph.builder().sigmoidCE(y, o2);
 
 	std::vector<Core::Span<float>> x_span
 	{

@@ -106,6 +106,8 @@ namespace TinNet::Core
 		NodeWrapper mse(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sPred);
 		NodeWrapper sigmoidCE(NodeWrapper sLabel, NodeWrapper sProb);
 		NodeWrapper sigmoidCE(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sProb);
+		NodeWrapper softmaxCE(NodeWrapper sLabel, NodeWrapper sProb);
+		NodeWrapper softmaxCE(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sProb);
 
 		/*
 			Initializers.

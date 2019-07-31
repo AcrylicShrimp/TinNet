@@ -27,6 +27,7 @@
 
 #include "../Node/MSE.h"
 #include "../Node/SigmoidCrossEntropy.h"
+#include "../Node/SoftmaxCrossEntropy.h"
 
 #include "../Initializer/Constant.h"
 #include "../Initializer/Xavier.h"
@@ -362,6 +363,26 @@ namespace TinNet::Core
 	NodeWrapper GraphBuilder::sigmoidCE(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sProb)
 	{
 		NodeWrapper sNode{this->pGraph->createNode<Node::SigmoidCrossEntropy>(sNodeName)};
+
+		sNode["label"]->attach(sLabel);
+		sNode["prob"]->attach(sProb);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::softmaxCE(NodeWrapper sLabel, NodeWrapper sProb)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::SoftmaxCrossEntropy>(DEFAULT_NAME(Node::SoftmaxCrossEntropy))};
+
+		sNode["label"]->attach(sLabel);
+		sNode["prob"]->attach(sProb);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::softmaxCE(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sProb)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::SoftmaxCrossEntropy>(sNodeName)};
 
 		sNode["label"]->attach(sLabel);
 		sNode["prob"]->attach(sProb);
