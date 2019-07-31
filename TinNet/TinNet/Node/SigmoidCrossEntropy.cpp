@@ -41,7 +41,7 @@ namespace TinNet::Node
 		this->sOutput.span()[0] = .0f;
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sInputLabel.inputNode()->shape().size()}; nIndex < nMaxIndex; ++nIndex)
-			this->sOutput.span()[0] += -this->sInputLabel.inputNode()->output()[nIndex] * std::log(this->sInputProb.inputNode()->output()[nIndex] + 1e-6f) + (this->sInputLabel.inputNode()->output()[nIndex] - 1.f) * std::log(1.f - this->sInputProb.inputNode()->output()[nIndex] + 1e-6f);
+			this->sOutput.span()[0] -= this->sInputLabel.inputNode()->output()[nIndex] * std::log(this->sInputProb.inputNode()->output()[nIndex] + 1e-6f) + (this->sInputLabel.inputNode()->output()[nIndex] - 1.f) * std::log(1.f - this->sInputProb.inputNode()->output()[nIndex] + 1e-6f);
 
 		this->sOutput.span()[0] /= this->sInputLabel.inputNode()->shape().size();
 	}
