@@ -123,6 +123,9 @@
     <ClCompile Include="TinNet\Node\SoftmaxCrossEntropy.cpp">
       <Filter>TinNet\Node</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Node\Log.cpp" />
+    <ClCompile Include="TinNet\Node\Multiply.cpp" />
+    <ClCompile Include="TinNet\Node\Negative.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -251,5 +254,8 @@
     <ClInclude Include="TinNet\Node\SoftmaxCrossEntropy.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
+    <ClInclude Include="TinNet\Node\Log.h" />
+    <ClInclude Include="TinNet\Node\Multiply.h" />
+    <ClInclude Include="TinNet\Node\Negative.h" />
   </ItemGroup>
 </Project>
