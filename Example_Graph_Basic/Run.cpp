@@ -60,12 +60,15 @@ std::int32_t main()
 
 	auto loss = graph.builder().mean(-graph.builder().sum(y * graph.builder().log(o2), true, {true, false}), true);
 
-	Optimizer::SGD optimizer
+	Optimizer::Momentum optimizer
 	{
-		graph.node<Node::Parameter>("w1"),
-		graph.node<Node::Parameter>("b1"),
-		graph.node<Node::Parameter>("w2"),
-		graph.node<Node::Parameter>("b2")
+		.9f,
+		{
+			graph.node<Node::Parameter>("w1"),
+			graph.node<Node::Parameter>("b1"),
+			graph.node<Node::Parameter>("w2"),
+			graph.node<Node::Parameter>("b2")
+		}
 	};
 	
 	std::mt19937_64 sEngine{std::random_device{}()};
@@ -74,20 +77,23 @@ std::int32_t main()
 	for (std::size_t nIndex{0}; nIndex < 60000; ++nIndex)
 		sShuffledIndexList.emplace_back(nIndex);
 
-	std::vector<float> sInput(32 * 764);
-	std::vector<float> sLabel(32 * 10);
-
 	for (;;)
 	{
 		graph.feed(
 			{
-				{"x", Core::Shape{764, 10000}, Core::Span<float>{train_x.begin(), train_x.end()}},
-				{"y", Core::Shape{10, 10000}, Core::Span<float>{train_y.begin(), train_y.end()}}
+				{"x", Core::Shape{764, 32}, Core::Span<float>{train_x.begin(), train_x.begin() + 764 * 32}},
+				{"y", Core::Shape{10, 32}, Core::Span<float>{train_y.begin(), train_y.begin() + 10 * 32}}
 			});
 
-		auto &test{o1.evalOutput().output()};
+		std::cout << "Training Loss: " << loss.evalOutput().output()[0] << std::endl;
 
-		std::cout << "Loss: " << loss.evalOutput().output()[0] << std::endl;
+		graph.feed(
+			{
+				{"x", Core::Shape{764, 32}, Core::Span<float>{test_x.begin(), test_x.begin() + 764 * 32}},
+				{"y", Core::Shape{10, 32}, Core::Span<float>{test_y.begin(), test_y.begin() + 10 * 32}}
+			});
+
+		std::cout << "Test Loss: " << loss.evalOutput().output()[0] << std::endl;
 
 		for (std::size_t nIndex{1}; nIndex < 60000; ++nIndex)
 			std::swap(sShuffledIndexList[nIndex - 1], sShuffledIndexList[std::uniform_int_distribution<std::size_t>{nIndex, 60000 - 1}(sEngine)]);
@@ -96,13 +102,10 @@ std::int32_t main()
 		{
 			std::size_t nActualBatchSize{std::min<std::size_t>(60000 - nIndex, 32)};
 
-			std::copy(train_x.begin() + nIndex / 32 * nActualBatchSize * 764, train_x.begin() + (nIndex / 32 + 1) * nActualBatchSize * 764, sInput.begin());
-			std::copy(train_y.begin() + nIndex / 32 * nActualBatchSize * 10, train_y.begin() + (nIndex / 32 + 1) * nActualBatchSize * 10, sLabel.begin());
-
 			graph.feed(
 				{
-					{"x", Core::Shape{764, nActualBatchSize}, Core::Span<float>{sInput.begin(), sInput.end()}},
-					{"y", Core::Shape{10, nActualBatchSize}, Core::Span<float>{sLabel.begin(), sLabel.end()}}
+					{"x", Core::Shape{764, nActualBatchSize}, Core::Span<float>{train_x.begin() + nIndex / 32 * nActualBatchSize * 764, train_x.begin() + (nIndex / 32 + 1) * nActualBatchSize * 764}},
+					{"y", Core::Shape{10, nActualBatchSize}, Core::Span<float>{train_y.begin() + nIndex / 32 * nActualBatchSize * 10, train_y.begin() + (nIndex / 32 + 1) * nActualBatchSize * 10}}
 				});
 
 			optimizer.reduce(.001f, loss);

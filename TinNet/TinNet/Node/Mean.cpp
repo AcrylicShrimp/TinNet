@@ -127,8 +127,10 @@ namespace TinNet::Node
 
 		if (!this->sReduceAxis.size())
 		{
+			const auto nFactor{1.f / this->sInput.inputNode()->gradient().length()};
+
 			for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
-				this->sInput.inputNode()->gradient()[nIndex] += this->nMeanFactor * this->sGradient.span()[0];
+				this->sInput.inputNode()->gradient()[nIndex] += nFactor * this->sGradient.span()[0];
 
 			return;
 		}
@@ -136,8 +138,12 @@ namespace TinNet::Node
 		if (this->sReduceAxis.size() == 1)
 		{
 			if (this->sReduceAxis[0])
+			{
+				const auto nFactor{1.f / this->sInput.inputNode()->gradient().length()};
+
 				for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
-					this->sInput.inputNode()->gradient()[nIndex] += this->nMeanFactor * this->sGradient.span()[0];
+					this->sInput.inputNode()->gradient()[nIndex] += nFactor * this->sGradient.span()[0];
+			}
 			else
 				for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
 					this->sInput.inputNode()->gradient()[nIndex] += this->sGradient.span()[nIndex];

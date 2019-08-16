@@ -30,6 +30,7 @@
 	TinNet::Optimizer
 */
 #include "Optimizer/SGD.h"
+#include "Optimizer/Momentum.h"
 
 /*
 	Basic node elements.

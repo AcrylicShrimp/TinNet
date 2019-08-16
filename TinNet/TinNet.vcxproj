@@ -263,6 +263,7 @@
     <ClCompile Include="TinNet\Node\SoftmaxCrossEntropy.cpp" />
     <ClCompile Include="TinNet\Node\Subtract.cpp" />
     <ClCompile Include="TinNet\Node\Sum.cpp" />
+    <ClCompile Include="TinNet\Optimizer\Momentum.cpp" />
     <ClCompile Include="TinNet\Optimizer\SGD.cpp" />
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
   </ItemGroup>
@@ -307,6 +308,7 @@
     <ClInclude Include="TinNet\Node\SoftmaxCrossEntropy.h" />
     <ClInclude Include="TinNet\Node\Subtract.h" />
     <ClInclude Include="TinNet\Node\Sum.h" />
+    <ClInclude Include="TinNet\Optimizer\Momentum.h" />
     <ClInclude Include="TinNet\Optimizer\SGD.h" />
     <ClInclude Include="TinNet\Reinforcement\Game.h" />
     <ClInclude Include="TinNet\Reinforcement\MCTS.h" />

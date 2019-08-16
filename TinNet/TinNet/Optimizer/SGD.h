@@ -31,12 +31,12 @@ namespace TinNet::Optimizer
 		SGD(std::initializer_list<Node::Parameter *> sParameterList);
 		SGD(const std::vector<Node::Parameter *> &sParameterList);
 		SGD(const SGD &sSrc) = default;
-		SGD(SGD &&sSrc) = default;
-		~SGD() = default;
+		SGD(SGD &&sSrc) noexcept = default;
+		~SGD() noexcept = default;
 		
 	public:
 		SGD &operator=(const SGD &sSrc) = default;
-		SGD &operator=(SGD &&sSrc) = default;
+		SGD &operator=(SGD &&sSrc) noexcept = default;
 		
 	public:
 		void reduce(float nLearningRate, Node::Node *pTarget);
