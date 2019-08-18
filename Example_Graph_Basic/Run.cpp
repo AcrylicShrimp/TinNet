@@ -56,9 +56,12 @@ std::int32_t main()
 
 	auto w2 = graph.builder().parameter("w2", Core::Shape{10, 300}, graph.builder().initXavier(300, 10));
 	auto b2 = graph.builder().parameter("b2", Core::Shape{10}, graph.builder().initConstant());
-	auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2), {true, false});
+	//auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2), {true, false});
+	auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2));
 
-	auto loss = graph.builder().mean(-graph.builder().sum(y * graph.builder().log(o2), true, {true, false}), true);
+	//auto loss = graph.builder().mean(-graph.builder().sum(y * graph.builder().log(o2), true, {true, false}), true);
+	//auto loss = graph.builder().sigmoidCE(y, o2);
+	auto loss = graph.builder().softmaxCE(y, o2);
 
 	Optimizer::Momentum optimizer
 	{
@@ -81,16 +84,16 @@ std::int32_t main()
 	{
 		graph.feed(
 			{
-				{"x", Core::Shape{764, 32}, Core::Span<float>{train_x.begin(), train_x.begin() + 764 * 32}},
-				{"y", Core::Shape{10, 32}, Core::Span<float>{train_y.begin(), train_y.begin() + 10 * 32}}
+				{"x", Core::Shape{764, 60000}, Core::Span<float>{train_x.begin(), train_x.end()}},
+				{"y", Core::Shape{10, 60000}, Core::Span<float>{train_y.begin(), train_y.end()}}
 			});
 
 		std::cout << "Training Loss: " << loss.evalOutput().output()[0] << std::endl;
 
 		graph.feed(
 			{
-				{"x", Core::Shape{764, 32}, Core::Span<float>{test_x.begin(), test_x.begin() + 764 * 32}},
-				{"y", Core::Shape{10, 32}, Core::Span<float>{test_y.begin(), test_y.begin() + 10 * 32}}
+				{"x", Core::Shape{764, 10000}, Core::Span<float>{test_x.begin(), test_x.end()}},
+				{"y", Core::Shape{10, 10000}, Core::Span<float>{test_y.begin(), test_y.end()}}
 			});
 
 		std::cout << "Test Loss: " << loss.evalOutput().output()[0] << std::endl;

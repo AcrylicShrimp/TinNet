@@ -132,7 +132,9 @@
     <ClCompile Include="TinNet\Node\Negative.cpp">
       <Filter>TinNet\Node</Filter>
     </ClCompile>
-    <ClCompile Include="TinNet\Optimizer\Momentum.cpp" />
+    <ClCompile Include="TinNet\Optimizer\Momentum.cpp">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -270,6 +272,8 @@
     <ClInclude Include="TinNet\Node\Negative.h">
       <Filter>TinNet\Node</Filter>
     </ClInclude>
-    <ClInclude Include="TinNet\Optimizer\Momentum.h" />
+    <ClInclude Include="TinNet\Optimizer\Momentum.h">
+      <Filter>TinNet\Optimizer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

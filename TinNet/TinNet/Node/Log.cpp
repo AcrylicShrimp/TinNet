@@ -30,7 +30,7 @@ namespace TinNet::Node
 		this->sInput.inputNode()->evalOutput();
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
-			this->sOutput.span()[nIndex] = std::log(this->sInput.inputNode()->output()[nIndex]);
+			this->sOutput.span()[nIndex] = std::log(this->sInput.inputNode()->output()[nIndex] + 1e-4f);
 	}
 
 	void Log::__backwardOp(const Node *pDy)
@@ -39,6 +39,6 @@ namespace TinNet::Node
 		this->evalGradient(pDy);
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
-			this->sInput.inputNode()->gradient()[nIndex] += this->sGradient.span()[nIndex] / this->sInput.inputNode()->output()[nIndex];
+			this->sInput.inputNode()->gradient()[nIndex] += this->sGradient.span()[nIndex] / (this->sInput.inputNode()->output()[nIndex] + 1e-4f);
 	}
 }
