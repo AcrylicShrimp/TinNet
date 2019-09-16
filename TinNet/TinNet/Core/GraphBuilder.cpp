@@ -14,8 +14,10 @@
 #include "../Node/Add.h"
 #include "../Node/Subtract.h"
 #include "../Node/Multiply.h"
+#include "../Node/Divide.h"
 #include "../Node/Negative.h"
 
+#include "../Node/Exp.h"
 #include "../Node/Log.h"
 #include "../Node/ReLU.h"
 #include "../Node/Sigmoid.h"
@@ -53,8 +55,10 @@ namespace TinNet::Core
 		this->pGraph->sNodeTypeManager.registerNode<Node::Add>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Subtract>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Multiply>();
+		this->pGraph->sNodeTypeManager.registerNode<Node::Divide>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Negative>();
 
+		this->pGraph->sNodeTypeManager.registerNode<Node::Exp>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Log>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::ReLU>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Sigmoid>();
@@ -152,6 +156,26 @@ namespace TinNet::Core
 		return sNode;
 	}
 
+	NodeWrapper GraphBuilder::divide(NodeWrapper sLeft, NodeWrapper sRight)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Divide>(DEFAULT_NAME(Node::Divide))};
+
+		sNode["left"]->attach(sLeft);
+		sNode["right"]->attach(sRight);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::divide(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Divide>(sNodeName)};
+
+		sNode["left"]->attach(sLeft);
+		sNode["right"]->attach(sRight);
+
+		return sNode;
+	}
+
 	NodeWrapper GraphBuilder::negative(NodeWrapper sInput)
 	{
 		NodeWrapper sNode{this->pGraph->createNode<Node::Negative>(DEFAULT_NAME(Node::Negative))};
@@ -170,6 +194,24 @@ namespace TinNet::Core
 		return sNode;
 	}
 
+	NodeWrapper GraphBuilder::exp(NodeWrapper sLogit)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Exp>(DEFAULT_NAME(Node::Exp))};
+
+		sNode["input"]->attach(sLogit);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::exp(const std::string &sNodeName, NodeWrapper sLogit)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Exp>(sNodeName)};
+
+		sNode["input"]->attach(sLogit);
+
+		return sNode;
+	}
+	
 	NodeWrapper GraphBuilder::log(NodeWrapper sLogit)
 	{
 		NodeWrapper sNode{this->pGraph->createNode<Node::Log>(DEFAULT_NAME(Node::Log))};
@@ -495,6 +537,17 @@ namespace TinNet::Core
 		assert(sLeft.pNode->pGraph == sRight.pNode->pGraph);
 
 		return sLeft.pNode->pGraph->builder().multiply(sLeft, sRight);
+	}
+
+	NodeWrapper operator/(NodeWrapper sLeft, NodeWrapper sRight)
+	{
+		assert(sLeft.pNode);
+		assert(sRight.pNode);
+		assert(sLeft.pNode->pGraph);
+		assert(sRight.pNode->pGraph);
+		assert(sLeft.pNode->pGraph == sRight.pNode->pGraph);
+
+		return sLeft.pNode->pGraph->builder().divide(sLeft, sRight);
 	}
 
 	NodeWrapper operator-(NodeWrapper sInput)

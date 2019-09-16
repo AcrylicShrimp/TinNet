@@ -57,11 +57,15 @@ std::int32_t main()
 	auto w2 = graph.builder().parameter("w2", Core::Shape{10, 300}, graph.builder().initXavier(300, 10));
 	auto b2 = graph.builder().parameter("b2", Core::Shape{10}, graph.builder().initConstant());
 	//auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2), {true, false});
-	auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2));
+	//auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2));
+	//auto o2_exp = graph.builder().exp(graph.builder().dense(o1, w2, b2));
+	//auto o2_sum = graph.builder().sum(o2_exp, false, {true, false});
+	//auto o2 = o2_exp / o2_sum;
+	auto o2 = graph.builder().sigmoid(graph.builder().dense(o1, w2, b2));
 
 	//auto loss = graph.builder().mean(-graph.builder().sum(y * graph.builder().log(o2), true, {true, false}), true);
-	//auto loss = graph.builder().sigmoidCE(y, o2);
-	auto loss = graph.builder().softmaxCE(y, o2);
+	auto loss = graph.builder().sigmoidCE(y, o2);
+	//auto loss = graph.builder().softmaxCE(y, o2);
 
 	Optimizer::Momentum optimizer
 	{
@@ -110,6 +114,8 @@ std::int32_t main()
 					{"x", Core::Shape{764, nActualBatchSize}, Core::Span<float>{train_x.begin() + nIndex / 32 * nActualBatchSize * 764, train_x.begin() + (nIndex / 32 + 1) * nActualBatchSize * 764}},
 					{"y", Core::Shape{10, nActualBatchSize}, Core::Span<float>{train_y.begin() + nIndex / 32 * nActualBatchSize * 10, train_y.begin() + (nIndex / 32 + 1) * nActualBatchSize * 10}}
 				});
+
+			auto test = o2.evalOutput().output();
 
 			optimizer.reduce(.001f, loss);
 		}

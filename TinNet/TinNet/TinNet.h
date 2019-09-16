@@ -57,6 +57,7 @@
 /*
 	Math function nodes.
 */
+#include "Node/Exp.h"
 #include "Node/Log.h"
 #include "Node/ReLU.h"
 #include "Node/Sigmoid.h"

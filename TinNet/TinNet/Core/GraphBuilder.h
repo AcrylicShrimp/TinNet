@@ -62,12 +62,16 @@ namespace TinNet::Core
 		NodeWrapper subtract(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
 		NodeWrapper multiply(NodeWrapper sLeft, NodeWrapper sRight);
 		NodeWrapper multiply(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
+		NodeWrapper divide(NodeWrapper sLeft, NodeWrapper sRight);
+		NodeWrapper divide(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
 		NodeWrapper negative(NodeWrapper sInput);
 		NodeWrapper negative(const std::string &sNodeName, NodeWrapper sInput);
 
 		/*
 			Math function nodes.
 		*/
+		NodeWrapper exp(NodeWrapper sLogit);
+		NodeWrapper exp(const std::string &sNodeName, NodeWrapper sLogit);
 		NodeWrapper log(NodeWrapper sLogit);
 		NodeWrapper log(const std::string &sNodeName, NodeWrapper sLogit);
 		NodeWrapper relu(NodeWrapper sLogit, float nAlpha = .0f);
@@ -125,6 +129,7 @@ namespace TinNet::Core
 	NodeWrapper TINNET_DLL operator+(NodeWrapper sLeft, NodeWrapper sRight);
 	NodeWrapper TINNET_DLL operator-(NodeWrapper sLeft, NodeWrapper sRight);
 	NodeWrapper TINNET_DLL operator*(NodeWrapper sLeft, NodeWrapper sRight);
+	NodeWrapper TINNET_DLL operator/(NodeWrapper sLeft, NodeWrapper sRight);
 	NodeWrapper TINNET_DLL operator-(NodeWrapper sInput);
 }
 

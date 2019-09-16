@@ -30,7 +30,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D09C5062-ECA6-4002-9EF5-E613F9183971}</ProjectGuid>
     <RootNamespace>TinNet</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -244,6 +244,8 @@
     <ClCompile Include="TinNet\IO\Serializable.cpp" />
     <ClCompile Include="TinNet\Node\Add.cpp" />
     <ClCompile Include="TinNet\Node\Dense.cpp" />
+    <ClCompile Include="TinNet\Node\Divide.cpp" />
+    <ClCompile Include="TinNet\Node\Exp.cpp" />
     <ClCompile Include="TinNet\Node\Log.cpp" />
     <ClCompile Include="TinNet\Node\Mean.cpp" />
     <ClCompile Include="TinNet\Node\MM.cpp" />
@@ -289,6 +291,8 @@
     <ClInclude Include="TinNet\IO\Serializable.h" />
     <ClInclude Include="TinNet\Node\Add.h" />
     <ClInclude Include="TinNet\Node\Dense.h" />
+    <ClInclude Include="TinNet\Node\Divide.h" />
+    <ClInclude Include="TinNet\Node\Exp.h" />
     <ClInclude Include="TinNet\Node\Input.h" />
     <ClInclude Include="TinNet\Node\Log.h" />
     <ClInclude Include="TinNet\Node\Mean.h" />

@@ -135,6 +135,8 @@
     <ClCompile Include="TinNet\Optimizer\Momentum.cpp">
       <Filter>TinNet\Optimizer</Filter>
     </ClCompile>
+    <ClCompile Include="TinNet\Node\Exp.cpp" />
+    <ClCompile Include="TinNet\Node\Divide.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TinNet\TinNetDLL.h">
@@ -275,5 +277,7 @@
     <ClInclude Include="TinNet\Optimizer\Momentum.h">
       <Filter>TinNet\Optimizer</Filter>
     </ClInclude>
+    <ClInclude Include="TinNet\Node\Exp.h" />
+    <ClInclude Include="TinNet\Node\Divide.h" />
   </ItemGroup>
 </Project>
