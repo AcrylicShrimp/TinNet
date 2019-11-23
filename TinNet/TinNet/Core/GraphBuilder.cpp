@@ -464,6 +464,11 @@ namespace TinNet::Core
 		return InitializerWrapper{this->pGraph->createInitializer<Initializer::Xavier>(nFanIn, nFanOut)};
 	}
 
+	InitializerWrapper GraphBuilder::initXavier(std::mt19937_64::result_type nSeed, std::size_t nFanIn, std::size_t nFanOut)
+	{
+		return InitializerWrapper{this->pGraph->createInitializer<Initializer::Xavier>(nSeed, nFanIn, nFanOut)};
+	}
+
 	NodeWrapper operator+(NodeWrapper sLeft, NodeWrapper sRight)
 	{
 		assert(sLeft.pNode);

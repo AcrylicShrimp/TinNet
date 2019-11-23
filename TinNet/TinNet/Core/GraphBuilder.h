@@ -18,6 +18,7 @@
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
+#include <random>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -120,6 +121,7 @@ namespace TinNet::Core
 		*/
 		InitializerWrapper initConstant(float nConstant = .0f);
 		InitializerWrapper initXavier(std::size_t nFanIn, std::size_t nFanOut);
+		InitializerWrapper initXavier(std::mt19937_64::result_type nSeed, std::size_t nFanIn, std::size_t nFanOut);
 	};
 
 	NodeWrapper TINNET_DLL operator+(NodeWrapper sLeft, NodeWrapper sRight);

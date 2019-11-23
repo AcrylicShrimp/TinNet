@@ -32,18 +32,16 @@ namespace TinNet::Optimizer
 	
 	void Momentum::reduce(float nLearningRate, Node::Node *pTarget)
 	{
-		for (auto *pParameter : this->sParameterList)
-			pParameter->evalGradient(pTarget);
+		for (auto &sMomentumGradient : this->sMomentumGradientList)
+			for (auto &nGradient : sMomentumGradient.span())
+				nGradient *= this->nMomentum;
 
 		auto iMomentumGradient{this->sMomentumGradientList.begin()};
 
 		for (auto *pParameter : this->sParameterList)
 		{
-			for (auto &nGradient : iMomentumGradient->span())
-				nGradient *= this->nMomentum;
-
-			iMomentumGradient->span().accumulateFrom(pParameter->gradient());
-			pParameter->parameter().accumulateFrom(-nLearningRate, iMomentumGradient->span());
+			iMomentumGradient->span().accumulateFrom(-nLearningRate, pParameter->evalGradient(pTarget).gradient());
+			pParameter->parameter().accumulateFrom(iMomentumGradient->span());
 			pParameter->markDirty(false);
 
 			++iMomentumGradient;

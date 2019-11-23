@@ -50,20 +50,23 @@ std::int32_t main()
 	auto x = graph.builder().input("x");
 	auto y = graph.builder().input("y");
 
-	auto w1 = graph.builder().parameter("w1", Core::Shape{300, 764}, graph.builder().initXavier(764, 300));
+	auto w1 = graph.builder().parameter("w1", Core::Shape{300, 784}, graph.builder().initXavier(0, 784, 300));
 	auto b1 = graph.builder().parameter("b1", Core::Shape{300}, graph.builder().initConstant());
-	auto o1 = graph.builder().relu(graph.builder().dense(x, w1, b1));
+	auto a1 = graph.builder().dense(x, w1, b1);
+	auto o1 = graph.builder().relu(a1, .001f);
 
-	auto w2 = graph.builder().parameter("w2", Core::Shape{10, 300}, graph.builder().initXavier(300, 10));
+	auto w2 = graph.builder().parameter("w2", Core::Shape{10, 300}, graph.builder().initXavier(0, 300, 10));
 	auto b2 = graph.builder().parameter("b2", Core::Shape{10}, graph.builder().initConstant());
-	//auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2), {true, false});
-	auto o2 = graph.builder().softmax(graph.builder().dense(o1, w2, b2));
+	auto a2 = graph.builder().dense(o1, w2, b2);
+	auto o2 = graph.builder().softmax(a2, {true, false});
+	//auto o2 = graph.builder().sigmoid(a2);
 
 	//auto loss = graph.builder().mean(-graph.builder().sum(y * graph.builder().log(o2), true, {true, false}), true);
-	//auto loss = graph.builder().sigmoidCE(y, o2);
 	auto loss = graph.builder().softmaxCE(y, o2);
+	//auto loss = graph.builder().sigmoidCE(y, o2);
 
 	Optimizer::Momentum optimizer
+	//Optimizer::SGD optimizer
 	{
 		.9f,
 		{
@@ -74,42 +77,44 @@ std::int32_t main()
 		}
 	};
 	
-	std::mt19937_64 sEngine{std::random_device{}()};
-	std::vector<std::size_t> sShuffledIndexList;
+	//std::mt19937_64 sEngine{std::random_device{}()};
+	//std::vector<std::size_t> sShuffledIndexList;
 
-	for (std::size_t nIndex{0}; nIndex < 60000; ++nIndex)
-		sShuffledIndexList.emplace_back(nIndex);
+	//for (std::size_t nIndex{0}; nIndex < 60000; ++nIndex)
+	//	sShuffledIndexList.emplace_back(nIndex);
 
 	for (;;)
 	{
+		//graph.feed(
+		//	{
+		//		{"x", Core::Shape{784, 60000}, Core::Span<float>{train_x.begin(), train_x.end()}},
+		//		{"y", Core::Shape{10, 60000}, Core::Span<float>{train_y.begin(), train_y.end()}}
+		//	});
+
+		//std::cout << "Training Loss: " << loss.evalOutput().output()[0] << std::endl;
+
 		graph.feed(
 			{
-				{"x", Core::Shape{764, 60000}, Core::Span<float>{train_x.begin(), train_x.end()}},
-				{"y", Core::Shape{10, 60000}, Core::Span<float>{train_y.begin(), train_y.end()}}
-			});
-
-		std::cout << "Training Loss: " << loss.evalOutput().output()[0] << std::endl;
-
-		graph.feed(
-			{
-				{"x", Core::Shape{764, 10000}, Core::Span<float>{test_x.begin(), test_x.end()}},
+				{"x", Core::Shape{784, 10000}, Core::Span<float>{test_x.begin(), test_x.end()}},
 				{"y", Core::Shape{10, 10000}, Core::Span<float>{test_y.begin(), test_y.end()}}
 			});
-
+		
 		std::cout << "Test Loss: " << loss.evalOutput().output()[0] << std::endl;
 
-		for (std::size_t nIndex{1}; nIndex < 60000; ++nIndex)
-			std::swap(sShuffledIndexList[nIndex - 1], sShuffledIndexList[std::uniform_int_distribution<std::size_t>{nIndex, 60000 - 1}(sEngine)]);
+		//for (std::size_t nIndex{1}; nIndex < 60000; ++nIndex)
+		//	std::swap(sShuffledIndexList[nIndex - 1], sShuffledIndexList[std::uniform_int_distribution<std::size_t>{nIndex, 60000 - 1}(sEngine)]);
 
-		for (std::size_t nIndex{0}; nIndex < 60000; nIndex += 32)
+		for (std::size_t nIndex{0}; nIndex + 32 <= 60000; nIndex += 32)
 		{
 			std::size_t nActualBatchSize{std::min<std::size_t>(60000 - nIndex, 32)};
 
 			graph.feed(
 				{
-					{"x", Core::Shape{764, nActualBatchSize}, Core::Span<float>{train_x.begin() + nIndex / 32 * nActualBatchSize * 764, train_x.begin() + (nIndex / 32 + 1) * nActualBatchSize * 764}},
-					{"y", Core::Shape{10, nActualBatchSize}, Core::Span<float>{train_y.begin() + nIndex / 32 * nActualBatchSize * 10, train_y.begin() + (nIndex / 32 + 1) * nActualBatchSize * 10}}
+					{"x", Core::Shape{784, nActualBatchSize}, Core::Span<float>{train_x.data() + nIndex * 784, nActualBatchSize * 784}},
+					{"y", Core::Shape{10, nActualBatchSize}, Core::Span<float>{train_y.data() + nIndex * 10, nActualBatchSize * 10}}
 				});
+
+			auto g = o1.evalOutput().output();
 
 			optimizer.reduce(.001f, loss);
 		}

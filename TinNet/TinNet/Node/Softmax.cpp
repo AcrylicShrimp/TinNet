@@ -6,6 +6,8 @@
 
 #include "Softmax.h"
 
+#include <cstdio>
+
 namespace TinNet::Node
 {
 	TINNET_NODE_TYPE_DEF(Softmax)
@@ -111,7 +113,7 @@ namespace TinNet::Node
 			this->sSummation.span()[fReduceIndex(nIndex)] += std::exp(this->sInputLogit.inputNode()->output()[nIndex] - nMaxInput);
 
 		for (auto &nSummationValue : this->sSummation.span())
-			nSummationValue = 1.f / (nSummationValue + 1e-4f);
+			nSummationValue = 1.f / nSummationValue;
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sInputLogit.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
 			this->sOutput.span()[nIndex] = this->sSummation.span()[fReduceIndex(nIndex)] * std::exp(this->sInputLogit.inputNode()->output()[nIndex] - nMaxInput);
@@ -162,6 +164,9 @@ namespace TinNet::Node
 
 			return nResult;
 		}};
+
+		//for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
+		//	printf("%llu ==> %llu\n", nIndex, fReduceIndex(nIndex));
 
 		this->sSummation.span().fillZero();
 
