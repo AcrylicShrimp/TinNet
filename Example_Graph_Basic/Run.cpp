@@ -7,6 +7,7 @@
 #include <TinNet/TinNet.h>
 
 #include <algorithm>
+#include <chrono>
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
@@ -59,11 +60,8 @@ std::int32_t main()
 	auto b2 = graph.builder().parameter("b2", Core::Shape{10}, graph.builder().initConstant());
 	auto a2 = graph.builder().dense(o1, w2, b2);
 	auto o2 = graph.builder().softmax(a2, {true, false});
-	//auto o2 = graph.builder().sigmoid(a2);
 
-	//auto loss = graph.builder().mean(-graph.builder().sum(y * graph.builder().log(o2), true, {true, false}), true);
 	auto loss = graph.builder().softmaxCE(y, o2);
-	//auto loss = graph.builder().sigmoidCE(y, o2);
 
 	Optimizer::Momentum optimizer
 	//Optimizer::SGD optimizer
@@ -77,21 +75,23 @@ std::int32_t main()
 		}
 	};
 	
-	//std::mt19937_64 sEngine{std::random_device{}()};
-	//std::vector<std::size_t> sShuffledIndexList;
+	std::mt19937_64 sEngine{std::random_device{}()};
+	std::vector<std::size_t> sShuffledIndexList;
 
-	//for (std::size_t nIndex{0}; nIndex < 60000; ++nIndex)
-	//	sShuffledIndexList.emplace_back(nIndex);
+	for (std::size_t nIndex{0}; nIndex < 60000; ++nIndex)
+		sShuffledIndexList.emplace_back(nIndex);
 
 	for (;;)
 	{
-		//graph.feed(
-		//	{
-		//		{"x", Core::Shape{784, 60000}, Core::Span<float>{train_x.begin(), train_x.end()}},
-		//		{"y", Core::Shape{10, 60000}, Core::Span<float>{train_y.begin(), train_y.end()}}
-		//	});
+		auto sBegin{std::chrono::system_clock::now()};
 
-		//std::cout << "Training Loss: " << loss.evalOutput().output()[0] << std::endl;
+		graph.feed(
+			{
+				{"x", Core::Shape{784, 60000}, Core::Span<float>{train_x.begin(), train_x.end()}},
+				{"y", Core::Shape{10, 60000}, Core::Span<float>{train_y.begin(), train_y.end()}}
+			});
+
+		std::cout << "Training Loss: " << loss.evalOutput().output()[0] << std::endl;
 
 		graph.feed(
 			{
@@ -101,8 +101,8 @@ std::int32_t main()
 		
 		std::cout << "Test Loss: " << loss.evalOutput().output()[0] << std::endl;
 
-		//for (std::size_t nIndex{1}; nIndex < 60000; ++nIndex)
-		//	std::swap(sShuffledIndexList[nIndex - 1], sShuffledIndexList[std::uniform_int_distribution<std::size_t>{nIndex, 60000 - 1}(sEngine)]);
+		for (std::size_t nIndex{1}; nIndex < 60000; ++nIndex)
+			std::swap(sShuffledIndexList[nIndex - 1], sShuffledIndexList[std::uniform_int_distribution<std::size_t>{nIndex, 60000 - 1}(sEngine)]);
 
 		for (std::size_t nIndex{0}; nIndex + 32 <= 60000; nIndex += 32)
 		{
@@ -118,6 +118,10 @@ std::int32_t main()
 
 			optimizer.reduce(.001f, loss);
 		}
+
+		auto sEnd{std::chrono::system_clock::now()};
+
+		std::cout << "==== Time took : " << std::chrono::duration_cast<std::chrono::milliseconds>(sEnd - sBegin).count() << "ms ====" << std::endl << std::endl;
 	}
 
 	return 0;
