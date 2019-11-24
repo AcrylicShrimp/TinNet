@@ -113,7 +113,7 @@ namespace TinNet::Node
 
 		if (!this->sReduceAxis.size())
 		{
-			for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
+			for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
 				this->sInput.inputNode()->gradient()[nIndex] += this->sGradient.span()[0];
 
 			return;
@@ -122,10 +122,10 @@ namespace TinNet::Node
 		if (this->sReduceAxis.size() == 1)
 		{
 			if (this->sReduceAxis[0])
-				for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
+				for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
 					this->sInput.inputNode()->gradient()[nIndex] += this->sGradient.span()[0];
 			else
-				for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
+				for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
 					this->sInput.inputNode()->gradient()[nIndex] += this->sGradient.span()[nIndex];
 
 			return;
@@ -141,7 +141,7 @@ namespace TinNet::Node
 			return nResult;
 		}};
 
-		for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
+		for (std::size_t nIndex{0}, nMaxIndex{this->sInput.inputNode()->gradient().length()}; nIndex < nMaxIndex; ++nIndex)
 			this->sInput.inputNode()->gradient()[nIndex] += this->sGradient.span()[fReduceIndex(nIndex)];
 	}
 }

@@ -13,7 +13,10 @@
 
 #include "../Node/Add.h"
 #include "../Node/Subtract.h"
+#include "../Node/Multiply.h"
+#include "../Node/Negative.h"
 
+#include "../Node/Log.h"
 #include "../Node/ReLU.h"
 #include "../Node/Sigmoid.h"
 #include "../Node/Softmax.h"
@@ -27,6 +30,7 @@
 
 #include "../Node/MSE.h"
 #include "../Node/SigmoidCrossEntropy.h"
+#include "../Node/SoftmaxCrossEntropy.h"
 
 #include "../Initializer/Constant.h"
 #include "../Initializer/Xavier.h"
@@ -47,7 +51,11 @@ namespace TinNet::Core
 		this->pGraph->sNodeTypeManager.registerNode<Node::Parameter>();
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::Add>();
+		this->pGraph->sNodeTypeManager.registerNode<Node::Subtract>();
+		this->pGraph->sNodeTypeManager.registerNode<Node::Multiply>();
+		this->pGraph->sNodeTypeManager.registerNode<Node::Negative>();
 
+		this->pGraph->sNodeTypeManager.registerNode<Node::Log>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::ReLU>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Sigmoid>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::Softmax>();
@@ -61,6 +69,7 @@ namespace TinNet::Core
 
 		this->pGraph->sNodeTypeManager.registerNode<Node::MSE>();
 		this->pGraph->sNodeTypeManager.registerNode<Node::SigmoidCrossEntropy>();
+		this->pGraph->sNodeTypeManager.registerNode<Node::SoftmaxCrossEntropy>();
 	}
 
 	NodeWrapper GraphBuilder::input()
@@ -119,6 +128,62 @@ namespace TinNet::Core
 
 		sNode["left"]->attach(sLeft);
 		sNode["right"]->attach(sRight);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::multiply(NodeWrapper sLeft, NodeWrapper sRight)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Multiply>(DEFAULT_NAME(Node::Multiply))};
+
+		sNode["left"]->attach(sLeft);
+		sNode["right"]->attach(sRight);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::multiply(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Multiply>(sNodeName)};
+
+		sNode["left"]->attach(sLeft);
+		sNode["right"]->attach(sRight);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::negative(NodeWrapper sInput)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Negative>(DEFAULT_NAME(Node::Negative))};
+
+		sNode["input"]->attach(sInput);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::negative(const std::string &sNodeName, NodeWrapper sInput)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Negative>(sNodeName)};
+
+		sNode["input"]->attach(sInput);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::log(NodeWrapper sLogit)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Log>(DEFAULT_NAME(Node::Log))};
+
+		sNode["input"]->attach(sLogit);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::log(const std::string &sNodeName, NodeWrapper sLogit)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::Log>(sNodeName)};
+
+		sNode["input"]->attach(sLogit);
 
 		return sNode;
 	}
@@ -369,6 +434,26 @@ namespace TinNet::Core
 		return sNode;
 	}
 
+	NodeWrapper GraphBuilder::softmaxCE(NodeWrapper sLabel, NodeWrapper sProb)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::SoftmaxCrossEntropy>(DEFAULT_NAME(Node::SoftmaxCrossEntropy))};
+
+		sNode["label"]->attach(sLabel);
+		sNode["prob"]->attach(sProb);
+
+		return sNode;
+	}
+
+	NodeWrapper GraphBuilder::softmaxCE(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sProb)
+	{
+		NodeWrapper sNode{this->pGraph->createNode<Node::SoftmaxCrossEntropy>(sNodeName)};
+
+		sNode["label"]->attach(sLabel);
+		sNode["prob"]->attach(sProb);
+
+		return sNode;
+	}
+
 	InitializerWrapper GraphBuilder::initConstant(float nConstant)
 	{
 		return InitializerWrapper{this->pGraph->createInitializer<Initializer::Constant>(nConstant)};
@@ -377,6 +462,11 @@ namespace TinNet::Core
 	InitializerWrapper GraphBuilder::initXavier(std::size_t nFanIn, std::size_t nFanOut)
 	{
 		return InitializerWrapper{this->pGraph->createInitializer<Initializer::Xavier>(nFanIn, nFanOut)};
+	}
+
+	InitializerWrapper GraphBuilder::initXavier(std::mt19937_64::result_type nSeed, std::size_t nFanIn, std::size_t nFanOut)
+	{
+		return InitializerWrapper{this->pGraph->createInitializer<Initializer::Xavier>(nSeed, nFanIn, nFanOut)};
 	}
 
 	NodeWrapper operator+(NodeWrapper sLeft, NodeWrapper sRight)
@@ -399,5 +489,24 @@ namespace TinNet::Core
 		assert(sLeft.pNode->pGraph == sRight.pNode->pGraph);
 
 		return sLeft.pNode->pGraph->builder().subtract(sLeft, sRight);
+	}
+
+	NodeWrapper operator*(NodeWrapper sLeft, NodeWrapper sRight)
+	{
+		assert(sLeft.pNode);
+		assert(sRight.pNode);
+		assert(sLeft.pNode->pGraph);
+		assert(sRight.pNode->pGraph);
+		assert(sLeft.pNode->pGraph == sRight.pNode->pGraph);
+
+		return sLeft.pNode->pGraph->builder().multiply(sLeft, sRight);
+	}
+
+	NodeWrapper operator-(NodeWrapper sInput)
+	{
+		assert(sInput.pNode);
+		assert(sInput.pNode->pGraph);
+
+		return sInput.pNode->pGraph->builder().negative(sInput);
 	}
 }

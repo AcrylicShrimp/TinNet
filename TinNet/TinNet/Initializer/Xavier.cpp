@@ -10,14 +10,16 @@ namespace TinNet::Initializer
 {
 	Xavier::Xavier(std::size_t nFanIn, std::size_t nFanOut) :
 		sEngine{static_cast<std::mt19937_64::result_type>(std::random_device{}())},
-		sDist{.0f, std::sqrt(2.f / (nFanIn + nFanOut))}
+		//sDist{.0f, std::sqrt(2.f / (nFanIn + nFanOut))}
+		sDist{.0f, std::sqrt(2.f / (nFanIn))}
 	{
 		//Empty.
 	}
 
 	Xavier::Xavier(std::mt19937_64::result_type nSeed, std::size_t nFanIn, std::size_t nFanOut) :
 		sEngine{nSeed},
-		sDist{.0f, std::sqrt(2.f / (nFanIn + nFanOut))}
+		//sDist{.0f, std::sqrt(2.f / (nFanIn + nFanOut))}
+		sDist{.0f, std::sqrt(2.f / (nFanIn))}
 	{
 		//Empty.
 	}

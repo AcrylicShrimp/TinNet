@@ -39,7 +39,7 @@ namespace TinNet::Node
 		this->sInputRight.inputNode()->evalOutput();
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
-			this->sOutput.span()[nIndex] = this->sInputLeft.inputNode()->output()[nIndex] + this->sInputRight.inputNode()->output()[nIndex];
+			this->sOutput.span()[nIndex] = this->sInputLeft.inputNode()->output()[nIndex] - this->sInputRight.inputNode()->output()[nIndex];
 	}
 
 	void Subtract::__backwardOpLeft(const Node *pDy)

@@ -244,10 +244,13 @@
     <ClCompile Include="TinNet\IO\Serializable.cpp" />
     <ClCompile Include="TinNet\Node\Add.cpp" />
     <ClCompile Include="TinNet\Node\Dense.cpp" />
+    <ClCompile Include="TinNet\Node\Log.cpp" />
     <ClCompile Include="TinNet\Node\Mean.cpp" />
     <ClCompile Include="TinNet\Node\MM.cpp" />
     <ClCompile Include="TinNet\Node\Input.cpp" />
     <ClCompile Include="TinNet\Node\MSE.cpp" />
+    <ClCompile Include="TinNet\Node\Multiply.cpp" />
+    <ClCompile Include="TinNet\Node\Negative.cpp" />
     <ClCompile Include="TinNet\Node\Node.cpp" />
     <ClCompile Include="TinNet\Node\NodeInput.cpp" />
     <ClCompile Include="TinNet\Node\NodeType.cpp" />
@@ -257,8 +260,10 @@
     <ClCompile Include="TinNet\Node\Sigmoid.cpp" />
     <ClCompile Include="TinNet\Node\SigmoidCrossEntropy.cpp" />
     <ClCompile Include="TinNet\Node\Softmax.cpp" />
+    <ClCompile Include="TinNet\Node\SoftmaxCrossEntropy.cpp" />
     <ClCompile Include="TinNet\Node\Subtract.cpp" />
     <ClCompile Include="TinNet\Node\Sum.cpp" />
+    <ClCompile Include="TinNet\Optimizer\Momentum.cpp" />
     <ClCompile Include="TinNet\Optimizer\SGD.cpp" />
     <ClCompile Include="TinNet\Reinforcement\MCTS.cpp" />
   </ItemGroup>
@@ -285,9 +290,12 @@
     <ClInclude Include="TinNet\Node\Add.h" />
     <ClInclude Include="TinNet\Node\Dense.h" />
     <ClInclude Include="TinNet\Node\Input.h" />
+    <ClInclude Include="TinNet\Node\Log.h" />
     <ClInclude Include="TinNet\Node\Mean.h" />
     <ClInclude Include="TinNet\Node\MM.h" />
     <ClInclude Include="TinNet\Node\MSE.h" />
+    <ClInclude Include="TinNet\Node\Multiply.h" />
+    <ClInclude Include="TinNet\Node\Negative.h" />
     <ClInclude Include="TinNet\Node\Node.h" />
     <ClInclude Include="TinNet\Node\NodeInput.h" />
     <ClInclude Include="TinNet\Node\NodeType.h" />
@@ -297,8 +305,10 @@
     <ClInclude Include="TinNet\Node\Sigmoid.h" />
     <ClInclude Include="TinNet\Node\SigmoidCrossEntropy.h" />
     <ClInclude Include="TinNet\Node\Softmax.h" />
+    <ClInclude Include="TinNet\Node\SoftmaxCrossEntropy.h" />
     <ClInclude Include="TinNet\Node\Subtract.h" />
     <ClInclude Include="TinNet\Node\Sum.h" />
+    <ClInclude Include="TinNet\Optimizer\Momentum.h" />
     <ClInclude Include="TinNet\Optimizer\SGD.h" />
     <ClInclude Include="TinNet\Reinforcement\Game.h" />
     <ClInclude Include="TinNet\Reinforcement\MCTS.h" />

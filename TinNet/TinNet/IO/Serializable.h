@@ -47,13 +47,15 @@ namespace TinNet::IO
 
 	inline constexpr bool Serializable::isLittleEndian()
 	{
-		static constexpr union
-		{
-			uint16_t nFirst;
-			uint8_t vSecond[2];
-		} sEndianness{1};
+		//static constexpr union
+		//{
+		//	uint16_t nFirst;
+		//	uint8_t vSecond[2];
+		//} sEndianness{1};
 
-		return sEndianness.vSecond[0];
+		//return sEndianness.vSecond[0];
+
+		return true;
 	}
 
 	template<class DataType> inline DataType Serializable::reverse(DataType tValue)

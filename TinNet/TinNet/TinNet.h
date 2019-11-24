@@ -30,6 +30,7 @@
 	TinNet::Optimizer
 */
 #include "Optimizer/SGD.h"
+#include "Optimizer/Momentum.h"
 
 /*
 	Basic node elements.
@@ -50,10 +51,13 @@
 */
 #include "Node/Add.h"
 #include "Node/Subtract.h"
+#include "Node/Multiply.h"
+#include "Node/Negative.h"
 
 /*
 	Math function nodes.
 */
+#include "Node/Log.h"
 #include "Node/ReLU.h"
 #include "Node/Sigmoid.h"
 #include "Node/Softmax.h"
@@ -79,5 +83,6 @@
 */
 #include "Node/MSE.h"
 #include "Node/SigmoidCrossEntropy.h"
+#include "Node/SoftmaxCrossEntropy.h"
 
 #endif

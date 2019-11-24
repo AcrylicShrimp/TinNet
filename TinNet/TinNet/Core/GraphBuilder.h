@@ -18,6 +18,7 @@
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
+#include <random>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -60,10 +61,16 @@ namespace TinNet::Core
 		NodeWrapper add(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
 		NodeWrapper subtract(NodeWrapper sLeft, NodeWrapper sRight);
 		NodeWrapper subtract(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
+		NodeWrapper multiply(NodeWrapper sLeft, NodeWrapper sRight);
+		NodeWrapper multiply(const std::string &sNodeName, NodeWrapper sLeft, NodeWrapper sRight);
+		NodeWrapper negative(NodeWrapper sInput);
+		NodeWrapper negative(const std::string &sNodeName, NodeWrapper sInput);
 
 		/*
 			Math function nodes.
 		*/
+		NodeWrapper log(NodeWrapper sLogit);
+		NodeWrapper log(const std::string &sNodeName, NodeWrapper sLogit);
 		NodeWrapper relu(NodeWrapper sLogit, float nAlpha = .0f);
 		NodeWrapper relu(const std::string &sNodeName, NodeWrapper sLogit, float nAlpha = .0f);
 		NodeWrapper sigmoid(NodeWrapper sLogit);
@@ -106,16 +113,21 @@ namespace TinNet::Core
 		NodeWrapper mse(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sPred);
 		NodeWrapper sigmoidCE(NodeWrapper sLabel, NodeWrapper sProb);
 		NodeWrapper sigmoidCE(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sProb);
+		NodeWrapper softmaxCE(NodeWrapper sLabel, NodeWrapper sProb);
+		NodeWrapper softmaxCE(const std::string &sNodeName, NodeWrapper sLabel, NodeWrapper sProb);
 
 		/*
 			Initializers.
 		*/
 		InitializerWrapper initConstant(float nConstant = .0f);
 		InitializerWrapper initXavier(std::size_t nFanIn, std::size_t nFanOut);
+		InitializerWrapper initXavier(std::mt19937_64::result_type nSeed, std::size_t nFanIn, std::size_t nFanOut);
 	};
 
 	NodeWrapper TINNET_DLL operator+(NodeWrapper sLeft, NodeWrapper sRight);
 	NodeWrapper TINNET_DLL operator-(NodeWrapper sLeft, NodeWrapper sRight);
+	NodeWrapper TINNET_DLL operator*(NodeWrapper sLeft, NodeWrapper sRight);
+	NodeWrapper TINNET_DLL operator-(NodeWrapper sInput);
 }
 
 #endif

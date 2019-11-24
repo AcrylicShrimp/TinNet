@@ -47,8 +47,12 @@ namespace TinNet::Node
 	void Dense::__evaluateOutput()
 	{
 		if (this->sInputBias)
+		{
+			this->sInputBias.inputNode()->evalOutput();
+
 			for (std::size_t nIndex{0}, nMaxIndex{this->sShape[1]}, nWidth{this->sShape[0]}; nIndex < nMaxIndex; ++nIndex)
-				this->sOutput.span().subSpan(nIndex * nWidth).copyFrom(this->sInputBias.inputNode()->evalOutput().output());
+				this->sOutput.span().subSpan(nIndex * nWidth).copyFrom(this->sInputBias.inputNode()->output());
+		}
 		else
 			this->sOutput.span().fillZero();
 
@@ -82,9 +86,12 @@ namespace TinNet::Node
 			this->sInput.inputNode()->evalOutput().output(),
 			this->sInputWeight.inputNode()->gradient());
 	}
-	
+
 	void Dense::__backwardOpBias(const Node *pDy)
 	{
-		this->sInputBias.inputNode()->gradient().accumulateFrom(this->evalGradient(pDy).gradient());
+		this->evalGradient(pDy);
+
+		for (std::size_t nIndex{0}, nMaxIndex{this->sShape[1]}, nWidth{this->sShape[0]}; nIndex < nMaxIndex; ++nIndex)
+			this->sInputBias.inputNode()->gradient().accumulateFrom(this->gradient().subSpan(nIndex * nWidth));
 	}
 }

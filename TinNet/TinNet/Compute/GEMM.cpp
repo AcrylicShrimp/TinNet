@@ -6,6 +6,8 @@
 
 #include "GEMM.h"
 
+#include <iostream>
+
 namespace TinNet::Compute
 {
 	void __vectorcall GEMM::multiply(std::size_t nMaxIndex, std::size_t nRow, std::size_t nColumn, const Core::Span<float> sLeft, const Core::Span<float> sRight, Core::Span<float> sDestination) noexcept
@@ -68,14 +70,13 @@ namespace TinNet::Compute
 
 		#pragma omp for schedule(guided)
 			for (std::int64_t nR{0}; nR < static_cast<std::int64_t>(nRow); ++nR)
-			{
 				for (std::size_t nC{0}; nC < nMaxIndex; ++nC)
 				{
 					std::size_t nIndex{0};
 					auto sSum{_mm256_setzero_ps()};
 
 					for (; nIndex + 8 <= nColumn; nIndex += 8)
-						sSum = _mm256_fmadd_ps(_mm256_loadu_ps(pG + nR * nColumn + nIndex), _mm256_loadu_ps(pR + nC * nColumn + nIndex), sSum);
+						sSum = _mm256_fmadd_ps(_mm256_loadu_ps(pG + nR * nColumn + nIndex), _mm256_loadu_ps(pRT + nC * nColumn + nIndex), sSum);
 
 					const auto sSum128 = _mm_add_ps(_mm256_extractf128_ps(sSum, 1), _mm256_castps256_ps128(sSum));
 					const auto sSum64 = _mm_add_ps(sSum128, _mm_movehl_ps(sSum128, sSum128));
@@ -83,11 +84,10 @@ namespace TinNet::Compute
 					auto nSum{_mm_cvtss_f32(sSum32)};
 
 					for (; nIndex < nColumn; ++nIndex)
-						nSum += pG[nR * nColumn + nIndex] * pR[nC * nColumn + nIndex];
+						nSum += pG[nR * nColumn + nIndex] * pRT[nC * nColumn + nIndex];
 
 					pD[nR * nMaxIndex + nC] += nSum;
 				}
-			}
 		}
 	}
 

@@ -6,6 +6,8 @@
 
 #include "Softmax.h"
 
+#include <cstdio>
+
 namespace TinNet::Node
 {
 	TINNET_NODE_TYPE_DEF(Softmax)
@@ -67,7 +69,7 @@ namespace TinNet::Node
 			for (auto nInputValue : this->sInputLogit.inputNode()->output())
 				nExpSumInv += std::exp(nInputValue - nMaxInput);
 
-			nExpSumInv = 1.f / (nExpSumInv + .0001f);
+			nExpSumInv = 1.f / (nExpSumInv + 1e-4f);
 
 			for (std::size_t nIndex{0}, nMaxIndex{this->sInputLogit.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
 				this->sOutput.span()[nIndex] = nExpSumInv * std::exp(this->sInputLogit.inputNode()->output()[nIndex] - nMaxInput);
@@ -84,10 +86,10 @@ namespace TinNet::Node
 				for (auto nInputValue : this->sInputLogit.inputNode()->output())
 					nExpSumInv += std::exp(nInputValue - nMaxInput);
 
-				nExpSumInv = 1.f / (nExpSumInv + .0001f);
+				nExpSumInv = 1.f / (nExpSumInv + 1e-4f);
 
 				for (std::size_t nIndex{0}, nMaxIndex{this->sInputLogit.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
-					this->sOutput.span()[0] = nExpSumInv * std::exp(this->sInputLogit.inputNode()->output()[nIndex] - nMaxInput);
+					this->sOutput.span()[nIndex] = nExpSumInv * std::exp(this->sInputLogit.inputNode()->output()[nIndex] - nMaxInput);
 			}
 			else
 				this->sOutput.span().fillOne();
@@ -111,7 +113,7 @@ namespace TinNet::Node
 			this->sSummation.span()[fReduceIndex(nIndex)] += std::exp(this->sInputLogit.inputNode()->output()[nIndex] - nMaxInput);
 
 		for (auto &nSummationValue : this->sSummation.span())
-			nSummationValue = 1.f / (nSummationValue + .0001f);
+			nSummationValue = 1.f / nSummationValue;
 
 		for (std::size_t nIndex{0}, nMaxIndex{this->sInputLogit.inputNode()->output().length()}; nIndex < nMaxIndex; ++nIndex)
 			this->sOutput.span()[nIndex] = this->sSummation.span()[fReduceIndex(nIndex)] * std::exp(this->sInputLogit.inputNode()->output()[nIndex] - nMaxInput);
@@ -162,6 +164,9 @@ namespace TinNet::Node
 
 			return nResult;
 		}};
+
+		//for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
+		//	printf("%llu ==> %llu\n", nIndex, fReduceIndex(nIndex));
 
 		this->sSummation.span().fillZero();
 
