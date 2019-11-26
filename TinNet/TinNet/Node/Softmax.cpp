@@ -6,8 +6,6 @@
 
 #include "Softmax.h"
 
-#include <cstdio>
-
 namespace TinNet::Node
 {
 	TINNET_NODE_TYPE_DEF(Softmax)
@@ -164,9 +162,6 @@ namespace TinNet::Node
 
 			return nResult;
 		}};
-
-		//for (std::size_t nIndex{0}, nMaxIndex{this->sOutput.size()}; nIndex < nMaxIndex; ++nIndex)
-		//	printf("%llu ==> %llu\n", nIndex, fReduceIndex(nIndex));
 
 		this->sSummation.span().fillZero();
 
