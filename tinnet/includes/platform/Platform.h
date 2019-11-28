@@ -1,0 +1,16 @@
+
+#ifndef _TINNET_PLATFORM_PLATFORM_H
+
+#define _TINNET_PLATFORM_PLATFORM_H
+
+#ifdef _MSC_VER
+
+#	define _TINNET_PLATFORM_WINDOWS
+
+#else
+
+#	define _TINNET_PLATFORM_UNIX
+
+#endif
+
+#endif
