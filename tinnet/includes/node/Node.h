@@ -7,6 +7,7 @@
 #include "tinnet/includes/node/Type.h"
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 namespace tinnet::node {
@@ -21,11 +22,12 @@ namespace tinnet::node {
 		std::vector<Node *> sRevDeps;	 // Nodes that depends on this instance.
 
 	public:
-		Node(Type eType, Shape &&eShape, const std::uint8_t *const pOutput, ) noexcept;
+		Node(Type eType, Shape &&eShape, const std::uint8_t *const pOutput, std::vector<Node *> &&sDeps) noexcept;
 		virtual ~Node() noexcept = default;
 
 	public:
 		// TODO: Add here some gradient-related compute methods.
+		std::unique_ptr<std::uint8_t[]> computeGradient();
 	};
 }	 // namespace tinnet::node
 
