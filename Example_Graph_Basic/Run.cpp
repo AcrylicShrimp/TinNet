@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <random>
@@ -113,8 +114,6 @@ std::int32_t main()
 					{"x", Core::Shape{784, nActualBatchSize}, Core::Span<float>{train_x.data() + nIndex * 784, nActualBatchSize * 784}},
 					{"y", Core::Shape{10, nActualBatchSize}, Core::Span<float>{train_y.data() + nIndex * 10, nActualBatchSize * 10}}
 				});
-
-			auto g = o1.evalOutput().output();
 
 			optimizer.reduce(.001f, loss);
 		}

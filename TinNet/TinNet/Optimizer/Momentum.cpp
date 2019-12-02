@@ -39,12 +39,14 @@ namespace TinNet::Optimizer
 		auto iMomentumGradient{this->sMomentumGradientList.begin()};
 
 		for (auto *pParameter : this->sParameterList)
-		{
-			iMomentumGradient->span().accumulateFrom(-nLearningRate, pParameter->evalGradient(pTarget).gradient());
-			pParameter->parameter().accumulateFrom(iMomentumGradient->span());
-			pParameter->markDirty(false);
+			iMomentumGradient++->span().accumulateFrom(-nLearningRate, pParameter->evalGradient(pTarget).gradient());
 
-			++iMomentumGradient;
+		iMomentumGradient = this->sMomentumGradientList.begin();
+
+		for (auto *pParameter : this->sParameterList)
+		{
+			pParameter->parameter().accumulateFrom(iMomentumGradient++->span());
+			pParameter->markDirty(false);
 		}
 	}
 }
