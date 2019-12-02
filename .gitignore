@@ -9,6 +9,7 @@
 /.ijwb/
 /.project
 /.settings
+/.vs/
 /.vscode/
 /bazel.iml
 # Ignore all bazel-* symlinks. There is no full list since this can change
