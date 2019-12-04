@@ -4,12 +4,17 @@ cc_library(
     srcs = [
         "src/compute/Denormal.cpp",
         "src/compute/GEMM.cpp",
+        "src/node/Node.cpp",
         "src/node/Shape.cpp",
+        "src/node/StandardNode.cpp",
     ],
     hdrs = [
         "includes/compute/Denormal.h",
         "includes/compute/GEMM.h",
+        "includes/node/Node.h",
         "includes/node/Shape.h",
+        "includes/node/StandardNode.h",
+        "includes/node/Type.h",
         "includes/platform/CallingConvention.h",
         "includes/platform/Platform.h",
     ],
