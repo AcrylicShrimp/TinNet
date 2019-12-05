@@ -4,6 +4,8 @@ cc_library(
     srcs = [
         "src/compute/Denormal.cpp",
         "src/compute/GEMM.cpp",
+        "src/memory/ScopedStorage.cpp",
+        "src/node/Builder.cpp",
         "src/node/Node.cpp",
         "src/node/Shape.cpp",
         "src/node/StandardNode.cpp",
@@ -11,6 +13,8 @@ cc_library(
     hdrs = [
         "includes/compute/Denormal.h",
         "includes/compute/GEMM.h",
+        "includes/memory/ScopedStorage.h",
+        "includes/node/Builder.h",
         "includes/node/Node.h",
         "includes/node/Shape.h",
         "includes/node/StandardNode.h",

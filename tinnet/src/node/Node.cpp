@@ -25,10 +25,7 @@ namespace tinnet::node {
 			for (auto pDepsNode: this->sDeps)
 				if ((this->bGradientEnabled = this->bGradientEnabled || pDepsNode->bGradientEnabled)) break;
 
-		if (this->bGradientEnabled)
-			this->pGradient = std::make_unique<std::uint8_t[]>(sizeof(float) * this->sShape.size());
-		else
-			this->pGradient = nullptr;
+		if (this->bGradientEnabled) this->sGradient = memory::ScopedStorage{sizeof(float) * this->sShape.size()};
 	}
 
 	void Node::computeGradient()
@@ -36,10 +33,7 @@ namespace tinnet::node {
 		if (!this->bGradientEnabled) return;
 
 		// Fills the target gradient buffer with ones.
-		std::fill(
-			reinterpret_cast<float *>(this->pGradient.get()),
-			reinterpret_cast<float *>(this->pGradient.get()) + this->nElement,
-			1.f);
+		std::fill(this->sGradient.aligned<float>(), this->sGradient.aligned<float>() + this->nElement, 1.f);
 
 		// Builds a dependency list for only nodes that enabled gradient.
 		std::vector<std::tuple<Node *, Node *, std::size_t>> sDepsChain;
@@ -61,11 +55,7 @@ namespace tinnet::node {
 		// Fills with zeros for all nodes
 		for (auto &sChainDeps: sDepsChain) {
 			auto *pNode{std::get<1>(sChainDeps)};
-
-			std::fill(
-				reinterpret_cast<float *>(pNode->pGradient.get()),
-				reinterpret_cast<float *>(pNode->pGradient.get()) + pNode->nElement,
-				.0f);
+			std::fill(pNode->sGradient.aligned<float>(), pNode->sGradient.aligned<float>() + pNode->nElement, .0f);
 		}
 
 		// Calls all gradient computation kernels.
@@ -74,7 +64,7 @@ namespace tinnet::node {
 			auto *pNode{std::get<0>(sChainDeps)};
 			auto *pDepsNode{std::get<1>(sChainDeps)};
 
-			pNode->sGFunction[nD](pNode->eType, pNode->sShape, pNode->pGradient.get(), pDepsNode->pGradient.get());
+			pNode->sGFunction[nD](pNode, pDepsNode);
 		}
 	}
 }	 // namespace tinnet::node

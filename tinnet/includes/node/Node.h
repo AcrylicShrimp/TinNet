@@ -3,19 +3,18 @@
 
 #define _TINNET_NODE_NODE_H
 
+#include "tinnet/includes/memory/ScopedStorage.h"
 #include "tinnet/includes/node/Shape.h"
 #include "tinnet/includes/node/Type.h"
 
 #include <cstdint>
 #include <functional>
-#include <memory>
 #include <vector>
 
 namespace tinnet::node {
 	class Node {
 	public:
-		using GFunc
-			= std::function<void(Type, const Shape &, const std::uint8_t *__restrict, std::uint8_t *__restrict)>;
+		using GFunc = std::function<void(Node *, Node *)>;
 
 	public:
 		const Type		  eType;
@@ -23,11 +22,11 @@ namespace tinnet::node {
 		const std::size_t nElement;
 
 	private:
-		bool							bGradientEnabled;
-		std::uint8_t *const				pOutput;
-		std::unique_ptr<std::uint8_t[]> pGradient;
-		std::vector<Node *>				sDeps;	  // Nodes that this instance depends on.
-		std::vector<GFunc>				sGFunction;
+		bool				  bGradientEnabled;
+		std::uint8_t *const	  pOutput;
+		memory::ScopedStorage sGradient;
+		std::vector<Node *>	  sDeps;	// Nodes that this instance depends on.
+		std::vector<GFunc>	  sGFunction;
 
 	public:
 		Node(
@@ -57,11 +56,11 @@ namespace tinnet::node {
 		}
 		std::uint8_t *gradient() noexcept
 		{
-			return this->pGradient.get();
+			return this->sGradient.aligned<std::uint8_t>();
 		}
 		const std::uint8_t *gradient() const noexcept
 		{
-			return this->pGradient.get();
+			return this->sGradient.aligned<std::uint8_t>();
 		}
 		const std::vector<Node *> &deps() const noexcept
 		{
