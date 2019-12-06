@@ -39,6 +39,9 @@ namespace tinnet::memory {
 		{
 			return reinterpret_cast<T *>(this->pAligned);
 		}
+
+	public:
+		// TODO: Provide swap support here.
 	};
 }	 // namespace tinnet::memory
 

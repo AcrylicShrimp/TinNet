@@ -1,6 +1,6 @@
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
 cc_library(
-    name = "tinnet",
+    name = "main",
     srcs = [
         "src/compute/Denormal.cpp",
         "src/compute/GEMM.cpp",
@@ -30,4 +30,21 @@ cc_library(
         "-O3 -mllvm -polly",
     ],
     visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "test",
+    timeout = "short",
+    srcs = [
+        "tests/memory/scopedstorage.cpp",
+        "tests/node/shape.cpp",
+    ],
+    copts = [
+        "-std=c++17",
+        "-O3 -mllvm -polly",
+    ],
+    deps = [
+        "//tinnet:main",
+        "@catch2//:main",
+    ],
 )

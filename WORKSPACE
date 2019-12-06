@@ -6,6 +6,12 @@ http_archive(
     urls = ["https://github.com/grailbio/bazel-toolchain/archive/master.tar.gz"],
 )
 
+http_archive(
+    name = "catch2",
+    strip_prefix = "catch2-bazel-2.2.3",
+    url = "https://github.com/evanmoran/catch2-bazel/archive/v2.2.3.tar.gz",
+)
+
 load("@com_grail_bazel_toolchain//toolchain:rules.bzl", "llvm_toolchain")
 
 llvm_toolchain(

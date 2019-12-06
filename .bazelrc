@@ -1,1 +1,2 @@
-build --incompatible_enable_cc_toolchain_resolution //tinnet //tinnet_examples/basic //tinnet_examples/mnist
+build --incompatible_enable_cc_toolchain_resolution //tinnet:main //tinnet_examples/basic //tinnet_examples/mnist
+test --incompatible_enable_cc_toolchain_resolution //tinnet:test --test_output=all

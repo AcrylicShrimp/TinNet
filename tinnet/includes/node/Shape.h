@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <functional>
 #include <numeric>
+#include <ostream>
 #include <utility>
 #include <vector>
 
@@ -23,19 +24,22 @@ namespace tinnet::node {
 		~Shape() noexcept			 = default;
 
 	public:
-		Shape &		 operator=(const std::vector<std::size_t> &sRhs);
-		Shape &		 operator=(std::vector<std::size_t> &&sRhs) noexcept;
-		Shape &		 operator=(const Shape &sRhs) = default;
-		Shape &		 operator=(Shape &&sRhs) noexcept = default;
-		bool		 operator==(const std::vector<std::size_t> &sRhs) const;
-		bool		 operator==(const Shape &sRhs) const;
-		bool		 operator!=(const std::vector<std::size_t> &sRhs) const;
-		bool		 operator!=(const Shape &sRhs) const;
-		Shape		 extend() const;
-		Shape		 extend(std::size_t nRank) const;
-		Shape		 shrink() const;
-		Shape		 squeeze() const;
-		static Shape broadcast(const Shape &sLhs, const Shape &sRhs);
+		Shape &				 operator=(const std::vector<std::size_t> &sRhs);
+		Shape &				 operator=(std::vector<std::size_t> &&sRhs) noexcept;
+		Shape &				 operator=(const Shape &sRhs) = default;
+		Shape &				 operator=(Shape &&sRhs) noexcept = default;
+		bool				 operator==(const Shape &sRhs) const;
+		friend bool			 operator==(const Shape &sLhs, const std::vector<std::size_t> &sRhs);
+		friend bool			 operator==(const std::vector<std::size_t> &sLhs, const Shape &sRhs);
+		bool				 operator!=(const Shape &sRhs) const;
+		friend bool			 operator!=(const Shape &sLhs, const std::vector<std::size_t> &sRhs);
+		friend bool			 operator!=(const std::vector<std::size_t> &sLhs, const Shape &sRhs);
+		friend std::ostream &operator<<(std::ostream &sLhs, const Shape &sRhs);
+		Shape				 extend() const;
+		Shape				 extend(std::size_t nRank) const;
+		Shape				 shrink() const;
+		Shape				 squeeze() const;
+		static Shape		 broadcast(const Shape &sLhs, const Shape &sRhs);
 
 	public:
 		std::size_t &operator[](std::size_t nIndex)
@@ -82,6 +86,7 @@ namespace tinnet::node {
 			swap(sLhs.sDimension, sRhs.sDimension);
 		}
 	};
+
 }	 // namespace tinnet::node
 
 #endif

@@ -6,5 +6,5 @@ cc_binary(
         "-std=c++17",
         "-O3 -mllvm -polly",
     ],
-    deps = ["//tinnet"],
+    deps = ["//tinnet:main"],
 )

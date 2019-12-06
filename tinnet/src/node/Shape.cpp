@@ -26,24 +26,47 @@ namespace tinnet::node {
 		return *this;
 	}
 
-	bool Shape::operator==(const std::vector<std::size_t> &sRhs) const
-	{
-		return this->sDimension == sRhs;
-	}
-
 	bool Shape::operator==(const Shape &sRhs) const
 	{
 		return this->sDimension == sRhs.sDimension;
 	}
 
-	bool Shape::operator!=(const std::vector<std::size_t> &sRhs) const
+	bool operator==(const Shape &sLhs, const std::vector<std::size_t> &sRhs)
 	{
-		return this->sDimension != sRhs;
+		return sLhs.sDimension == sRhs;
+	}
+
+	bool operator==(const std::vector<std::size_t> &sLhs, const Shape &sRhs)
+	{
+		return sLhs == sRhs.sDimension;
 	}
 
 	bool Shape::operator!=(const Shape &sRhs) const
 	{
 		return this->sDimension != sRhs.sDimension;
+	}
+
+	bool operator!=(const Shape &sLhs, const std::vector<std::size_t> &sRhs)
+	{
+		return sLhs.sDimension != sRhs;
+	}
+
+	bool operator!=(const std::vector<std::size_t> &sLhs, const Shape &sRhs)
+	{
+		return sLhs != sRhs.sDimension;
+	}
+
+	std::ostream &operator<<(std::ostream &sLhs, const Shape &sRhs)
+	{
+		sLhs << "[";
+
+		for (std::size_t nIndex{0}, nMaxIndex{sRhs.sDimension.size()}; nIndex < nMaxIndex; ++nIndex) {
+			sLhs << sRhs.sDimension[nIndex];
+
+			if (nIndex + 1 != nMaxIndex) sLhs << ", ";
+		}
+
+		return sLhs << "]";
 	}
 
 	Shape Shape::extend() const
@@ -95,13 +118,13 @@ namespace tinnet::node {
 		for (; iL != iLEnd && iR != iREnd; ++iL, ++iR) {
 			if (*iL != *iR && *iL != 1 && *iR != 1) throw std::runtime_error{"unable to broadcast"};
 
-			sResult.sDimension.emplace_back(std::max(*iL, *iR));
+			sResult.sDimension.insert(sResult.sDimension.cbegin(), std::max(*iL, *iR));
 		}
 
 		if (iL != iLEnd)
-			for (; iL != iLEnd; ++iL) sResult.sDimension.emplace_back(*iL);
+			for (; iL != iLEnd; ++iL) sResult.sDimension.insert(sResult.sDimension.cbegin(), *iL);
 		else if (iR != iREnd)
-			for (; iR != iREnd; ++iR) sResult.sDimension.emplace_back(*iR);
+			for (; iR != iREnd; ++iR) sResult.sDimension.insert(sResult.sDimension.cbegin(), *iR);
 
 		return sResult;
 	}
