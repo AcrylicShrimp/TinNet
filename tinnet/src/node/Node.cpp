@@ -49,7 +49,7 @@ namespace tinnet::node {
 				sDepsChain.reserve(sDepsChain.size() + pNode->sDeps.size());
 
 				for (std::size_t nD{0}, nMaxD{pNode->sDeps.size()}; nD < nMaxD; ++nD)
-					if (pNode->sDeps[nD]->bGradientEnabled) sDepsChain.emplace_back(this, pNode->sDeps[nD], nD);
+					if (pNode->sDeps[nD]->bGradientEnabled) sDepsChain.emplace_back(pNode, pNode->sDeps[nD], nD);
 			}
 
 		// Fills with zeros for all nodes
@@ -67,4 +67,4 @@ namespace tinnet::node {
 			pNode->sGFunction[nD](pNode, pDepsNode);
 		}
 	}
-}	 // namespace tinnet::node
+}
