@@ -8,7 +8,7 @@ cc_library(
         "src/node/Builder.cpp",
         "src/node/Node.cpp",
         "src/node/Shape.cpp",
-        "src/node/StandardNode.cpp",
+        "src/node/kernel/Add.cpp",
     ],
     hdrs = [
         "includes/compute/Denormal.h",
@@ -17,8 +17,8 @@ cc_library(
         "includes/node/Builder.h",
         "includes/node/Node.h",
         "includes/node/Shape.h",
-        "includes/node/StandardNode.h",
         "includes/node/Type.h",
+        "includes/node/kernel/Add.h",
         "includes/platform/CallingConvention.h",
         "includes/platform/Platform.h",
     ],
@@ -37,6 +37,7 @@ cc_test(
     timeout = "short",
     srcs = [
         "tests/memory/scopedstorage.cpp",
+        "tests/node/kernel/add.cpp",
         "tests/node/shape.cpp",
     ],
     copts = [

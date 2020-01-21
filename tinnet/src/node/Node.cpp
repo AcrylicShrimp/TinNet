@@ -7,17 +7,17 @@
 
 namespace tinnet::node {
 	Node::Node(
-		Type				  eType,
-		Shape &&			  sShape,
-		bool				  bGradientEnabled,
-		std::uint8_t *const	  pOutput,
-		std::vector<Node *> &&sDeps,
-		std::vector<GFunc> && sGFunction) :
+		Type					eType,
+		Shape &&				sShape,
+		bool					bGradientEnabled,
+		memory::ScopedStorage &&sOutput,
+		std::vector<Node *> &&	sDeps,
+		std::vector<GFunc> &&	sGFunction) :
 		eType{eType},
 		sShape{std::move(sShape)},
 		nElement{this->sShape.size()},
 		bGradientEnabled{bGradientEnabled},
-		pOutput{pOutput},
+		sOutput{std::move(sOutput)},
 		sDeps{std::move(sDeps)},
 		sGFunction{std::move(sGFunction)}
 	{
@@ -52,9 +52,11 @@ namespace tinnet::node {
 					if (pNode->sDeps[nD]->bGradientEnabled) sDepsChain.emplace_back(pNode, pNode->sDeps[nD], nD);
 			}
 
+		// TODO: Support multiple types here.
 		// Fills with zeros for all nodes
 		for (auto &sChainDeps: sDepsChain) {
 			auto *pNode{std::get<1>(sChainDeps)};
+
 			std::fill(pNode->sGradient.aligned<float>(), pNode->sGradient.aligned<float>() + pNode->nElement, .0f);
 		}
 
@@ -67,4 +69,4 @@ namespace tinnet::node {
 			pNode->sGFunction[nD](pNode, pDepsNode);
 		}
 	}
-}
+}	 // namespace tinnet::node

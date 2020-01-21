@@ -8,8 +8,8 @@ http_archive(
 
 http_archive(
     name = "catch2",
-    strip_prefix = "catch2-bazel-2.2.3",
-    url = "https://github.com/evanmoran/catch2-bazel/archive/v2.2.3.tar.gz",
+    strip_prefix = "catch2-bazel-2.11.1",
+    url = "https://github.com/AcrylicShrimp/catch2-bazel/archive/v2.11.1.tar.gz",
 )
 
 load("@com_grail_bazel_toolchain//toolchain:rules.bzl", "llvm_toolchain")

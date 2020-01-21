@@ -23,19 +23,19 @@ namespace tinnet::node {
 
 	private:
 		bool				  bGradientEnabled;
-		std::uint8_t *const	  pOutput;
+		memory::ScopedStorage sOutput;
 		memory::ScopedStorage sGradient;
 		std::vector<Node *>	  sDeps;	// Nodes that this instance depends on.
 		std::vector<GFunc>	  sGFunction;
 
 	public:
 		Node(
-			Type				  eType,
-			Shape &&			  sShape,
-			bool				  bGradientEnabled,
-			std::uint8_t *const	  pOutput,
-			std::vector<Node *> &&sDeps,
-			std::vector<GFunc> && sGFunction);
+			Type					eType,
+			Shape &&				sShape,
+			bool					bGradientEnabled,
+			memory::ScopedStorage &&pOutput,
+			std::vector<Node *> &&	sDeps,
+			std::vector<GFunc> &&	sGFunction);
 		virtual ~Node() noexcept = default;
 
 	public:
@@ -46,21 +46,13 @@ namespace tinnet::node {
 		{
 			return this->bGradientEnabled;
 		}
-		std::uint8_t *output() noexcept
+		const memory::ScopedStorage &output() const noexcept
 		{
-			return this->pOutput;
+			return this->sOutput;
 		}
-		const std::uint8_t *output() const noexcept
+		const memory::ScopedStorage &gradient() const noexcept
 		{
-			return this->pOutput;
-		}
-		std::uint8_t *gradient() noexcept
-		{
-			return this->sGradient.aligned<std::uint8_t>();
-		}
-		const std::uint8_t *gradient() const noexcept
-		{
-			return this->sGradient.aligned<std::uint8_t>();
+			return this->sGradient;
 		}
 		const std::vector<Node *> &deps() const noexcept
 		{

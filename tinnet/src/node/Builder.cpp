@@ -1,8 +1,9 @@
 
 #include "tinnet/includes/node/Builder.h"
 
-#include "tinnet/includes/node/StandardNode.h"
+#include "tinnet/includes/node/kernel/Add.h"
 
+#include <algorithm>
 #include <cstdint>
 #include <utility>
 #include <vector>
@@ -19,25 +20,29 @@ namespace tinnet::node {
 	// 		std::vector<Node::GFunc>{});
 	// }
 
-	std::unique_ptr<Node> Builder::wrap(Shape &&sShape, float *pSource, bool bGradientEnabled)
+	std::unique_ptr<Node> Builder::memory(Shape &&sShape, const float *pSource, bool bGradientEnabled)
 	{
+		memory::ScopedStorage sOutput{sizeof(float) * sShape.size()};
+		std::copy(pSource, pSource + sShape.size(), sOutput.aligned<float>());
+
 		return std::make_unique<Node>(
 			Type::F32,
 			std::move(sShape),
 			bGradientEnabled,
-			reinterpret_cast<std::uint8_t *>(pSource),
+			std::move(sOutput),
 			std::vector<Node *>{},
 			std::vector<Node::GFunc>{});
 	}
 
-	std::unique_ptr<StandardNode> variable(Shape &&sShape, memory::ScopedStorage &&sInitial, bool bGradientEnabled)
+	std::unique_ptr<Node>
+		Builder::add(const std::unique_ptr<Node> &sLeft, const std::unique_ptr<Node> &sRight, bool bGradientEnabled)
 	{
-		return std::make_unique<StandardNode>(
+		return std::make_unique<Node>(
 			Type::F32,
-			std::move(sShape),
+			Shape{sLeft->sShape},
 			bGradientEnabled,
-			std::move(sInitial),
-			std::vector<Node *>{},
-			std::vector<Node::GFunc>{});
+			kernel::__kernel__add(sLeft.get(), sRight.get()),
+			std::vector<Node *>{sLeft.get(), sRight.get()},
+			std::vector<Node::GFunc>{&kernel::__kernel__addGradient, &kernel::__kernel__addGradient});
 	}
 }	 // namespace tinnet::node
