@@ -15,6 +15,18 @@ namespace tinnet::test::helper {
 		~Random() noexcept = delete;
 
 	public:
+		static std::vector<float> genPositiveData(std::size_t nLength)
+		{
+			std::mt19937						  sMT{std::random_device{}()};
+			std::uniform_real_distribution<float> sDist{.0f, 1024.f};
+
+			std::vector<float> sResult(nLength, .0f);
+
+			for (auto &nElement: sResult) nElement = sDist(sMT);
+
+			return sResult;
+		}
+
 		static std::vector<float> genData(std::size_t nLength)
 		{
 			std::mt19937						  sMT{std::random_device{}()};

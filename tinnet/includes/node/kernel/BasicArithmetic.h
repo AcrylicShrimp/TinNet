@@ -1,11 +1,10 @@
 
-#include "tinnet/includes/memory/ScopedStorage.h"
-
 #ifndef _TINNET_NODE_KERNEL_BASICARITHMETIC_H
 
-#	define _TINNET_NODE_KERNEL_BASICARITHMETIC_H
+#define _TINNET_NODE_KERNEL_BASICARITHMETIC_H
 
-#	include "tinnet/includes/node/Node.h"
+#include "tinnet/includes/memory/ScopedStorage.h"
+#include "tinnet/includes/node/Node.h"
 
 namespace tinnet::node::kernel {
 	memory::ScopedStorage __kernel__add(Node *pLeft, Node *pRight);

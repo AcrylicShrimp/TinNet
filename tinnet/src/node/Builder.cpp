@@ -2,6 +2,7 @@
 #include "tinnet/includes/node/Builder.h"
 
 #include "tinnet/includes/node/kernel/BasicArithmetic.h"
+#include "tinnet/includes/node/kernel/MathFunction.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -80,5 +81,16 @@ namespace tinnet::node {
 			kernel::__kernel__div(sLeft.get(), sRight.get()),
 			std::vector<Node *>{sLeft.get(), sRight.get()},
 			std::vector<Node::GFunc>{&kernel::__kernel__divLGradient, &kernel::__kernel__divRGradient});
+	}
+
+	std::unique_ptr<Node> Builder::log(const std::unique_ptr<Node> &sLeft, bool bGradientEnabled)
+	{
+		return std::make_unique<Node>(
+			Type::F32,
+			Shape{sLeft->sShape},
+			bGradientEnabled,
+			kernel::__kernel__log(sLeft.get()),
+			std::vector<Node *>{sLeft.get()},
+			std::vector<Node::GFunc>{&kernel::__kernel__logGradient});
 	}
 }	 // namespace tinnet::node

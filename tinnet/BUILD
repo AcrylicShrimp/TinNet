@@ -9,6 +9,7 @@ cc_library(
         "src/node/Node.cpp",
         "src/node/Shape.cpp",
         "src/node/kernel/BasicArithmetic.cpp",
+        "src/node/kernel/MathFunction.cpp",
     ],
     hdrs = [
         "includes/compute/Denormal.h",
@@ -19,6 +20,7 @@ cc_library(
         "includes/node/Shape.h",
         "includes/node/Type.h",
         "includes/node/kernel/BasicArithmetic.h",
+        "includes/node/kernel/MathFunction.h",
         "includes/platform/CallingConvention.h",
         "includes/platform/Platform.h",
     ],
@@ -41,6 +43,7 @@ cc_test(
         "tests/memory/scopedstorage.cpp",
         "tests/node/kernel/add.cpp",
         "tests/node/kernel/div.cpp",
+        "tests/node/kernel/log.cpp",
         "tests/node/kernel/mul.cpp",
         "tests/node/kernel/sub.cpp",
         "tests/node/shape.cpp",

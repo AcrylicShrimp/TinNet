@@ -29,6 +29,8 @@ namespace tinnet::node {
 			mul(const std::unique_ptr<Node> &sLeft, const std::unique_ptr<Node> &sRight, bool bGradientEnabled = false);
 		static std::unique_ptr<Node>
 			div(const std::unique_ptr<Node> &sLeft, const std::unique_ptr<Node> &sRight, bool bGradientEnabled = false);
+
+		static std::unique_ptr<Node> log(const std::unique_ptr<Node> &sLeft, bool bGradientEnabled = false);
 	};
 
 }	 // namespace tinnet::node
