@@ -15,7 +15,7 @@ namespace tinnet::memory {
 			(reinterpret_cast<std::uint64_t>(this->pOrigin) + 31) & ~31);	 // 32byte alignment.
 	}
 
-	ScopedStorage::ScopedStorage(ScopedStorage &&sRhs) noexcept : ScopedStorage{}
+	ScopedStorage::ScopedStorage(ScopedStorage &&sRhs) noexcept : ScopedStorage()
 	{
 		using std::swap;
 
@@ -30,14 +30,14 @@ namespace tinnet::memory {
 
 	ScopedStorage &ScopedStorage::operator=(ScopedStorage &&sRhs)
 	{
-		if (&sRhs == this) { return *this; }
+		if (&sRhs == this) return *this;
 
 		this->~ScopedStorage();
 
-		using std::swap;
-
-		swap(this->pOrigin, sRhs.pOrigin);
-		swap(this->pAligned, sRhs.pAligned);
+		this->pOrigin  = sRhs.pOrigin;
+		this->pAligned = sRhs.pAligned;
+		sRhs.pOrigin   = nullptr;
+		sRhs.pAligned  = nullptr;
 
 		return *this;
 	}

@@ -8,7 +8,7 @@ cc_library(
         "src/node/Builder.cpp",
         "src/node/Node.cpp",
         "src/node/Shape.cpp",
-        "src/node/kernel/Add.cpp",
+        "src/node/kernel/BasicArithmetic.cpp",
     ],
     hdrs = [
         "includes/compute/Denormal.h",
@@ -18,12 +18,13 @@ cc_library(
         "includes/node/Node.h",
         "includes/node/Shape.h",
         "includes/node/Type.h",
-        "includes/node/kernel/Add.h",
+        "includes/node/kernel/BasicArithmetic.h",
         "includes/platform/CallingConvention.h",
         "includes/platform/Platform.h",
     ],
     copts = [
         "-std=c++17",
+        "-ffast-math",
         "-fopenmp",
         "-mavx2",
         "-mfma",
@@ -36,12 +37,17 @@ cc_test(
     name = "test",
     timeout = "short",
     srcs = [
+        "tests/helper/Random.h",
         "tests/memory/scopedstorage.cpp",
         "tests/node/kernel/add.cpp",
+        "tests/node/kernel/div.cpp",
+        "tests/node/kernel/mul.cpp",
+        "tests/node/kernel/sub.cpp",
         "tests/node/shape.cpp",
     ],
     copts = [
         "-std=c++17",
+        "-ffast-math",
         "-O3 -mllvm -polly",
     ],
     deps = [

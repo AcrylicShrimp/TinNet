@@ -1,7 +1,7 @@
 
 #include "tinnet/includes/node/Builder.h"
 
-#include "tinnet/includes/node/kernel/Add.h"
+#include "tinnet/includes/node/kernel/BasicArithmetic.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -44,5 +44,41 @@ namespace tinnet::node {
 			kernel::__kernel__add(sLeft.get(), sRight.get()),
 			std::vector<Node *>{sLeft.get(), sRight.get()},
 			std::vector<Node::GFunc>{&kernel::__kernel__addGradient, &kernel::__kernel__addGradient});
+	}
+
+	std::unique_ptr<Node>
+		Builder::sub(const std::unique_ptr<Node> &sLeft, const std::unique_ptr<Node> &sRight, bool bGradientEnabled)
+	{
+		return std::make_unique<Node>(
+			Type::F32,
+			Shape{sLeft->sShape},
+			bGradientEnabled,
+			kernel::__kernel__sub(sLeft.get(), sRight.get()),
+			std::vector<Node *>{sLeft.get(), sRight.get()},
+			std::vector<Node::GFunc>{&kernel::__kernel__subLGradient, &kernel::__kernel__subRGradient});
+	}
+
+	std::unique_ptr<Node>
+		Builder::mul(const std::unique_ptr<Node> &sLeft, const std::unique_ptr<Node> &sRight, bool bGradientEnabled)
+	{
+		return std::make_unique<Node>(
+			Type::F32,
+			Shape{sLeft->sShape},
+			bGradientEnabled,
+			kernel::__kernel__mul(sLeft.get(), sRight.get()),
+			std::vector<Node *>{sLeft.get(), sRight.get()},
+			std::vector<Node::GFunc>{&kernel::__kernel__mulLGradient, &kernel::__kernel__mulRGradient});
+	}
+
+	std::unique_ptr<Node>
+		Builder::div(const std::unique_ptr<Node> &sLeft, const std::unique_ptr<Node> &sRight, bool bGradientEnabled)
+	{
+		return std::make_unique<Node>(
+			Type::F32,
+			Shape{sLeft->sShape},
+			bGradientEnabled,
+			kernel::__kernel__div(sLeft.get(), sRight.get()),
+			std::vector<Node *>{sLeft.get(), sRight.get()},
+			std::vector<Node::GFunc>{&kernel::__kernel__divLGradient, &kernel::__kernel__divRGradient});
 	}
 }	 // namespace tinnet::node
