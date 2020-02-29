@@ -33,7 +33,7 @@ namespace tinnet::node {
 			Type					eType,
 			Shape &&				sShape,
 			bool					bGradientEnabled,
-			memory::ScopedStorage &&pOutput,
+			memory::ScopedStorage &&sOutput,
 			std::vector<Node *> &&	sDeps,
 			std::vector<GFunc> &&	sGFunction);
 		virtual ~Node() noexcept = default;
