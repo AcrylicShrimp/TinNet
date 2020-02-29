@@ -8,7 +8,7 @@ This project uses [Bazel](https://bazel.build/) as a build system(1.0 or above r
 
 To build, issue below.
 
-```bash
+```
 bazel build //tinnet:main
 ```
 
@@ -18,7 +18,7 @@ Windows are not supported currently.
 
 To run all tests, issue below.
 
-```bash
+```
 bazel test //tinnet:test
 ```
 
