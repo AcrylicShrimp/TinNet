@@ -8,7 +8,7 @@
 
 TEST_CASE("tinnet::node::kernel::BasicArithmetic sub")
 {
-	std::size_t nLength{tinnet::test::helper::Random::genIndex()};
+	auto nLength{tinnet::test::helper::Random::genIndex()};
 
 	auto sLeft{tinnet::test::helper::Random::genData(nLength)};
 	auto sRight{tinnet::test::helper::Random::genData(nLength)};

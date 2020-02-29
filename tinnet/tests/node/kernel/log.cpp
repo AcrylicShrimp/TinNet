@@ -9,7 +9,7 @@
 
 TEST_CASE("tinnet::node::kernel::MathFunction log")
 {
-	std::size_t nLength{tinnet::test::helper::Random::genIndex()};
+	auto nLength{tinnet::test::helper::Random::genIndex()};
 
 	auto sNode{tinnet::test::helper::Random::genPositiveData(nLength)};
 	auto pNode{tinnet::node::Builder::memory(tinnet::node::Shape{{nLength}}, sNode.data(), true)};
