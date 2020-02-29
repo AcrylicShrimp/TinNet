@@ -1,3 +1,0 @@
-[submodule "Dependency/Catch2"]
-	path = Dependency/Catch2
-	url = https://github.com/catchorg/Catch2.git
