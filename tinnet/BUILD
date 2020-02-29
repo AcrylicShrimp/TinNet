@@ -47,6 +47,7 @@ cc_test(
         "tests/node/kernel/div.cpp",
         "tests/node/kernel/log.cpp",
         "tests/node/kernel/mul.cpp",
+        "tests/node/kernel/neg.cpp",
         "tests/node/kernel/sub.cpp",
         "tests/node/shape.cpp",
     ],

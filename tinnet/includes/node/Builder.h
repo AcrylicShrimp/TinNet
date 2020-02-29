@@ -21,6 +21,7 @@ namespace tinnet::node {
 		// static std::unique_ptr<Node> memory(Type eType, Shape &&sShape, bool bGradientEnabled, std::uint8_t
 		// *pOutput);
 		static std::unique_ptr<Node> memory(Shape &&sShape, const float *pSource, bool bGradientEnabled = false);
+		static std::unique_ptr<Node> neg(const std::unique_ptr<Node> &sLeft, bool bGradientEnabled = false);
 		static std::unique_ptr<Node>
 			add(const std::unique_ptr<Node> &sLeft, const std::unique_ptr<Node> &sRight, bool bGradientEnabled = false);
 		static std::unique_ptr<Node>
@@ -34,6 +35,11 @@ namespace tinnet::node {
 	};
 
 }	 // namespace tinnet::node
+
+inline std::unique_ptr<tinnet::node::Node> operator-(std::unique_ptr<tinnet::node::Node> &sNode)
+{
+	return tinnet::node::Builder::neg(sNode, false);
+}
 
 inline std::unique_ptr<tinnet::node::Node>
 	operator+(std::unique_ptr<tinnet::node::Node> &sLeft, std::unique_ptr<tinnet::node::Node> &sRight)

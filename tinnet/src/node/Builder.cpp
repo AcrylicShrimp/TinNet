@@ -35,6 +35,17 @@ namespace tinnet::node {
 			std::vector<Node::GFunc>{});
 	}
 
+	std::unique_ptr<Node> Builder::neg(const std::unique_ptr<Node> &sLeft, bool bGradientEnabled)
+	{
+		return std::make_unique<Node>(
+			Type::F32,
+			Shape{sLeft->sShape},
+			bGradientEnabled,
+			kernel::__kernel__neg(sLeft.get()),
+			std::vector<Node *>{sLeft.get()},
+			std::vector<Node::GFunc>{&kernel::__kernel__negGradient});
+	}
+
 	std::unique_ptr<Node>
 		Builder::add(const std::unique_ptr<Node> &sLeft, const std::unique_ptr<Node> &sRight, bool bGradientEnabled)
 	{
