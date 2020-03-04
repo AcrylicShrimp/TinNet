@@ -3,6 +3,7 @@
 
 #include "tinnet/includes/node/kernel/BasicArithmetic.h"
 #include "tinnet/includes/node/kernel/MathFunction.h"
+#include "tinnet/includes/node/kernel/NNFunction.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -103,5 +104,18 @@ namespace tinnet::node {
 			kernel::__kernel__log(sLeft.get()),
 			std::vector<Node *>{sLeft.get()},
 			std::vector<Node::GFunc>{&kernel::__kernel__logGradient});
+	}
+
+	std::unique_ptr<Node> Builder::relu(const std::unique_ptr<Node> &sLeft, float nA, bool bGradientEnabled)
+	{
+		return std::make_unique<Node>(
+			Type::F32,
+			Shape{sLeft->sShape},
+			bGradientEnabled,
+			kernel::__kernel__relu(sLeft.get(), nA),
+			std::vector<Node *>{sLeft.get()},
+			std::vector<Node::GFunc>{[nA](auto *pNode, auto *pGradient) {
+				kernel::__kernel__reluGradient(pNode, pGradient, nA);
+			}});
 	}
 }	 // namespace tinnet::node
